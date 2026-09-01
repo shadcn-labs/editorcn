@@ -43,8 +43,7 @@ export const SiteHeader = () => (
               sound="click"
             >
               <Link
-                href="https://shadcn-labs.com"
-                target="_blank"
+                href="/"
                 rel="noopener noreferrer"
               >
                 <LogoMark className="size-5" />
