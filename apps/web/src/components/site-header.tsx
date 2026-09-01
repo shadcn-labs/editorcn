@@ -42,11 +42,7 @@ export const SiteHeader = () => (
               className="hover:bg-transparent focus-visible:bg-transparent dark:hover:bg-transparent lg:size-9"
               sound="click"
             >
-              <Link
-                href="https://shadcn-labs.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <Link href="/" rel="noopener noreferrer">
                 <LogoMark className="size-5" />
               </Link>
             </Button>
