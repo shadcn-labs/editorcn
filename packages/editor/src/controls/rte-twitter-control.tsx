@@ -84,13 +84,18 @@ const TwitterNodeView = (props: NodeViewProps) => {
           /* ignored */
         }
       } else {
-        const script = document.createElement("script");
-        script.src = WIDGET_SCRIPT_URL;
-        script.async = true;
+        let script = document.querySelector<HTMLScriptElement>(
+          `script[src="${WIDGET_SCRIPT_URL}"]`
+        );
+        if (!script) {
+          script = document.createElement("script");
+          script.src = WIDGET_SCRIPT_URL;
+          script.async = true;
+          document.body.append(script);
+        }
         script.addEventListener("load", () => {
           void renderTweet();
         });
-        document.body.append(script);
       }
     };
 

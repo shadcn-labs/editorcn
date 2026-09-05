@@ -49,8 +49,15 @@ const getYouTubeId = (url: string): string | null => {
 };
 
 const YouTubeNodeView = (props: NodeViewProps) => {
-  const { node } = props;
-  const videoId = getYouTubeId(node.attrs.src) || node.attrs.src;
+  const { node, updateAttributes } = props;
+  const rawSrc = node.attrs.src || "";
+  const videoId = getYouTubeId(rawSrc) || rawSrc;
+  let watchUrl: string | undefined;
+  if (videoId) {
+    watchUrl = videoId.startsWith("http")
+      ? videoId
+      : `https://www.youtube.com/watch?v=${videoId}`;
+  }
 
   return (
     <ResizableNodeView
@@ -59,6 +66,9 @@ const YouTubeNodeView = (props: NodeViewProps) => {
       aspectRatio={16 / 9}
       minWidth={320}
       maxWidth={1200}
+      videoSrc={rawSrc}
+      watchUrl={watchUrl}
+      onSrcChange={(newSrc) => updateAttributes({ src: newSrc })}
     >
       <iframe
         src={`https://www.youtube-nocookie.com/embed/${videoId}`}

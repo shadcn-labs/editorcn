@@ -1,5 +1,5 @@
 import type { Editor } from "@tiptap/react";
-import { useCallback, useRef, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useSyncExternalStore } from "react";
 
 const defaultEqual = <T>(a: T, b: T) => a === b;
 
@@ -27,10 +27,12 @@ export const useEditorState = <T>(
   isEqual: (a: T, b: T) => boolean = defaultEqual
 ): T => {
   const selectorRef = useRef(selector);
-  selectorRef.current = selector;
-
   const isEqualRef = useRef(isEqual);
-  isEqualRef.current = isEqual;
+
+  useEffect(() => {
+    selectorRef.current = selector;
+    isEqualRef.current = isEqual;
+  });
 
   const snapshotRef = useRef<{ value: T }>({
     value: editor ? selector(editor) : (undefined as unknown as T),

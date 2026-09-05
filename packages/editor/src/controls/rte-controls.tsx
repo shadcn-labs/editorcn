@@ -146,6 +146,7 @@ export const H6Control = createControl({
 
 export const AlignLeftControl = createControl({
   iconKey: "alignLeftControlIcon",
+  isActive: { attrs: { textAlign: "left" } },
   label: "alignLeftControlLabel",
   operation: { attributes: "left", name: "setTextAlign" },
 });
