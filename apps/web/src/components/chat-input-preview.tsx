@@ -1,6 +1,11 @@
 "use client";
 
-import { FloatingMenu, FloatingMenuExtension } from "@editorcn/floating-menu";
+import {
+  FloatingMenu,
+  FloatingMenuExtension,
+  defaultTextFormattingItems,
+  showOnTextSelection,
+} from "@editorcn/floating-menu";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
@@ -88,6 +93,12 @@ export const ChatInputPreview = () => {
           )}
         />
         <FloatingMenu editor={editor} />
+        {/* Formatting actions on text selection */}
+        <FloatingMenu
+          editor={editor}
+          items={defaultTextFormattingItems}
+          shouldShow={showOnTextSelection}
+        />
         <Button
           type="button"
           size="icon"

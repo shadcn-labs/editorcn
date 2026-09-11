@@ -98,6 +98,32 @@ FloatingMenuExtension.configure({
 
 The component reads it automatically; an explicit `shouldShow` prop takes precedence. Its visuals follow your shadcn theme tokens and can be customized with the `.fm-menu`, `.fm-group`, and `.fm-item` classes.
 
+## Formatting selected text
+
+Pair a block-actions instance (empty lines) with a formatting instance (text selections). The predicates are mutually exclusive, so only one menu shows at a time. Selections anchor above the selected range; the cursor instance stays on the caret line:
+
+```tsx
+import {
+  FloatingMenu,
+  defaultTextFormattingItems,
+  showOnTextSelection,
+} from "@/components/floating-menu";
+
+<>
+  {/* Block actions on empty lines (defaults) */}
+  <FloatingMenu editor={editor} />
+  {/* Text formatting on selections */}
+  <FloatingMenu
+    editor={editor}
+    items={defaultTextFormattingItems}
+    shouldShow={showOnTextSelection}
+  />
+  <EditorContent editor={editor} />
+</>;
+```
+
+`defaultTextFormattingItems` covers bold, italic, underline, strikethrough, and inline code. Note that `toggleUnderline` needs `@tiptap/extension-underline`, which is not part of StarterKit — it no-ops gracefully without it.
+
 ## Use in a chat input
 
 The menu is editor-agnostic: point it at any Tiptap instance. A minimal chat input pairs a compact editor with Enter-to-send:

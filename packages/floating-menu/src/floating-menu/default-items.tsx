@@ -2,15 +2,20 @@
 
 import type { Editor } from "@tiptap/react";
 import {
+  Bold,
+  Code,
   Heading1,
   Heading2,
   Heading3,
+  Italic,
   List,
   ListOrdered,
   Minus,
   Pilcrow,
   SquareCode,
+  Strikethrough,
   TextQuote,
+  Underline as UnderlineIcon,
 } from "lucide-react";
 
 import type { FloatingMenuItem } from "./floating-menu";
@@ -21,12 +26,17 @@ interface FloatingMenuChainedCommands {
   setHorizontalRule: () => FloatingMenuChainedCommands;
   setParagraph: () => FloatingMenuChainedCommands;
   toggleBlockquote: () => FloatingMenuChainedCommands;
+  toggleBold: () => FloatingMenuChainedCommands;
   toggleBulletList: () => FloatingMenuChainedCommands;
+  toggleCode: () => FloatingMenuChainedCommands;
   toggleCodeBlock: () => FloatingMenuChainedCommands;
   toggleHeading: (attributes: {
     level: 1 | 2 | 3 | 4 | 5 | 6;
   }) => FloatingMenuChainedCommands;
+  toggleItalic: () => FloatingMenuChainedCommands;
   toggleOrderedList: () => FloatingMenuChainedCommands;
+  toggleStrike: () => FloatingMenuChainedCommands;
+  toggleUnderline: () => FloatingMenuChainedCommands;
 }
 
 const chainFocus = (editor: Editor): FloatingMenuChainedCommands =>
@@ -123,5 +133,60 @@ export const defaultFloatingMenuItems: FloatingMenuItem[] = [
     icon: <Minus className={iconClassName} />,
     id: "divider",
     label: "Divider",
+  },
+];
+
+/**
+ * Default text-formatting actions for selected text. Pair with a
+ * `shouldShow` predicate that requires a non-empty selection (see
+ * `showOnTextSelection`) next to a block-actions instance for empty
+ * lines. `toggleUnderline` needs `@tiptap/extension-underline`, which
+ * is not part of StarterKit; it no-ops gracefully without it.
+ */
+export const defaultTextFormattingItems: FloatingMenuItem[] = [
+  {
+    command: (editor) => {
+      chainFocus(editor).toggleBold().run();
+    },
+    icon: <Bold className={iconClassName} />,
+    id: "bold",
+    isActive: (editor) => editor.isActive("bold"),
+    label: "Bold",
+  },
+  {
+    command: (editor) => {
+      chainFocus(editor).toggleItalic().run();
+    },
+    icon: <Italic className={iconClassName} />,
+    id: "italic",
+    isActive: (editor) => editor.isActive("italic"),
+    label: "Italic",
+  },
+  {
+    command: (editor) => {
+      chainFocus(editor).toggleUnderline().run();
+    },
+    icon: <UnderlineIcon className={iconClassName} />,
+    id: "underline",
+    isActive: (editor) => editor.isActive("underline"),
+    label: "Underline",
+  },
+  {
+    command: (editor) => {
+      chainFocus(editor).toggleStrike().run();
+    },
+    icon: <Strikethrough className={iconClassName} />,
+    id: "strikethrough",
+    isActive: (editor) => editor.isActive("strike"),
+    label: "Strikethrough",
+  },
+  {
+    command: (editor) => {
+      chainFocus(editor).toggleCode().run();
+    },
+    icon: <Code className={iconClassName} />,
+    id: "code",
+    isActive: (editor) => editor.isActive("code"),
+    label: "Inline code",
   },
 ];

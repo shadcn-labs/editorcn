@@ -96,42 +96,59 @@ export const FloatingMenu = ({
     if (!editor || !menuRef.current) {
       return;
     }
-    // The cursor position is read live; the extension is an options
+    // The selection is read live; the extension is an options
     // bag and install marker, not position storage.
-    const pos = editor.state.selection.from;
+    const { selection } = editor.state;
+    const { from } = selection;
+    const { to } = selection;
 
-    let coords: {
-      left: number;
-      top: number;
-      right: number;
-      bottom: number;
-    } | null = null;
-    try {
-      coords = editor.view.coordsAtPos(pos);
-    } catch {
+    // Collapsed cursor: anchor at the caret. Text selection: anchor
+    // to the box spanning the selection so the menu sits above it.
+    const anchorFrom = selection.empty ? from : Math.min(from, to);
+    const anchorTo = selection.empty ? from : Math.max(from, to);
+
+    const coordsAt = (
+      pos: number
+    ): { left: number; top: number; right: number; bottom: number } | null => {
       try {
-        const dom = editor.view.domAtPos(pos);
-        const raw: unknown = dom.node;
-        let el: HTMLElement | null = null;
-        if (raw instanceof HTMLElement) {
-          el = raw;
-        } else if (raw instanceof Text) {
-          el = raw.parentElement;
-        }
-        if (el) {
+        return editor.view.coordsAtPos(pos);
+      } catch {
+        try {
+          const dom = editor.view.domAtPos(pos);
+          const raw: unknown = dom.node;
+          let el: HTMLElement | null = null;
+          if (raw instanceof HTMLElement) {
+            el = raw;
+          } else if (raw instanceof Text) {
+            el = raw.parentElement;
+          }
+          if (!el) {
+            return null;
+          }
           const rect = el.getBoundingClientRect();
-          coords = {
+          return {
             bottom: rect.bottom,
             left: rect.left,
             right: rect.right,
             top: rect.top,
           };
+        } catch {
+          return null;
         }
-      } catch {
-        coords = null;
       }
-    }
+    };
 
+    const start = coordsAt(anchorFrom);
+    const end = selection.empty ? start : coordsAt(anchorTo);
+    const coords =
+      start && end
+        ? {
+            bottom: Math.max(start.bottom, end.bottom),
+            left: Math.min(start.left, end.left),
+            right: Math.max(start.right, end.right),
+            top: Math.min(start.top, end.top),
+          }
+        : (start ?? end);
     if (!coords || !menuRef.current) {
       return;
     }
@@ -159,17 +176,25 @@ export const FloatingMenu = ({
     try {
       const { x, y } = await computePosition(virtualElement, menuRef.current, {
         middleware: [offset(menuOffset), flip(), shift({ crossAxis: true })],
-        // Same line as the cursor, right after the caret, vertically
-        // centered; shift keeps the centered menu in view.
-        placement: "right",
+        // Collapsed cursor: same line, right after the caret, vertically
+        // centered. Text selection: above the selection, centered.
+        // Shift keeps the menu in view on either axis.
+        placement: selection.empty ? "right" : "top",
       });
       place(x, y);
     } catch {
-      place(
-        rect.right + menuOffset,
-        rect.top -
-          Math.max((menuRef.current?.offsetHeight || 0) - rect.height, 0) / 2
-      );
+      if (selection.empty) {
+        place(
+          rect.right + menuOffset,
+          rect.top -
+            Math.max((menuRef.current?.offsetHeight || 0) - rect.height, 0) / 2
+        );
+      } else {
+        place(
+          rect.left + rect.width / 2 - (menuRef.current?.offsetWidth || 0) / 2,
+          rect.top - (menuRef.current?.offsetHeight || 0) - menuOffset
+        );
+      }
     }
   }, [editor, menuOffset]);
 

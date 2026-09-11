@@ -15,7 +15,8 @@ export const FloatingMenuPage = () => (
     <h2 className="mt-10 mb-2 text-xl font-bold">Chat input usage</h2>
     <p className="mb-6 text-sm text-muted-foreground">
       The same menu package powers a WhatsApp-style chat input. Press Enter on
-      an empty line for block actions; press Enter with text to send.
+      an empty line for block actions; select text for formatting; press Enter
+      with text to send.
     </p>
     <ChatInputPreview />
   </div>

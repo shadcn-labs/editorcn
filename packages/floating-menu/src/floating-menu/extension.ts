@@ -22,6 +22,13 @@ export const defaultFloatingMenuShouldShow = ({
   return $from.parent.isTextblock && $from.parent.textContent === "";
 };
 
+/**
+ * Companion predicate for a formatting instance next to a block-actions
+ * instance: shows on any non-empty text selection while focused.
+ */
+export const showOnTextSelection = ({ editor }: { editor: Editor }): boolean =>
+  editor.isEditable && editor.isFocused && !editor.state.selection.empty;
+
 export const FloatingMenuExtension = Extension.create<FloatingMenuOptions>({
   addOptions() {
     return {
