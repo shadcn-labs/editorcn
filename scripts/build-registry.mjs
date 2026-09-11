@@ -460,7 +460,13 @@ const deps = {
     "lucide-react@>=0.400.0 <1.0.0",
     "tailwind-merge@^3.0.0",
   ],
-  "static-renderer": ["clsx@^2.1.1", "tailwind-merge@^3.0.0"],
+  "static-renderer": [
+    "@tiptap/core@>=3.21.0 <4",
+    "@tiptap/pm@>=3.21.0 <4",
+    "@tiptap/static-renderer@>=3.21.0 <4",
+    "clsx@^2.1.1",
+    "tailwind-merge@^3.0.0",
+  ],
 };
 
 const buildItem = (

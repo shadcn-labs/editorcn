@@ -333,6 +333,9 @@
     },
     {
       "dependencies": [
+        "@tiptap/core@>=3.21.0 <4",
+        "@tiptap/pm@>=3.21.0 <4",
+        "@tiptap/static-renderer@>=3.21.0 <4",
         "clsx@^2.1.1",
         "tailwind-merge@^3.0.0"
       ],

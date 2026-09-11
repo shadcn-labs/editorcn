@@ -40,6 +40,9 @@ catalogs:
       specifier: ^4.1.13
       version: 4.4.3
 
+overrides:
+  '@tiptap/static-renderer': 3.30.5
+
 importers:
 
   .:
@@ -180,6 +183,9 @@ importers:
       '@tiptap/starter-kit':
         specifier: ^3.0.0
         version: 3.30.5
+      '@tiptap/static-renderer':
+        specifier: 3.30.5
+        version: 3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/pm@3.30.5)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tiptap/suggestion':
         specifier: ^3.0.0
         version: 3.30.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/pm@3.30.5)
@@ -468,6 +474,15 @@ importers:
 
   packages/static-renderer:
     dependencies:
+      '@tiptap/core':
+        specifier: '>=3.21.0 <4'
+        version: 3.30.5(@tiptap/pm@3.30.5)
+      '@tiptap/pm':
+        specifier: '>=3.21.0 <4'
+        version: 3.30.5
+      '@tiptap/static-renderer':
+        specifier: 3.30.5
+        version: 3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/pm@3.30.5)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -3091,6 +3106,14 @@ packages:
 
   '@tiptap/starter-kit@3.30.5':
     resolution: {integrity: sha512-cmDRvukpoqjQjhE96q+l3tCLNZZcJKehxK+00Sp9F4XbKecfM2QpZ2TRHh3vi8qhCeDQNyMoCqfNaqznIjLjIQ==}
+
+  '@tiptap/static-renderer@3.30.5':
+    resolution: {integrity: sha512-kiabhK7vGB9hrYDqcDUIBLmoOuGTN5SkaUwLDsX2wil3mMIFsTsX4TDwofWgpoyrHfDviuM4fcV+5myKBXmaTg==}
+    peerDependencies:
+      '@tiptap/core': 3.30.5
+      '@tiptap/pm': 3.30.5
+      react: ^17.0.0 || ^18.0.0 || ^19.0.0
+      react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
 
   '@tiptap/suggestion@3.30.5':
     resolution: {integrity: sha512-kXlsY2GyXlVpYKp6uSedvvfACC4Phd0I8/Gp1/7ts8fYLlkVfGco6kgqOKHxT6HcUF1pGshxkDh9lfRCakkQEA==}
@@ -7984,6 +8007,13 @@ snapshots:
       '@tiptap/extension-underline': 3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))
       '@tiptap/extensions': 3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/pm@3.30.5)
       '@tiptap/pm': 3.30.5
+
+  '@tiptap/static-renderer@3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/pm@3.30.5)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
+    dependencies:
+      '@tiptap/core': 3.30.5(@tiptap/pm@3.30.5)
+      '@tiptap/pm': 3.30.5
+      react: 19.2.7
+      react-dom: 19.2.7(react@19.2.7)
 
   '@tiptap/suggestion@3.30.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/pm@3.30.5)':
     dependencies:

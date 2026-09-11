@@ -2,6 +2,9 @@ packages:
   - apps/*
   - packages/*
 
+overrides:
+  "@tiptap/static-renderer": 3.30.5
+
 allowBuilds:
   lefthook: true
   msw: true

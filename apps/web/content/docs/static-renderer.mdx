@@ -1,30 +1,36 @@
 ---
 title: Static Renderer
-description: Render saved editor content as styled, read-only HTML.
+description: Render saved editor content as styled, read-only HTML or React (from editor.getHTML() or editor.getJSON()).
 ---
 
-The static renderer is a small package that displays content produced by
-`@editorcn/editor` or `@editorcn/block-editor` as **read-only, fully styled
-HTML** — for blog posts, preview panes, emails, or chat message history.
+`StaticRenderer` displays content produced by `@editorcn/editor` or
+`@editorcn/block-editor` as **read-only, fully styled output** for blog
+posts, preview panes, emails, or chat message history.
 
-It ships a dedicated stylesheet targeting the exact HTML structure the editors
+One component accepts two kinds of saved content:
+
+- an **HTML string** from `editor.getHTML()`, or
+- a **ProseMirror JSON document** from `editor.getJSON()` (or parsed on your
+  backend / received via an API).
+
+It ships a dedicated stylesheet targeting the exact structure the editors
 serialize, so lists, headings, code blocks, tables, task lists, and embeds all
 render correctly out of the box. No markdown/`typeset.css` conversions needed.
 
-> The outside is not styled by the stylesheet — the text below is the exact
-> HTML string passed to `StaticRenderer`.
-
 <StaticRendererDemo />
+
+> The two panes below the editor render the same document twice: once from the
+> HTML string and once from the JSON document, so you can see both modes at
+> once.
 
 ## Installation
 
 `@editorcn/static-renderer` can be installed via the **shadcn registry**
-(recommended) or as a regular **npm** dependency — same as the editors.
+(recommended) or as a regular **npm** dependency, same as the editors.
 
 - **shadcn registry** (recommended) copies the component source into your
   project (under `components/static-renderer`), so you own and can customize
-  it. This is the preferred method since it gives you full control over
-  styling and behavior.
+  it.
 - **npm** installs the package as a regular dependency. Use this if you'd
   rather not vendor the component source into your repo.
 
@@ -49,8 +55,8 @@ npx shadcn@latest add @editorcn/static-renderer
 ```
 
 The CLI copies `StaticRenderer` and its stylesheet into
-`components/static-renderer` and installs the required `clsx` &
-`tailwind-merge` dependencies. Import from the copied source:
+`components/static-renderer` and installs the required dependencies. Import
+from the copied source:
 
 ```tsx
 import { StaticRenderer } from "@/components/static-renderer";
@@ -78,50 +84,194 @@ import "@editorcn/static-renderer/style.css";
 @import "@editorcn/static-renderer/style.css";
 ```
 
-The styles follow your shadcn theme (`--foreground`, `--primary`,
-`--border`, `--muted`, `--radius`, `--font-mono`, ...) and adapt to dark mode
-automatically.
-
-## Component
+## Usage
 
 > Import paths below use the npm install. When installed via the shadcn
 > registry, import from `@/components/static-renderer` instead.
 
+Pick a mode based on what you stored:
+
+- **HTML**: you saved `editor.getHTML()`. Simplest option; pass the string as
+  `content` and you're done.
+- **JSON**: you saved `editor.getJSON()`, or render a document received from
+  an API. Pass the document as `content` plus the `extensions` that built it.
+
+### HTML string
+
 ```tsx
 import { StaticRenderer } from "@editorcn/static-renderer";
-import "@editorcn/static-renderer/style.css";
 
 function PostView({ html }: { html: string }) {
   return <StaticRenderer content={html} />;
 }
 ```
 
-It renders a wrapper with the `rte-static-renderer` class and injects the
-content with `dangerouslySetInnerHTML`. Accepts the usual `HTMLAttributes`
-plus:
-
-| Prop        | Type          | Default | Description                                        |
-| ----------- | ------------- | ------- | -------------------------------------------------- |
-| `content`   | `string`      | —       | HTML from `editor.getHTML()`                       |
-| `as`        | `ElementType` | `"div"` | Root element to render                             |
-| `className` | `string`      | —       | Merged with the wrapper class via `tailwind-merge` |
-
-## Without the component
-
-Prefer plain HTML? Add the `rte-static-renderer` class yourself:
+### JSON document
 
 ```tsx
-function RenderContent({ html }: { html: string }) {
+import { StaticRenderer } from "@editorcn/static-renderer";
+import StarterKit from "@tiptap/starter-kit";
+
+const extensions = [StarterKit];
+
+function PostView({ json }: { json: Record<string, unknown> }) {
+  return <StaticRenderer content={json} extensions={extensions} />;
+}
+```
+
+Every node and mark type referenced by the document must be registered in
+`extensions`, otherwise rendering throws (mirroring `Node.fromJSON`). The
+`extensions` array should match the one your editor was created with.
+
+### Custom nodes
+
+Custom nodes come from the Tiptap extensions you registered in your editor.
+Each registered node appears as `{ "type": "<name>" }` inside
+`editor.getJSON()`. To replace its default static output with your own
+component, map the node name under `options.nodeMapping`.
+
+The rest of this section walks through the full flow: a custom `media` node
+used in the editor, the JSON it produces, and how the renderer displays it.
+
+**1. Define the node extension** (`media.ts`):
+
+```tsx
+import { Node } from "@tiptap/core";
+
+export const Media = Node.create({
+  name: "media",
+  group: "block",
+  atom: true,
+  addAttributes() {
+    return {
+      src: { default: null },
+      alt: { default: null },
+    };
+  },
+  parseHTML() {
+    return [{ tag: "img[src]" }];
+  },
+  renderHTML({ HTMLAttributes }) {
+    return ["img", HTMLAttributes];
+  },
+});
+```
+
+**2. Use it in the editor** (`post-editor.tsx`):
+
+```tsx
+"use client";
+
+import { RichTextEditor } from "@editorcn/editor";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import { Media } from "./media";
+
+const extensions = [StarterKit, Media];
+
+function PostEditor({ onSave }: { onSave: (json: unknown) => void }) {
+  const editor = useEditor({
+    extensions,
+    content: "<p>Write your post...</p>",
+    onCreate({ editor: ed }) {
+      onSave(ed.getJSON());
+    },
+    onUpdate({ editor: ed }) {
+      onSave(ed.getJSON());
+    },
+  });
+
   return (
-    <div
-      className="rte-static-renderer"
-      dangerouslySetInnerHTML={{ __html: html }}
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+Every time the author types, `onSave` receives the current document as JSON,
+including the `media` node:
+
+```json
+{
+  "type": "doc",
+  "content": [
+    {
+      "type": "media",
+      "attrs": { "src": "/diagram.png", "alt": "Architecture" }
+    }
+  ]
+}
+```
+
+Persist that JSON (a database column, an API response, a file) and hand it to
+the reader-facing side of your app.
+
+**3. Render it** (`post-view.tsx`):
+
+```tsx
+import { StaticRenderer } from "@editorcn/static-renderer";
+import StarterKit from "@tiptap/starter-kit";
+import type { Node } from "@tiptap/pm/model";
+import { Media } from "./media";
+
+const extensions = [StarterKit, Media];
+
+function MediaStatic({ node }: { node: Node }) {
+  return (
+    <figure>
+      <img src={node.attrs.src} alt={node.attrs.alt} className="rounded-lg" />
+      <figcaption>Rendered by a custom nodeMapping</figcaption>
+    </figure>
+  );
+}
+
+function PostView({ json }: { json: Record<string, unknown> }) {
+  return (
+    <StaticRenderer
+      content={json}
+      extensions={extensions}
+      options={{
+        nodeMapping: { media: ({ node }) => <MediaStatic node={node} /> },
+      }}
     />
   );
 }
 ```
 
-## Supported output
+`PostView` can live anywhere: the same page as the editor, a separate route
+that fetches the post by id, or a server component receiving JSON from your API.
+
+The preview above uses the same pattern with the built-in `image` node from
+`@tiptap/extension-image`: the JSON pane maps `image` to a custom component
+that wraps the image in a figure with a caption.
+
+> `nodeMapping` values render as standard React elements, so they work in both
+> client components (interactive) and in RSC (static). Node views
+> (`ReactNodeViewRenderer`) don't work outside a live editor; use `nodeMapping`
+> instead.
+
+## Props
+
+`StaticRenderer` renders a wrapper with the `rte-static-renderer` class. It
+accepts the usual `HTMLAttributes` plus:
+
+| Prop                  | Type                                                          | Default | Description                                                         |
+| --------------------- | ------------------------------------------------------------- | ------- | ------------------------------------------------------------------- |
+| `content`             | `string \| JSONContent \| Node`                               | -       | HTML from `editor.getHTML()`, or a ProseMirror JSON document        |
+| `as`                  | `ElementType`                                                 | `"div"` | Root element to render                                              |
+| `className`           | `string`                                                      | -       | Merged with the wrapper class via `tailwind-merge`                  |
+| `extensions`          | `Extensions`                                                  | -       | Tiptap extensions used to render JSON content (JSON mode only)      |
+| `staticEditorOptions` | `StaticEditorOptions`                                         | -       | Editor-level options applied while rendering JSON                   |
+| `options`             | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>` | -       | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes |
+
+## Styling
+
+The styles follow your shadcn theme (`--foreground`, `--primary`, `--border`,
+`--muted`, `--radius`, `--font-mono`, ...) and adapt to dark mode
+automatically.
+
+### Supported output
 
 The stylesheet covers every block element the editors serialize:
 
@@ -141,29 +291,12 @@ The stylesheet covers every block element the editors serialize:
 | Task lists          | `.rte-static-renderer ul[data-type="taskList"]`              |
 | Embeds (toolbar)    | `.rte-static-renderer div[data-type="youtube" / "twitter"]`  |
 
-## Embeds
-
 YouTube and Twitter embeds are serialized as empty `<div>`s carrying
-`data-type`, `data-src` / `data-tweet-id` attributes. The stylesheet renders
-them as 16:9 placeholder cards. To show the live media, replace the markup
-with an iframe or widget:
+`data-type`, `data-src` / `data-tweet-id` attributes, which render as 16:9
+placeholder cards. To show the live media in JSON mode, provide a
+`nodeMapping` entry; in HTML mode, replace the markup before rendering.
 
-```tsx
-import { StaticRenderer } from "@editorcn/static-renderer";
-
-function PostView({ html }: { html: string }) {
-  return (
-    <StaticRenderer
-      content={html.replace(
-        /<div([^>]*data-type="youtube"[^>]*)><\/div>/g,
-        "...youtube iframe using the data-src attribute..."
-      )}
-    />
-  );
-}
-```
-
-## Scoping overrides
+### Scoping overrides
 
 Wrap the renderer in a container and scope your overrides:
 
@@ -175,5 +308,20 @@ Wrap the renderer in a container and scope your overrides:
 
 .my-post .rte-static-renderer p {
   line-height: 1.8;
+}
+```
+
+## Without the component
+
+Prefer plain HTML? Add the `rte-static-renderer` class yourself:
+
+```tsx
+function RenderContent({ html }: { html: string }) {
+  return (
+    <div
+      className="rte-static-renderer"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
 }
 ```
