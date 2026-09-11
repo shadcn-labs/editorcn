@@ -10,6 +10,14 @@ import type { ElementType, HTMLAttributes, ReactNode } from "react";
 
 import { cn } from "./lib/utils";
 
+const resolveUniqueExtensions = (extensions: Extensions) => {
+  const byName = new Map<string, (typeof extensions)[number]>();
+  for (const extension of extensions) {
+    byName.set(extension.name, extension);
+  }
+  return [...byName.values()];
+};
+
 export type StaticRendererProps = Omit<
   HTMLAttributes<HTMLElement>,
   "content" | "dangerouslySetInnerHTML"
@@ -45,7 +53,7 @@ export const StaticRenderer = ({
 
   const children = renderToReactElement({
     content,
-    extensions: extensions ?? [],
+    extensions: resolveUniqueExtensions(extensions ?? []),
     options,
     staticEditorOptions,
   });

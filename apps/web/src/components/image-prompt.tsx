@@ -61,6 +61,7 @@ export const ImagePromptPortal = () => {
   const shown = useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
   const [url, setUrl] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (shown) {
@@ -74,6 +75,19 @@ export const ImagePromptPortal = () => {
     resolveCurrent?.(val);
     resolveCurrent = null;
   }, []);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) {
+      return;
+    }
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      handleClose(typeof reader.result === "string" ? reader.result : null);
+    });
+    reader.readAsDataURL(file);
+    e.target.value = "";
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -99,13 +113,13 @@ export const ImagePromptPortal = () => {
     >
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Insert Image URL</DialogTitle>
+          <DialogTitle>Insert Image</DialogTitle>
           <DialogDescription>
-            Enter the URL of the image you want to insert.
+            Paste an image URL or pick a file from your device.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
-          <div className="py-4">
+          <div className="space-y-3 py-4">
             <input
               ref={inputRef}
               type="url"
@@ -114,6 +128,21 @@ export const ImagePromptPortal = () => {
               placeholder="https://example.com/image.png"
               className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             />
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={handleFileChange}
+            />
+            <Button
+              variant="outline"
+              type="button"
+              className="w-full"
+              onClick={() => fileInputRef.current?.click()}
+            >
+              Choose a file...
+            </Button>
           </div>
           <DialogFooter>
             <Button

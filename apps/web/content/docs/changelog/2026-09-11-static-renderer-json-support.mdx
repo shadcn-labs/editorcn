@@ -1,0 +1,16 @@
+---
+title: "September 11, 2026 - Static renderer JSON support"
+description: "@editorcn/static-renderer now renders saved Tiptap JSON documents and maps custom nodes to your own React components."
+date: "2026-09-11"
+---
+
+`@editorcn/static-renderer` **v0.2.0** now renders saved Tiptap **JSON documents**, not just the HTML string the editors serialize. Pass an HTML string, a `JSONContent` document, or a Tiptap `Node` directly to `content`.
+
+## Highlights
+
+- **JSON content support** — `<StaticRenderer content={json} />` renders a saved JSON document read-only. The same `extensions` used in the editor are reused for the static renderer, so nothing is lost in the round trip.
+- **Custom node mapping** — the `options` prop accepts `nodeMapping`, letting you replace any node (such as `image`) with your own React component instead of the default HTML output.
+- **Existing HTML path unchanged** — passing `content` as a plain HTML string keeps rendering through the same stylesheet as before.
+- **Changeable demo image** — the [docs demo](/docs/static-renderer) toolbar now opens a prompt to insert or replace the preview image by URL or by picking a file from your device. The file option ships in the shared image prompt, so it is also available in the block editor slash command and the home page demo.
+
+See the [Static Renderer docs](/docs/static-renderer) for installation, the props table, and the custom nodes walkthrough.
