@@ -8,18 +8,21 @@ import {
   useLayoutEffect,
   useReducer,
   useRef,
+  useState,
 } from "react";
 
 import { cn } from "../ui/utils";
 import { defaultFloatingMenuItems } from "./default-items";
+import { defaultFloatingMenuShouldShow } from "./extension";
 import type { FloatingMenuOptions } from "./extension";
-import { getFloatingMenuState } from "./extension";
 
 export interface FloatingMenuItem {
   icon: React.ReactNode;
   label: string;
   command: (editor: Editor) => void;
   isActive?: (editor: Editor) => boolean;
+  /** Stable key for the button; falls back to `label`. */
+  id?: string;
 }
 
 export interface FloatingMenuProps {
@@ -30,19 +33,6 @@ export interface FloatingMenuProps {
   itemClassName?: string;
   offset?: number;
 }
-
-const defaultShouldShow = ({ editor }: { editor: Editor }) => {
-  if (
-    !editor.isEditable ||
-    !editor.isFocused ||
-    !editor.state.selection.empty
-  ) {
-    return false;
-  }
-  // Empty textblock only: typing hides the menu.
-  const { $from } = editor.state.selection;
-  return $from.parent.isTextblock && $from.parent.textContent === "";
-};
 
 const getExtensionShouldShow = (
   editor: Editor
@@ -68,6 +58,9 @@ export const FloatingMenu = ({
   // Re-render on every editor change so visibility and item
   // active-states always reflect live editor state.
   const [tick, forceUpdate] = useReducer((x: number) => x + 1, 0);
+  // Hidden until first positioned so the initial frame never
+  // flashes at the viewport origin. Resets on unmount (hide).
+  const [positioned, setPositioned] = useState(false);
 
   // Block actions by default; pass `items` to customize.
   const resolvedItems = items ?? defaultFloatingMenuItems;
@@ -75,7 +68,7 @@ export const FloatingMenu = ({
   const effectiveShouldShow =
     shouldShow ??
     (editor ? getExtensionShouldShow(editor) : undefined) ??
-    defaultShouldShow;
+    defaultFloatingMenuShouldShow;
 
   useEffect(() => {
     if (!editor) {
@@ -97,20 +90,15 @@ export const FloatingMenu = ({
   const show =
     editor !== null &&
     resolvedItems.length > 0 &&
-    editor.isEditable &&
-    editor.isFocused &&
     effectiveShouldShow({ editor });
 
   const updateMenuPosition = useCallback(async () => {
     if (!editor || !menuRef.current) {
       return;
     }
-    // Fall back to the live selection when the extension isn't installed.
-    const pos =
-      getFloatingMenuState(editor)?.pos ?? editor.state.selection.from;
-    if (pos < 0) {
-      return;
-    }
+    // The cursor position is read live; the extension is an options
+    // bag and install marker, not position storage.
+    const pos = editor.state.selection.from;
 
     let coords: {
       left: number;
@@ -124,7 +112,12 @@ export const FloatingMenu = ({
       try {
         const dom = editor.view.domAtPos(pos);
         const raw: unknown = dom.node;
-        const el = raw instanceof HTMLElement ? raw : null;
+        let el: HTMLElement | null = null;
+        if (raw instanceof HTMLElement) {
+          el = raw;
+        } else if (raw instanceof Text) {
+          el = raw.parentElement;
+        }
         if (el) {
           const rect = el.getBoundingClientRect();
           coords = {
@@ -156,30 +149,27 @@ export const FloatingMenu = ({
     const virtualElement = { getBoundingClientRect: () => rect };
 
     const place = (x: number, y: number) => {
-      const el = menuRef.current;
-      if (!el) {
-        return;
+      if (menuRef.current) {
+        menuRef.current.style.left = `${x}px`;
+        menuRef.current.style.top = `${y}px`;
+        setPositioned(true);
       }
-      // Vertically center the menu on the cursor line instead of
-      // top-aligning it, then clamp into the viewport.
-      const menuHeight = el.offsetHeight || 0;
-      const lineHeight = Math.max(rect.height, 0);
-      const centeredY = y - Math.max(menuHeight - lineHeight, 0) / 2;
-      const margin = 4;
-      const maxY = Math.max(window.innerHeight - menuHeight - margin, margin);
-      el.style.left = `${x}px`;
-      el.style.top = `${Math.min(Math.max(centeredY, margin), maxY)}px`;
     };
 
     try {
       const { x, y } = await computePosition(virtualElement, menuRef.current, {
-        middleware: [offset(menuOffset), flip(), shift()],
-        // Same line as the cursor, right after the caret.
-        placement: "right-start",
+        middleware: [offset(menuOffset), flip(), shift({ crossAxis: true })],
+        // Same line as the cursor, right after the caret, vertically
+        // centered; shift keeps the centered menu in view.
+        placement: "right",
       });
       place(x, y);
     } catch {
-      place(rect.right + menuOffset, rect.top);
+      place(
+        rect.right + menuOffset,
+        rect.top -
+          Math.max((menuRef.current?.offsetHeight || 0) - rect.height, 0) / 2
+      );
     }
   }, [editor, menuOffset]);
 
@@ -215,15 +205,16 @@ export const FloatingMenu = ({
         left: 0,
         position: "fixed",
         top: 0,
+        visibility: positioned ? "visible" : "hidden",
         zIndex: 50,
       }}
     >
       <div className="rte-floating-group">
-        {resolvedItems.map((item, i) => {
+        {resolvedItems.map((item) => {
           const isActive = item.isActive ? item.isActive(editor) : false;
           return (
             <button
-              key={i}
+              key={item.id ?? item.label}
               type="button"
               className={cn(
                 "rte-floating-item",

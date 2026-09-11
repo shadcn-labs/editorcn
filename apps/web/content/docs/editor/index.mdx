@@ -294,14 +294,14 @@ const editor = useEditor({
 
 ### Props
 
-| Prop            | Type                      | Default                              | Description                                                                |
-| --------------- | ------------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
-| `editor`        | `Editor \| null`          | —                                    | The Tiptap editor instance                                                 |
-| `items`         | `FloatingMenuItem[]`      | `defaultFloatingMenuItems`           | Menu buttons; each has `icon`, `label`, `command`, and optional `isActive` |
-| `shouldShow`    | `({ editor }) => boolean` | editable + focused + empty textblock | Visibility predicate; overrides the extension option                       |
-| `className`     | `string`                  | —                                    | Extra classes on the menu container                                        |
-| `itemClassName` | `string`                  | —                                    | Extra classes on each menu button                                          |
-| `offset`        | `number`                  | `8`                                  | Gap in pixels between the cursor and the menu                              |
+| Prop            | Type                      | Default                              | Description                                                                                                         |
+| --------------- | ------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| `editor`        | `Editor \| null`          | —                                    | The Tiptap editor instance                                                                                          |
+| `items`         | `FloatingMenuItem[]`      | `defaultFloatingMenuItems`           | Menu buttons; each has `icon`, `label`, `command`, and optional `isActive` and `id` (`id` is used as the React key) |
+| `shouldShow`    | `({ editor }) => boolean` | editable + focused + empty textblock | Visibility predicate; overrides the extension option                                                                |
+| `className`     | `string`                  | —                                    | Extra classes on the menu container                                                                                 |
+| `itemClassName` | `string`                  | —                                    | Extra classes on each menu button                                                                                   |
+| `offset`        | `number`                  | `8`                                  | Gap in pixels between the cursor and the menu                                                                       |
 
 ### Custom items
 
@@ -337,11 +337,13 @@ To offer the menu at every collapsed cursor instead of only empty lines, loosen 
 />
 ```
 
-You can also configure the predicate once on the extension instead of the component:
+You can also configure the predicate once on the extension instead of the component. The extension carries options only — cursor tracking reads live editor state, no plugin state involved:
 
 ```tsx
+import { defaultFloatingMenuShouldShow } from "@/components/editor";
+
 FloatingMenuExtension.configure({
-  shouldShow: ({ editor }) => editor.isEditable && editor.isFocused,
+  shouldShow: defaultFloatingMenuShouldShow,
 });
 ```
 

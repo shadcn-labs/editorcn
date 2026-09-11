@@ -46,6 +46,7 @@ export const defaultFloatingMenuItems: FloatingMenuItem[] = [
       chainFocus(editor).setParagraph().run();
     },
     icon: <Pilcrow className={iconClassName} />,
+    id: "text",
     isActive: (editor) =>
       editor.isActive("paragraph") &&
       !editor.isActive("bulletList") &&
@@ -57,6 +58,7 @@ export const defaultFloatingMenuItems: FloatingMenuItem[] = [
       chainFocus(editor).toggleHeading({ level: 1 }).run();
     },
     icon: <Heading1 className={iconClassName} />,
+    id: "heading-1",
     isActive: (editor) => editor.isActive("heading", { level: 1 }),
     label: "Heading 1",
   },
@@ -65,6 +67,7 @@ export const defaultFloatingMenuItems: FloatingMenuItem[] = [
       chainFocus(editor).toggleHeading({ level: 2 }).run();
     },
     icon: <Heading2 className={iconClassName} />,
+    id: "heading-2",
     isActive: (editor) => editor.isActive("heading", { level: 2 }),
     label: "Heading 2",
   },
@@ -73,6 +76,7 @@ export const defaultFloatingMenuItems: FloatingMenuItem[] = [
       chainFocus(editor).toggleHeading({ level: 3 }).run();
     },
     icon: <Heading3 className={iconClassName} />,
+    id: "heading-3",
     isActive: (editor) => editor.isActive("heading", { level: 3 }),
     label: "Heading 3",
   },
@@ -81,6 +85,7 @@ export const defaultFloatingMenuItems: FloatingMenuItem[] = [
       chainFocus(editor).toggleBulletList().run();
     },
     icon: <List className={iconClassName} />,
+    id: "bullet-list",
     isActive: (editor) => editor.isActive("bulletList"),
     label: "Bullet list",
   },
@@ -89,6 +94,7 @@ export const defaultFloatingMenuItems: FloatingMenuItem[] = [
       chainFocus(editor).toggleOrderedList().run();
     },
     icon: <ListOrdered className={iconClassName} />,
+    id: "ordered-list",
     isActive: (editor) => editor.isActive("orderedList"),
     label: "Ordered list",
   },
@@ -97,6 +103,7 @@ export const defaultFloatingMenuItems: FloatingMenuItem[] = [
       chainFocus(editor).toggleBlockquote().run();
     },
     icon: <TextQuote className={iconClassName} />,
+    id: "blockquote",
     isActive: (editor) => editor.isActive("blockquote"),
     label: "Quote",
   },
@@ -105,6 +112,7 @@ export const defaultFloatingMenuItems: FloatingMenuItem[] = [
       chainFocus(editor).toggleCodeBlock().run();
     },
     icon: <SquareCode className={iconClassName} />,
+    id: "code-block",
     isActive: (editor) => editor.isActive("codeBlock"),
     label: "Code block",
   },
@@ -113,6 +121,7 @@ export const defaultFloatingMenuItems: FloatingMenuItem[] = [
       chainFocus(editor).setHorizontalRule().run();
     },
     icon: <Minus className={iconClassName} />,
+    id: "divider",
     label: "Divider",
   },
 ];

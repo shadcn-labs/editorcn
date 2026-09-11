@@ -1,8 +1,7 @@
 export { FloatingMenu } from "./floating-menu";
 export {
   FloatingMenuExtension,
-  floatingMenuPluginKey,
-  getFloatingMenuState,
+  defaultFloatingMenuShouldShow,
 } from "./extension";
 export { defaultFloatingMenuItems } from "./default-items";
 export type { FloatingMenuItem, FloatingMenuProps } from "./floating-menu";
