@@ -6,6 +6,7 @@ import * as controls from "./controls/rte-controls";
 import { LinkControl } from "./controls/rte-link-control";
 import { TwitterEmbedControl } from "./controls/rte-twitter-control";
 import { YouTubeEmbedControl } from "./controls/rte-youtube-control";
+import { FloatingMenu } from "./floating-menu/index";
 import { DEFAULT_ICONS } from "./icons";
 import { DEFAULT_LABELS } from "./labels";
 import { Content } from "./rte-content";
@@ -77,6 +78,7 @@ export const RichTextEditor = Object.assign(RichTextEditorRoot, {
   Content,
   Control: RichTextEditorControl,
   ControlsGroup,
+  FloatingMenu,
   Footer,
   H1: controls.H1Control,
   H2: controls.H2Control,

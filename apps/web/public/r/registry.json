@@ -21,6 +21,7 @@
         "@base-ui/react@^1.0.0",
         "class-variance-authority@^0.7.1",
         "clsx@^2.1.1",
+        "@floating-ui/dom@^1.6.0",
         "lucide-react@>=0.400.0 <1.0.0",
         "tailwind-merge@^3.0.0"
       ],
@@ -84,6 +85,22 @@
         },
         {
           "path": "editor/bubble-menu/text-buttons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/floating-menu/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/floating-menu/extension.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/floating-menu/floating-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/floating-menu/default-items.tsx",
           "type": "registry:component"
         },
         {

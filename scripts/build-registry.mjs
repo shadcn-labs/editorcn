@@ -79,6 +79,30 @@ const editorFiles = [
     "bubble-menu/text-buttons.tsx"
   ),
   entry(
+    "editor/floating-menu/index.ts",
+    "registry:component",
+    "editor",
+    "floating-menu/index.ts"
+  ),
+  entry(
+    "editor/floating-menu/extension.ts",
+    "registry:component",
+    "editor",
+    "floating-menu/extension.ts"
+  ),
+  entry(
+    "editor/floating-menu/floating-menu.tsx",
+    "registry:component",
+    "editor",
+    "floating-menu/floating-menu.tsx"
+  ),
+  entry(
+    "editor/floating-menu/default-items.tsx",
+    "registry:component",
+    "editor",
+    "floating-menu/default-items.tsx"
+  ),
+  entry(
     "editor/controls/rte-control.tsx",
     "registry:component",
     "editor",
@@ -457,6 +481,7 @@ const deps = {
     "@base-ui/react@^1.0.0",
     "class-variance-authority@^0.7.1",
     "clsx@^2.1.1",
+    "@floating-ui/dom@^1.6.0",
     "lucide-react@>=0.400.0 <1.0.0",
     "tailwind-merge@^3.0.0",
   ],
