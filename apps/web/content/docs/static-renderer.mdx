@@ -196,7 +196,10 @@ including the `media` node:
 {
   "type": "doc",
   "content": [
-    { "type": "media", "attrs": { "src": "/diagram.png", "alt": "Architecture" } }
+    {
+      "type": "media",
+      "attrs": { "src": "/diagram.png", "alt": "Architecture" }
+    }
   ]
 }
 ```
@@ -228,7 +231,9 @@ function PostView({ json }: { json: Record<string, unknown> }) {
     <StaticRenderer
       content={json}
       extensions={extensions}
-      options={{ nodeMapping: { media: ({ node }) => <MediaStatic node={node} /> } }}
+      options={{
+        nodeMapping: { media: ({ node }) => <MediaStatic node={node} /> },
+      }}
     />
   );
 }
@@ -251,14 +256,14 @@ that wraps the image in a figure with a caption.
 `StaticRenderer` renders a wrapper with the `rte-static-renderer` class. It
 accepts the usual `HTMLAttributes` plus:
 
-| Prop                | Type                                                        | Default | Description                                                       |
-| ------------------- | ----------------------------------------------------------- | ------- | ----------------------------------------------------------------- |
-| `content`           | `string \| JSONContent \| Node`                             | -       | HTML from `editor.getHTML()`, or a ProseMirror JSON document      |
-| `as`                | `ElementType`                                               | `"div"` | Root element to render                                            |
-| `className`         | `string`                                                    | -       | Merged with the wrapper class via `tailwind-merge`                |
-| `extensions`        | `Extensions`                                                | -       | Tiptap extensions used to render JSON content (JSON mode only)    |
-| `staticEditorOptions` | `StaticEditorOptions`                                     | -       | Editor-level options applied while rendering JSON                 |
-| `options`           | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>` | -     | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes |
+| Prop                  | Type                                                          | Default | Description                                                         |
+| --------------------- | ------------------------------------------------------------- | ------- | ------------------------------------------------------------------- |
+| `content`             | `string \| JSONContent \| Node`                               | -       | HTML from `editor.getHTML()`, or a ProseMirror JSON document        |
+| `as`                  | `ElementType`                                                 | `"div"` | Root element to render                                              |
+| `className`           | `string`                                                      | -       | Merged with the wrapper class via `tailwind-merge`                  |
+| `extensions`          | `Extensions`                                                  | -       | Tiptap extensions used to render JSON content (JSON mode only)      |
+| `staticEditorOptions` | `StaticEditorOptions`                                         | -       | Editor-level options applied while rendering JSON                   |
+| `options`             | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>` | -       | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes |
 
 ## Styling
 
