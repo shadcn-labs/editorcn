@@ -11,7 +11,7 @@ import {
   useState,
 } from "react";
 
-import { cn } from "../ui/utils";
+import { cn } from "../lib/utils";
 import { defaultFloatingMenuItems } from "./default-items";
 import { defaultFloatingMenuShouldShow } from "./extension";
 import type { FloatingMenuOptions } from "./extension";
@@ -200,7 +200,7 @@ export const FloatingMenu = ({
   return (
     <div
       ref={menuRef}
-      className={cn("rte-floating-menu", className)}
+      className={cn("fm-menu", className)}
       style={{
         left: 0,
         position: "fixed",
@@ -209,7 +209,7 @@ export const FloatingMenu = ({
         zIndex: 50,
       }}
     >
-      <div className="rte-floating-group">
+      <div className="fm-group">
         {resolvedItems.map((item) => {
           const isActive = item.isActive ? item.isActive(editor) : false;
           return (
@@ -217,8 +217,8 @@ export const FloatingMenu = ({
               key={item.id ?? item.label}
               type="button"
               className={cn(
-                "rte-floating-item",
-                isActive && "rte-floating-item--active",
+                "fm-item",
+                isActive && "fm-item--active",
                 itemClassName
               )}
               onMouseDown={(e) => e.preventDefault()}

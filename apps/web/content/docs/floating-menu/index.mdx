@@ -1,0 +1,130 @@
+---
+title: Floating Menu
+description: A cursor-anchored floating menu for Tiptap editors. Drop it into any editor, including chat inputs.
+---
+
+A horizontal menu anchored to the blinking cursor, vertically centered on the cursor line right after the caret. Unlike a bubble menu (which formats a text selection), the floating menu acts on the block under the caret, so no selection is needed. By default it ships block actions — text, headings 1–3, bullet and ordered lists, quote, code block, divider — and shows only on an empty textblock while the editor is focused. Typing hides it, and selecting text hides it too.
+
+## Installation
+
+**Install via the shadcn registry (recommended):**
+
+```bash
+npx shadcn@latest add @editorcn/floating-menu
+```
+
+**Or install via npm:**
+
+```bash
+npm install @editorcn/floating-menu @tiptap/react @tiptap/pm @tiptap/core @floating-ui/dom
+```
+
+## Usage
+
+```tsx
+import {
+  FloatingMenu,
+  FloatingMenuExtension,
+} from "@/components/floating-menu";
+import "@editorcn/floating-menu/style.css";
+
+const editor = useEditor({
+  extensions: [StarterKit, FloatingMenuExtension],
+});
+
+return (
+  <>
+    <FloatingMenu editor={editor} />
+    <EditorContent editor={editor} />
+  </>
+);
+```
+
+### Props
+
+| Prop            | Type                      | Default                              | Description                                                                                                         |
+| --------------- | ------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| `editor`        | `Editor \| null`          | —                                    | The Tiptap editor instance                                                                                          |
+| `items`         | `FloatingMenuItem[]`      | `defaultFloatingMenuItems`           | Menu buttons; each has `icon`, `label`, `command`, and optional `isActive` and `id` (`id` is used as the React key) |
+| `shouldShow`    | `({ editor }) => boolean` | editable + focused + empty textblock | Visibility predicate; overrides the extension option                                                                |
+| `className`     | `string`                  | —                                    | Extra classes on the menu container                                                                                 |
+| `itemClassName` | `string`                  | —                                    | Extra classes on each menu button                                                                                   |
+| `offset`        | `number`                  | `8`                                  | Gap in pixels between the cursor and the menu                                                                       |
+
+### Custom items
+
+Pass `items` to replace the defaults, or spread `defaultFloatingMenuItems` to extend them:
+
+```tsx
+import { defaultFloatingMenuItems } from "@/components/floating-menu";
+
+<FloatingMenu
+  editor={editor}
+  items={[
+    ...defaultFloatingMenuItems,
+    {
+      command: (ed) => ed.chain().focus().toggleBold().run(),
+      icon: <Bold />,
+      id: "bold",
+      isActive: (ed) => ed.isActive("bold"),
+      label: "Bold",
+    },
+  ]}
+/>;
+```
+
+### Show at any cursor position
+
+To offer the menu at every collapsed cursor instead of only empty lines, loosen the predicate:
+
+```tsx
+<FloatingMenu
+  editor={editor}
+  shouldShow={({ editor: ed }) =>
+    ed.isEditable && ed.isFocused && ed.state.selection.empty
+  }
+/>
+```
+
+You can also configure the predicate once on the extension instead of the component. The extension carries options only — cursor tracking reads live editor state, no plugin state involved:
+
+```tsx
+import { defaultFloatingMenuShouldShow } from "@/components/floating-menu";
+
+FloatingMenuExtension.configure({
+  shouldShow: defaultFloatingMenuShouldShow,
+});
+```
+
+The component reads it automatically; an explicit `shouldShow` prop takes precedence. Its visuals follow your shadcn theme tokens and can be customized with the `.fm-menu`, `.fm-group`, and `.fm-item` classes.
+
+## Use in a chat input
+
+The menu is editor-agnostic: point it at any Tiptap instance. A minimal chat input pairs a compact editor with Enter-to-send:
+
+```tsx
+const editor = useEditor({
+  extensions: [StarterKit, Placeholder.configure({ placeholder: "Message" })],
+  editorProps: {
+    handleKeyDown: (view, event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        send(view.state.doc.textContent);
+        view.dispatch(view.state.tr.delete(0, view.state.doc.content.size));
+        return true;
+      }
+      return false;
+    },
+  },
+});
+
+return (
+  <div className="chat-input">
+    <FloatingMenu editor={editor} />
+    <EditorContent editor={editor} />
+    <button onClick={send} aria-label="Send">
+      <Send />
+    </button>
+  </div>
+);
+```

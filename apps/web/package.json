@@ -12,6 +12,7 @@
     "@editorcn/block-editor": "workspace:*",
     "@editorcn/editor": "workspace:*",
     "@editorcn/env": "workspace:*",
+    "@editorcn/floating-menu": "workspace:*",
     "@editorcn/static-renderer": "workspace:*",
     "@editorcn/ui": "workspace:*",
     "@floating-ui/dom": "^1.6.0",

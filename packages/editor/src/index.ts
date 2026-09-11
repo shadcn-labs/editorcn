@@ -1,15 +1,6 @@
 export { RichTextEditor } from "./rte-text-editor";
 export { useRichTextEditorContext } from "./rte-context";
 export { BubbleMenu } from "./bubble-menu/index";
-export { FloatingMenu } from "./floating-menu/index";
-export { FloatingMenuExtension } from "./floating-menu/index";
-export { defaultFloatingMenuItems } from "./floating-menu/index";
-export { defaultFloatingMenuShouldShow } from "./floating-menu/index";
-export type {
-  FloatingMenuItem,
-  FloatingMenuProps,
-  FloatingMenuOptions,
-} from "./floating-menu/index";
 export type { RichTextEditorProps } from "./types";
 export type { RichTextEditorVariant } from "./types";
 export type { RichTextEditorFooterProps, WordCountInfo } from "./types";

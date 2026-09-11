@@ -21,7 +21,6 @@
         "@base-ui/react@^1.0.0",
         "class-variance-authority@^0.7.1",
         "clsx@^2.1.1",
-        "@floating-ui/dom@^1.6.0",
         "lucide-react@>=0.400.0 <1.0.0",
         "tailwind-merge@^3.0.0"
       ],
@@ -85,22 +84,6 @@
         },
         {
           "path": "editor/bubble-menu/text-buttons.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/floating-menu/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/floating-menu/extension.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/floating-menu/floating-menu.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/floating-menu/default-items.tsx",
           "type": "registry:component"
         },
         {
@@ -377,6 +360,47 @@
       ],
       "name": "static-renderer",
       "title": "Static Renderer",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=2.11.5 <4",
+        "@tiptap/react@>=2.11.5 <4",
+        "@tiptap/pm@>=2.11.5 <4",
+        "@floating-ui/dom@^1.6.0",
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "tailwind-merge@^3.0.0"
+      ],
+      "description": "A cursor-anchored floating menu for Tiptap editors. Drop it into any editor, including chat inputs.",
+      "files": [
+        {
+          "path": "floating-menu/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "floating-menu/extension.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "floating-menu/floating-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "floating-menu/default-items.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "floating-menu/lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "floating-menu/style.css",
+          "type": "registry:style"
+        }
+      ],
+      "name": "floating-menu",
+      "title": "Floating Menu",
       "type": "registry:component"
     }
   ],

@@ -32,7 +32,7 @@ interface FloatingMenuChainedCommands {
 const chainFocus = (editor: Editor): FloatingMenuChainedCommands =>
   editor.chain().focus() as unknown as FloatingMenuChainedCommands;
 
-const iconClassName = "rte-editor-icon";
+const iconClassName = "fm-icon";
 
 /**
  * Default cursor actions for the floating menu: insert / transform blocks

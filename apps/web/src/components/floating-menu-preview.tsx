@@ -1,6 +1,7 @@
 "use client";
 
-import { FloatingMenuExtension, Link, RichTextEditor } from "@editorcn/editor";
+import { Link, RichTextEditor } from "@editorcn/editor";
+import { FloatingMenu, FloatingMenuExtension } from "@editorcn/floating-menu";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { Underline } from "@tiptap/extension-underline";
 import type { Editor } from "@tiptap/react";
@@ -10,7 +11,7 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 
-import "@editorcn/editor/style.css";
+import "@editorcn/floating-menu/style.css";
 
 const DEMO_CONTENT = `
 <p>Click on an empty line below — the <strong>floating menu</strong> appears on the same line, right after the cursor, with block actions (headings, lists, quote, code).</p>
@@ -88,7 +89,7 @@ export const FloatingMenuPreview = () => {
           {/* Existing: text formatting on selection */}
           <RichTextEditor.BubbleMenu editor={editor} />
           {/* New: block actions at the cursor (zero-config defaults) */}
-          <RichTextEditor.FloatingMenu
+          <FloatingMenu
             editor={editor}
             shouldShow={mode === "cursor" ? showAtAnyCursor : undefined}
           />
