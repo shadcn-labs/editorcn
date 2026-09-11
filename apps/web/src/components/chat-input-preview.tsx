@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  FloatingMenu,
-  FloatingMenuExtension,
-  defaultTextFormattingItems,
-  showOnTextSelection,
-} from "@editorcn/floating-menu";
+import { FloatingMenu, FloatingMenuExtension } from "@editorcn/floating-menu";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { EditorContent, useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
@@ -25,7 +20,7 @@ interface ChatMessage {
 export const ChatInputPreview = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      html: "Hey! Click the input below, then press Enter on an empty line.",
+      html: "Hey! Type below, then select your text for formatting.",
       id: 1,
     },
   ]);
@@ -92,13 +87,8 @@ export const ChatInputPreview = () => {
             "[&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]"
           )}
         />
+        {/* Formatting actions on text selection (zero-config defaults) */}
         <FloatingMenu editor={editor} />
-        {/* Formatting actions on text selection */}
-        <FloatingMenu
-          editor={editor}
-          items={defaultTextFormattingItems}
-          shouldShow={showOnTextSelection}
-        />
         <Button
           type="button"
           size="icon"

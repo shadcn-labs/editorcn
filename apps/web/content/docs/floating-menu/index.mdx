@@ -1,9 +1,9 @@
 ---
 title: Floating Menu
-description: A cursor-anchored floating menu for Tiptap editors. Drop it into any editor, including chat inputs.
+description: A floating formatting menu for selected text. Drop it into any Tiptap editor, including chat inputs.
 ---
 
-A horizontal menu anchored to the blinking cursor, vertically centered on the cursor line right after the caret. Unlike a bubble menu (which formats a text selection), the floating menu acts on the block under the caret, so no selection is needed. By default it ships block actions — text, headings 1–3, bullet and ordered lists, quote, code block, divider — and shows only on an empty textblock while the editor is focused. Typing hides it, and selecting text hides it too.
+A horizontal menu that appears above selected text with formatting actions — bold, italic, underline, strikethrough, and inline code — like the formatting popup in WhatsApp or X chat inputs. It shows on any non-empty text selection while the editor is editable and focused, anchored above the selected range.
 
 ## Installation
 
@@ -42,87 +42,50 @@ return (
 
 ### Props
 
-| Prop            | Type                      | Default                              | Description                                                                                                         |
-| --------------- | ------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------- |
-| `editor`        | `Editor \| null`          | —                                    | The Tiptap editor instance                                                                                          |
-| `items`         | `FloatingMenuItem[]`      | `defaultFloatingMenuItems`           | Menu buttons; each has `icon`, `label`, `command`, and optional `isActive` and `id` (`id` is used as the React key) |
-| `shouldShow`    | `({ editor }) => boolean` | editable + focused + empty textblock | Visibility predicate; overrides the extension option                                                                |
-| `className`     | `string`                  | —                                    | Extra classes on the menu container                                                                                 |
-| `itemClassName` | `string`                  | —                                    | Extra classes on each menu button                                                                                   |
-| `offset`        | `number`                  | `8`                                  | Gap in pixels between the cursor and the menu                                                                       |
+| Prop            | Type                      | Default                                  | Description                                                                                                         |
+| --------------- | ------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `editor`        | `Editor \| null`          | —                                        | The Tiptap editor instance                                                                                          |
+| `items`         | `FloatingMenuItem[]`      | `defaultTextFormattingItems`             | Menu buttons; each has `icon`, `label`, `command`, and optional `isActive` and `id` (`id` is used as the React key) |
+| `shouldShow`    | `({ editor }) => boolean` | editable + focused + non-empty selection | Visibility predicate; overrides the extension option                                                                |
+| `className`     | `string`                  | —                                        | Extra classes on the menu container                                                                                 |
+| `itemClassName` | `string`                  | —                                        | Extra classes on each menu button                                                                                   |
+| `offset`        | `number`                  | `8`                                      | Gap in pixels between the selection and the menu                                                                    |
 
 ### Custom items
 
-Pass `items` to replace the defaults, or spread `defaultFloatingMenuItems` to extend them:
+Pass `items` to replace the defaults, or spread `defaultTextFormattingItems` to extend them:
 
 ```tsx
-import { defaultFloatingMenuItems } from "@/components/floating-menu";
+import { defaultTextFormattingItems } from "@/components/floating-menu";
 
 <FloatingMenu
   editor={editor}
   items={[
-    ...defaultFloatingMenuItems,
+    ...defaultTextFormattingItems,
     {
-      command: (ed) => ed.chain().focus().toggleBold().run(),
-      icon: <Bold />,
-      id: "bold",
-      isActive: (ed) => ed.isActive("bold"),
-      label: "Bold",
+      command: (ed) => ed.chain().focus().toggleStrike().run(),
+      icon: <Strikethrough />,
+      id: "strike",
+      isActive: (ed) => ed.isActive("strike"),
+      label: "Strikethrough",
     },
   ]}
 />;
 ```
 
-### Show at any cursor position
+Note that `toggleUnderline` needs `@tiptap/extension-underline`, which is not part of StarterKit — it no-ops gracefully without it.
 
-To offer the menu at every collapsed cursor instead of only empty lines, loosen the predicate:
-
-```tsx
-<FloatingMenu
-  editor={editor}
-  shouldShow={({ editor: ed }) =>
-    ed.isEditable && ed.isFocused && ed.state.selection.empty
-  }
-/>
-```
-
-You can also configure the predicate once on the extension instead of the component. The extension carries options only — cursor tracking reads live editor state, no plugin state involved:
+You can also configure the predicate once on the extension instead of the component. The extension carries options only — selection tracking reads live editor state, no plugin state involved:
 
 ```tsx
-import { defaultFloatingMenuShouldShow } from "@/components/floating-menu";
+import { showOnTextSelection } from "@/components/floating-menu";
 
 FloatingMenuExtension.configure({
-  shouldShow: defaultFloatingMenuShouldShow,
+  shouldShow: showOnTextSelection,
 });
 ```
 
 The component reads it automatically; an explicit `shouldShow` prop takes precedence. Its visuals follow your shadcn theme tokens and can be customized with the `.fm-menu`, `.fm-group`, and `.fm-item` classes.
-
-## Formatting selected text
-
-Pair a block-actions instance (empty lines) with a formatting instance (text selections). The predicates are mutually exclusive, so only one menu shows at a time. Selections anchor above the selected range; the cursor instance stays on the caret line:
-
-```tsx
-import {
-  FloatingMenu,
-  defaultTextFormattingItems,
-  showOnTextSelection,
-} from "@/components/floating-menu";
-
-<>
-  {/* Block actions on empty lines (defaults) */}
-  <FloatingMenu editor={editor} />
-  {/* Text formatting on selections */}
-  <FloatingMenu
-    editor={editor}
-    items={defaultTextFormattingItems}
-    shouldShow={showOnTextSelection}
-  />
-  <EditorContent editor={editor} />
-</>;
-```
-
-`defaultTextFormattingItems` covers bold, italic, underline, strikethrough, and inline code. Note that `toggleUnderline` needs `@tiptap/extension-underline`, which is not part of StarterKit — it no-ops gracefully without it.
 
 ## Use in a chat input
 

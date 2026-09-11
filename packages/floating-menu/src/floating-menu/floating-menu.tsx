@@ -12,8 +12,8 @@ import {
 } from "react";
 
 import { cn } from "../lib/utils";
-import { defaultFloatingMenuItems } from "./default-items";
-import { defaultFloatingMenuShouldShow } from "./extension";
+import { defaultTextFormattingItems } from "./default-items";
+import { showOnTextSelection } from "./extension";
 import type { FloatingMenuOptions } from "./extension";
 
 export interface FloatingMenuItem {
@@ -62,13 +62,13 @@ export const FloatingMenu = ({
   // flashes at the viewport origin. Resets on unmount (hide).
   const [positioned, setPositioned] = useState(false);
 
-  // Block actions by default; pass `items` to customize.
-  const resolvedItems = items ?? defaultFloatingMenuItems;
+  // Text-formatting actions by default; pass `items` to customize.
+  const resolvedItems = items ?? defaultTextFormattingItems;
 
   const effectiveShouldShow =
     shouldShow ??
     (editor ? getExtensionShouldShow(editor) : undefined) ??
-    defaultFloatingMenuShouldShow;
+    showOnTextSelection;
 
   useEffect(() => {
     if (!editor) {
@@ -102,10 +102,10 @@ export const FloatingMenu = ({
     const { from } = selection;
     const { to } = selection;
 
-    // Collapsed cursor: anchor at the caret. Text selection: anchor
-    // to the box spanning the selection so the menu sits above it.
-    const anchorFrom = selection.empty ? from : Math.min(from, to);
-    const anchorTo = selection.empty ? from : Math.max(from, to);
+    // Anchor to the box spanning the selection so the menu sits
+    // above it. A collapsed cursor degrades to the caret point.
+    const anchorFrom = Math.min(from, to);
+    const anchorTo = Math.max(from, to);
 
     const coordsAt = (
       pos: number
@@ -139,7 +139,7 @@ export const FloatingMenu = ({
     };
 
     const start = coordsAt(anchorFrom);
-    const end = selection.empty ? start : coordsAt(anchorTo);
+    const end = coordsAt(anchorTo);
     const coords =
       start && end
         ? {
@@ -176,25 +176,15 @@ export const FloatingMenu = ({
     try {
       const { x, y } = await computePosition(virtualElement, menuRef.current, {
         middleware: [offset(menuOffset), flip(), shift({ crossAxis: true })],
-        // Collapsed cursor: same line, right after the caret, vertically
-        // centered. Text selection: above the selection, centered.
-        // Shift keeps the menu in view on either axis.
-        placement: selection.empty ? "right" : "top",
+        // Above the selection, centered; shift keeps the menu in view.
+        placement: "top",
       });
       place(x, y);
     } catch {
-      if (selection.empty) {
-        place(
-          rect.right + menuOffset,
-          rect.top -
-            Math.max((menuRef.current?.offsetHeight || 0) - rect.height, 0) / 2
-        );
-      } else {
-        place(
-          rect.left + rect.width / 2 - (menuRef.current?.offsetWidth || 0) / 2,
-          rect.top - (menuRef.current?.offsetHeight || 0) - menuOffset
-        );
-      }
+      place(
+        rect.left + rect.width / 2 - (menuRef.current?.offsetWidth || 0) / 2,
+        rect.top - (menuRef.current?.offsetHeight || 0) - menuOffset
+      );
     }
   }, [editor, menuOffset]);
 
