@@ -1,6 +1,9 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "dependencies": [
+    "@tiptap/core@>=3.21.0 <4",
+    "@tiptap/pm@>=3.21.0 <4",
+    "@tiptap/static-renderer@>=3.21.0 <4",
     "clsx@^2.1.1",
     "tailwind-merge@^3.0.0"
   ],
@@ -13,7 +16,7 @@
       "type": "registry:component"
     },
     {
-      "content": "import type { ElementType, HTMLAttributes } from \"react\";\r\nimport { createElement } from \"react\";\r\n\r\nimport { cn } from \"./lib/utils\";\r\n\r\nexport type StaticRendererProps = Omit<\r\n  HTMLAttributes<HTMLElement>,\r\n  \"dangerouslySetInnerHTML\"\r\n> & {\r\n  /**\r\n   * HTML produced by `editor.getHTML()` from either `@editorcn/editor` or\r\n   * `@editorcn/block-editor`. Rendered read-only.\r\n   */\r\n  content: string;\r\n  /**\r\n   * Element used as the renderer's root. Defaults to `\"div\"`.\r\n   */\r\n  as?: ElementType;\r\n};\r\n\r\nexport const StaticRenderer = ({\r\n  as: Tag = \"div\",\r\n  className,\r\n  content,\r\n  ...props\r\n}: StaticRendererProps) =>\r\n  createElement(Tag, {\r\n    ...props,\r\n    className: cn(\"rte-static-renderer\", className),\r\n    dangerouslySetInnerHTML: { __html: content },\r\n  });\r\n",
+      "content": "import type { Extensions, JSONContent } from \"@tiptap/core\";\nimport type { Mark, Node } from \"@tiptap/pm/model\";\nimport { renderToReactElement } from \"@tiptap/static-renderer\";\nimport type {\n  StaticEditorOptions,\n  TiptapStaticRendererOptions,\n} from \"@tiptap/static-renderer\";\nimport { createElement } from \"react\";\nimport type { ElementType, HTMLAttributes, ReactNode } from \"react\";\n\nimport { cn } from \"./lib/utils\";\n\nexport type StaticRendererProps = Omit<\n  HTMLAttributes<HTMLElement>,\n  \"content\" | \"dangerouslySetInnerHTML\"\n> & {\n  // HTML from editor.getHTML() rendered read-only, or a ProseMirror JSON document.\n  content: string | JSONContent | Node;\n  // Root element, defaults to \"div\".\n  as?: ElementType;\n  // Tiptap extensions used to render JSON content; every node/mark in the document must be registered.\n  extensions?: Extensions;\n  // Editor-level options applied while rendering JSON.\n  staticEditorOptions?: StaticEditorOptions;\n  // renderToReactElement options — nodeMapping/markMapping for custom nodes.\n  options?: Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>;\n};\n\nexport const StaticRenderer = ({\n  as: Tag = \"div\",\n  className,\n  content,\n  extensions,\n  staticEditorOptions,\n  options,\n  ...props\n}: StaticRendererProps) => {\n  if (typeof content === \"string\") {\n    return createElement(Tag, {\n      ...props,\n      className: cn(\"rte-static-renderer\", className),\n      dangerouslySetInnerHTML: { __html: content },\n    });\n  }\n\n  const children = renderToReactElement({\n    content,\n    extensions: extensions ?? [],\n    options,\n    staticEditorOptions,\n  });\n\n  return createElement(\n    Tag,\n    { ...props, className: cn(\"rte-static-renderer\", className) },\n    children\n  );\n};\n",
       "path": "static-renderer/static-renderer.tsx",
       "target": "@components/static-renderer/static-renderer.tsx",
       "type": "registry:component"

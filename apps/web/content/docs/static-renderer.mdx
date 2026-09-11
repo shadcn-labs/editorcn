@@ -100,11 +100,71 @@ It renders a wrapper with the `rte-static-renderer` class and injects the
 content with `dangerouslySetInnerHTML`. Accepts the usual `HTMLAttributes`
 plus:
 
-| Prop        | Type          | Default | Description                                        |
-| ----------- | ------------- | ------- | -------------------------------------------------- |
-| `content`   | `string`      | —       | HTML from `editor.getHTML()`                       |
-| `as`        | `ElementType` | `"div"` | Root element to render                             |
-| `className` | `string`      | —       | Merged with the wrapper class via `tailwind-merge` |
+| Prop                | Type                                                                 | Default | Description                                                          |
+| ------------------- | -------------------------------------------------------------------- | ------- | -------------------------------------------------------------------- |
+| `content`           | `string \| JSONContent \| Node`                                      | —       | HTML from `editor.getHTML()`, or a ProseMirror JSON document         |
+| `as`                | `ElementType`                                                        | `"div"` | Root element to render                                               |
+| `className`         | `string`                                                             | —       | Merged with the wrapper class via `tailwind-merge`                   |
+| `extensions`        | `Extensions`                                                         | —       | Tiptap extensions used to render JSON content (required in JSON mode) |
+| `staticEditorOptions` | `StaticEditorOptions`                                              | —       | Editor-level options applied while rendering JSON                    |
+| `options`           | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>`        | —       | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes  |
+
+## Rendering JSON content
+
+`content` accepts a ProseMirror JSON document — from `editor.getJSON()`, parsed
+on your backend, or received via an API — in addition to HTML strings. JSON
+documents are rendered through `renderToReactElement` from
+`@tiptap/static-renderer`, so pass the `extensions` that define every node and
+mark in the document:
+
+```tsx
+import { StaticRenderer } from "@editorcn/static-renderer";
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
+const extensions = [StarterKit];
+
+function PostView({ json }: { json: Record<string, unknown> }) {
+  return <StaticRenderer content={json} extensions={extensions} />;
+}
+```
+
+Every node type referenced by the document must be registered in
+`extensions`, otherwise rendering throws (mirroring `Node.fromJSON`).
+
+### Custom interactive nodes
+
+Use `options.nodeMapping` to swap any node's default rendering for your own
+component — e.g. media, diagrams, or embeds that need an interactive
+representation:
+
+```tsx
+import { StaticRenderer } from "@editorcn/static-renderer";
+import StarterKit from "@tiptap/starter-kit";
+import type { Node } from "@tiptap/pm/model";
+
+const extensions = [StarterKit];
+
+function MediaStatic({ node }: { node: Node }) {
+  const { type, src } = node.attrs;
+  return type === "video" ? <VideoPlayer src={src} /> : <Image src={src} />;
+}
+
+function PostView({ json }: { json: Record<string, unknown> }) {
+  return (
+    <StaticRenderer
+      content={json}
+      extensions={extensions}
+      options={{ nodeMapping: { media: ({ node }) => <MediaStatic node={node} /> } }}
+    />
+  );
+}
+```
+
+> `nodeMapping` values render as standard React elements, so they work in both
+> client components (interactive) and in RSC (static). Node views
+> (`ReactNodeViewRenderer`) don't work outside a live editor — use `nodeMapping`
+> instead.
 
 ## Without the component
 

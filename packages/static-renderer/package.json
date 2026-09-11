@@ -1,6 +1,6 @@
 {
   "name": "@editorcn/static-renderer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "files": [
     "dist"
   ],
@@ -35,6 +35,9 @@
     "typescript": "^5"
   },
   "peerDependencies": {
+    "@tiptap/core": ">=3.21.0 <4",
+    "@tiptap/pm": ">=3.21.0 <4",
+    "@tiptap/static-renderer": ">=3.21.0 <4",
     "react": "^18 || ^19",
     "react-dom": "^18 || ^19"
   }

@@ -6,6 +6,7 @@ import { Placeholder } from "@tiptap/extension-placeholder";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Underline } from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
+import type { JSONContent } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { Eye } from "lucide-react";
 import { useState } from "react";
@@ -65,11 +66,16 @@ const extensions = [
 
 export const StaticRendererDemo = () => {
   const [doc, setDoc] = useState(CONTENT);
+  const [json, setJson] = useState<JSONContent | null>(null);
   const editor = useEditor({
     content: CONTENT,
     extensions,
     immediatelyRender: false,
-    onUpdate: ({ editor: ed }) => setDoc(ed.getHTML()),
+    onCreate: ({ editor: ed }) => setJson(ed.getJSON()),
+    onUpdate: ({ editor: ed }) => {
+      setDoc(ed.getHTML());
+      setJson(ed.getJSON());
+    },
     shouldRerenderOnTransaction: false,
   });
 
@@ -110,13 +116,24 @@ export const StaticRendererDemo = () => {
         </RichTextEditor>
       </div>
 
-      <div className="overflow-hidden rounded-md border border-border">
-        <div className="flex items-center gap-2 border-b border-border px-4 py-2.5 text-sm font-medium text-muted-foreground">
-          <Eye className="size-4" />
-          Static read-only output
+      <div className="grid gap-4 md:grid-cols-2">
+        <div className="overflow-hidden rounded-md border border-border">
+          <div className="flex items-center gap-2 border-b border-border px-4 py-2.5 text-sm font-medium text-muted-foreground">
+            <Eye className="size-4" />
+            Static output — HTML
+          </div>
+          <div className="p-5">
+            <StaticRenderer content={doc} />
+          </div>
         </div>
-        <div className="p-5">
-          <StaticRenderer content={doc} />
+        <div className="overflow-hidden rounded-md border border-border">
+          <div className="flex items-center gap-2 border-b border-border px-4 py-2.5 text-sm font-medium text-muted-foreground">
+            <Eye className="size-4" />
+            Static output — JSON
+          </div>
+          <div className="p-5">
+            {json && <StaticRenderer content={json} extensions={extensions} />}
+          </div>
         </div>
       </div>
     </div>
