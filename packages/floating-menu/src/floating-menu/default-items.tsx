@@ -11,28 +11,20 @@ import {
 
 import type { FloatingMenuItem } from "./floating-menu";
 
-interface FloatingMenuChainedCommands {
-  focus: () => FloatingMenuChainedCommands;
-  run: () => boolean;
-  toggleBold: () => FloatingMenuChainedCommands;
-  toggleCode: () => FloatingMenuChainedCommands;
-  toggleItalic: () => FloatingMenuChainedCommands;
-  toggleStrike: () => FloatingMenuChainedCommands;
-  toggleUnderline: () => FloatingMenuChainedCommands;
+interface ToggleableChain {
+  run(): boolean;
+  toggleBold(): ToggleableChain;
+  toggleCode(): ToggleableChain;
+  toggleItalic(): ToggleableChain;
+  toggleStrike(): ToggleableChain;
+  toggleUnderline(): ToggleableChain;
 }
 
-const chainFocus = (editor: Editor): FloatingMenuChainedCommands =>
-  editor.chain().focus() as unknown as FloatingMenuChainedCommands;
+const chainFocus = (editor: Editor): ToggleableChain =>
+  editor.chain().focus() as unknown as ToggleableChain;
 
 const iconClassName = "fm-icon";
 
-/**
- * Default text-formatting actions for selected text. Pair with a
- * `shouldShow` predicate that requires a non-empty selection (see
- * `showOnTextSelection`). `toggleUnderline` needs
- * `@tiptap/extension-underline`, which is not part of StarterKit; it
- * no-ops gracefully without it.
- */
 export const defaultTextFormattingItems: FloatingMenuItem[] = [
   {
     command: (editor) => {

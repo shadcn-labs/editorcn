@@ -12,6 +12,7 @@ import {
 } from "react";
 
 import { cn } from "../lib/utils";
+import { FloatingMenuButton, FloatingMenuButtonGroup } from "../ui";
 import { defaultTextFormattingItems } from "./default-items";
 import { showOnTextSelection } from "./extension";
 import type { FloatingMenuOptions } from "./extension";
@@ -21,7 +22,6 @@ export interface FloatingMenuItem {
   label: string;
   command: (editor: Editor) => void;
   isActive?: (editor: Editor) => boolean;
-  /** Stable key for the button; falls back to `label`. */
   id?: string;
 }
 
@@ -55,14 +55,9 @@ export const FloatingMenu = ({
   offset: menuOffset = 8,
 }: FloatingMenuProps) => {
   const menuRef = useRef<HTMLDivElement>(null);
-  // Re-render on every editor change so visibility and item
-  // active-states always reflect live editor state.
   const [tick, forceUpdate] = useReducer((x: number) => x + 1, 0);
-  // Hidden until first positioned so the initial frame never
-  // flashes at the viewport origin. Resets on unmount (hide).
   const [positioned, setPositioned] = useState(false);
 
-  // Text-formatting actions by default; pass `items` to customize.
   const resolvedItems = items ?? defaultTextFormattingItems;
 
   const effectiveShouldShow =
@@ -96,14 +91,10 @@ export const FloatingMenu = ({
     if (!editor || !menuRef.current) {
       return;
     }
-    // The selection is read live; the extension is an options
-    // bag and install marker, not position storage.
     const { selection } = editor.state;
     const { from } = selection;
     const { to } = selection;
 
-    // Anchor to the box spanning the selection so the menu sits
-    // above it. A collapsed cursor degrades to the caret point.
     const anchorFrom = Math.min(from, to);
     const anchorTo = Math.max(from, to);
 
@@ -176,7 +167,6 @@ export const FloatingMenu = ({
     try {
       const { x, y } = await computePosition(virtualElement, menuRef.current, {
         middleware: [offset(menuOffset), flip(), shift({ crossAxis: true })],
-        // Above the selection, centered; shift keeps the menu in view.
         placement: "top",
       });
       place(x, y);
@@ -224,18 +214,14 @@ export const FloatingMenu = ({
         zIndex: 50,
       }}
     >
-      <div className="fm-group">
+      <FloatingMenuButtonGroup>
         {resolvedItems.map((item) => {
           const isActive = item.isActive ? item.isActive(editor) : false;
           return (
-            <button
+            <FloatingMenuButton
               key={item.id ?? item.label}
-              type="button"
-              className={cn(
-                "fm-item",
-                isActive && "fm-item--active",
-                itemClassName
-              )}
+              active={isActive}
+              className={itemClassName}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => {
                 item.command(editor);
@@ -245,10 +231,10 @@ export const FloatingMenu = ({
               data-active={isActive}
             >
               {item.icon}
-            </button>
+            </FloatingMenuButton>
           );
         })}
-      </div>
+      </FloatingMenuButtonGroup>
     </div>
   );
 };

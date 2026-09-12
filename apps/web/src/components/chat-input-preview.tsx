@@ -87,7 +87,6 @@ export const ChatInputPreview = () => {
             "[&_.ProseMirror_p.is-editor-empty:first-child::before]:content-[attr(data-placeholder)]"
           )}
         />
-        {/* Formatting actions on text selection (zero-config defaults) */}
         <FloatingMenu editor={editor} />
         <Button
           type="button"
