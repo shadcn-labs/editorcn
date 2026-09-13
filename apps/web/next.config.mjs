@@ -21,7 +21,7 @@ const nextConfig = {
       },
     ];
   },
-  transpilePackages: ["@editorcn/editor"],
+  transpilePackages: ["@editorcn/custom-controls", "@editorcn/editor"],
 };
 
 const withMDX = createMDX();

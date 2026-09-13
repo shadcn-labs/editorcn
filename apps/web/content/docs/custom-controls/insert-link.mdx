@@ -1,0 +1,30 @@
+---
+title: Insert Link
+description: Insert a hyperlink from a URL dialog.
+---
+
+The Insert Link control opens a dialog when the button is clicked, with an input field to enter a URL. The link text of the current selection is detected and prefilled.
+
+<ControlInstall slug="insert-link" />
+
+The control requires the link extension:
+
+```bash
+npm install @tiptap/extension-link
+```
+
+## Use with `@editorcn/editor`
+
+Select a phrase below, then use the link control in the toolbar.
+
+<ControlPreview slug="insert-link" editor="toolbar" />
+
+<ControlUsage slug="insert-link" editor="toolbar" />
+
+## Use with `@editorcn/block-editor`
+
+The same control works in a block editor when placed in a custom strip above the content.
+
+<ControlPreview slug="insert-link" editor="block" />
+
+<ControlUsage slug="insert-link" editor="block" />

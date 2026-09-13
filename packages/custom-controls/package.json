@@ -1,0 +1,35 @@
+{
+  "name": "@editorcn/custom-controls",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./core": "./src/core/index.ts",
+    "./core/*": "./src/core/*",
+    "./controls/*": "./src/controls/*/index.tsx",
+    "./manifest.json": "./manifest.json"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@editorcn/ui": "workspace:*",
+    "lucide-react": "catalog:"
+  },
+  "devDependencies": {
+    "@editorcn/config": "workspace:*",
+    "@tiptap/extension-heading": "^3.30.0",
+    "@tiptap/extension-highlight": "^3.30.0",
+    "@tiptap/extension-image": "^3.30.0",
+    "@tiptap/extension-link": "^3.30.0",
+    "@tiptap/extension-paragraph": "^3.30.0",
+    "@tiptap/extension-table": "^3.30.0",
+    "@types/react": "^19",
+    "typescript": "^5"
+  },
+  "peerDependencies": {
+    "@tiptap/core": ">=3.0.0 <4",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  }
+}

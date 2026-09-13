@@ -406,6 +406,105 @@ const staticRendererFiles = [
   ),
 ];
 
+const customControlCoreFiles = [
+  "commands.ts",
+  "content-control.tsx",
+  "context.tsx",
+  "create-control.tsx",
+  "detection.ts",
+  "editor-state.ts",
+  "labels.ts",
+].map((src) =>
+  entry(`custom-controls/core/${src}`, "registry:component", "custom-controls", `core/${src}`)
+);
+
+const readUiComponent = (name) =>
+  readFileSync(
+    resolve(root, "packages", "ui", "src", "components", `${name}.tsx`),
+    "utf-8"
+  );
+
+const collectUiComponents = (names, out = new Map()) => {
+  for (const name of names) {
+    if (out.has(name)) {
+      continue;
+    }
+    const content = readUiComponent(name);
+    const imported = [
+      ...content.matchAll(/@editorcn\/ui\/components\/([a-z-]+)/g),
+    ].map((match) => match[1]);
+    collectUiComponents(imported, out);
+    out.set(
+      name,
+      content.replaceAll("@editorcn/ui/lib/utils", "@/lib/utils")
+    );
+  }
+  return out;
+};
+
+const customControlsBaseDeps = [
+  "@base-ui/react@^1.0.0",
+  "class-variance-authority@^0.7.1",
+  "@tiptap/core@>=3.0.0 <4",
+  "lucide-react@>=0.400.0 <1.0.0",
+];
+
+const customControlsManifest = JSON.parse(
+  readFileSync(
+    resolve(root, "packages", "custom-controls", "manifest.json"),
+    "utf-8"
+  )
+);
+
+const customControlsConfig = Object.entries(customControlsManifest).map(
+  ([slug, meta]) => ({
+    ...meta,
+    name: `custom-controls-${slug}`,
+  })
+);
+
+const rewriteCustomControlContent = (content) =>
+  content
+    .replaceAll("@editorcn/ui/components/", "@components/custom-controls/ui/")
+    .replaceAll("@editorcn/ui/lib/", "@/lib/");
+
+const buildCustomControlItem = (config) => {
+  const controlEntry = entry(
+    `custom-controls/${config.file}`,
+    "registry:component",
+    "custom-controls",
+    config.file
+  );
+  const controlUiDeps = [
+    ...controlEntry.content.matchAll(/@editorcn\/ui\/components\/([a-z-]+)/g),
+  ].map((match) => match[1]);
+  const uiNames = [...new Set([...config.ui, ...controlUiDeps])];
+  const files = [
+    ...customControlCoreFiles,
+    controlEntry,
+    ...[...collectUiComponents(uiNames)].map(([name, content]) => ({
+      content: rewriteCustomControlContent(content),
+      path: `custom-controls/ui/${name}.tsx`,
+      target: `@components/custom-controls/ui/${name}`,
+      type: "registry:component",
+    })),
+  ];
+  for (const file of files) {
+    if (file.path.startsWith("custom-controls/core/") || file.path === controlEntry.path) {
+      file.content = rewriteCustomControlContent(file.content);
+    }
+  }
+  return {
+    name: config.name,
+    title: config.title,
+    files,
+    deps: customControlsBaseDeps,
+    description: config.description,
+  };
+};
+
+const customControlsItems = customControlsConfig.map(buildCustomControlItem);
+
 const deps = {
   "block-editor": [
     "@tiptap/react@>=2.11.5 <4",
@@ -549,6 +648,23 @@ writeFileSync(
   )
 );
 
+for (const item of customControlsItems) {
+  writeFileSync(
+    resolve(outDir, `${item.name}.json`),
+    JSON.stringify(
+      buildItem(
+        item.name,
+        item.title,
+        item.description,
+        item.files,
+        item.deps
+      ),
+      null,
+      2
+    )
+  );
+}
+
 const catalog = {
   $schema: "https://ui.shadcn.com/schema/registry.json",
   homepage: "https://editorcn.vercel.app",
@@ -574,6 +690,9 @@ const catalog = {
       deps["static-renderer"],
       staticRendererFiles
     ),
+    ...customControlsItems.map((item) =>
+      catalogItem(item.name, item.title, item.description, item.deps, item.files)
+    ),
   ],
   name: "editorcn",
 };
@@ -587,3 +706,6 @@ console.log("  apps/web/public/r/registry.json");
 console.log("  apps/web/public/r/editor.json");
 console.log("  apps/web/public/r/block-editor.json");
 console.log("  apps/web/public/r/static-renderer.json");
+for (const item of customControlsItems) {
+  console.log(`  apps/web/public/r/${item.name}.json`);
+}

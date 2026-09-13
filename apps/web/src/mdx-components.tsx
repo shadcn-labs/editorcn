@@ -12,6 +12,12 @@ import {
   BlockEditorCustomSlashCommandsDemo,
 } from "@/components/customization/block-editor-demos";
 import {
+  ControlInstall,
+  ControlList,
+  ControlPreview,
+  ControlUsage,
+} from "@/components/customization/custom-controls";
+import {
   EditorVariantsDemo,
   EditorClassNameDemo,
   EditorThemingDemo,
@@ -65,6 +71,10 @@ export const mdxComponents = {
   Callout,
   CodeBlockCommand,
   CodeTabs,
+  ControlInstall,
+  ControlList,
+  ControlPreview,
+  ControlUsage,
   DocumentEditorCard,
   EditorClassNameDemo,
   EditorCustomControlsDemo,

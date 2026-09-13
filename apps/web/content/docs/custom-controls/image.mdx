@@ -1,0 +1,30 @@
+---
+title: Image
+description: Insert an image by URL from a dialog.
+---
+
+The Image control opens a dialog when the button is clicked, with an input field to enter an image URL, and inserts the image at the cursor position.
+
+<ControlInstall slug="image" />
+
+The control requires the image extension:
+
+```bash
+npm install @tiptap/extension-image
+```
+
+## Use with `@editorcn/editor`
+
+Use the image control in the toolbar below and paste an image URL.
+
+<ControlPreview slug="image" editor="toolbar" />
+
+<ControlUsage slug="image" editor="toolbar" />
+
+## Use with `@editorcn/block-editor`
+
+The same control works in a block editor when placed in a custom strip above the content.
+
+<ControlPreview slug="image" editor="block" />
+
+<ControlUsage slug="image" editor="block" />
