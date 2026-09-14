@@ -1,0 +1,33 @@
+{
+  "image-placeholder": {
+    "title": "Image Placeholder",
+    "description": "A Notion-style image placeholder node that lets you upload or embed an image by URL, with a resizable image node view and its own toolbar button.",
+    "extension": "image-placeholder/index.ts",
+    "node": "image-placeholder/image-placeholder-node.tsx",
+    "image": "image-placeholder/image.tsx",
+    "toolbar": "image-placeholder/toolbar.tsx",
+    "ui": ["tabs", "input", "button", "popover", "dropdown-menu", "separator"],
+    "deps": ["@tiptap/extension-image@>=3.0.0 <4"]
+  },
+  "table": {
+    "title": "Table",
+    "description": "A table node with a toolbar that inserts tables from a grid-size picker and lets you add or delete rows and columns, merge and split cells, and toggle the header row.",
+    "extension": "table/index.ts",
+    "toolbar": "table/toolbar.tsx",
+    "ui": ["popover", "button", "separator"],
+    "deps": [
+      "@tiptap/extension-table@>=3.0.0 <4",
+      "@tiptap/extension-table-row@>=3.0.0 <4",
+      "@tiptap/extension-table-cell@>=3.0.0 <4",
+      "@tiptap/extension-table-header@>=3.0.0 <4"
+    ]
+  },
+  "highlight": {
+    "title": "Highlight Color",
+    "description": "The multicolor highlight mark with a toolbar that applies a color from a popover palette and removes existing highlights.",
+    "extension": "highlight/index.ts",
+    "toolbar": "highlight/toolbar.tsx",
+    "ui": ["popover", "button"],
+    "deps": ["@tiptap/extension-highlight@>=3.0.0 <4"]
+  }
+}

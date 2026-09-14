@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@editorcn/block-editor": "workspace:*",
-    "@editorcn/custom-controls": "workspace:*",
     "@editorcn/editor": "workspace:*",
     "@editorcn/env": "workspace:*",
+    "@editorcn/extensions": "workspace:*",
     "@editorcn/static-renderer": "workspace:*",
     "@editorcn/ui": "workspace:*",
     "@floating-ui/dom": "^1.6.0",

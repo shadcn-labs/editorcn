@@ -1,0 +1,211 @@
+---
+title: Image Placeholder
+description: A Notion-style image placeholder node that lets you upload or embed an image by URL, with a matching toolbar button.
+---
+
+The Image Placeholder inserts a block that looks like a button inside the document. Click it to open a small popover with two tabs — **Upload** (drag & drop or pick a file) and **Embed link** (paste an image URL). On confirm, the placeholder is replaced by a resizable image at the exact position.
+
+The inserted image ships its own node view: drag the left or right handles to resize it, use the floating controls to change its alignment (left / center / right), and open the more menu to duplicate it, make it full width, or delete it.
+
+<ExtensionPreview slug="image-placeholder" editor="toolbar" />
+
+## Installation
+
+Run the following command to install the extension, its toolbar component and the shared extension runtime:
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/image-placeholder.json"
+```
+
+This installs the node, the node view, the toolbar and `extensions/core/` into your project. It also installs `@tiptap/extension-image`, which the node view uses to insert the final image.
+
+To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/image-placeholder):
+
+```bash
+npm install @tiptap/core @tiptap/react @tiptap/extension-image
+```
+
+## Usage
+
+Register `ImagePlaceholder` in your editor, then add `ImagePlaceholderToolbar` to a toolbar group. The toolbar accepts an optional `editor` prop, or reads it from an `EditorControlsProvider` if you don't pass one.
+
+For resizable images, register the `ResizableImage` extension that ships alongside the placeholder (it configures `@tiptap/extension-image` with resize handles enabled). A plain `Image` extension also works if you don't need resizing.
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
+import {
+  ImagePlaceholder,
+  ResizableImage,
+} from "@/components/extensions/image-placeholder";
+import { ImagePlaceholderToolbar } from "@/components/extensions/image-placeholder-toolbar";
+import { RichTextEditor } from "@/components/editor";
+
+import "@/components/editor/style.css";
+
+export function MyEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [StarterKit, ResizableImage, ImagePlaceholder],
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Undo />
+        </RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <ImagePlaceholderToolbar editor={editor} />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+### With `@editorcn/block-editor`
+
+The placeholder works in the block editor too, and `insertImagePlaceholder` can be wired into the slash command menu:
+
+<ExtensionPreview slug="image-placeholder" editor="block" />
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
+import {
+  BlockEditor,
+  SlashCommand,
+  defaultSlashCommandItems,
+  getSlashCommandSuggestion,
+} from "@/components/block-editor";
+import {
+  ImagePlaceholder,
+  ResizableImage,
+} from "@/components/extensions/image-placeholder";
+
+export function MyBlockEditor() {
+  const editor = useEditor({
+    extensions: [
+      StarterKit,
+      ResizableImage,
+      ImagePlaceholder,
+      SlashCommand.configure({
+        suggestion: getSlashCommandSuggestion([
+          ...defaultSlashCommandItems,
+          {
+            id: "insertImagePlaceholder",
+            title: "Image",
+            description: "Insert an image placeholder",
+            keywords: ["image", "photo", "picture"],
+            command: ({ editor, range }) =>
+              editor
+                .chain()
+                .focus()
+                .deleteRange(range)
+                .insertImagePlaceholder()
+                .run(),
+          },
+        ]),
+      }),
+    ],
+  });
+
+  return <BlockEditor editor={editor} />;
+}
+```
+
+## Settings
+
+### `HTMLAttributes`
+
+HTML attributes applied to the placeholder element.
+
+```tsx
+ImagePlaceholder.configure({
+  HTMLAttributes: { class: "w-full" },
+})
+```
+
+### `allowedMimeTypes`
+
+Mime types accepted by the file upload. Files outside this list are rejected and passed to `onDropRejected`.
+
+```tsx
+ImagePlaceholder.configure({
+  allowedMimeTypes: { image: ["image/*"] },
+})
+```
+
+### `maxFiles`
+
+Maximum number of files accepted in one drop. Set to `1` to disable multi-select.
+
+```tsx
+ImagePlaceholder.configure({ maxFiles: 1 })
+```
+
+### `maxSize`
+
+Maximum file size in bytes. Larger files are rejected.
+
+```tsx
+ImagePlaceholder.configure({
+  maxSize: 1024 * 1024, // 1MB
+})
+```
+
+### `onDrop`
+
+Called with the accepted files after the images have been inserted.
+
+```tsx
+ImagePlaceholder.configure({
+  onDrop: (files, editor) => {
+    console.log("dropped", files, editor);
+  },
+})
+```
+
+### `onDropRejected`
+
+Called with the files that were rejected by `allowedMimeTypes` or `maxSize`.
+
+```tsx
+ImagePlaceholder.configure({
+  onDropRejected: (files, editor) => {
+    console.log("rejected", files, editor);
+  },
+})
+```
+
+### `onEmbed`
+
+Called when an image is inserted from a URL.
+
+```tsx
+ImagePlaceholder.configure({
+  onEmbed: (url, editor) => {
+    console.log("embedded", url, editor);
+  },
+})
+```
+
+## Commands
+
+### `insertImagePlaceholder`
+
+Inserts a placeholder at the current selection.
+
+```tsx
+editor.commands.insertImagePlaceholder();
+```

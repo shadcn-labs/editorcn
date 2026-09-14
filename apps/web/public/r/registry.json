@@ -364,284 +364,222 @@
     },
     {
       "dependencies": [
+        "@editorcn/editor@latest",
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
         "@base-ui/react@^1.0.0",
         "class-variance-authority@^0.7.1",
-        "@tiptap/core@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "tailwind-merge@^3.0.0",
+        "@tiptap/extension-image@>=3.0.0 <4"
       ],
-      "description": "A paragraph and heading level picker (H1-H3) for editor toolbars.",
+      "description": "A Notion-style image placeholder node that lets you upload or embed an image by URL, with a resizable image node view and its own toolbar button.",
       "files": [
         {
-          "path": "custom-controls/core/commands.ts",
+          "path": "extensions/core/index.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/content-control.tsx",
+          "path": "extensions/core/commands.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/context.tsx",
+          "path": "extensions/core/context.tsx",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/create-control.tsx",
+          "path": "extensions/core/detection.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/detection.ts",
+          "path": "extensions/core/editor-state.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/editor-state.ts",
+          "path": "extensions/core/labels.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/labels.ts",
+          "path": "extensions/core/types.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/controls/heading-select/index.tsx",
+          "path": "extensions/image-placeholder/index.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/ui/select.tsx",
+          "path": "extensions/image-placeholder/image-placeholder-node.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/image-placeholder/image.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/image-placeholder/toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/tabs.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/input.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/separator.tsx",
           "type": "registry:component"
         }
       ],
-      "name": "custom-controls-heading-select",
-      "title": "Heading Select",
+      "name": "image-placeholder",
+      "title": "Image Placeholder",
       "type": "registry:component"
     },
     {
       "dependencies": [
+        "@editorcn/editor@latest",
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
         "@base-ui/react@^1.0.0",
         "class-variance-authority@^0.7.1",
-        "@tiptap/core@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "tailwind-merge@^3.0.0",
+        "@tiptap/extension-table@>=3.0.0 <4",
+        "@tiptap/extension-table-row@>=3.0.0 <4",
+        "@tiptap/extension-table-cell@>=3.0.0 <4",
+        "@tiptap/extension-table-header@>=3.0.0 <4"
       ],
-      "description": "Insert a hyperlink from a URL dialog, prefilled with the selected text.",
+      "description": "A table node with a toolbar that inserts tables from a grid-size picker and lets you add or delete rows and columns, merge and split cells, and toggle the header row.",
       "files": [
         {
-          "path": "custom-controls/core/commands.ts",
+          "path": "extensions/core/index.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/content-control.tsx",
+          "path": "extensions/core/commands.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/context.tsx",
+          "path": "extensions/core/context.tsx",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/create-control.tsx",
+          "path": "extensions/core/detection.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/detection.ts",
+          "path": "extensions/core/editor-state.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/editor-state.ts",
+          "path": "extensions/core/labels.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/labels.ts",
+          "path": "extensions/core/types.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/controls/insert-link/index.tsx",
+          "path": "extensions/table/index.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/ui/button.tsx",
+          "path": "extensions/table/toolbar.tsx",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/ui/dialog.tsx",
+          "path": "extensions/ui/popover.tsx",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/ui/input.tsx",
+          "path": "extensions/ui/button.tsx",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/ui/label.tsx",
+          "path": "extensions/ui/separator.tsx",
           "type": "registry:component"
         }
       ],
-      "name": "custom-controls-insert-link",
-      "title": "Insert Link",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@base-ui/react@^1.0.0",
-        "class-variance-authority@^0.7.1",
-        "@tiptap/core@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
-      ],
-      "description": "Insert and manage tables: add or delete rows and columns, merge and split cells, and toggle the header row.",
-      "files": [
-        {
-          "path": "custom-controls/core/commands.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/content-control.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/context.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/create-control.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/detection.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/editor-state.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/labels.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/controls/table/index.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/ui/dropdown-menu.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/ui/button.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "custom-controls-table",
+      "name": "table",
       "title": "Table",
       "type": "registry:component"
     },
     {
       "dependencies": [
+        "@editorcn/editor@latest",
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
         "@base-ui/react@^1.0.0",
         "class-variance-authority@^0.7.1",
-        "@tiptap/core@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "tailwind-merge@^3.0.0",
+        "@tiptap/extension-highlight@>=3.0.0 <4"
       ],
-      "description": "Apply a highlight mark color from a popover palette and remove existing highlights.",
+      "description": "The multicolor highlight mark with a toolbar that applies a color from a popover palette and removes existing highlights.",
       "files": [
         {
-          "path": "custom-controls/core/commands.ts",
+          "path": "extensions/core/index.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/content-control.tsx",
+          "path": "extensions/core/commands.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/context.tsx",
+          "path": "extensions/core/context.tsx",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/create-control.tsx",
+          "path": "extensions/core/detection.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/detection.ts",
+          "path": "extensions/core/editor-state.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/editor-state.ts",
+          "path": "extensions/core/labels.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/core/labels.ts",
+          "path": "extensions/core/types.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/controls/highlight-color/index.tsx",
+          "path": "extensions/highlight/index.ts",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/ui/popover.tsx",
+          "path": "extensions/highlight/toolbar.tsx",
           "type": "registry:component"
         },
         {
-          "path": "custom-controls/ui/button.tsx",
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
           "type": "registry:component"
         }
       ],
-      "name": "custom-controls-highlight-color",
+      "name": "highlight",
       "title": "Highlight Color",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@base-ui/react@^1.0.0",
-        "class-variance-authority@^0.7.1",
-        "@tiptap/core@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
-      ],
-      "description": "Insert an image by URL from a dialog.",
-      "files": [
-        {
-          "path": "custom-controls/core/commands.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/content-control.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/context.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/create-control.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/detection.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/editor-state.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/core/labels.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/controls/image/index.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/ui/button.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/ui/dialog.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/ui/input.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "custom-controls/ui/label.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "custom-controls-image",
-      "title": "Image",
       "type": "registry:component"
     }
   ],

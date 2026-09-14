@@ -406,16 +406,16 @@ const staticRendererFiles = [
   ),
 ];
 
-const customControlCoreFiles = [
+const extensionCoreFiles = [
+  "index.ts",
   "commands.ts",
-  "content-control.tsx",
   "context.tsx",
-  "create-control.tsx",
   "detection.ts",
   "editor-state.ts",
   "labels.ts",
+  "types.ts",
 ].map((src) =>
-  entry(`custom-controls/core/${src}`, "registry:component", "custom-controls", `core/${src}`)
+  entry(`extensions/core/${src}`, "registry:component", "extensions", `core/${src}`)
 );
 
 const readUiComponent = (name) =>
@@ -442,68 +442,74 @@ const collectUiComponents = (names, out = new Map()) => {
   return out;
 };
 
-const customControlsBaseDeps = [
+const extensionsBaseDeps = [
+  "@editorcn/editor@latest",
+  "@tiptap/core@>=3.0.0 <4",
+  "@tiptap/react@>=3.0.0 <4",
   "@base-ui/react@^1.0.0",
   "class-variance-authority@^0.7.1",
-  "@tiptap/core@>=3.0.0 <4",
+  "clsx@^2.1.1",
   "lucide-react@>=0.400.0 <1.0.0",
+  "tailwind-merge@^3.0.0",
 ];
 
-const customControlsManifest = JSON.parse(
+const extensionsManifest = JSON.parse(
   readFileSync(
-    resolve(root, "packages", "custom-controls", "manifest.json"),
+    resolve(root, "packages", "extensions", "manifest.json"),
     "utf-8"
   )
 );
 
-const customControlsConfig = Object.entries(customControlsManifest).map(
+const extensionsConfig = Object.entries(extensionsManifest).map(
   ([slug, meta]) => ({
     ...meta,
-    name: `custom-controls-${slug}`,
+    name: slug,
   })
 );
 
-const rewriteCustomControlContent = (content) =>
+const rewriteExtensionsContent = (content) =>
   content
-    .replaceAll("@editorcn/ui/components/", "@components/custom-controls/ui/")
+    .replaceAll("@editorcn/ui/components/", "@components/extensions/ui/")
     .replaceAll("@editorcn/ui/lib/", "@/lib/");
 
-const buildCustomControlItem = (config) => {
-  const controlEntry = entry(
-    `custom-controls/${config.file}`,
-    "registry:component",
-    "custom-controls",
-    config.file
+const buildExtensionItem = (config) => {
+  const sourceFiles = [
+    config.extension,
+    config.node,
+    config.image,
+    config.toolbar,
+  ].filter(Boolean);
+  const entries = sourceFiles.map((file) =>
+    entry(`extensions/${file}`, "registry:component", "extensions", file)
   );
-  const controlUiDeps = [
-    ...controlEntry.content.matchAll(/@editorcn\/ui\/components\/([a-z-]+)/g),
-  ].map((match) => match[1]);
-  const uiNames = [...new Set([...config.ui, ...controlUiDeps])];
-  const files = [
-    ...customControlCoreFiles,
-    controlEntry,
-    ...[...collectUiComponents(uiNames)].map(([name, content]) => ({
-      content: rewriteCustomControlContent(content),
-      path: `custom-controls/ui/${name}.tsx`,
-      target: `@components/custom-controls/ui/${name}`,
-      type: "registry:component",
-    })),
+  const uiNames = [
+    ...new Set([
+      ...(config.ui ?? []),
+      ...entries.flatMap((e) => [
+        ...e.content.matchAll(/@editorcn\/ui\/components\/([a-z-]+)/g),
+      ].map((match) => match[1])),
+    ]),
   ];
+  const uiEntries = [...collectUiComponents(uiNames)].map(([name, content]) => ({
+    content: rewriteExtensionsContent(content),
+    path: `extensions/ui/${name}.tsx`,
+    target: `@components/extensions/ui/${name}`,
+    type: "registry:component",
+  }));
+  const files = [...extensionCoreFiles, ...entries, ...uiEntries];
   for (const file of files) {
-    if (file.path.startsWith("custom-controls/core/") || file.path === controlEntry.path) {
-      file.content = rewriteCustomControlContent(file.content);
-    }
+    file.content = rewriteExtensionsContent(file.content);
   }
   return {
     name: config.name,
     title: config.title,
     files,
-    deps: customControlsBaseDeps,
+    deps: [...new Set([...extensionsBaseDeps, ...(config.deps ?? [])])],
     description: config.description,
   };
 };
 
-const customControlsItems = customControlsConfig.map(buildCustomControlItem);
+const extensionsItems = extensionsConfig.map(buildExtensionItem);
 
 const deps = {
   "block-editor": [
@@ -533,10 +539,6 @@ const deps = {
     "clsx@^2.1.1",
     "lucide-react@>=0.400.0 <1.0.0",
     "tailwind-merge@^3.0.0",
-  ],
-  "custom-controls": [
-    "@editorcn/editor@latest",
-    "lucide-react@>=0.400.0 <1.0.0",
   ],
   editor: [
     "@tiptap/core@>=2.11.5 <4",
@@ -648,7 +650,7 @@ writeFileSync(
   )
 );
 
-for (const item of customControlsItems) {
+for (const item of extensionsItems) {
   writeFileSync(
     resolve(outDir, `${item.name}.json`),
     JSON.stringify(
@@ -690,7 +692,7 @@ const catalog = {
       deps["static-renderer"],
       staticRendererFiles
     ),
-    ...customControlsItems.map((item) =>
+    ...extensionsItems.map((item) =>
       catalogItem(item.name, item.title, item.description, item.deps, item.files)
     ),
   ],
@@ -706,6 +708,6 @@ console.log("  apps/web/public/r/registry.json");
 console.log("  apps/web/public/r/editor.json");
 console.log("  apps/web/public/r/block-editor.json");
 console.log("  apps/web/public/r/static-renderer.json");
-for (const item of customControlsItems) {
+for (const item of extensionsItems) {
   console.log(`  apps/web/public/r/${item.name}.json`);
 }
