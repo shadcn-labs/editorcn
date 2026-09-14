@@ -25,7 +25,7 @@ export const SponsorLink = () => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <Link href={ROUTES.SPONSOR}>
+      <Link href={ROUTES.SPONSOR} prefetch={false}>
         <HeartHandshakeIcon className="text-pink-500" ref={heartRef} />
         <span className="max-sm:sr-only">Sponsor</span>
       </Link>

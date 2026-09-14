@@ -130,6 +130,7 @@ export const mdxComponents = {
   Link: ({ className, ...props }: React.ComponentProps<typeof Link>) => (
     <Link
       className={cn("font-medium underline underline-offset-4", className)}
+      prefetch={false}
       {...props}
     />
   ),
@@ -139,6 +140,7 @@ export const mdxComponents = {
         "bg-surface text-surface-foreground hover:bg-surface/80 flex w-full flex-col items-center rounded-xl p-6 transition-colors sm:p-10",
         className
       )}
+      prefetch={false}
       {...props}
     />
   ),
