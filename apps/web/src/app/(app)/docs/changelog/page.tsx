@@ -88,6 +88,7 @@ export default function ChangelogPage() {
                           className="flex w-full flex-col rounded-xl bg-surface px-4 py-3 text-surface-foreground transition-colors hover:bg-surface/80"
                           href={page.url}
                           key={page.url}
+                          prefetch={false}
                         >
                           <span className="text-xs text-muted-foreground">
                             {date}
@@ -117,6 +118,7 @@ export default function ChangelogPage() {
                     className="text-[0.8rem] text-muted-foreground no-underline transition-colors hover:text-foreground"
                     href={page.url}
                     key={page.url}
+                    prefetch={false}
                   >
                     {data.title}
                   </Link>

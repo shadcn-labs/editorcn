@@ -23,7 +23,11 @@ const GetStartedButton = () => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <Link href={ROUTES.DOCS} transitionTypes={["nav-forward"]}>
+      <Link
+        href={ROUTES.DOCS}
+        prefetch={false}
+        transitionTypes={["nav-forward"]}
+      >
         Get Started
         <ArrowRightIcon className="hidden sm:inline" ref={iconRef} />
       </Link>
@@ -44,7 +48,11 @@ const BrowseComponentsButton = () => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <Link href={ROUTES.DOCS_EDITOR} transitionTypes={["nav-forward"]}>
+      <Link
+        href={ROUTES.DOCS_EDITOR}
+        prefetch={false}
+        transitionTypes={["nav-forward"]}
+      >
         <ComponentIcon className="hidden sm:inline" ref={iconRef} />
         Browse Editor
       </Link>

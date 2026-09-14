@@ -33,7 +33,7 @@ const SidebarMenuItemLink = ({
 }) => (
   <SidebarMenuItem>
     <SidebarMenuButton asChild className={MENU_BUTTON_CLS} isActive={isActive}>
-      <Link href={href}>
+      <Link href={href} prefetch={false}>
         <span className="absolute inset-0 flex w-(--sidebar-menu-width) bg-transparent" />
         {children}
         {PAGES_NEW.includes(href) && (
@@ -71,7 +71,7 @@ const SidebarPageGroup = ({
                 className={MENU_BUTTON_CLS}
                 isActive={page.url === pathname}
               >
-                <Link href={page.url}>
+                <Link href={page.url} prefetch={false}>
                   <span className="absolute inset-0 flex w-(--sidebar-menu-width) bg-transparent" />
                   {page.name}
                 </Link>

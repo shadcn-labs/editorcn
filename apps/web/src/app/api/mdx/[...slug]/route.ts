@@ -17,9 +17,16 @@ export const GET = async (
   try {
     const content = await readFile(filePath, "utf-8");
     return new NextResponse(content, {
-      headers: { "Content-Type": "text/markdown" },
+      headers: {
+        "Cache-Control":
+          "public, s-maxage=86400, stale-while-revalidate=604800",
+        "Content-Type": "text/markdown",
+      },
     });
   } catch {
-    return new NextResponse("Not found", { status: 404 });
+    return new NextResponse("Not found", {
+      headers: { "Cache-Control": "public, s-maxage=60" },
+      status: 404,
+    });
   }
 };

@@ -30,13 +30,13 @@ const GAME_TRANSITION = {
 const NotFoundActions = () => (
   <div className="flex flex-wrap items-center justify-center gap-2">
     <Button asChild variant="outline">
-      <Link href={ROUTES.HOME}>
+      <Link href={ROUTES.HOME} prefetch={false}>
         <ArrowLeftIcon />
         Back to Home
       </Link>
     </Button>
     <Button asChild>
-      <Link href={ROUTES.DOCS}>
+      <Link href={ROUTES.DOCS} prefetch={false}>
         <BookOpenTextIcon />
         Go to Docs
       </Link>
