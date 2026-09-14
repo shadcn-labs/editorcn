@@ -198,7 +198,7 @@ export const EditorSection = (props: EditorSectionProps) => {
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
-          <Link href={props.docsHref}>
+          <Link href={props.docsHref} prefetch={false}>
             View docs <ArrowRightIcon ref={iconRef} />
           </Link>
         </Button>

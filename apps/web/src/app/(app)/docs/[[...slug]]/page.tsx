@@ -158,14 +158,24 @@ const Page = async (props: { params: Promise<{ slug?: string[] }> }) => {
                   <div className="flex items-center space-x-2 pt-4">
                     {links?.doc && (
                       <Badge asChild variant="secondary">
-                        <Link href={links.doc} target="_blank" rel="noreferrer">
+                        <Link
+                          href={links.doc}
+                          target="_blank"
+                          rel="noreferrer"
+                          prefetch={false}
+                        >
                           Docs <ArrowUpRightIcon />
                         </Link>
                       </Badge>
                     )}
                     {links?.api && (
                       <Badge asChild variant="secondary">
-                        <Link href={links.api} target="_blank" rel="noreferrer">
+                        <Link
+                          href={links.api}
+                          target="_blank"
+                          rel="noreferrer"
+                          prefetch={false}
+                        >
                           API Reference <ArrowUpRightIcon />
                         </Link>
                       </Badge>

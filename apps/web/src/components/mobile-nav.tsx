@@ -39,6 +39,7 @@ const MobileLink = ({
     <Link
       href={href}
       onClick={handleClick}
+      prefetch={false}
       className={cn("text-2xl font-medium", className)}
       {...props}
     >

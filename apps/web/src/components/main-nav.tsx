@@ -22,6 +22,7 @@ export const MainNav = ({
           <Link
             href={item.href}
             transitionTypes={["nav-forward"]}
+            prefetch={false}
             className={cn(pathname === item.href && "text-primary")}
           >
             {item.label}

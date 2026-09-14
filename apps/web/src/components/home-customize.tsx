@@ -64,7 +64,7 @@ export const HomeCustomize = ({ className }: { className?: string }) => {
           onMouseEnter={onMouseEnter}
           onMouseLeave={onMouseLeave}
         >
-          <Link href="/docs/customization">
+          <Link href="/docs/customization" prefetch={false}>
             Explore customization <ArrowRightIcon ref={iconRef} />
           </Link>
         </Button>

@@ -52,7 +52,7 @@ export const DocsNavLink = ({
       onMouseLeave={handleMouseLeave}
       {...props}
     >
-      <Link href={href} transitionTypes={transitionTypes}>
+      <Link href={href} prefetch={false} transitionTypes={transitionTypes}>
         {transitionTypes?.includes("nav-back") && (
           <ArrowLeftIcon ref={iconRef} />
         )}
