@@ -93,6 +93,9 @@ importers:
       '@editorcn/env':
         specifier: workspace:*
         version: link:../../packages/env
+      '@editorcn/floating-menu':
+        specifier: workspace:*
+        version: link:../../packages/floating-menu
       '@editorcn/static-renderer':
         specifier: workspace:*
         version: link:../../packages/static-renderer
@@ -471,6 +474,46 @@ importers:
       typescript:
         specifier: 'catalog:'
         version: 6.0.3
+
+  packages/floating-menu:
+    dependencies:
+      '@floating-ui/dom':
+        specifier: ^1.7.6
+        version: 1.7.6
+      '@tiptap/core':
+        specifier: '>=3.0.0 <4'
+        version: 3.30.5(@tiptap/pm@3.30.5)
+      '@tiptap/pm':
+        specifier: '>=3.0.0 <4'
+        version: 3.30.5
+      '@tiptap/react':
+        specifier: '>=3.0.0 <4'
+        version: 3.30.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/pm@3.30.5)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      lucide-react:
+        specifier: '>=0.400.0 <1.0.0'
+        version: 0.546.0(react@19.2.7)
+      react:
+        specifier: ^18 || ^19
+        version: 19.2.7
+      react-dom:
+        specifier: ^18 || ^19
+        version: 19.2.7(react@19.2.7)
+      tailwind-merge:
+        specifier: ^3.0.0
+        version: 3.6.0
+    devDependencies:
+      '@types/react':
+        specifier: ^19
+        version: 19.2.17
+      tsup:
+        specifier: ^8.4.0
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.23)(typescript@5.9.3)(yaml@2.9.0)
+      typescript:
+        specifier: ^5
+        version: 5.9.3
 
   packages/static-renderer:
     dependencies:

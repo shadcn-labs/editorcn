@@ -1,0 +1,119 @@
+---
+title: Floating Menu
+description: A floating formatting menu for selected text. Drop it into any Tiptap editor, including chat inputs.
+---
+
+A horizontal menu that appears above selected text with formatting actions — bold, italic, underline, strikethrough, and inline code — like the formatting popup in WhatsApp or X chat inputs. It shows on any non-empty text selection while the editor is editable and focused, anchored above the selected range.
+
+## Installation
+
+**Install via the shadcn registry (recommended):**
+
+```bash
+npx shadcn@latest add @editorcn/floating-menu
+```
+
+**Or install via npm:**
+
+```bash
+npm install @editorcn/floating-menu @tiptap/react @tiptap/pm @tiptap/core @floating-ui/dom
+```
+
+## Usage
+
+```tsx
+import {
+  FloatingMenu,
+  FloatingMenuExtension,
+} from "@/components/floating-menu";
+import "@editorcn/floating-menu/style.css";
+
+const editor = useEditor({
+  extensions: [StarterKit, FloatingMenuExtension],
+});
+
+return (
+  <>
+    <FloatingMenu editor={editor} />
+    <EditorContent editor={editor} />
+  </>
+);
+```
+
+### Props
+
+| Prop            | Type                      | Default                                  | Description                                                                                                         |
+| --------------- | ------------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `editor`        | `Editor \| null`          | —                                        | The Tiptap editor instance                                                                                          |
+| `items`         | `FloatingMenuItem[]`      | `defaultTextFormattingItems`             | Menu buttons; each has `icon`, `label`, `command`, and optional `isActive` and `id` (`id` is used as the React key) |
+| `shouldShow`    | `({ editor }) => boolean` | editable + focused + non-empty selection | Visibility predicate; overrides the extension option                                                                |
+| `className`     | `string`                  | —                                        | Extra classes on the menu container                                                                                 |
+| `itemClassName` | `string`                  | —                                        | Extra classes on each menu button                                                                                   |
+| `offset`        | `number`                  | `8`                                      | Gap in pixels between the selection and the menu                                                                    |
+
+### Custom items
+
+Pass `items` to replace the defaults, or spread `defaultTextFormattingItems` to extend them:
+
+```tsx
+import { defaultTextFormattingItems } from "@/components/floating-menu";
+
+<FloatingMenu
+  editor={editor}
+  items={[
+    ...defaultTextFormattingItems,
+    {
+      command: (ed) => ed.chain().focus().toggleStrike().run(),
+      icon: <Strikethrough />,
+      id: "strike",
+      isActive: (ed) => ed.isActive("strike"),
+      label: "Strikethrough",
+    },
+  ]}
+/>;
+```
+
+Note that `toggleUnderline` needs `@tiptap/extension-underline`, which is not part of StarterKit — it no-ops gracefully without it.
+
+You can also configure the predicate once on the extension instead of the component. The extension carries options only — selection tracking reads live editor state, no plugin state involved:
+
+```tsx
+import { showOnTextSelection } from "@/components/floating-menu";
+
+FloatingMenuExtension.configure({
+  shouldShow: showOnTextSelection,
+});
+```
+
+The component reads it automatically; an explicit `shouldShow` prop takes precedence. Its visuals follow your shadcn theme tokens and can be customized with the `.fm-menu`, `.fm-group`, and `.fm-item` classes.
+
+## Use in a chat input
+
+The menu is editor-agnostic: point it at any Tiptap instance. A minimal chat input pairs a compact editor with Enter-to-send:
+
+```tsx
+const editor = useEditor({
+  extensions: [StarterKit, Placeholder.configure({ placeholder: "Message" })],
+  editorProps: {
+    handleKeyDown: (view, event) => {
+      if (event.key === "Enter" && !event.shiftKey) {
+        event.preventDefault();
+        send(view.state.doc.textContent);
+        view.dispatch(view.state.tr.delete(0, view.state.doc.content.size));
+        return true;
+      }
+      return false;
+    },
+  },
+});
+
+return (
+  <div className="chat-input">
+    <FloatingMenu editor={editor} />
+    <EditorContent editor={editor} />
+    <button onClick={send} aria-label="Send">
+      <Send />
+    </button>
+  </div>
+);
+```

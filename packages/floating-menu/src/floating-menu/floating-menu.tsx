@@ -1,0 +1,240 @@
+"use client";
+
+import { computePosition, flip, offset, shift } from "@floating-ui/dom";
+import type { Editor } from "@tiptap/react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
+
+import { cn } from "../lib/utils";
+import { FloatingMenuButton, FloatingMenuButtonGroup } from "../ui";
+import { defaultTextFormattingItems } from "./default-items";
+import { showOnTextSelection } from "./extension";
+import type { FloatingMenuOptions } from "./extension";
+
+export interface FloatingMenuItem {
+  icon: React.ReactNode;
+  label: string;
+  command: (editor: Editor) => void;
+  isActive?: (editor: Editor) => boolean;
+  id?: string;
+}
+
+export interface FloatingMenuProps {
+  editor: Editor | null;
+  items?: FloatingMenuItem[];
+  shouldShow?: (props: { editor: Editor }) => boolean;
+  className?: string;
+  itemClassName?: string;
+  offset?: number;
+}
+
+const getExtensionShouldShow = (
+  editor: Editor
+): FloatingMenuOptions["shouldShow"] => {
+  const extension = editor.extensionManager.extensions.find(
+    (e) => e.name === "floatingMenu"
+  );
+  const options = extension?.options as FloatingMenuOptions | undefined;
+  return typeof options?.shouldShow === "function"
+    ? options.shouldShow
+    : undefined;
+};
+
+export const FloatingMenu = ({
+  editor,
+  items,
+  shouldShow,
+  className,
+  itemClassName,
+  offset: menuOffset = 8,
+}: FloatingMenuProps) => {
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [tick, forceUpdate] = useReducer((x: number) => x + 1, 0);
+  const [positioned, setPositioned] = useState(false);
+
+  const resolvedItems = items ?? defaultTextFormattingItems;
+
+  const effectiveShouldShow =
+    shouldShow ??
+    (editor ? getExtensionShouldShow(editor) : undefined) ??
+    showOnTextSelection;
+
+  useEffect(() => {
+    if (!editor) {
+      return;
+    }
+    const bump = () => forceUpdate();
+    editor.on("transaction", bump);
+    editor.on("selectionUpdate", bump);
+    editor.on("focus", bump);
+    editor.on("blur", bump);
+    return () => {
+      editor.off("transaction", bump);
+      editor.off("selectionUpdate", bump);
+      editor.off("focus", bump);
+      editor.off("blur", bump);
+    };
+  }, [editor]);
+
+  const show =
+    editor !== null &&
+    resolvedItems.length > 0 &&
+    effectiveShouldShow({ editor });
+
+  const updateMenuPosition = useCallback(async () => {
+    if (!editor || !menuRef.current) {
+      return;
+    }
+    const { selection } = editor.state;
+    const { from } = selection;
+    const { to } = selection;
+
+    const anchorFrom = Math.min(from, to);
+    const anchorTo = Math.max(from, to);
+
+    const coordsAt = (
+      pos: number
+    ): { left: number; top: number; right: number; bottom: number } | null => {
+      try {
+        return editor.view.coordsAtPos(pos);
+      } catch {
+        try {
+          const dom = editor.view.domAtPos(pos);
+          const raw: unknown = dom.node;
+          let el: HTMLElement | null = null;
+          if (raw instanceof HTMLElement) {
+            el = raw;
+          } else if (raw instanceof Text) {
+            el = raw.parentElement;
+          }
+          if (!el) {
+            return null;
+          }
+          const rect = el.getBoundingClientRect();
+          return {
+            bottom: rect.bottom,
+            left: rect.left,
+            right: rect.right,
+            top: rect.top,
+          };
+        } catch {
+          return null;
+        }
+      }
+    };
+
+    const start = coordsAt(anchorFrom);
+    const end = coordsAt(anchorTo);
+    const coords =
+      start && end
+        ? {
+            bottom: Math.max(start.bottom, end.bottom),
+            left: Math.min(start.left, end.left),
+            right: Math.max(start.right, end.right),
+            top: Math.min(start.top, end.top),
+          }
+        : (start ?? end);
+    if (!coords || !menuRef.current) {
+      return;
+    }
+
+    const rect = {
+      bottom: coords.bottom,
+      height: Math.max(coords.bottom - coords.top, 0),
+      left: coords.left,
+      right: coords.right,
+      top: coords.top,
+      width: Math.max(coords.right - coords.left, 0),
+      x: coords.left,
+      y: coords.top,
+    };
+    const virtualElement = { getBoundingClientRect: () => rect };
+
+    const place = (x: number, y: number) => {
+      if (menuRef.current) {
+        menuRef.current.style.left = `${x}px`;
+        menuRef.current.style.top = `${y}px`;
+        setPositioned(true);
+      }
+    };
+
+    try {
+      const { x, y } = await computePosition(virtualElement, menuRef.current, {
+        middleware: [offset(menuOffset), flip(), shift({ crossAxis: true })],
+        placement: "top",
+      });
+      place(x, y);
+    } catch {
+      place(
+        rect.left + rect.width / 2 - (menuRef.current?.offsetWidth || 0) / 2,
+        rect.top - (menuRef.current?.offsetHeight || 0) - menuOffset
+      );
+    }
+  }, [editor, menuOffset]);
+
+  useLayoutEffect(() => {
+    if (!show || !editor) {
+      return;
+    }
+    updateMenuPosition();
+  }, [show, tick, editor, updateMenuPosition]);
+
+  useEffect(() => {
+    if (!show || !editor) {
+      return;
+    }
+    const handle = () => updateMenuPosition();
+    window.addEventListener("resize", handle);
+    window.addEventListener("scroll", handle, true);
+    return () => {
+      window.removeEventListener("resize", handle);
+      window.removeEventListener("scroll", handle, true);
+    };
+  }, [show, editor, updateMenuPosition]);
+
+  if (!show || !editor) {
+    return null;
+  }
+
+  return (
+    <div
+      ref={menuRef}
+      className={cn("fm-menu", className)}
+      style={{
+        left: 0,
+        position: "fixed",
+        top: 0,
+        visibility: positioned ? "visible" : "hidden",
+        zIndex: 50,
+      }}
+    >
+      <FloatingMenuButtonGroup>
+        {resolvedItems.map((item) => {
+          const isActive = item.isActive ? item.isActive(editor) : false;
+          return (
+            <FloatingMenuButton
+              key={item.id ?? item.label}
+              active={isActive}
+              className={itemClassName}
+              onMouseDown={(e) => e.preventDefault()}
+              onClick={() => {
+                item.command(editor);
+              }}
+              aria-label={item.label}
+              title={item.label}
+              data-active={isActive}
+            >
+              {item.icon}
+            </FloatingMenuButton>
+          );
+        })}
+      </FloatingMenuButtonGroup>
+    </div>
+  );
+};

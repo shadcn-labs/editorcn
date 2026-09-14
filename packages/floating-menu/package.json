@@ -1,0 +1,46 @@
+{
+  "name": "@editorcn/floating-menu",
+  "version": "0.1.0",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./style.css": "./dist/style.css"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup && node -e \"require('fs').copyFileSync('src/style.css','dist/style.css')\"",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "@floating-ui/dom": "^1.7.6",
+    "clsx": "^2.1.1",
+    "lucide-react": ">=0.400.0 <1.0.0",
+    "tailwind-merge": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19",
+    "tsup": "^8.4.0",
+    "typescript": "^5"
+  },
+  "peerDependencies": {
+    "@tiptap/core": ">=3.0.0 <4",
+    "@tiptap/pm": ">=3.0.0 <4",
+    "@tiptap/react": ">=3.0.0 <4",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  }
+}

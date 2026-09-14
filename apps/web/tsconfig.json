@@ -27,6 +27,8 @@
       "@editorcn/editor/*": ["../../packages/editor/src/*"],
       "@editorcn/block-editor": ["../../packages/block-editor/src"],
       "@editorcn/block-editor/*": ["../../packages/block-editor/src/*"],
+      "@editorcn/floating-menu": ["../../packages/floating-menu/src"],
+      "@editorcn/floating-menu/*": ["../../packages/floating-menu/src/*"],
       "@tiptap/core": [
         "../../node_modules/.pnpm/@tiptap+core@2.27.2_@tiptap+pm@2.27.2/node_modules/@tiptap/core"
       ],

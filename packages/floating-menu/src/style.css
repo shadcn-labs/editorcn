@@ -1,0 +1,82 @@
+/* ── Floating Menu (cursor-anchored) ── */
+@keyframes fm-pop-in {
+  0% {
+    opacity: 0;
+    transform: scale(0.98) translateY(6px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.fm-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.fm-menu {
+  display: flex;
+  align-items: center;
+  height: 2.25rem;
+  max-width: min(92vw, 26rem);
+  overflow-x: auto;
+  scrollbar-width: none;
+  background: var(--popover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  padding: 0 0.25rem;
+  animation: fm-pop-in 0.25s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  will-change: left, top;
+}
+
+.fm-menu::-webkit-scrollbar {
+  display: none;
+}
+
+.fm-group {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.fm-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.75rem;
+  min-width: 1.75rem;
+  padding: 0 0.375rem;
+  border: none;
+  border-radius: calc(var(--radius) - 4px);
+  background: transparent;
+  color: var(--popover-foreground);
+  cursor: pointer;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  transition:
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    transform 100ms ease-out;
+}
+
+.fm-item svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.fm-item:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.fm-item:active {
+  transform: scale(0.96);
+}
+
+.fm-item--active {
+  color: var(--primary);
+  background: var(--accent);
+}

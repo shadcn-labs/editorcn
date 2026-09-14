@@ -406,6 +406,45 @@ const staticRendererFiles = [
   ),
 ];
 
+const floatingMenuFiles = [
+  entry(
+    "floating-menu/index.ts",
+    "registry:component",
+    "floating-menu",
+    "index.ts"
+  ),
+  entry(
+    "floating-menu/extension.ts",
+    "registry:component",
+    "floating-menu",
+    "floating-menu/extension.ts"
+  ),
+  entry(
+    "floating-menu/floating-menu.tsx",
+    "registry:component",
+    "floating-menu",
+    "floating-menu/floating-menu.tsx"
+  ),
+  entry(
+    "floating-menu/default-items.tsx",
+    "registry:component",
+    "floating-menu",
+    "floating-menu/default-items.tsx"
+  ),
+  entry(
+    "floating-menu/lib/utils.ts",
+    "registry:lib",
+    "floating-menu",
+    "lib/utils.ts"
+  ),
+  entry(
+    "floating-menu/style.css",
+    "registry:style",
+    "floating-menu",
+    "style.css"
+  ),
+];
+
 const deps = {
   "block-editor": [
     "@tiptap/react@>=2.11.5 <4",
@@ -456,6 +495,15 @@ const deps = {
     "lowlight@>=3.0.0 <4",
     "@base-ui/react@^1.0.0",
     "class-variance-authority@^0.7.1",
+    "clsx@^2.1.1",
+    "lucide-react@>=0.400.0 <1.0.0",
+    "tailwind-merge@^3.0.0",
+  ],
+  "floating-menu": [
+    "@tiptap/core@>=2.11.5 <4",
+    "@tiptap/react@>=2.11.5 <4",
+    "@tiptap/pm@>=2.11.5 <4",
+    "@floating-ui/dom@^1.6.0",
     "clsx@^2.1.1",
     "lucide-react@>=0.400.0 <1.0.0",
     "tailwind-merge@^3.0.0",
@@ -548,6 +596,20 @@ writeFileSync(
     2
   )
 );
+writeFileSync(
+  resolve(outDir, "floating-menu.json"),
+  JSON.stringify(
+    buildItem(
+      "floating-menu",
+      "Floating Menu",
+      "A cursor-anchored floating menu for Tiptap editors. Drop it into any editor, including chat inputs.",
+      floatingMenuFiles,
+      deps["floating-menu"]
+    ),
+    null,
+    2
+  )
+);
 
 const catalog = {
   $schema: "https://ui.shadcn.com/schema/registry.json",
@@ -573,6 +635,13 @@ const catalog = {
       "Read-only rendering and styling for HTML produced by editor and block-editor.",
       deps["static-renderer"],
       staticRendererFiles
+    ),
+    catalogItem(
+      "floating-menu",
+      "Floating Menu",
+      "A cursor-anchored floating menu for Tiptap editors. Drop it into any editor, including chat inputs.",
+      deps["floating-menu"],
+      floatingMenuFiles
     ),
   ],
   name: "editorcn",
