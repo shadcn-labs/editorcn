@@ -6,13 +6,19 @@ export interface LabsNavLink {
   description?: string;
 }
 
+export const LABS_LATEST = {
+  description: "Beautiful shaders, made simple",
+  href: "https://shadercn.run",
+  name: "shadercn",
+} as const satisfies LabsNavLink;
+
 export const LABS_REGISTRIES = [
   { href: "https://termcn.dev", name: "termcn" },
-  { href: "https://emailcn.run", name: "emailcn" },
   { href: "https://framecn.dev", name: "framecn" },
   { href: "https://ogimagecn.com", name: "ogimagecn" },
   { href: "https://agentcn.run", name: "agentcn" },
   { href: "https://mcpcn.dev", name: "mcpcn" },
+  { href: "https://emailcn.run", name: "emailcn" },
   { href: "https://pdfcn.dev", name: "pdfcn" },
 ] as const satisfies readonly LabsNavLink[];
 
