@@ -520,6 +520,9 @@ importers:
       '@types/react':
         specifier: ^19
         version: 19.2.17
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.2.3(@types/react@19.2.17)
       typescript:
         specifier: ^5
         version: 5.9.3

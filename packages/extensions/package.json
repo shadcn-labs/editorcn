@@ -34,6 +34,7 @@
     "@tiptap/extension-table-row": "^3.30.0",
     "@tiptap/react": "^3.30.0",
     "@types/react": "^19",
+    "@types/react-dom": "catalog:",
     "typescript": "^5"
   },
   "peerDependencies": {
