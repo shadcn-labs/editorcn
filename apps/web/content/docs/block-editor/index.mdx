@@ -17,7 +17,7 @@ This copies the component source directly into your project, so you can customiz
 **Or install via npm/pnpm:**
 
 ```bash
-npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react lucide-react
+npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react lucide-react @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
 ```
 
 After installation, import the editor styles at the root of your application:
@@ -41,8 +41,8 @@ import {
   defaultSlashCommandItems,
   getSlashCommandSuggestion,
   DEFAULT_ICONS,
-} from "@/components/block-editor";
-import type { BlockEditorIcons } from "@/components/block-editor";
+} from "@editorcn/block-editor";
+import type { BlockEditorIcons } from "@editorcn/block-editor";
 import "@editorcn/block-editor/style.css";
 ```
 
@@ -312,36 +312,37 @@ Exported constants:
 
 **Available icon keys:**
 
-| Key                    | Used in                                                  |
-| ---------------------- | -------------------------------------------------------- |
-| `slashTextIcon`        | Slash menu                                               |
-| `slashHeadingIcon`     | Slash menu                                               |
-| `slashBulletListIcon`  | Slash menu                                               |
-| `slashOrderedListIcon` | Slash menu                                               |
-| `slashTaskListIcon`    | Slash menu                                               |
-| `slashBlockquoteIcon`  | Slash menu                                               |
-| `slashCodeBlockIcon`   | Slash menu                                               |
-| `slashDividerIcon`     | Slash menu                                               |
-| `slashImageIcon`       | Slash menu                                               |
-| `slashTableIcon`       | Slash menu                                               |
-| `searchIcon`           | Slash menu                                               |
-| `fallbackIcon`         | Slash menu                                               |
-| `dragHandleIcon`       | Drag handle                                              |
-| `boldIcon`             | Bubble menu                                              |
-| `italicIcon`           | Bubble menu                                              |
-| `underlineIcon`        | Bubble menu                                              |
-| `strikethroughIcon`    | Bubble menu                                              |
-| `codeIcon`             | Bubble menu                                              |
-| `alignLeftIcon`        | Bubble menu                                              |
-| `alignCenterIcon`      | Bubble menu                                              |
-| `alignRightIcon`       | Bubble menu                                              |
-| `linkIcon`             | Bubble menu                                              |
-| `unlinkIcon`           | Bubble menu                                              |
-| `checkIcon`            | Bubble menu                                              |
-| `copyIcon`             | Bubble menu                                              |
-| `deleteIcon`           | Bubble menu                                              |
-| `dropdownArrowIcon`    | Bubble menu                                              |
-| `languageIcons`        | Code block language selector (Record of language → icon) |
+| Key                     | Used in                                                  |
+| ----------------------- | -------------------------------------------------------- |
+| `slashTextIcon`         | Slash menu                                               |
+| `slashHeadingIcon`      | Slash menu                                               |
+| `slashBulletListIcon`   | Slash menu                                               |
+| `slashOrderedListIcon`  | Slash menu                                               |
+| `slashTaskListIcon`     | Slash menu                                               |
+| `slashBlockquoteIcon`   | Slash menu                                               |
+| `slashCodeBlockIcon`    | Slash menu                                               |
+| `slashDividerIcon`      | Slash menu                                               |
+| `slashImageIcon`        | Slash menu                                               |
+| `slashTableIcon`        | Slash menu                                               |
+| `searchIcon`            | Slash menu                                               |
+| `fallbackIcon`          | Slash menu                                               |
+| `dragHandleIcon`        | Drag handle                                              |
+| `boldIcon`              | Bubble menu                                              |
+| `italicIcon`            | Bubble menu                                              |
+| `underlineIcon`         | Bubble menu                                              |
+| `strikethroughIcon`     | Bubble menu                                              |
+| `codeIcon`              | Bubble menu                                              |
+| `alignLeftIcon`         | Bubble menu                                              |
+| `alignCenterIcon`       | Bubble menu                                              |
+| `alignRightIcon`        | Bubble menu                                              |
+| `linkIcon`              | Bubble menu                                              |
+| `unlinkIcon`            | Bubble menu                                              |
+| `checkIcon`             | Bubble menu                                              |
+| `copyIcon`              | Bubble menu                                              |
+| `deleteIcon`            | Bubble menu                                              |
+| `dropdownArrowIcon`     | Bubble menu                                              |
+| `codeBlockLanguageIcon` | Code block language selector                             |
+| `languageIcons`         | Code block language selector (Record of language → icon) |
 
 Custom items are commonly used for commands that require additional extensions, such as **Image** and **Table**:
 
@@ -402,10 +403,41 @@ Select text to see the floating bubble menu with:
 
 - **Node type selector** — Switch between paragraph, headings, lists, etc. (with icons)
 - **Inline formatting** — Bold, Italic, Underline, Strike, Code (with icons)
+- **Text color** — A single color button opens a dropdown with two stacked grids: **Text color** (when `@tiptap/extension-text-style` + `@tiptap/extension-color` are registered) and **Highlight** (when `@tiptap/extension-highlight` is registered with `multicolor: true`), each with a remove action
 - **Link insertion/removal** — Add or remove links
 - **Text alignment** — Left, Center, Right (with icons)
 
 The bubble menu automatically positions itself near the selection and is styled with your theme's `--popover` tokens. All bubble menu icons can be overridden via the `icons` prop.
+
+### Text color & highlight
+
+The bubble menu's color button opens a dropdown with two stacked grids — **Text color** and **Highlight** — each with an 8-color palette and a remove action. Colors you pick are remembered in `localStorage` and shown in a **Recently Used** row (up to 10).
+
+Sections only render when the matching extensions are registered:
+
+| Section    | Required extensions                                        |
+| ---------- | ---------------------------------------------------------- |
+| Text color | `@tiptap/extension-text-style` + `@tiptap/extension-color` |
+| Highlight  | `@tiptap/extension-highlight` (with `multicolor: true`)    |
+
+```bash
+npm install @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
+```
+
+```tsx
+import TextStyle from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
+
+const editor = useEditor({
+  extensions: [
+    StarterKit,
+    TextStyle,
+    Color,
+    Highlight.configure({ multicolor: true }),
+  ],
+});
+```
 
 ### Block actions
 
@@ -431,6 +463,9 @@ All `@tiptap/*` packages are **peer dependencies** — you must install them in 
 | `@tiptap/extension-drag-handle-react`   | Block drag handle UI                      | Yes      |
 | `@tiptap/extension-code-block-lowlight` | Syntax highlighting (requires `lowlight`) | Optional |
 | `@tiptap/extension-placeholder`         | Placeholder text                          | Optional |
+| `@tiptap/extension-text-style`          | Text color - together with `Color`        | Optional |
+| `@tiptap/extension-color`               | Text color (requires Text Style)          | Optional |
+| `@tiptap/extension-highlight`           | Highlight (with `multicolor: true`)       | Optional |
 
 Extensions for **Image**, **Table**, **Link**, and others are not included — add them as needed for your custom slash commands.
 

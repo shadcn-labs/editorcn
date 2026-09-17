@@ -1,4 +1,4 @@
 {
   "title": "@editorcn/editor",
-  "pages": ["index", "serialization-format"]
+  "pages": ["index", "toolbar", "link", "serialization-format"]
 }

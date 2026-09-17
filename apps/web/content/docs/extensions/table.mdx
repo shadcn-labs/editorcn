@@ -1,0 +1,220 @@
+---
+title: Table
+description: A table node with a toolbar that inserts tables from a grid-size picker and manages rows, columns, merged cells and the header row.
+---
+
+The Table extension extends Tiptap's `Table` with a `TableToolbar` that inserts a table by dragging across a grid-size picker (like Notion), then manages it while the cursor is inside a table: add or delete rows and columns, merge and split cells, and toggle the header row. Columns are resizable by dragging their edges. Each column has a fixed default width (8rem), so adding a column extends the table and shows a horizontal scroll instead of shrinking existing columns.
+
+While the cursor is inside a table, a hover overlay shows three-dot menu handles at the top of the hovered column and to the left of the hovered row. The handles detect hover over the entire `.tableWrapper` container, so they stay visible when the pointer is in the scroll area around the table. Hover a handle to reveal its `⋮` menu, or click it to open that row's or column's actions, or use the toolbar control. The `Gapcursor` extension is bundled automatically, so you can click between blocks to move the cursor into or past a table with no extra setup.
+
+<ExtensionPreview slug="table" editor="toolbar" />
+
+## Installation
+
+Run the following command to install the extension, its toolbar component and the shared extension runtime:
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/table.json"
+```
+
+This installs `extensions/table`, `extensions/core/`, `extensions/ui/` and the `@tiptap/extension-table*` packages that the table node depends on. Table styles and shared UI styles are installed as `extensions/table/style.css` and `extensions/ui/style.css`.
+
+To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/table):
+
+```bash
+npm install @tiptap/core @tiptap/extension-table @tiptap/extension-table-row @tiptap/extension-table-cell @tiptap/extension-table-header @tiptap/extension-gapcursor
+```
+
+`@tiptap/extension-gapcursor` is only needed if you register `Table` yourself — the extension includes `Gapcursor` by default.
+
+## Usage
+
+Register `Table` in your editor and add `TableToolbar` to a toolbar group. The toolbar accepts an optional `editor` prop or falls back to an `EditorControlsProvider`. Place `TableHoverOverlay` inside the content area to enable the row/column context handles.
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
+import { Table } from "@/components/extensions/table";
+import { TableHoverOverlay } from "@/components/extensions/table/table-hover-overlay";
+import { TableToolbar } from "@/components/extensions/table/toolbar";
+import { RichTextEditor } from "@/components/editor";
+
+import "@/components/editor/style.css";
+import "@/components/extensions/table/style.css";
+import "@/components/extensions/ui/style.css";
+
+export function MyEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [StarterKit, Table],
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Undo />
+        </RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <TableToolbar editor={editor} />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+      <RichTextEditor.Content>
+        <TableHoverOverlay editor={editor} />
+      </RichTextEditor.Content>
+    </RichTextEditor>
+  );
+}
+```
+
+### With `@editorcn/block-editor`
+
+The block editor has no toolbar, so insert the table from a slash command and manage it with the hover context handles that `TableHoverOverlay` renders when the cursor is inside a table.
+
+<ExtensionPreview slug="table" editor="block" />
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
+import {
+  BlockEditor,
+  SlashCommand,
+  defaultSlashCommandItems,
+  getSlashCommandSuggestion,
+} from "@/components/block-editor";
+import type { SlashCommandSuggestionItem } from "@/components/block-editor";
+
+import { Table } from "@/components/extensions/table";
+import { TableHoverOverlay } from "@/components/extensions/table/table-hover-overlay";
+
+import "@/components/block-editor/style.css";
+import "@/components/extensions/table/style.css";
+import "@/components/extensions/ui/style.css";
+
+const tableItem: SlashCommandSuggestionItem = {
+  command: ({ editor, range }) =>
+    editor.chain().focus().deleteRange(range).insertTableWithHeader().run(),
+  description: "Insert a table with a header row",
+  id: "insertTableWithHeader",
+  keywords: ["table", "row", "column"],
+  title: "Insert table",
+};
+
+function MyBlockEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [
+      StarterKit,
+      Table,
+      SlashCommand.configure({
+        suggestion: getSlashCommandSuggestion([
+          ...defaultSlashCommandItems,
+          tableItem,
+        ]),
+      }),
+    ],
+  });
+
+  return (
+    <>
+      <BlockEditor editor={editor} />
+      <TableHoverOverlay editor={editor} />
+    </>
+  );
+}
+```
+
+Render `TableHoverOverlay` next to `BlockEditor`. Its hover handles on the hovered row and column are what add or delete rows and columns, merge or split cells, and toggle the header row — the `TableToolbar` control is only needed in toolbar editors.
+
+## Settings
+
+### `defaultCols`
+
+Default number of columns for a newly inserted table.
+
+```tsx
+Table.configure({ defaultCols: 4 });
+```
+
+### `defaultRows`
+
+Default number of rows for a newly inserted table.
+
+```tsx
+Table.configure({ defaultRows: 5 });
+```
+
+### `withHeaderRow`
+
+Inserts a header row with the table.
+
+```tsx
+Table.configure({ withHeaderRow: false });
+```
+
+### `resizable`
+
+Enables column resizing by dragging the right edge of each column. Defaults to `true`.
+
+```tsx
+Table.configure({ resizable: false });
+```
+
+### `HTMLAttributes`
+
+HTML attributes applied to the `<table>` element. All `@tiptap/extension-table` options are also supported.
+
+```tsx
+Table.configure({
+  HTMLAttributes: { class: "w-full" },
+});
+```
+
+## Commands
+
+### `insertTableWithHeader`
+
+Inserts a table using `defaultCols`, `defaultRows` and `withHeaderRow`.
+
+```tsx
+editor.commands.insertTableWithHeader();
+```
+
+### `moveColumn`
+
+Moves the column at index `from` to index `to` (0-based, clamped), preserving column widths. Useful for building drag-and-drop or shift controls around the table.
+
+```tsx
+editor.commands.moveColumn(0, 2);
+```
+
+### `moveRow`
+
+Moves the row at index `from` to index `to` (0-based, clamped). The row index includes the header row.
+
+```tsx
+editor.commands.moveRow(1, 3);
+```
+
+The toolbar also exposes the underlying `@tiptap/extension-table` commands:
+
+```tsx
+editor.commands.addRowBefore();
+editor.commands.addRowAfter();
+editor.commands.deleteRow();
+editor.commands.addColumnBefore();
+editor.commands.addColumnAfter();
+editor.commands.deleteColumn();
+editor.commands.toggleHeaderRow();
+editor.commands.mergeCells();
+editor.commands.splitCell();
+editor.commands.deleteTable();
+```

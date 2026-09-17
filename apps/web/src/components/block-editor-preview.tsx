@@ -7,22 +7,30 @@ import {
   getSlashCommandSuggestion,
 } from "@editorcn/block-editor";
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
+import {
+  ImagePlaceholder,
+  ResizableImage,
+} from "@editorcn/extensions/image-placeholder";
+import { Table } from "@editorcn/extensions/table";
+import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
-import { Image } from "@tiptap/extension-image";
+import { Color } from "@tiptap/extension-color";
+import { Highlight } from "@tiptap/extension-highlight";
 import { Link } from "@tiptap/extension-link";
 import { Placeholder } from "@tiptap/extension-placeholder";
-import { TableKit } from "@tiptap/extension-table";
 import { TaskItem } from "@tiptap/extension-task-item";
 import { TaskList } from "@tiptap/extension-task-list";
 import { TextAlign } from "@tiptap/extension-text-align";
+import { TextStyle } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { common, createLowlight } from "lowlight";
 
-import { showImagePrompt } from "@/components/image-prompt";
-
 import "@editorcn/block-editor/style.css";
+import "@editorcn/extensions/image-placeholder/style.css";
+import "@editorcn/extensions/ui/style.css";
+import "@editorcn/extensions/table/style.css";
 
 const DEMO_CONTENT = `
 <h1 style="text-align: center;">Block Editor</h1>
@@ -112,14 +120,10 @@ const myItems: SlashCommandSuggestionItem[] = [
     title: "Custom",
   },
   {
-    command: async ({ editor, range }) => {
-      const url = await showImagePrompt();
-      if (!url) {
-        return;
-      }
-      editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
+    command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range).insertImagePlaceholder().run();
     },
-    description: "Insert an image.",
+    description: "Insert an image placeholder you can fill in.",
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -188,6 +192,9 @@ export const BlockEditorPreview = () => {
       }),
       Placeholder.configure({ placeholder: "Type / for commands..." }),
       Underline,
+      TextStyle,
+      Color.configure({ types: ["textStyle"] }),
+      Highlight.configure({ multicolor: true }),
       TaskList,
       TaskItem.configure({ nested: true }),
       CodeBlockLowlight.configure({ lowlight }),
@@ -197,8 +204,9 @@ export const BlockEditorPreview = () => {
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
-      TableKit,
-      Image,
+      Table.configure({ resizable: true }),
+      ResizableImage,
+      ImagePlaceholder,
       Link.configure({
         autolink: true,
         defaultProtocol: "https",
@@ -276,7 +284,7 @@ export const BlockEditorPreview = () => {
   });
 
   return (
-    <div className=" rounded-md border border-border font-inter [&_.ProseMirror]:text-[15px]">
+    <div className="relative rounded-md border border-border font-inter [&_.ProseMirror]:text-[15px]">
       <BlockEditor
         editor={editor}
         className="px-2"
@@ -287,6 +295,7 @@ export const BlockEditorPreview = () => {
           slashTextIcon: <span className="text-sm font-bold">T</span>,
         }}
       />
+      <TableHoverOverlay editor={editor} />
     </div>
   );
 };

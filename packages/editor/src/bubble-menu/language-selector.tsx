@@ -1,7 +1,15 @@
 import type { Editor } from "@tiptap/react";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
 import { useRichTextEditorContext } from "../rte-context";
+import {
+  RteButton,
+  RteDropdown,
+  RteDropdownIcon,
+  RteDropdownItem,
+  RteIcon,
+  RteOverlay,
+} from "../ui";
 import {
   CODE_BLOCK_LANGUAGES,
   getLanguageLabel,
@@ -27,12 +35,6 @@ const FallbackIcon = () => (
 
 export const LanguageSelector = ({ editor }: { editor: Editor }) => {
   const [open, setOpen] = useState(false);
-  const [pill, setPill] = useState<{
-    height: number;
-    left: number;
-    top: number;
-    width: number;
-  } | null>(null);
   const { icons } = useRichTextEditorContext();
   const { currentLanguage } = useEditorState(
     editor,
@@ -44,48 +46,17 @@ export const LanguageSelector = ({ editor }: { editor: Editor }) => {
 
   const langIcon = icons.languageIcons[currentLanguage] ?? <FallbackIcon />;
 
-  const handleItemEnter = useCallback((target: EventTarget | null) => {
-    const item = (target as HTMLElement).closest<HTMLElement>(
-      "[data-dropdown-item]"
-    );
-    if (!item) {
-      return;
-    }
-    setPill({
-      height: item.offsetHeight,
-      left: item.offsetLeft,
-      top: item.offsetTop,
-      width: item.offsetWidth,
-    });
-  }, []);
-
-  const handleMouseOver = useCallback(
-    (event: React.MouseEvent<HTMLDivElement>) => {
-      handleItemEnter(event.target);
-    },
-    [handleItemEnter]
-  );
-
-  const handleFocus = useCallback(
-    (event: React.FocusEvent<HTMLDivElement>) => {
-      handleItemEnter(event.target);
-    },
-    [handleItemEnter]
-  );
-
   return (
     <div style={{ position: "relative" }}>
-      <button
-        type="button"
-        className="rte-bubble-btn"
+      <RteButton
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => setOpen(!open)}
       >
-        <span className="rte-bubble-btn-icon">{langIcon}</span>
+        <RteIcon>{langIcon}</RteIcon>
         <span className="rte-bubble-btn-text">
           {getLanguageLabel(currentLanguage)}
         </span>
-        <span className="rte-bubble-btn-icon" style={{ height: 12, width: 12 }}>
+        <RteIcon style={{ height: 12, width: 12 }}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -97,13 +68,11 @@ export const LanguageSelector = ({ editor }: { editor: Editor }) => {
           >
             <path d="m6 9 6 6 6-6" />
           </svg>
-        </span>
-      </button>
+        </RteIcon>
+      </RteButton>
       {open && (
         <>
-          <div
-            className="rte-bubble-overlay"
-            role="presentation"
+          <RteOverlay
             onClick={() => setOpen(false)}
             onKeyDown={(e) => {
               if (e.key === "Escape") {
@@ -111,37 +80,11 @@ export const LanguageSelector = ({ editor }: { editor: Editor }) => {
               }
             }}
           />
-          <div
-            className="rte-bubble-dropdown rte-bubble-dropdown--language"
-            onFocus={handleFocus}
-            onMouseLeave={() => setPill(null)}
-            onMouseOver={handleMouseOver}
-          >
-            <div
-              aria-hidden="true"
-              className={[
-                "rte-bubble-dropdown-pill",
-                pill ? "rte-bubble-dropdown-pill--visible" : "",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              style={
-                pill
-                  ? {
-                      height: pill.height,
-                      left: pill.left,
-                      top: pill.top,
-                      width: pill.width,
-                    }
-                  : undefined
-              }
-            />
+          <RteDropdown variant="language">
             {CODE_BLOCK_LANGUAGES.map((lang) => (
-              <button
+              <RteDropdownItem
                 key={lang}
-                type="button"
-                data-dropdown-item
-                className={`rte-bubble-dropdown-item${currentLanguage === lang ? " rte-bubble-dropdown-item--active" : ""}`}
+                active={currentLanguage === lang}
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => {
                   editor
@@ -152,13 +95,13 @@ export const LanguageSelector = ({ editor }: { editor: Editor }) => {
                   setOpen(false);
                 }}
               >
-                <span className="rte-bubble-dropdown-icon">
+                <RteDropdownIcon>
                   {icons.languageIcons[lang] ?? <FallbackIcon />}
-                </span>
+                </RteDropdownIcon>
                 <span>{getLanguageLabel(lang)}</span>
-              </button>
+              </RteDropdownItem>
             ))}
-          </div>
+          </RteDropdown>
         </>
       )}
     </div>

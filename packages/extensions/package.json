@@ -1,0 +1,46 @@
+{
+  "name": "@editorcn/extensions",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./core": "./src/core/index.ts",
+    "./core/*": "./src/core/*",
+    "./image-placeholder": "./src/image-placeholder/index.ts",
+    "./image-placeholder-toolbar": "./src/image-placeholder/toolbar.tsx",
+    "./image-placeholder/style.css": "./src/image-placeholder/style.css",
+    "./table": "./src/table/index.ts",
+    "./table-hover-overlay": "./src/table/table-hover-overlay.tsx",
+    "./table-toolbar": "./src/table/toolbar.tsx",
+    "./ui": "./src/ui/index.ts",
+    "./ui/*": "./src/ui/*",
+    "./ui/style.css": "./src/ui/style.css",
+    "./table/style.css": "./src/table/style.css",
+    "./manifest.json": "./manifest.json"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@tiptap/extension-gapcursor": "^3.30.0",
+    "lucide-react": "catalog:"
+  },
+  "devDependencies": {
+    "@editorcn/config": "workspace:*",
+    "@tiptap/extension-image": "^3.30.0",
+    "@tiptap/extension-table": "^3.30.0",
+    "@tiptap/extension-table-cell": "^3.30.0",
+    "@tiptap/extension-table-header": "^3.30.0",
+    "@tiptap/extension-table-row": "^3.30.0",
+    "@tiptap/react": "^3.30.0",
+    "@types/react": "^19",
+    "@types/react-dom": "catalog:",
+    "typescript": "^5"
+  },
+  "peerDependencies": {
+    "@tiptap/core": ">=3.0.0 <4",
+    "@tiptap/react": ">=3.0.0 <4",
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  }
+}

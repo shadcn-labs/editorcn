@@ -14,6 +14,8 @@ export { BubbleDropdownIcon } from "./bubble-dropdown-icon";
 export type { BubbleDropdownIconProps } from "./bubble-dropdown-icon";
 export { DropdownOverlay } from "./dropdown-overlay";
 export type { DropdownOverlayProps } from "./dropdown-overlay";
+export { ColorSwatch } from "./color-swatch";
+export type { ColorSwatchProps } from "./color-swatch";
 export { SlashMenu } from "./slash-menu";
 export type { SlashMenuProps } from "./slash-menu";
 export { SlashMenuSearch } from "./slash-menu-search";

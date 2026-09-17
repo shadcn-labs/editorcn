@@ -17,7 +17,7 @@ This copies the component source directly into your project, so you can customiz
 **Or install via npm/pnpm:**
 
 ```bash
-npm install @editorcn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-placeholder
+npm install @editorcn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
 ```
 
 After installation, import the editor styles at the root of your application:
@@ -35,7 +35,7 @@ import "@/components/editor/style.css";
 If you installed via npm, import from `@editorcn/editor` instead of `@/components/editor` throughout this page:
 
 ```tsx
-import { RichTextEditor, Link } from "@/components/editor";
+import { RichTextEditor, Link } from "@editorcn/editor";
 import "@editorcn/editor/style.css";
 ```
 
@@ -250,7 +250,7 @@ const editor = useEditor({
 
 ## RichTextEditor.BubbleMenu
 
-A floating formatting menu that appears when you select text inside the content area. It shows inline formatting actions (**bold**, _italic_, underline, strikethrough, code); when the selection is inside a code block it instead shows the syntax language selector.
+A floating formatting menu that appears when you select text inside the content area. It shows inline formatting actions (**bold**, _italic_, underline, strikethrough, code); when the selection is inside a code block it instead shows the syntax language selector. A **color** button opens a single dropdown with two stacked color grids — **Text color** (when `@tiptap/extension-text-style` + `@tiptap/extension-color` are registered) and **Highlight** (when `@tiptap/extension-highlight` is registered with `multicolor: true`) — each with its own remove action. Sections are hidden automatically when the corresponding extension is not registered.
 
 ```tsx
 <RichTextEditor editor={editor}>
@@ -267,6 +267,46 @@ A floating formatting menu that appears when you select text inside the content 
 | `editor` | `Editor \| null` | —       | The Tiptap editor instance |
 
 The bubble menu uses Floating UI via `@tiptap/react/menus` and hides automatically when the editor becomes read-only (`editor.setEditable(false)`). Its visuals follow your shadcn theme tokens and can be customized with the `.rte-bubble-menu`, `.rte-bubble-btn`, and `.rte-bubble-dropdown` classes.
+
+## Text color & highlight
+
+Both editors ship a **color control** with text color and highlight. In the toolbar editor it lives inside the bubble menu; in the block editor it is part of `BlockEditor.BubbleMenu`. It renders one button that opens a dropdown with two stacked grids — **Text color** and **Highlight** — each with an 8-color palette and a remove action.
+
+The sections only appear when the matching Tiptap extensions are registered:
+
+| Section    | Required extensions                                        |
+| ---------- | ---------------------------------------------------------- |
+| Text color | `@tiptap/extension-text-style` + `@tiptap/extension-color` |
+| Highlight  | `@tiptap/extension-highlight` (with `multicolor: true`)    |
+
+### Install the dependencies
+
+```bash
+npm install @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
+```
+
+### Register the extensions
+
+```tsx
+import TextStyle from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
+
+const editor = useEditor({
+  extensions: [
+    StarterKit,
+    TextStyle,
+    Color,
+    Highlight.configure({ multicolor: true }),
+  ],
+});
+```
+
+Both sections show in the dropdown once the extensions are registered. Recolor a word with the highlighter, then use the **remove action** in the dropdown (or the `RichTextEditor.Highlight` control) to strip it.
+
+### Recent colors
+
+Colors you pick are remembered in `localStorage` and shown in a **Recently Used** row at the top of the dropdown (up to 10), so frequently-used text and highlight colors stay one click away.
 
 ## RichTextEditor.Control
 

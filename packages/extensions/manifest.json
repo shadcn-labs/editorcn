@@ -1,0 +1,49 @@
+{
+  "image-placeholder": {
+    "title": "Image Placeholder",
+    "description": "A Notion-style image placeholder node that lets you upload or embed an image by URL, with a resizable image node view and its own toolbar button.",
+    "extension": "image-placeholder/index.ts",
+    "node": "image-placeholder/image-placeholder-node.tsx",
+    "image": "image-placeholder/image.tsx",
+    "toolbar": "image-placeholder/toolbar.tsx",
+    "css": ["image-placeholder/style.css"],
+    "ui": [
+      "button",
+      "dropdown-menu",
+      "dropdown-content",
+      "dropdown-item",
+      "dropdown-separator",
+      "input",
+      "popover",
+      "popover-content",
+      "separator",
+      "tabs"
+    ],
+    "deps": ["@tiptap/extension-image@>=3.0.0 <4"]
+  },
+  "table": {
+    "title": "Table",
+    "description": "A table node with a toolbar that inserts tables from a grid-size picker, lets you add or delete rows and columns, merge and split cells, toggle the header row, and manage rows and columns from hover context handles. Columns are resizable and a gap cursor is included by default.",
+    "extension": "table/index.ts",
+    "toolbar": "table/toolbar.tsx",
+    "overlay": "table/table-hover-overlay.tsx",
+    "css": ["table/style.css"],
+    "ui": [
+      "button",
+      "dropdown-menu",
+      "dropdown-content",
+      "dropdown-item",
+      "dropdown-separator",
+      "popover",
+      "popover-content",
+      "separator"
+    ],
+    "deps": [
+      "@tiptap/extension-table@>=3.0.0 <4",
+      "@tiptap/extension-table-row@>=3.0.0 <4",
+      "@tiptap/extension-table-cell@>=3.0.0 <4",
+      "@tiptap/extension-table-header@>=3.0.0 <4",
+      "@tiptap/extension-gapcursor@>=3.0.0 <4"
+    ]
+  }
+}

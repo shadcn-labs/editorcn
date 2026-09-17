@@ -3,6 +3,8 @@ import type { Editor } from "@tiptap/react";
 import { BubbleMenu as TiptapBubbleMenu } from "@tiptap/react/menus";
 import { useCallback } from "react";
 
+import { RteSeparator } from "../ui";
+import { ColorSelector } from "./color-selector";
 import { LanguageSelector } from "./language-selector";
 import { TextButtons } from "./text-buttons";
 import { useEditorState, shallowEqual } from "./utils";
@@ -59,7 +61,11 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
         {isCodeBlockActive ? (
           <LanguageSelector editor={editor} />
         ) : (
-          <TextButtons editor={editor} />
+          <>
+            <TextButtons editor={editor} />
+            <RteSeparator />
+            <ColorSelector editor={editor} />
+          </>
         )}
       </div>
     </TiptapBubbleMenu>

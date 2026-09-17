@@ -21,6 +21,10 @@ import {
   EditorCustomLabelsDemo,
   EditorCustomIconsDemo,
 } from "@/components/customization/editor-demos";
+import {
+  ExtensionList,
+  ExtensionPreview,
+} from "@/components/customization/extensions";
 import { StaticRendererDemo } from "@/components/customization/static-renderer-demo";
 import {
   DocumentEditorCard,
@@ -76,6 +80,8 @@ export const mdxComponents = {
   EditorVariantsDemo,
   EmojiMenuCard,
   EnhancedEditorCard,
+  ExtensionList,
+  ExtensionPreview,
   FeatureCard: ({
     icon: Icon,
     title,

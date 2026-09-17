@@ -60,7 +60,6 @@ export const TOP_LEVEL_SECTIONS = [
   { href: ROUTES.DOCS_OWNERSHIP, name: "Code Ownership" },
   { href: ROUTES.DOCS_MCP, name: "MCP" },
   { href: ROUTES.DOCS_REGISTRY, name: "Registry" },
-  { href: ROUTES.DOCS_STATIC_RENDERER, name: "Static Renderer" },
   { href: ROUTES.LLMS, name: "llms.txt" },
   { href: ROUTES.DOCS_CHANGELOG, name: "Changelog" },
 ];
