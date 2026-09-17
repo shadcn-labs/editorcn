@@ -299,10 +299,9 @@
   right: -2px;
   top: 0;
   bottom: -2px;
-  width: 2px;
+  width: 1px;
   background-color: color-mix(in srgb, var(--foreground) 25%, transparent);
   pointer-events: none;
-  transition: background-color 100ms ease-out;
 }
 
 .ProseMirror .column-resize-dragging .column-resize-handle {

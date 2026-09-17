@@ -101,8 +101,16 @@
   gap: 0.5rem;
 }
 
-.ext-image-embed-submit {
+.ext-image-embed-submit.ext-image-embed-submit {
   width: 100%;
+  border-color: transparent;
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+
+.ext-image-embed-submit.ext-image-embed-submit:hover {
+  background: color-mix(in srgb, var(--primary) 85%, black);
+  color: var(--primary-foreground);
 }
 
 .ext-image-error {

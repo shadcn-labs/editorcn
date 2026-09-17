@@ -1,5 +1,5 @@
 import type { Editor } from "@tiptap/react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 
 import { chainFocus } from "../lib/commands";
 import {
@@ -22,28 +22,44 @@ interface RecentColor {
 const RECENT_KEY = "editorcn-block-editor-recent-colors";
 const RECENT_LIMIT = 10;
 
-const readRecentColors = (): RecentColor[] => {
-  if (typeof window === "undefined") {
-    return [];
-  }
-  try {
-    const raw = window.localStorage.getItem(RECENT_KEY);
-    if (!raw) {
+const ColorGroup = ({
+  title,
+  children,
+  className,
+}: {
+  title: string;
+  children: React.ReactNode;
+  className: string;
+}) => (
+  <div className="block-editor-color-section">
+    <span className="block-editor-color-label">{title}</span>
+    <div className={className}>{children}</div>
+  </div>
+);
+
+const storage = {
+  get(): RecentColor[] {
+    if (typeof window === "undefined") {
       return [];
     }
-    const parsed = JSON.parse(raw) as RecentColor[];
-    return Array.isArray(parsed) ? parsed.slice(0, RECENT_LIMIT) : [];
-  } catch {
-    return [];
-  }
-};
-
-const persistRecentColors = (recent: RecentColor[]): void => {
-  try {
-    window.localStorage.setItem(RECENT_KEY, JSON.stringify(recent));
-  } catch {
-    /* ignored */
-  }
+    try {
+      const raw = window.localStorage.getItem(RECENT_KEY);
+      if (!raw) {
+        return [];
+      }
+      const parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.slice(0, RECENT_LIMIT) : [];
+    } catch {
+      return [];
+    }
+  },
+  set(recent: RecentColor[]): void {
+    try {
+      window.localStorage.setItem(RECENT_KEY, JSON.stringify(recent));
+    } catch {
+      // Silently fail if localStorage is disabled or full
+    }
+  },
 };
 
 const TEXT_COLORS = [
@@ -74,7 +90,7 @@ const HIGHLIGHT_COLORS = [
 
 export const ColorSelector = ({ editor }: { editor: Editor }) => {
   const [open, setOpen] = useState(false);
-  const [recent, setRecent] = useState<RecentColor[]>(() => readRecentColors());
+  const [recent, setRecent] = useState<RecentColor[]>(storage.get);
 
   const { highlightColor, textColor } = useEditorState(
     editor,
@@ -96,34 +112,40 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
     (ext) => ext.name === "highlight"
   );
 
-  const remember = (type: SwatchType, color: string, label: string): void => {
-    setRecent((prev) => {
-      const next = [
-        { color, label, type },
-        ...prev.filter((item) => !(item.type === type && item.color === color)),
-      ].slice(0, RECENT_LIMIT);
-      persistRecentColors(next);
-      return next;
-    });
-  };
+  const rememberColor = useCallback(
+    (type: SwatchType, color: string, label: string) => {
+      setRecent((prev) => {
+        const next = [
+          { color, label, type },
+          ...prev.filter(
+            (item) => !(item.type === type && item.color === color)
+          ),
+        ].slice(0, RECENT_LIMIT);
+        storage.set(next);
+        return next;
+      });
+    },
+    []
+  );
 
-  const selectText = (color: string, label: string): void => {
-    remember("text", color, label);
-    if (textColor === color) {
-      chainFocus(editor).unsetColor().run();
-    } else {
-      chainFocus(editor).setColor(color).run();
-    }
-  };
+  const selectColor = useCallback(
+    (type: SwatchType, color: string, label: string) => {
+      rememberColor(type, color, label);
 
-  const selectHighlight = (color: string, label: string): void => {
-    remember("highlight", color, label);
-    if (highlightColor === color) {
-      chainFocus(editor).unsetHighlight().run();
-    } else {
-      chainFocus(editor).setHighlight({ color }).run();
-    }
-  };
+      if (type === "text") {
+        if (textColor === color) {
+          chainFocus(editor).unsetColor().run();
+        } else {
+          chainFocus(editor).setColor(color).run();
+        }
+      } else if (highlightColor === color) {
+        chainFocus(editor).unsetHighlight().run();
+      } else {
+        chainFocus(editor).setHighlight({ color }).run();
+      }
+    },
+    [editor, textColor, highlightColor, rememberColor]
+  );
 
   if (!hasColor && !hasHighlight) {
     return null;
@@ -153,84 +175,83 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
           </svg>
         </span>
       </BubbleButton>
+
       {open && (
         <>
           <DropdownOverlay
             onClick={() => setOpen(false)}
-            onKeyDown={(e) => {
-              if (e.key === "Escape") {
-                setOpen(false);
-              }
-            }}
+            onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
           />
           <BubbleDropdown className="block-editor-bubble-dropdown--color">
-            {recent.length > 0 ? (
-              <div className="block-editor-color-section">
-                <span className="block-editor-color-label">Recently Used</span>
-                <div className="block-editor-color-recent">
-                  {recent.map((item) => (
+            {recent.length > 0 && (
+              <ColorGroup
+                title="Recently Used"
+                className="block-editor-color-recent"
+              >
+                {recent.map((item) => (
+                  <ColorSwatch
+                    key={`${item.type}-${item.color}`}
+                    variant={item.type}
+                    color={item.color}
+                    label={item.label}
+                    active={
+                      item.type === "text"
+                        ? textColor === item.color
+                        : highlightColor === item.color
+                    }
+                    onSelect={() =>
+                      selectColor(item.type, item.color, item.label)
+                    }
+                  />
+                ))}
+              </ColorGroup>
+            )}
+
+            {hasColor && (
+              <>
+                {recent.length > 0 && <BubbleDropdownDivider />}
+                <ColorGroup
+                  title="Text Color"
+                  className="block-editor-color-grid"
+                >
+                  {TEXT_COLORS.map((item) => (
                     <ColorSwatch
-                      key={`${item.type}-${item.color}`}
-                      variant={item.type}
+                      key={item.color}
+                      variant="text"
                       color={item.color}
                       label={item.label}
-                      active={
-                        item.type === "text"
-                          ? textColor === item.color
-                          : highlightColor === item.color
-                      }
+                      active={textColor === item.color}
                       onSelect={() =>
-                        item.type === "text"
-                          ? selectText(item.color, item.label)
-                          : selectHighlight(item.color, item.label)
+                        selectColor("text", item.color, item.label)
                       }
                     />
                   ))}
-                </div>
-              </div>
-            ) : null}
-            {hasColor ? (
-              <>
-                {recent.length > 0 && <BubbleDropdownDivider />}
-                <div className="block-editor-color-section">
-                  <span className="block-editor-color-label">Text Color</span>
-                  <div className="block-editor-color-grid">
-                    {TEXT_COLORS.map((item) => (
-                      <ColorSwatch
-                        key={item.color}
-                        variant="text"
-                        color={item.color}
-                        label={item.label}
-                        active={textColor === item.color}
-                        onSelect={() => selectText(item.color, item.label)}
-                      />
-                    ))}
-                  </div>
-                </div>
+                </ColorGroup>
               </>
-            ) : null}
-            {hasHighlight ? (
+            )}
+
+            {hasHighlight && (
               <>
                 {(recent.length > 0 || hasColor) && <BubbleDropdownDivider />}
-                <div className="block-editor-color-section">
-                  <span className="block-editor-color-label">
-                    Highlight Color
-                  </span>
-                  <div className="block-editor-color-grid">
-                    {HIGHLIGHT_COLORS.map((item) => (
-                      <ColorSwatch
-                        key={item.color}
-                        variant="highlight"
-                        color={item.color}
-                        label={item.label}
-                        active={highlightColor === item.color}
-                        onSelect={() => selectHighlight(item.color, item.label)}
-                      />
-                    ))}
-                  </div>
-                </div>
+                <ColorGroup
+                  title="Highlight Color"
+                  className="block-editor-color-grid"
+                >
+                  {HIGHLIGHT_COLORS.map((item) => (
+                    <ColorSwatch
+                      key={item.color}
+                      variant="highlight"
+                      color={item.color}
+                      label={item.label}
+                      active={highlightColor === item.color}
+                      onSelect={() =>
+                        selectColor("highlight", item.color, item.label)
+                      }
+                    />
+                  ))}
+                </ColorGroup>
               </>
-            ) : null}
+            )}
           </BubbleDropdown>
         </>
       )}
