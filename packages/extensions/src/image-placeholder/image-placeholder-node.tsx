@@ -45,7 +45,7 @@ export const ImagePlaceholderNode = ({
         .focus()
         .insertContentAt(
           { from: pos, to: pos + node.nodeSize },
-          { attrs: { src }, type: "image" }
+          { attrs: { src, width: "60%" }, type: "image" }
         )
         .run();
     },

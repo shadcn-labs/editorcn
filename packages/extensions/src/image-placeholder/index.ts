@@ -28,10 +28,14 @@ export const ImagePlaceholder = Node.create<ImagePlaceholderOptions>({
     return {
       insertImagePlaceholder:
         () =>
-        ({ commands }: CommandProps) =>
-          commands.insertContent({
-            type: this.name,
-          }),
+        ({ chain, state }: CommandProps) => {
+          const { from } = state.selection;
+          const node = this.type.create();
+          return chain()
+            .insertContentAt(from, node.toJSON())
+            .setTextSelection(from + node.nodeSize)
+            .run();
+        },
     };
   },
   addNodeView() {

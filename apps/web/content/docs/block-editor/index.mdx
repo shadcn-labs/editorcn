@@ -17,7 +17,7 @@ This copies the component source directly into your project, so you can customiz
 **Or install via npm/pnpm:**
 
 ```bash
-npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react lucide-react
+npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react lucide-react @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
 ```
 
 After installation, import the editor styles at the root of your application:
@@ -408,6 +408,36 @@ Select text to see the floating bubble menu with:
 - **Text alignment** — Left, Center, Right (with icons)
 
 The bubble menu automatically positions itself near the selection and is styled with your theme's `--popover` tokens. All bubble menu icons can be overridden via the `icons` prop.
+
+### Text color & highlight
+
+The bubble menu's color button opens a dropdown with two stacked grids — **Text color** and **Highlight** — each with an 8-color palette and a remove action. Colors you pick are remembered in `localStorage` and shown in a **Recently Used** row (up to 10).
+
+Sections only render when the matching extensions are registered:
+
+| Section    | Required extensions                                                          |
+| ---------- | ----------------------------------------------------------------------------- |
+| Text color | `@tiptap/extension-text-style` + `@tiptap/extension-color`                    |
+| Highlight  | `@tiptap/extension-highlight` (with `multicolor: true`)                       |
+
+```bash
+npm install @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
+```
+
+```tsx
+import TextStyle from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
+
+const editor = useEditor({
+  extensions: [
+    StarterKit,
+    TextStyle,
+    Color,
+    Highlight.configure({ multicolor: true }),
+  ],
+});
+```
 
 ### Block actions
 

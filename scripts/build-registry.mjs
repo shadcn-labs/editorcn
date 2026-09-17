@@ -601,7 +601,7 @@ const buildExtensionItem = (config) => {
   const extensionsUiEntries = [...extensionsUi].map(([name, content]) => ({
     content,
     path: `extensions/ui/${name}.tsx`,
-    target: `@components/extensions/ui/${name}`,
+    target: `@components/extensions/ui/${name}.tsx`,
     type: "registry:component",
   }));
   const legacyUiNames = [
@@ -614,7 +614,7 @@ const buildExtensionItem = (config) => {
     ([name, content]) => ({
       content: rewriteExtensionsContent(content),
       path: `extensions/ui/${name}.tsx`,
-      target: `@components/extensions/ui/${name}`,
+      target: `@components/extensions/ui/${name}.tsx`,
       type: "registry:component",
     })
   );

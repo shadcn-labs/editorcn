@@ -47,7 +47,7 @@ npx shadcn@latest add @editorcn/editor
 **Or install via npm:**
 
 ```bash
-npm install @editorcn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-underline @tiptap/extension-character-count
+npm install @editorcn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-underline @tiptap/extension-character-count @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
 ```
 
 Import the styles:
@@ -70,6 +70,9 @@ import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import Placeholder from "@tiptap/extension-placeholder";
+import TextStyle from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
+import Highlight from "@tiptap/extension-highlight";
 import { CharacterCount } from "@tiptap/extension-character-count";
 import { RichTextEditor, Link } from "@/components/editor";
 import "@/components/editor/style.css";
@@ -85,6 +88,9 @@ export function MyEditor() {
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({ placeholder: "Start typing..." }),
       CharacterCount,
+      TextStyle,
+      Color,
+      Highlight.configure({ multicolor: true }),
     ],
     content: "<p>Start typing...</p>",
   });
@@ -131,6 +137,8 @@ export function MyEditor() {
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 
+      <RichTextEditor.BubbleMenu editor={editor} />
+
       <RichTextEditor.Content />
       <RichTextEditor.Footer showWordCount />
     </RichTextEditor>
@@ -149,7 +157,7 @@ npx shadcn@latest add @editorcn/block-editor
 **Or install via npm:**
 
 ```bash
-npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react @tiptap/extension-link @tiptap/extension-underline @tiptap/extension-placeholder
+npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react @tiptap/extension-link @tiptap/extension-underline @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
 ```
 
 Import the styles:

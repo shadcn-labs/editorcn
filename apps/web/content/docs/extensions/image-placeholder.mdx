@@ -5,7 +5,7 @@ description: A Notion-style image placeholder node that lets you upload or embed
 
 The Image Placeholder inserts a block that looks like a button inside the document. Click it to open a small popover with two tabs — **Upload** (drag & drop or pick a file) and **Embed link** (paste an image URL). On confirm, the placeholder is replaced by a resizable image at the exact position.
 
-The inserted image ships its own node view: drag the left or right handles to resize it, click the image to reveal alignment, duplicate, full-width and delete controls (positioned below the image so they never get clipped by overflow containers), and open the more menu for additional options.
+The inserted image ships its own node view: drag the left or right handles to resize it, click the image to reveal alignment, duplicate, full-width and delete controls (positioned below the image so they never get clipped by overflow containers), and open the more menu for additional options. New images default to **60 % width** with auto height so they never fill the entire line.
 
 <ExtensionPreview slug="image-placeholder" editor="toolbar" />
 
@@ -41,7 +41,7 @@ import {
   ImagePlaceholder,
   ResizableImage,
 } from "@/components/extensions/image-placeholder";
-import { ImagePlaceholderToolbar } from "@/components/extensions/image-placeholder-toolbar";
+import { ImagePlaceholderToolbar } from "@/components/extensions/image-placeholder/toolbar";
 import { RichTextEditor } from "@/components/editor";
 
 import "@/components/editor/style.css";
