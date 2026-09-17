@@ -618,7 +618,7 @@ const buildExtensionItem = (config) => {
       type: "registry:component",
     })
   );
-  const styles = [...new Set(config.css ?? [])];
+  const styles = config.css ? [...new Set(config.css)] : [];
   if (
     extensionsUiEntries.length > 0 &&
     existsSync(resolve(extensionsUiDir, "style.css"))
@@ -645,11 +645,11 @@ const buildExtensionItem = (config) => {
     file.content = rewriteExtensionsContent(file.content);
   }
   return {
-    name: config.name,
-    title: config.title,
-    files,
     deps: [...new Set([...extensionsBaseDeps, ...(config.deps ?? [])])],
     description: config.description,
+    files,
+    name: config.name,
+    title: config.title,
   };
 };
 
