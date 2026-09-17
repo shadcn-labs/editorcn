@@ -139,7 +139,7 @@ HTML attributes applied to the placeholder element.
 ```tsx
 ImagePlaceholder.configure({
   HTMLAttributes: { class: "w-full" },
-})
+});
 ```
 
 ### `allowedMimeTypes`
@@ -149,7 +149,7 @@ Mime types accepted by the file upload. Files outside this list are rejected and
 ```tsx
 ImagePlaceholder.configure({
   allowedMimeTypes: { image: ["image/*"] },
-})
+});
 ```
 
 ### `maxFiles`
@@ -157,7 +157,7 @@ ImagePlaceholder.configure({
 Maximum number of files accepted in one drop. Set to `1` to disable multi-select.
 
 ```tsx
-ImagePlaceholder.configure({ maxFiles: 1 })
+ImagePlaceholder.configure({ maxFiles: 1 });
 ```
 
 ### `maxSize`
@@ -167,7 +167,7 @@ Maximum file size in bytes. Larger files are rejected.
 ```tsx
 ImagePlaceholder.configure({
   maxSize: 1024 * 1024, // 1MB
-})
+});
 ```
 
 ### `onDrop`
@@ -179,7 +179,7 @@ ImagePlaceholder.configure({
   onDrop: (files, editor) => {
     console.log("dropped", files, editor);
   },
-})
+});
 ```
 
 ### `onDropRejected`
@@ -191,7 +191,7 @@ ImagePlaceholder.configure({
   onDropRejected: (files, editor) => {
     console.log("rejected", files, editor);
   },
-})
+});
 ```
 
 ### `onEmbed`
@@ -203,7 +203,7 @@ ImagePlaceholder.configure({
   onEmbed: (url, editor) => {
     console.log("embedded", url, editor);
   },
-})
+});
 ```
 
 ## Commands

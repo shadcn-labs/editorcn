@@ -312,37 +312,37 @@ Exported constants:
 
 **Available icon keys:**
 
-| Key                    | Used in                                                  |
-| ---------------------- | -------------------------------------------------------- |
-| `slashTextIcon`        | Slash menu                                               |
-| `slashHeadingIcon`     | Slash menu                                               |
-| `slashBulletListIcon`  | Slash menu                                               |
-| `slashOrderedListIcon` | Slash menu                                               |
-| `slashTaskListIcon`    | Slash menu                                               |
-| `slashBlockquoteIcon`  | Slash menu                                               |
-| `slashCodeBlockIcon`   | Slash menu                                               |
-| `slashDividerIcon`     | Slash menu                                               |
-| `slashImageIcon`       | Slash menu                                               |
-| `slashTableIcon`       | Slash menu                                               |
-| `searchIcon`           | Slash menu                                               |
-| `fallbackIcon`         | Slash menu                                               |
-| `dragHandleIcon`       | Drag handle                                              |
-| `boldIcon`             | Bubble menu                                              |
-| `italicIcon`           | Bubble menu                                              |
-| `underlineIcon`        | Bubble menu                                              |
-| `strikethroughIcon`    | Bubble menu                                              |
-| `codeIcon`             | Bubble menu                                              |
-| `alignLeftIcon`        | Bubble menu                                              |
-| `alignCenterIcon`      | Bubble menu                                              |
-| `alignRightIcon`       | Bubble menu                                              |
-| `linkIcon`             | Bubble menu                                              |
-| `unlinkIcon`           | Bubble menu                                              |
+| Key                     | Used in                                                  |
+| ----------------------- | -------------------------------------------------------- |
+| `slashTextIcon`         | Slash menu                                               |
+| `slashHeadingIcon`      | Slash menu                                               |
+| `slashBulletListIcon`   | Slash menu                                               |
+| `slashOrderedListIcon`  | Slash menu                                               |
+| `slashTaskListIcon`     | Slash menu                                               |
+| `slashBlockquoteIcon`   | Slash menu                                               |
+| `slashCodeBlockIcon`    | Slash menu                                               |
+| `slashDividerIcon`      | Slash menu                                               |
+| `slashImageIcon`        | Slash menu                                               |
+| `slashTableIcon`        | Slash menu                                               |
+| `searchIcon`            | Slash menu                                               |
+| `fallbackIcon`          | Slash menu                                               |
+| `dragHandleIcon`        | Drag handle                                              |
+| `boldIcon`              | Bubble menu                                              |
+| `italicIcon`            | Bubble menu                                              |
+| `underlineIcon`         | Bubble menu                                              |
+| `strikethroughIcon`     | Bubble menu                                              |
+| `codeIcon`              | Bubble menu                                              |
+| `alignLeftIcon`         | Bubble menu                                              |
+| `alignCenterIcon`       | Bubble menu                                              |
+| `alignRightIcon`        | Bubble menu                                              |
+| `linkIcon`              | Bubble menu                                              |
+| `unlinkIcon`            | Bubble menu                                              |
 | `checkIcon`             | Bubble menu                                              |
 | `copyIcon`              | Bubble menu                                              |
 | `deleteIcon`            | Bubble menu                                              |
 | `dropdownArrowIcon`     | Bubble menu                                              |
 | `codeBlockLanguageIcon` | Code block language selector                             |
-| `languageIcons`        | Code block language selector (Record of language → icon) |
+| `languageIcons`         | Code block language selector (Record of language → icon) |
 
 Custom items are commonly used for commands that require additional extensions, such as **Image** and **Table**:
 
@@ -415,10 +415,10 @@ The bubble menu's color button opens a dropdown with two stacked grids — **Tex
 
 Sections only render when the matching extensions are registered:
 
-| Section    | Required extensions                                                          |
-| ---------- | ----------------------------------------------------------------------------- |
-| Text color | `@tiptap/extension-text-style` + `@tiptap/extension-color`                    |
-| Highlight  | `@tiptap/extension-highlight` (with `multicolor: true`)                       |
+| Section    | Required extensions                                        |
+| ---------- | ---------------------------------------------------------- |
+| Text color | `@tiptap/extension-text-style` + `@tiptap/extension-color` |
+| Highlight  | `@tiptap/extension-highlight` (with `multicolor: true`)    |
 
 ```bash
 npm install @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
@@ -464,7 +464,7 @@ All `@tiptap/*` packages are **peer dependencies** — you must install them in 
 | `@tiptap/extension-code-block-lowlight` | Syntax highlighting (requires `lowlight`) | Optional |
 | `@tiptap/extension-placeholder`         | Placeholder text                          | Optional |
 | `@tiptap/extension-text-style`          | Text color - together with `Color`        | Optional |
-| `@tiptap/extension-color`               | Text color (requires Text Style)           | Optional |
+| `@tiptap/extension-color`               | Text color (requires Text Style)          | Optional |
 | `@tiptap/extension-highlight`           | Highlight (with `multicolor: true`)       | Optional |
 
 Extensions for **Image**, **Table**, **Link**, and others are not included — add them as needed for your custom slash commands.

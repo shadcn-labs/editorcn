@@ -12,10 +12,6 @@ import {
   BlockEditorCustomSlashCommandsDemo,
 } from "@/components/customization/block-editor-demos";
 import {
-  ExtensionList,
-  ExtensionPreview,
-} from "@/components/customization/extensions";
-import {
   EditorVariantsDemo,
   EditorClassNameDemo,
   EditorThemingDemo,
@@ -25,6 +21,10 @@ import {
   EditorCustomLabelsDemo,
   EditorCustomIconsDemo,
 } from "@/components/customization/editor-demos";
+import {
+  ExtensionList,
+  ExtensionPreview,
+} from "@/components/customization/extensions";
 import { StaticRendererDemo } from "@/components/customization/static-renderer-demo";
 import {
   DocumentEditorCard,

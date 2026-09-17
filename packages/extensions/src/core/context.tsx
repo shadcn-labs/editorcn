@@ -35,14 +35,11 @@ export const ToolbarProvider = ({
   );
 
   return (
-    <ToolbarContext.Provider value={value}>
-      {children}
-    </ToolbarContext.Provider>
+    <ToolbarContext.Provider value={value}>{children}</ToolbarContext.Provider>
   );
 };
 
-export const useToolbar = (): ToolbarContextValue =>
-  useContext(ToolbarContext);
+export const useToolbar = (): ToolbarContextValue => useContext(ToolbarContext);
 
 export const useToolbarEditor = (
   editor: Editor | null | undefined

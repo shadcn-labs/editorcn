@@ -53,7 +53,9 @@ export const useEditorState = <T>(
   const subscribe = useCallback(
     (onStoreChange: () => void) => {
       if (!editor) {
-        return () => {};
+        return () => {
+          /* Nothing to subscribe to. */
+        };
       }
       const update = () => {
         computeSnapshot();
