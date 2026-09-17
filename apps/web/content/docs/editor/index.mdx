@@ -35,7 +35,7 @@ import "@/components/editor/style.css";
 If you installed via npm, import from `@editorcn/editor` instead of `@/components/editor` throughout this page:
 
 ```tsx
-import { RichTextEditor, Link } from "@/components/editor";
+import { RichTextEditor, Link } from "@editorcn/editor";
 import "@editorcn/editor/style.css";
 ```
 
@@ -250,7 +250,7 @@ const editor = useEditor({
 
 ## RichTextEditor.BubbleMenu
 
-A floating formatting menu that appears when you select text inside the content area. It shows inline formatting actions (**bold**, _italic_, underline, strikethrough, code); when the selection is inside a code block it instead shows the syntax language selector.
+A floating formatting menu that appears when you select text inside the content area. It shows inline formatting actions (**bold**, _italic_, underline, strikethrough, code); when the selection is inside a code block it instead shows the syntax language selector. A **color** button opens a single dropdown with two stacked color grids — **Text color** (when `@tiptap/extension-text-style` + `@tiptap/extension-color` are registered) and **Highlight** (when `@tiptap/extension-highlight` is registered with `multicolor: true`) — each with its own remove action. Sections are hidden automatically when the corresponding extension is not registered.
 
 ```tsx
 <RichTextEditor editor={editor}>

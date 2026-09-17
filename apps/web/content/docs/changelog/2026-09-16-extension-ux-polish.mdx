@@ -1,0 +1,28 @@
+---
+title: "September 16, 2026 - Editor UX polish"
+description: "Table handles now use three-dot menus, a combined text color + highlight control landed in both editors' bubble menus, and the rich text editor gained reusable UI primitives."
+date: "2026-09-16"
+---
+
+A UX-focused pass over the editors and extensions:
+
+## Table
+
+- The hover handles now show a **three-dot menu** (`⋮` / `⋯`) instead of the grip strokes — hover a handle to reveal it, click to open the row or column actions.
+- The propose-a-range hover highlight was removed in favor of the cleaner three-dot handles.
+- Column resize feedback now tints to `--primary` while dragging, and the shared `Separator` vertical variant renders at a fixed height (fixing an invisible divider in the image action bar).
+
+## Color & highlight
+
+- The bubble menu of both editors now has a single **color** control that opens one dropdown with two stacked grids — **Text color** (requires `@tiptap/extension-text-style` + `@tiptap/extension-color`) and **Highlight** (requires `@tiptap/extension-highlight` with `multicolor: true`). Each section shows an 8-color palette plus a remove action, and sections appear only when the matching extension is registered.
+- The old highlight extension was removed from the extensions package; every reference (exports, manifest, docs page, registry entry, landing snippets) was cleaned up.
+
+## Rich text editor UI primitives
+
+- `@editorcn/editor` now ships reusable bubble-menu primitives (`RteButton`, `RteIcon`, `RteSeparator`, `RteOverlay`, `RteDropdown`, `RteDropdownItem`, `RteDropdownDivider`, `RteDropdownIcon`) exported from `@editorcn/editor/ui`, matching the block editor's component API. The language and color selectors were refactored to use them instead of raw HTML.
+
+## Shared
+
+- **Code snippets** on the landing page now match the current previews — the rich text editor shows the table toolbar, hover overlay, resizable image and placeholder toolbar; the block editor shows the extension-based table and image placeholder slash commands.
+
+See the [Table](/docs/extensions/table) and [Image Placeholder](/docs/extensions/image-placeholder) docs.

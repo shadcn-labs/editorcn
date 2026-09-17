@@ -1,16 +1,15 @@
 "use client";
 
-import { Button } from "@editorcn/ui/components/button";
-import { cn } from "@editorcn/ui/lib/utils";
+import { Image } from "lucide-react";
+
 import { useToolbar, useToolbarEditor } from "../core/context";
 import { useEditorState } from "../core/editor-state";
-import { Image } from "lucide-react";
 import type { ToolbarComponentProps } from "../core/types";
+import { Button } from "../ui/button";
 
 export const ImagePlaceholderToolbar = ({
   className,
   editor: editorProp,
-  size = "icon-sm",
 }: ToolbarComponentProps) => {
   const { labels } = useToolbar();
   const editor = useToolbarEditor(editorProp);
@@ -28,11 +27,9 @@ export const ImagePlaceholderToolbar = ({
   return (
     <Button
       aria-label={labels.image}
-      className={cn("data-active:bg-accent data-active:text-accent-foreground", className)}
+      className={["ext-btn--icon-sm", className].filter(Boolean).join(" ")}
       disabled={disabled}
-      size={size}
       title={labels.image}
-      variant="ghost"
       onClick={() => {
         if (editor && !editor.isDestroyed && !disabled) {
           editor.chain().focus().insertImagePlaceholder().run();

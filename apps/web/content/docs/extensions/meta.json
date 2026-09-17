@@ -1,4 +1,4 @@
 {
   "title": "@editorcn/extensions",
-  "pages": ["index", "image-placeholder", "table", "highlight"]
+  "pages": ["index", "image-placeholder", "table"]
 }

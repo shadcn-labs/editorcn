@@ -1,0 +1,292 @@
+/* Extensions UI primitives using shadcn CSS variables */
+
+@keyframes ext-pop-in {
+  from {
+    opacity: 0;
+    translate: 0 0.25rem;
+    scale: 0.95;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    scale: 1;
+  }
+}
+
+/* ── Button ── */
+.ext-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  gap: 0.375rem;
+  height: 2rem;
+  padding: 0 0.625rem;
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius) - 2px);
+  background: transparent;
+  color: inherit;
+  font-size: 0.8125rem;
+  font-family: inherit;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none;
+  transition:
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    border-color 150ms ease-out,
+    transform 100ms ease-out;
+}
+
+.ext-btn > svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.ext-btn--icon {
+  width: 2rem;
+  padding: 0;
+}
+
+.ext-btn--icon-sm {
+  width: 1.75rem;
+  padding: 0;
+}
+
+.ext-btn:hover {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.ext-btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: -2px;
+}
+
+.ext-btn:active {
+  transform: scale(0.96);
+}
+
+.ext-btn:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.ext-btn--active {
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+.ext-btn--danger {
+  color: var(--destructive, #ef4444);
+}
+
+.ext-btn--danger:hover {
+  background: color-mix(in srgb, var(--destructive, #ef4444) 10%, transparent);
+  color: var(--destructive, #ef4444);
+}
+
+/* ── Dropdown ── */
+.ext-dropdown-content {
+  position: relative;
+  min-width: 10rem;
+  padding: 0.25rem;
+  background: var(--popover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  color: var(--popover-foreground);
+  animation: ext-pop-in 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.ext-dropdown-item {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.375rem 0.5rem;
+  border: none;
+  border-radius: calc(var(--radius) - 4px);
+  background: transparent;
+  color: var(--popover-foreground);
+  font-size: 0.8125rem;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 100ms ease-out,
+    color 100ms ease-out,
+    transform 100ms ease-out;
+}
+
+.ext-dropdown-item > svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.ext-dropdown-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+  border-radius: calc(var(--radius) - 4px);
+  background: color-mix(in srgb, var(--primary) 6%, transparent);
+  opacity: 0;
+  transition:
+    top 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    left 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    width 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    height 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 150ms ease-out;
+}
+
+.ext-dropdown-pill--visible {
+  opacity: 1;
+}
+
+.ext-dropdown-item:hover,
+.ext-dropdown-item:focus-visible {
+  color: var(--foreground);
+  outline: none;
+}
+
+.ext-dropdown-item:active {
+  transform: scale(0.98);
+}
+
+.ext-dropdown-item:disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.ext-dropdown-item--danger {
+  color: var(--destructive, #ef4444);
+}
+
+.ext-dropdown-item--danger:hover,
+.ext-dropdown-item--danger:focus-visible {
+  background: color-mix(in srgb, var(--destructive, #ef4444) 10%, transparent);
+  color: var(--destructive, #ef4444);
+}
+
+.ext-dropdown-separator {
+  height: 1px;
+  background: var(--border);
+  margin: 0.25rem 0;
+}
+
+/* ── Popover ── */
+.ext-popover-content {
+  position: relative;
+  background: var(--popover);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  color: var(--popover-foreground);
+  animation: ext-pop-in 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ── Separator ── */
+.ext-separator {
+  flex-shrink: 0;
+  background: var(--border);
+}
+
+.ext-separator--horizontal {
+  height: 1px;
+  margin: 0.25rem 0;
+}
+
+.ext-separator--vertical {
+  width: 1px;
+  height: 1rem;
+  align-self: center;
+  margin: 0 0.25rem;
+}
+
+/* ── Input ── */
+.ext-input {
+  width: 100%;
+  height: 2rem;
+  padding: 0 0.625rem;
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius) - 2px);
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-family: inherit;
+  outline: none;
+  transition:
+    border-color 150ms ease-out,
+    box-shadow 150ms ease-out;
+}
+
+.ext-input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.ext-input:focus-visible {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ring) 30%, transparent);
+}
+
+/* ── Tabs ── */
+.ext-tabs {
+  display: flex;
+  flex-direction: column;
+}
+
+.ext-tabs-list {
+  display: flex;
+  gap: 0.125rem;
+  width: fit-content;
+  padding: 0.25rem;
+  border-radius: calc(var(--radius) - 4px);
+  background: var(--muted);
+}
+
+.ext-tabs-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.625rem;
+  border: none;
+  border-radius: calc(var(--radius) - 6px);
+  background: transparent;
+  color: var(--muted-foreground);
+  font-size: 0.8125rem;
+  font-family: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background-color 150ms ease-out,
+    color 150ms ease-out;
+}
+
+.ext-tabs-trigger > svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.ext-tabs-trigger:hover,
+.ext-tabs-trigger:focus-visible {
+  color: var(--foreground);
+  outline: none;
+}
+
+.ext-tabs-trigger--active {
+  background: var(--background);
+  color: var(--foreground);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.ext-tabs-content {
+  padding-top: 0.5rem;
+}

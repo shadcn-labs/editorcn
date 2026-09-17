@@ -342,6 +342,130 @@
   color: var(--destructive, #ef4444);
 }
 
+.block-editor-color-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+}
+
+.block-editor-color-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.block-editor-bubble-dropdown--color {
+  min-width: auto;
+  padding: 0.5rem;
+}
+
+.block-editor-bubble-dropdown--color .block-editor-bubble-dropdown-divider {
+  margin: 0.5rem 0 0.375rem;
+}
+
+.block-editor-color-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.block-editor-color-label {
+  padding: 0 0.125rem;
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.block-editor-color-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1.5rem);
+  justify-content: center;
+  gap: 0.375rem;
+}
+
+.block-editor-color-recent {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.375rem;
+}
+
+.block-editor-color-swatch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition:
+    transform 120ms cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 100ms ease-out,
+    border-color 100ms ease-out,
+    color 100ms ease-out,
+    box-shadow 120ms ease-out;
+}
+
+.block-editor-color-swatch:hover {
+  transform: scale(1.1);
+}
+
+.block-editor-color-swatch:active {
+  transform: scale(0.96);
+}
+
+.block-editor-color-swatch:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 1px;
+}
+
+.block-editor-color-swatch--text {
+  background: transparent;
+  border-color: var(--swatch-color);
+  color: var(--swatch-color);
+}
+
+.block-editor-color-swatch--text.block-editor-color-swatch--active {
+  background: var(--swatch-color);
+  border-color: var(--swatch-color);
+  color: var(--swatch-check);
+}
+
+.block-editor-color-swatch--highlight {
+  background: var(--swatch-color);
+  border-color: transparent;
+  color: var(--swatch-check);
+}
+
+.block-editor-color-swatch--highlight.block-editor-color-swatch--active {
+  box-shadow: 0 0 0 2px
+    color-mix(in srgb, var(--swatch-color) 55%, var(--popover-foreground));
+}
+
+.block-editor-color-glyph {
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.block-editor-color-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 0.75rem;
+  height: 0.75rem;
+  color: var(--swatch-check);
+}
+
+.block-editor-color-check svg {
+  width: 100%;
+  height: 100%;
+}
+
 /* ── Typography & Content ── */
 .block-editor-content .ProseMirror h1 {
   font-size: 1.875rem;
@@ -560,7 +684,7 @@
 /* Tables */
 .block-editor-content .ProseMirror table {
   border-collapse: collapse;
-  width: 100%;
+  width: max-content;
   margin: 0.5em 0;
 }
 

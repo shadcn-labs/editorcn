@@ -6,6 +6,7 @@ import { useState, useCallback } from "react";
 import { DEFAULT_ICONS } from "../icons";
 import { BubbleButton, BubbleSeparator } from "../ui";
 import { TextAlignSelector } from "./align-selector";
+import { ColorSelector } from "./color-selector";
 import { LanguageSelector } from "./language-selector";
 import { LinkSelector } from "./link-selector";
 import { NodeSelector } from "./node-selector";
@@ -98,6 +99,8 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
             <NodeSelector editor={editor} />
             <BubbleSeparator />
             <TextButtons editor={editor} />
+            <BubbleSeparator />
+            <ColorSelector editor={editor} />
             <BubbleSeparator />
             <LinkSelector editor={editor} />
             {hasTextAlign && (

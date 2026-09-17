@@ -4,6 +4,5 @@ export type { ImagePlaceholderOptions } from "./image-placeholder";
 export { ImagePlaceholderToolbar } from "./image-placeholder/toolbar";
 export { Table } from "./table";
 export type { TableConfigOptions } from "./table";
+export { TableHoverOverlay } from "./table/table-hover-overlay";
 export { TableToolbar } from "./table/toolbar";
-export { Highlight } from "./highlight";
-export { HighlightToolbar } from "./highlight/toolbar";

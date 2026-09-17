@@ -14,6 +14,8 @@ export interface BlockEditorChainedCommands {
     attributes?: Record<string, unknown>
   ) => BlockEditorChainedCommands;
   setParagraph: () => BlockEditorChainedCommands;
+  setColor: (color: string) => BlockEditorChainedCommands;
+  setHighlight: (attributes: { color: string }) => BlockEditorChainedCommands;
   setTextAlign: (alignment: string) => BlockEditorChainedCommands;
   toggleBlockquote: () => BlockEditorChainedCommands;
   toggleBold: () => BlockEditorChainedCommands;
@@ -35,6 +37,8 @@ export interface BlockEditorChainedCommands {
   toggleStrike: () => BlockEditorChainedCommands;
   toggleTaskList: () => BlockEditorChainedCommands;
   toggleUnderline: () => BlockEditorChainedCommands;
+  unsetColor: () => BlockEditorChainedCommands;
+  unsetHighlight: () => BlockEditorChainedCommands;
   unsetLink: () => BlockEditorChainedCommands;
 }
 

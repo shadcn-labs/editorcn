@@ -5,7 +5,7 @@ description: A Notion-style image placeholder node that lets you upload or embed
 
 The Image Placeholder inserts a block that looks like a button inside the document. Click it to open a small popover with two tabs — **Upload** (drag & drop or pick a file) and **Embed link** (paste an image URL). On confirm, the placeholder is replaced by a resizable image at the exact position.
 
-The inserted image ships its own node view: drag the left or right handles to resize it, use the floating controls to change its alignment (left / center / right), and open the more menu to duplicate it, make it full width, or delete it.
+The inserted image ships its own node view: drag the left or right handles to resize it, click the image to reveal alignment, duplicate, full-width and delete controls (positioned below the image so they never get clipped by overflow containers), and open the more menu for additional options.
 
 <ExtensionPreview slug="image-placeholder" editor="toolbar" />
 
@@ -17,7 +17,7 @@ Run the following command to install the extension, its toolbar component and th
 npx shadcn@latest add "https://editorcn.vercel.app/r/image-placeholder.json"
 ```
 
-This installs the node, the node view, the toolbar and `extensions/core/` into your project. It also installs `@tiptap/extension-image`, which the node view uses to insert the final image.
+This installs the node, the node view, the toolbar, `extensions/core/` and `extensions/ui/` into your project. It also installs `@tiptap/extension-image`, which the node view uses to insert the final image. Extension and shared UI styles are installed as `extensions/image-placeholder/style.css` and `extensions/ui/style.css`.
 
 To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/image-placeholder):
 
@@ -45,6 +45,8 @@ import { ImagePlaceholderToolbar } from "@/components/extensions/image-placehold
 import { RichTextEditor } from "@/components/editor";
 
 import "@/components/editor/style.css";
+import "@/components/extensions/image-placeholder/style.css";
+import "@/components/extensions/ui/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
@@ -92,6 +94,10 @@ import {
   ImagePlaceholder,
   ResizableImage,
 } from "@/components/extensions/image-placeholder";
+
+import "@/components/block-editor/style.css";
+import "@/components/extensions/image-placeholder/style.css";
+import "@/components/extensions/ui/style.css";
 
 export function MyBlockEditor() {
   const editor = useEditor({

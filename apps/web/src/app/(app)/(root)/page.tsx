@@ -13,10 +13,20 @@ import Underline from "@tiptap/extension-underline";
 import TextAlign from "@tiptap/extension-text-align";
 import Placeholder from "@tiptap/extension-placeholder";
 import Highlight from "@tiptap/extension-highlight";
+import TextStyle from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
-import { RichTextEditor, Link, YouTubeEmbed, TwitterEmbed, CodeBlock } from "@editorcn/editor";
-import "@editorcn/editor/style.css";
+import { RichTextEditor, Link, YouTubeEmbed, TwitterEmbed, CodeBlock } from "@/components/editor";
+import { Table } from "@/components/extensions/table";
+import { TableToolbar } from "@/components/extensions/table-toolbar";
+import { TableHoverOverlay } from "@/components/extensions/table-hover-overlay";
+import { ResizableImage, ImagePlaceholder } from "@/components/extensions/image-placeholder";
+import { ImagePlaceholderToolbar } from "@/components/extensions/image-placeholder-toolbar";
+import "@/components/editor/style.css";
+import "@/components/extensions/table/style.css";
+import "@/components/extensions/image-placeholder/style.css";
+import "@/components/extensions/ui/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
@@ -30,12 +40,17 @@ export function MyEditor() {
       YouTubeEmbed,
       TwitterEmbed,
       Underline,
-      Highlight,
+      TextStyle,
+      Color.configure({ types: ["textStyle"] }),
+      Highlight.configure({ multicolor: true }),
       Subscript,
       Superscript,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({ placeholder: "Start typing..." }),
       CodeBlock,
+      Table.configure({ resizable: true }),
+      ResizableImage,
+      ImagePlaceholder,
     ],
   });
 
@@ -92,12 +107,21 @@ export function MyEditor() {
         </RichTextEditor.ControlsGroup>
 
         <RichTextEditor.ControlsGroup>
+          <ImagePlaceholderToolbar editor={editor} />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <TableToolbar editor={editor} />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
           <RichTextEditor.Undo />
           <RichTextEditor.Redo />
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 
       <RichTextEditor.Content />
+      <TableHoverOverlay editor={editor} />
     </RichTextEditor>
   );
 }`;
@@ -106,24 +130,28 @@ const blockEditorCode = `import { useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Placeholder from "@tiptap/extension-placeholder";
 import Underline from "@tiptap/extension-underline";
+import Highlight from "@tiptap/extension-highlight";
+import TextStyle from "@tiptap/extension-text-style";
+import Color from "@tiptap/extension-color";
 import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
-import Image from "@tiptap/extension-image";
-import { Table } from "@tiptap/extension-table";
-import TableRow from "@tiptap/extension-table-row";
-import TableCell from "@tiptap/extension-table-cell";
-import TableHeader from "@tiptap/extension-table-header";
 import Link from "@tiptap/extension-link";
-import { showImagePrompt } from "@/components/image-prompt";
+import { GripVerticalIcon } from "lucide-react";
+import { Table } from "@/components/extensions/table";
+import { TableHoverOverlay } from "@/components/extensions/table-hover-overlay";
+import { ResizableImage, ImagePlaceholder } from "@/components/extensions/image-placeholder";
 import {
   BlockEditor,
   SlashCommand,
   CodeBlock,
   defaultSlashCommandItems,
   getSlashCommandSuggestion,
-} from "@editorcn/block-editor";
-import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
-import "@editorcn/block-editor/style.css";
+} from "@/components/block-editor";
+import type { SlashCommandSuggestionItem } from "@/components/block-editor";
+import "@/components/block-editor/style.css";
+import "@/components/extensions/table/style.css";
+import "@/components/extensions/image-placeholder/style.css";
+import "@/components/extensions/ui/style.css";
 
 const DEMO_CONTENT = "<h2>Getting Started</h2><p>The BlockEditor is a block-style editor.</p>";
 
@@ -132,7 +160,7 @@ const myItems: SlashCommandSuggestionItem[] = [
   {
     id: "image",
     title: "Image",
-    description: "Insert an image.",
+    description: "Insert an image placeholder you can fill in.",
     keywords: ["image", "img", "picture", "photo"],
     icon: (
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -142,10 +170,7 @@ const myItems: SlashCommandSuggestionItem[] = [
       </svg>
     ),
     command: ({ editor, range }) => {
-      showImagePrompt().then((url) => {
-        if (!url) return;
-        editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
-      });
+      editor.chain().focus().deleteRange(range).insertImagePlaceholder().run();
     },
   },
   {
@@ -179,13 +204,14 @@ export function MyBlockEditor() {
       StarterKit.configure({ heading: { levels: [1, 2, 3], codeBlock: false } }),
       Placeholder.configure({ placeholder: "Type / for commands..." }),
       Underline,
+      TextStyle,
+      Color.configure({ types: ["textStyle"] }),
+      Highlight.configure({ multicolor: true }),
       TaskList,
       TaskItem.configure({ nested: true }),
-      Table,
-      TableRow,
-      TableCell,
-      TableHeader,
-      Image,
+      Table.configure({ resizable: true }),
+      ResizableImage,
+      ImagePlaceholder,
       SlashCommand.configure({ suggestion: getSlashCommandSuggestion(myItems) }),
       CodeBlock,
       Link.configure({ openOnClick: true, autolink: true, defaultProtocol: "https", protocols: ["http", "https"] }),
@@ -194,13 +220,16 @@ export function MyBlockEditor() {
   });
 
   return (
-    <BlockEditor
-      editor={editor}
-      icons={{
-        dragHandleIcon: <GripVerticalIcon className="h-4 w-4" />,
-        boldIcon: <strong>B</strong>,
-      }}
-    />
+    <>
+      <BlockEditor
+        editor={editor}
+        icons={{
+          dragHandleIcon: <GripVerticalIcon className="h-4 w-4" />,
+          boldIcon: <strong>B</strong>,
+        }}
+      />
+      <TableHoverOverlay editor={editor} />
+    </>
   );
 }`;
 

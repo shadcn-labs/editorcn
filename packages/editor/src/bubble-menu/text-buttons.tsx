@@ -1,5 +1,6 @@
 import type { Editor } from "@tiptap/react";
 
+import { RteButton, RteButtonGroup, RteIcon } from "../ui";
 import { useEditorState, shallowEqual } from "./utils";
 
 const Svg = ({
@@ -21,6 +22,10 @@ const Svg = ({
   >
     {children}
   </svg>
+);
+
+const Icon = ({ children }: { children: React.ReactNode }) => (
+  <RteIcon>{children}</RteIcon>
 );
 
 interface TextSelectorResult {
@@ -45,10 +50,12 @@ const textItems = [
     command: (e: Editor) =>
       (e.chain().focus() as unknown as ToggleableChain).toggleBold().run(),
     icon: (
-      <Svg>
-        <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" />
-        <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" />
-      </Svg>
+      <Icon>
+        <Svg>
+          <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" />
+          <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z" />
+        </Svg>
+      </Icon>
     ),
     isActive: (s: TextSelectorResult) => s.isBold,
   },
@@ -56,11 +63,13 @@ const textItems = [
     command: (e: Editor) =>
       (e.chain().focus() as unknown as ToggleableChain).toggleItalic().run(),
     icon: (
-      <Svg>
-        <line x1="19" y1="4" x2="10" y2="4" />
-        <line x1="14" y1="20" x2="5" y2="20" />
-        <line x1="15" y1="4" x2="9" y2="20" />
-      </Svg>
+      <Icon>
+        <Svg>
+          <line x1="19" y1="4" x2="10" y2="4" />
+          <line x1="14" y1="20" x2="5" y2="20" />
+          <line x1="15" y1="4" x2="9" y2="20" />
+        </Svg>
+      </Icon>
     ),
     isActive: (s: TextSelectorResult) => s.isItalic,
   },
@@ -68,10 +77,12 @@ const textItems = [
     command: (e: Editor) =>
       (e.chain().focus() as unknown as ToggleableChain).toggleUnderline().run(),
     icon: (
-      <Svg>
-        <path d="M6 4v6a6 6 0 0 0 12 0V4" />
-        <line x1="4" y1="20" x2="20" y2="20" />
-      </Svg>
+      <Icon>
+        <Svg>
+          <path d="M6 4v6a6 6 0 0 0 12 0V4" />
+          <line x1="4" y1="20" x2="20" y2="20" />
+        </Svg>
+      </Icon>
     ),
     isActive: (s: TextSelectorResult) => s.isUnderline,
   },
@@ -79,11 +90,13 @@ const textItems = [
     command: (e: Editor) =>
       (e.chain().focus() as unknown as ToggleableChain).toggleStrike().run(),
     icon: (
-      <Svg>
-        <path d="M16 4H9.5a3.5 3.5 0 0 0-2.9 5.4" />
-        <path d="M14.5 14.6a3.5 3.5 0 0 1-2.9 5.4H8" />
-        <line x1="4" y1="12" x2="20" y2="12" />
-      </Svg>
+      <Icon>
+        <Svg>
+          <path d="M16 4H9.5a3.5 3.5 0 0 0-2.9 5.4" />
+          <path d="M14.5 14.6a3.5 3.5 0 0 1-2.9 5.4H8" />
+          <line x1="4" y1="12" x2="20" y2="12" />
+        </Svg>
+      </Icon>
     ),
     isActive: (s: TextSelectorResult) => s.isStrike,
   },
@@ -91,10 +104,12 @@ const textItems = [
     command: (e: Editor) =>
       (e.chain().focus() as unknown as ToggleableChain).toggleCode().run(),
     icon: (
-      <Svg>
-        <polyline points="16 18 22 12 16 6" />
-        <polyline points="8 6 2 12 8 18" />
-      </Svg>
+      <Icon>
+        <Svg>
+          <polyline points="16 18 22 12 16 6" />
+          <polyline points="8 6 2 12 8 18" />
+        </Svg>
+      </Icon>
     ),
     isActive: (s: TextSelectorResult) => s.isCode,
   },
@@ -114,18 +129,17 @@ export const TextButtons = ({ editor }: { editor: Editor }) => {
   );
 
   return (
-    <div className="rte-bubble-group">
+    <RteButtonGroup>
       {textItems.map((item, i) => (
-        <button
+        <RteButton
           key={i}
-          type="button"
-          className={`rte-bubble-btn${item.isActive(editorState) ? " rte-bubble-btn--active" : ""}`}
+          active={item.isActive(editorState)}
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => item.command(editor)}
         >
           {item.icon}
-        </button>
+        </RteButton>
       ))}
-    </div>
+    </RteButtonGroup>
   );
 };

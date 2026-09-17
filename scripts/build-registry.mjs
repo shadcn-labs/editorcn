@@ -73,6 +73,12 @@ const editorFiles = [
     "bubble-menu/language-selector.tsx"
   ),
   entry(
+    "editor/bubble-menu/color-selector.tsx",
+    "registry:component",
+    "editor",
+    "bubble-menu/color-selector.tsx"
+  ),
+  entry(
     "editor/bubble-menu/text-buttons.tsx",
     "registry:component",
     "editor",
@@ -158,6 +164,67 @@ const editorFiles = [
     "editor",
     "ui/dialog.tsx"
   ),
+  entry("editor/ui/index.ts", "registry:component", "editor", "ui/index.ts"),
+  entry(
+    "editor/ui/rte-button.tsx",
+    "registry:component",
+    "editor",
+    "ui/rte-button.tsx"
+  ),
+  entry(
+    "editor/ui/rte-button-group.tsx",
+    "registry:component",
+    "editor",
+    "ui/rte-button-group.tsx"
+  ),
+  entry(
+    "editor/ui/rte-icon.tsx",
+    "registry:component",
+    "editor",
+    "ui/rte-icon.tsx"
+  ),
+  entry(
+    "editor/ui/rte-separator.tsx",
+    "registry:component",
+    "editor",
+    "ui/rte-separator.tsx"
+  ),
+  entry(
+    "editor/ui/rte-overlay.tsx",
+    "registry:component",
+    "editor",
+    "ui/rte-overlay.tsx"
+  ),
+  entry(
+    "editor/ui/rte-dropdown.tsx",
+    "registry:component",
+    "editor",
+    "ui/rte-dropdown.tsx"
+  ),
+  entry(
+    "editor/ui/rte-dropdown-item.tsx",
+    "registry:component",
+    "editor",
+    "ui/rte-dropdown-item.tsx"
+  ),
+  entry(
+    "editor/ui/rte-dropdown-divider.tsx",
+    "registry:component",
+    "editor",
+    "ui/rte-dropdown-divider.tsx"
+  ),
+  entry(
+    "editor/ui/rte-dropdown-icon.tsx",
+    "registry:component",
+    "editor",
+    "ui/rte-dropdown-icon.tsx"
+  ),
+  entry(
+    "editor/ui/rte-color-swatch.tsx",
+    "registry:component",
+    "editor",
+    "ui/rte-color-swatch.tsx"
+  ),
 ];
 
 const blockEditorFiles = [
@@ -214,6 +281,12 @@ const blockEditorFiles = [
     "registry:component",
     "block-editor",
     "bubble-menu/language-selector.tsx"
+  ),
+  entry(
+    "block-editor/bubble-menu/color-selector.tsx",
+    "registry:component",
+    "block-editor",
+    "bubble-menu/color-selector.tsx"
   ),
   entry(
     "block-editor/context.tsx",
@@ -336,6 +409,12 @@ const blockEditorFiles = [
     "ui/dropdown-overlay.tsx"
   ),
   entry(
+    "block-editor/ui/color-swatch.tsx",
+    "registry:component",
+    "block-editor",
+    "ui/color-swatch.tsx"
+  ),
+  entry(
     "block-editor/ui/slash-menu.tsx",
     "registry:component",
     "block-editor",
@@ -415,7 +494,12 @@ const extensionCoreFiles = [
   "labels.ts",
   "types.ts",
 ].map((src) =>
-  entry(`extensions/core/${src}`, "registry:component", "extensions", `core/${src}`)
+  entry(
+    `extensions/core/${src}`,
+    "registry:component",
+    "extensions",
+    `core/${src}`
+  )
 );
 
 const readUiComponent = (name) =>
@@ -434,23 +518,15 @@ const collectUiComponents = (names, out = new Map()) => {
       ...content.matchAll(/@editorcn\/ui\/components\/([a-z-]+)/g),
     ].map((match) => match[1]);
     collectUiComponents(imported, out);
-    out.set(
-      name,
-      content.replaceAll("@editorcn/ui/lib/utils", "@/lib/utils")
-    );
+    out.set(name, content.replaceAll("@editorcn/ui/lib/utils", "@/lib/utils"));
   }
   return out;
 };
 
 const extensionsBaseDeps = [
-  "@editorcn/editor@latest",
   "@tiptap/core@>=3.0.0 <4",
   "@tiptap/react@>=3.0.0 <4",
-  "@base-ui/react@^1.0.0",
-  "class-variance-authority@^0.7.1",
-  "clsx@^2.1.1",
   "lucide-react@>=0.400.0 <1.0.0",
-  "tailwind-merge@^3.0.0",
 ];
 
 const extensionsManifest = JSON.parse(
@@ -472,31 +548,99 @@ const rewriteExtensionsContent = (content) =>
     .replaceAll("@editorcn/ui/components/", "@components/extensions/ui/")
     .replaceAll("@editorcn/ui/lib/", "@/lib/");
 
+const extensionsUiDir = resolve(root, "packages", "extensions", "src", "ui");
+
+const extensionUiExists = (name) =>
+  existsSync(resolve(extensionsUiDir, `${name}.tsx`));
+
+const collectExtensionUi = (name, out = new Map()) => {
+  if (out.has(name) || !extensionUiExists(name)) {
+    return out;
+  }
+  const content = readFileSync(
+    resolve(extensionsUiDir, `${name}.tsx`),
+    "utf-8"
+  );
+  const imported = [...content.matchAll(/from "\.\/([a-z-]+)"/g)].map(
+    (match) => match[1]
+  );
+  for (const dep of imported) {
+    collectExtensionUi(dep, out);
+  }
+  out.set(name, content);
+  return out;
+};
+
 const buildExtensionItem = (config) => {
   const sourceFiles = [
     config.extension,
     config.node,
     config.image,
     config.toolbar,
+    config.overlay,
   ].filter(Boolean);
   const entries = sourceFiles.map((file) =>
     entry(`extensions/${file}`, "registry:component", "extensions", file)
   );
-  const uiNames = [
-    ...new Set([
-      ...(config.ui ?? []),
-      ...entries.flatMap((e) => [
-        ...e.content.matchAll(/@editorcn\/ui\/components\/([a-z-]+)/g),
-      ].map((match) => match[1])),
-    ]),
+  const legacyMatched = [
+    ...new Set(
+      entries.flatMap((e) =>
+        [...e.content.matchAll(/@editorcn\/ui\/components\/([a-z-]+)/g)].map(
+          (match) => match[1]
+        )
+      )
+    ),
   ];
-  const uiEntries = [...collectUiComponents(uiNames)].map(([name, content]) => ({
-    content: rewriteExtensionsContent(content),
+  const uiConfig = config.ui ?? [];
+  const extensionsUi = new Map();
+  for (const name of uiConfig) {
+    if (extensionUiExists(name) && legacyMatched.includes(name) === false) {
+      collectExtensionUi(name, extensionsUi);
+    }
+  }
+  const extensionsUiEntries = [...extensionsUi].map(([name, content]) => ({
+    content,
     path: `extensions/ui/${name}.tsx`,
     target: `@components/extensions/ui/${name}`,
     type: "registry:component",
   }));
-  const files = [...extensionCoreFiles, ...entries, ...uiEntries];
+  const legacyUiNames = [
+    ...new Set([
+      ...legacyMatched,
+      ...uiConfig.filter((name) => !extensionUiExists(name)),
+    ]),
+  ];
+  const legacyUiEntries = [...collectUiComponents(legacyUiNames)].map(
+    ([name, content]) => ({
+      content: rewriteExtensionsContent(content),
+      path: `extensions/ui/${name}.tsx`,
+      target: `@components/extensions/ui/${name}`,
+      type: "registry:component",
+    })
+  );
+  const styles = [...new Set(config.css ?? [])];
+  if (
+    extensionsUiEntries.length > 0 &&
+    existsSync(resolve(extensionsUiDir, "style.css"))
+  ) {
+    styles.push("ui/style.css");
+  }
+  const styleEntries = styles.map((file) => ({
+    content: readFileSync(
+      resolve(root, "packages", "extensions", "src", file),
+      "utf-8"
+    ),
+    path: `extensions/${file}`,
+    target: `@components/extensions/${file}`,
+    type: "registry:style",
+  }));
+  const files = [
+    ...extensionCoreFiles,
+    ...entries,
+    ...extensionsUiEntries,
+    ...legacyUiEntries,
+    ...styleEntries,
+  ];
   for (const file of files) {
     file.content = rewriteExtensionsContent(file.content);
   }
@@ -532,6 +676,9 @@ const deps = {
     "@tiptap/extension-drag-handle-react@>=2.11.5 <4",
     "@tiptap/suggestion@>=2.11.5 <4",
     "@tiptap/extension-code-block-lowlight@>=2.11.5 <4",
+    "@tiptap/extension-text-style@>=2.11.5 <4",
+    "@tiptap/extension-color@>=2.11.5 <4",
+    "@tiptap/extension-highlight@>=2.11.5 <4",
     "lowlight@>=3.0.0 <4",
     "@base-ui/react@^1.0.0",
     "@floating-ui/dom@^1.6.0",
@@ -553,6 +700,8 @@ const deps = {
     "@tiptap/extension-superscript@>=2.11.5 <4",
     "@tiptap/extension-placeholder@>=2.11.5 <4",
     "@tiptap/extension-character-count@>=2.11.5 <4",
+    "@tiptap/extension-text-style@>=2.11.5 <4",
+    "@tiptap/extension-color@>=2.11.5 <4",
     "@tiptap/extension-code-block-lowlight@>=2.11.5 <4",
     "lowlight@>=3.0.0 <4",
     "@base-ui/react@^1.0.0",
@@ -654,13 +803,7 @@ for (const item of extensionsItems) {
   writeFileSync(
     resolve(outDir, `${item.name}.json`),
     JSON.stringify(
-      buildItem(
-        item.name,
-        item.title,
-        item.description,
-        item.files,
-        item.deps
-      ),
+      buildItem(item.name, item.title, item.description, item.files, item.deps),
       null,
       2
     )
@@ -693,7 +836,13 @@ const catalog = {
       staticRendererFiles
     ),
     ...extensionsItems.map((item) =>
-      catalogItem(item.name, item.title, item.description, item.deps, item.files)
+      catalogItem(
+        item.name,
+        item.title,
+        item.description,
+        item.deps,
+        item.files
+      )
     ),
   ],
   name: "editorcn",

@@ -9,11 +9,13 @@ import {
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
 import { RichTextEditor } from "@editorcn/editor";
 import { ToolbarProvider } from "@editorcn/extensions/core";
-import { Highlight } from "@editorcn/extensions/highlight";
-import { HighlightToolbar } from "@editorcn/extensions/highlight-toolbar";
-import { ImagePlaceholder, ResizableImage } from "@editorcn/extensions/image-placeholder";
+import {
+  ImagePlaceholder,
+  ResizableImage,
+} from "@editorcn/extensions/image-placeholder";
 import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-toolbar";
 import { Table } from "@editorcn/extensions/table";
+import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { TableToolbar } from "@editorcn/extensions/table-toolbar";
 import type { AnyExtension } from "@tiptap/core";
 import { Placeholder } from "@tiptap/extension-placeholder";
@@ -23,71 +25,27 @@ import type { ReactNode } from "react";
 
 import "@editorcn/block-editor/style.css";
 import "@editorcn/editor/style.css";
+import "@editorcn/extensions/ui/style.css";
+import "@editorcn/extensions/table/style.css";
+import "@editorcn/extensions/image-placeholder/style.css";
 
-const TABLE_CSS = `
-.rte-content table, .block-editor-content table {
-  border-collapse: collapse;
-  table-layout: fixed;
-  width: 100%;
-  margin: 0;
-  overflow: hidden;
-  position: relative;
-}
-.rte-content td, .rte-content th, .block-editor-content td, .block-editor-content th {
-  border: 1px solid var(--border);
-  padding: 0.5rem 0.75rem;
-  vertical-align: top;
-  text-align: left;
-  min-width: 80px;
-  position: relative;
-}
-.rte-content th, .block-editor-content th {
-  background: var(--muted);
-  font-weight: 600;
-}
-.rte-content .selectedCell, .block-editor-content .selectedCell {
-  background: var(--accent);
-}
-.rte-content table .column-resize-handle, .block-editor-content table .column-resize-handle {
-  position: absolute;
-  right: -2px;
-  top: 0;
-  bottom: -2px;
-  width: 4px;
-  background-color: var(--primary);
-  pointer-events: none;
-}
-.rte-content table.resize-cursor, .block-editor-content table.resize-cursor {
-  cursor: col-resize;
-}
-`;
+/* Table alignment + resize handle styling ships with
+   @editorcn/extensions/table/style.css (see .ProseMirror.resize-cursor). */
 
 interface PreviewConfig {
   content: string;
   extensions: AnyExtension[];
   toolbar: ReactNode;
   slashItems?: SlashCommandSuggestionItem[];
-  style?: string;
 }
 
 const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
-  highlight: {
-    content:
-      "<p>Select some text and use the highlight control in the toolbar to apply a highlight color, or remove it again.</p>",
-    extensions: [StarterKit, Highlight],
-    toolbar: <HighlightToolbar />,
-  },
   "image-placeholder": {
     content:
       "<p>Click the image button in the toolbar to insert a placeholder, then upload a file or paste an image URL to replace it. The inserted image can be resized from its handles.</p>",
     extensions: [StarterKit, ResizableImage, ImagePlaceholder],
-    toolbar: <ImagePlaceholderToolbar />,
     slashItems: [
       {
-        id: "insertImagePlaceholder",
-        title: "Image",
-        description: "Insert an image placeholder",
-        keywords: ["image", "photo", "picture"],
         command: ({ editor, range }) =>
           editor
             .chain()
@@ -95,21 +53,20 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
             .deleteRange(range)
             .insertImagePlaceholder()
             .run(),
+        description: "Insert an image placeholder",
+        id: "insertImagePlaceholder",
+        keywords: ["image", "photo", "picture"],
+        title: "Image",
       },
     ],
+    toolbar: <ImagePlaceholderToolbar />,
   },
   table: {
     content:
       "<h2>Table</h2><p>Click inside the table, then use the Table control to add or remove rows and columns, merge or split cells, and toggle the header row. In the block editor, type <code>/</code> to insert a table from the command menu.</p><table><thead><tr><th>Feature</th><th>Status</th></tr></thead><tbody><tr><td>Rows</td><td>Add / delete</td></tr><tr><td>Columns</td><td>Add / delete</td></tr><tr><td>Cells</td><td>Merge / split</td></tr></tbody></table>",
     extensions: [StarterKit, Table],
-    toolbar: <TableToolbar />,
-    style: TABLE_CSS,
     slashItems: [
       {
-        id: "insertTableWithHeader",
-        title: "Insert table",
-        description: "Insert a table with a header row",
-        keywords: ["table", "row", "column"],
         command: ({ editor, range }) =>
           editor
             .chain()
@@ -117,23 +74,15 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
             .deleteRange(range)
             .insertTableWithHeader()
             .run(),
+        description: "Insert a table with a header row",
+        id: "insertTableWithHeader",
+        keywords: ["table", "row", "column"],
+        title: "Insert table",
       },
     ],
+    toolbar: <TableToolbar />,
   },
 };
-
-const ExtensionPreviewShell = ({
-  children,
-  style,
-}: {
-  children: ReactNode;
-  style?: string;
-}) => (
-  <div className="overflow-hidden rounded-md border border-border">
-    {style ? <style>{style}</style> : null}
-    {children}
-  </div>
-);
 
 const ToolbarEditorPreview = ({ config }: { config: PreviewConfig }) => {
   const editor = useEditor({
@@ -144,7 +93,7 @@ const ToolbarEditorPreview = ({ config }: { config: PreviewConfig }) => {
   });
 
   return (
-    <ExtensionPreviewShell style={config.style}>
+    <div className="overflow-hidden rounded-md border border-border">
       <RichTextEditor editor={editor}>
         <RichTextEditor.Toolbar>
           <RichTextEditor.ControlsGroup>
@@ -157,9 +106,11 @@ const ToolbarEditorPreview = ({ config }: { config: PreviewConfig }) => {
             <ToolbarProvider editor={editor}>{config.toolbar}</ToolbarProvider>
           </RichTextEditor.ControlsGroup>
         </RichTextEditor.Toolbar>
-        <RichTextEditor.Content />
+        <RichTextEditor.Content>
+          <TableHoverOverlay editor={editor} />
+        </RichTextEditor.Content>
       </RichTextEditor>
-    </ExtensionPreviewShell>
+    </div>
   );
 };
 
@@ -181,9 +132,10 @@ const BlockEditorPreview = ({ config }: { config: PreviewConfig }) => {
   });
 
   return (
-    <ExtensionPreviewShell style={config.style}>
+    <div className="overflow-hidden rounded-md border border-border">
       <BlockEditor editor={editor} />
-    </ExtensionPreviewShell>
+      <TableHoverOverlay editor={editor} />
+    </div>
   );
 };
 

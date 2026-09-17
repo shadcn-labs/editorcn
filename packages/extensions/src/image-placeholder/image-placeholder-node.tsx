@@ -1,26 +1,23 @@
 "use client";
 
-import { Button } from "@editorcn/ui/components/button";
-import { Input } from "@editorcn/ui/components/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@editorcn/ui/components/popover";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@editorcn/ui/components/tabs";
-import { isValidUrl } from "../core/commands";
-import { useToolbar } from "../core/context";
-import { cn } from "@editorcn/ui/lib/utils";
 import type { NodeViewProps } from "@tiptap/react";
 import { NodeViewWrapper } from "@tiptap/react";
 import { Image, Link, Upload } from "lucide-react";
 import type { DragEvent, FormEvent } from "react";
 import { useCallback, useId, useState } from "react";
+
+import { isValidUrl } from "../core/commands";
+import { useToolbar } from "../core/context";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Popover } from "../ui/popover";
+import { PopoverContent } from "../ui/popover-content";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+
+const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
+  e.preventDefault();
+  e.stopPropagation();
+};
 
 export const ImagePlaceholderNode = ({
   editor,
@@ -48,12 +45,23 @@ export const ImagePlaceholderNode = ({
         .focus()
         .insertContentAt(
           { from: pos, to: pos + node.nodeSize },
-          { type: "image", attrs: { src } }
+          { attrs: { src }, type: "image" }
         )
         .run();
     },
     [editor, getPos, node.nodeSize]
   );
+
+  const handleAcceptedFiles = (files: File[]) => {
+    for (const file of files) {
+      const reader = new FileReader();
+      reader.addEventListener("load", () =>
+        replaceWithImage(reader.result as string)
+      );
+      reader.readAsDataURL(file);
+    }
+    extension.options.onDrop?.(files, editor);
+  };
 
   const handleDragEnter = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -68,11 +76,6 @@ export const ImagePlaceholderNode = ({
     setIsDragReject(false);
   };
 
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.stopPropagation();
-  };
-
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -83,7 +86,7 @@ export const ImagePlaceholderNode = ({
     const accepted: File[] = [];
     const rejected: File[] = [];
 
-    for (const file of Array.from(files)) {
+    for (const file of files) {
       const mimeTypes = extension.options.allowedMimeTypes as
         | Record<string, string[]>
         | undefined;
@@ -113,17 +116,8 @@ export const ImagePlaceholderNode = ({
     }
   };
 
-  const handleAcceptedFiles = (files: File[]) => {
-    for (const file of files) {
-      const reader = new FileReader();
-      reader.onload = () => replaceWithImage(reader.result as string);
-      reader.readAsDataURL(file);
-    }
-    extension.options.onDrop?.(files, editor);
-  };
-
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleAcceptedFiles(Array.from(e.target.files || []));
+    handleAcceptedFiles([...(e.target.files || [])]);
   };
 
   const handleInsertEmbed = (e: FormEvent) => {
@@ -137,34 +131,53 @@ export const ImagePlaceholderNode = ({
   };
 
   const mimeTypeList = Object.keys(
-    (extension.options.allowedMimeTypes as Record<string, string[]> | undefined) ?? {
+    (extension.options.allowedMimeTypes as
+      | Record<string, string[]>
+      | undefined) ?? {
       "image/*": ["image/*"],
     }
   ).join(",");
 
+  const triggerClass = [
+    "ext-image-placeholder-trigger",
+    selected ? "ext-image-placeholder-trigger--selected" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  const uploadZoneClass = [
+    "ext-image-upload-zone",
+    isDragActive ? "ext-image-upload-zone--dragging" : "",
+    isDragReject ? "ext-image-upload-zone--reject" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <NodeViewWrapper className="w-full">
-      <Popover modal open={open} onOpenChange={setOpen}>
-        <PopoverTrigger className="w-full">
-          <div
-            className={cn(
-              "flex w-full cursor-pointer items-center gap-3 rounded-md bg-accent px-3 py-3 text-sm text-accent-foreground transition-colors hover:bg-secondary",
-              selected && "bg-primary/10 hover:bg-primary/20"
-            )}
+    <NodeViewWrapper className="ext-image-placeholder">
+      <Popover
+        open={open}
+        onOpenChange={setOpen}
+        trigger={
+          <button
+            aria-label={labels.imagePlaceholder}
+            className={triggerClass}
+            type="button"
           >
-            <Image className="size-6" />
+            <Image />
             {labels.imagePlaceholder}
-          </div>
-        </PopoverTrigger>
-        <PopoverContent className="w-[450px] px-0 py-2">
-          <Tabs defaultValue="upload" className="px-3 flex-col">
+          </button>
+        }
+      >
+        <PopoverContent className="ext-image-placeholder-popover">
+          <Tabs defaultValue="upload">
             <TabsList>
-              <TabsTrigger className="px-2 py-1 text-sm" value="upload">
-                <Upload className="mr-2 size-4" />
+              <TabsTrigger value="upload">
+                <Upload />
                 Upload
               </TabsTrigger>
-              <TabsTrigger className="px-2 py-1 text-sm" value="url">
-                <Link className="mr-2 size-4" />
+              <TabsTrigger value="url">
+                <Link />
                 Embed link
               </TabsTrigger>
             </TabsList>
@@ -174,49 +187,43 @@ export const ImagePlaceholderNode = ({
                 onDragLeave={handleDragLeave}
                 onDragOver={handleDragOver}
                 onDrop={handleDrop}
-                className={cn(
-                  "my-2 rounded-md border border-dashed text-sm transition-colors",
-                  isDragActive && "border-primary bg-secondary",
-                  isDragReject && "border-destructive bg-destructive/10",
-                  "hover:bg-secondary"
-                )}
+                className={uploadZoneClass}
               >
                 <input
                   type="file"
                   accept={mimeTypeList}
-                  multiple={(extension.options.maxFiles as number | undefined) !== 1}
+                  multiple={
+                    (extension.options.maxFiles as number | undefined) !== 1
+                  }
                   onChange={handleFileInputChange}
-                  className="sr-only"
+                  className="ext-sr-only"
                   id={fileInputId}
                 />
-                <label
-                  htmlFor={fileInputId}
-                  className="flex h-28 w-full cursor-pointer flex-col items-center justify-center text-center"
-                >
-                  <Upload className="mx-auto mb-2 size-6" />
+                <label htmlFor={fileInputId} className="ext-image-upload-label">
+                  <Upload />
                   Drag & drop or click to upload
                 </label>
               </div>
             </TabsContent>
             <TabsContent value="url">
-              <form onSubmit={handleInsertEmbed} className="grid gap-2">
+              <form onSubmit={handleInsertEmbed} className="ext-image-embed">
                 <Input
                   value={url}
                   onChange={(e) => {
                     setUrl(e.target.value);
-                    if (urlError) setUrlError(false);
+                    if (urlError) {
+                      setUrlError(false);
+                    }
                   }}
                   placeholder="Paste the image link..."
                 />
                 {urlError ? (
-                  <p className="text-xs text-destructive">
-                    Please enter a valid URL
-                  </p>
+                  <p className="ext-image-error">Please enter a valid URL</p>
                 ) : null}
-                <Button type="submit" size="sm" className="w-full">
+                <Button type="submit" className="ext-image-embed-submit">
                   Embed Image
                 </Button>
-                <p className="text-center text-xs text-muted-foreground">
+                <p className="ext-image-hint">
                   Works with any image from the web
                 </p>
               </form>

@@ -1,13 +1,4 @@
 "use client";
-
-import { Button } from "@editorcn/ui/components/button";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@editorcn/ui/components/popover";
-import { Separator } from "@editorcn/ui/components/separator";
-import { cn } from "@editorcn/ui/lib/utils";
 import type { ChainedCommands, Editor } from "@tiptap/core";
 import { CheckIcon, Grid3x3 as GridIcon } from "lucide-react";
 import { useRef, useState } from "react";
@@ -16,25 +7,61 @@ import { useToolbar, useToolbarEditor } from "../core/context";
 import { extensionPresent } from "../core/detection";
 import { shallowEqual, useEditorState } from "../core/editor-state";
 import type { ToolbarComponentProps } from "../core/types";
+import { Button } from "../ui/button";
+import { DropdownMenuItem } from "../ui/dropdown-item";
+import { Popover } from "../ui/popover";
+import { PopoverContent } from "../ui/popover-content";
+import { Separator } from "../ui/separator";
 
 const GRID_INIT_SIZE = 6;
 const GRID_MAX_SIZE = 10;
-const GRID_DEFAULT = { rows: 1, cols: 1 };
+const GRID_DEFAULT = { cols: 1, rows: 1 };
 
 const createRange = (length: number) =>
   Array.from({ length }, (_, index) => index + 1);
 
+const selectionInTable = (editor: Editor): boolean => {
+  const { $head } = editor.state.selection;
+  for (let { depth } = $head; depth > 0; depth -= 1) {
+    if ($head.node(depth).type.spec.tableRole === "row") {
+      return true;
+    }
+  }
+  return false;
+};
+
+const findFirstCellPos = (editor: Editor): number => {
+  let position = -1;
+  editor.state.doc.descendants((node, nodePos) => {
+    if (position !== -1) {
+      return false;
+    }
+    if (node.type.name === "tableCell" || node.type.name === "tableHeader") {
+      position = nodePos + 1;
+      return false;
+    }
+    return true;
+  });
+  return position;
+};
+
 const run = (
-  editor: Editor,
+  editor: Editor | null,
   operation: (chain: ChainedCommands) => ChainedCommands,
   disabled: boolean
 ) => {
-  if (!editor || editor.isDestroyed || disabled) return;
-  operation(editor.chain().focus()).run();
+  if (!editor || editor.isDestroyed || disabled) {
+    return;
+  }
+  const chain = editor.chain().focus();
+  if (!selectionInTable(editor)) {
+    const position = findFirstCellPos(editor);
+    if (position !== -1) {
+      chain.setTextSelection(position);
+    }
+  }
+  operation(chain).run();
 };
-
-const menuItemClass =
-  "flex w-full cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground disabled:pointer-events-none disabled:opacity-50";
 
 export const TableToolbar = ({
   className,
@@ -44,8 +71,8 @@ export const TableToolbar = ({
   const editor = useToolbarEditor(editorProp);
   const [open, setOpen] = useState(false);
   const [gridSize, setGridSize] = useState({
-    rows: GRID_INIT_SIZE,
     cols: GRID_INIT_SIZE,
+    rows: GRID_INIT_SIZE,
   });
   const [selected, setSelected] = useState(GRID_DEFAULT);
   const selectedRef = useRef(GRID_DEFAULT);
@@ -74,7 +101,7 @@ export const TableToolbar = ({
   };
 
   const resetGrid = () => {
-    setGridSize({ rows: GRID_INIT_SIZE, cols: GRID_INIT_SIZE });
+    setGridSize({ cols: GRID_INIT_SIZE, rows: GRID_INIT_SIZE });
     selectedRef.current = GRID_DEFAULT;
     setSelected(GRID_DEFAULT);
   };
@@ -86,9 +113,19 @@ export const TableToolbar = ({
     if (cols === gridSize.cols && cols < GRID_MAX_SIZE) {
       setGridSize((prev) => ({ ...prev, cols: prev.cols + 1 }));
     }
-    const next = { rows, cols };
+    const next = { cols, rows };
     selectedRef.current = next;
     setSelected(next);
+  };
+
+  const selectCell = (cell: HTMLElement): boolean => {
+    const rows = Number(cell.dataset.rows);
+    const cols = Number(cell.dataset.cols);
+    if (Number.isNaN(rows) || Number.isNaN(cols)) {
+      return false;
+    }
+    selectGridSize(rows, cols);
+    return true;
   };
 
   const selectGridFromPointer = (
@@ -100,7 +137,6 @@ export const TableToolbar = ({
     if (cell && event.currentTarget.contains(cell)) {
       return selectCell(cell);
     }
-
     const elementAtPointer = document.elementFromPoint(
       event.clientX,
       event.clientY
@@ -111,20 +147,16 @@ export const TableToolbar = ({
     return fallback ? selectCell(fallback) : false;
   };
 
-  const selectCell = (cell: HTMLElement): boolean => {
-    const rows = Number(cell.dataset.rows);
-    const cols = Number(cell.dataset.cols);
-    if (Number.isNaN(rows) || Number.isNaN(cols)) return false;
-    selectGridSize(rows, cols);
-    return true;
-  };
-
   const onPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!event.isPrimary || (event.pointerType === "mouse" && event.button !== 0)) {
+    if (
+      !event.isPrimary ||
+      (event.pointerType === "mouse" && event.button !== 0)
+    ) {
       return;
     }
-    if (!selectGridFromPointer(event)) return;
-
+    if (!selectGridFromPointer(event)) {
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
     activePointerId.current = event.pointerId;
@@ -132,7 +164,10 @@ export const TableToolbar = ({
   };
 
   const onPointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (activePointerId.current !== null && activePointerId.current !== event.pointerId) {
+    if (
+      activePointerId.current !== null &&
+      activePointerId.current !== event.pointerId
+    ) {
       return;
     }
     if (activePointerId.current !== null) {
@@ -143,25 +178,32 @@ export const TableToolbar = ({
   };
 
   const onPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (activePointerId.current !== event.pointerId) return;
-
+    if (activePointerId.current !== event.pointerId) {
+      return;
+    }
     event.preventDefault();
     event.stopPropagation();
     selectGridFromPointer(event);
-
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
     activePointerId.current = null;
-
     const { rows, cols } = selectedRef.current;
-    if (!editor || editor.isDestroyed || state.disabled) return;
-    editor.chain().focus().insertTable({ rows, cols, withHeaderRow: true }).run();
+    if (!editor || editor.isDestroyed || state.disabled) {
+      return;
+    }
+    editor
+      .chain()
+      .focus()
+      .insertTable({ cols, rows, withHeaderRow: true })
+      .run();
     setOpen(false);
   };
 
   const onPointerCancel = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (activePointerId.current !== event.pointerId) return;
+    if (activePointerId.current !== event.pointerId) {
+      return;
+    }
     if (event.currentTarget.hasPointerCapture(event.pointerId)) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
@@ -170,124 +212,115 @@ export const TableToolbar = ({
 
   const onOpenChange = (next: boolean) => {
     setOpen(next);
-    if (next) resetGrid();
+    if (next) {
+      resetGrid();
+    }
   };
 
   return (
-    <Popover modal onOpenChange={onOpenChange} open={open}>
-      <PopoverTrigger
-        render={
-          <Button
-            aria-label={labels.insertTable}
-            className={cn(
-              "data-active:bg-accent data-active:text-accent-foreground",
-              className
-            )}
-            data-active={state.inTable || undefined}
-            disabled={state.disabled}
-            size="icon-sm"
-            title={labels.insertTable}
-            variant="ghost"
-          />
-        }
-      >
-        <GridIcon />
-      </PopoverTrigger>
-      <PopoverContent align="start" className="w-auto p-2" sideOffset={6}>
+    <Popover
+      open={open}
+      onOpenChange={onOpenChange}
+      side="bottom"
+      align="start"
+      sideOffset={6}
+      trigger={
+        <Button
+          aria-label={labels.insertTable}
+          active={state.inTable}
+          className={["ext-btn--icon-sm", className].filter(Boolean).join(" ")}
+          disabled={state.disabled}
+          title={labels.insertTable}
+        >
+          <GridIcon />
+        </Button>
+      }
+    >
+      <PopoverContent className="ext-table-toolbar-popover">
         {state.inTable ? (
-          <div className="grid min-w-44 gap-0.5" role="menu">
-            <p className="px-2 pb-1 pt-1.5 text-xs font-medium text-muted-foreground">
-              {labels.rows}
-            </p>
-            <button
-              className={menuItemClass}
-              type="button"
-              onClick={() => run(editor!, (c) => c.addRowBefore(), state.disabled)}
+          <div className="ext-table-grid" role="menu">
+            <p className="ext-table-toolbar-label">{labels.rows}</p>
+            <DropdownMenuItem
+              onClick={() =>
+                run(editor, (c) => c.addRowBefore(), state.disabled)
+              }
             >
               {labels.addRowAbove}
-            </button>
-            <button
-              className={menuItemClass}
-              type="button"
-              onClick={() => run(editor!, (c) => c.addRowAfter(), state.disabled)}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                run(editor, (c) => c.addRowAfter(), state.disabled)
+              }
             >
               {labels.addRowBelow}
-            </button>
-            <button
-              className={menuItemClass}
+            </DropdownMenuItem>
+            <DropdownMenuItem
               disabled={!state.canDeleteRow}
-              type="button"
-              onClick={() => run(editor!, (c) => c.deleteRow(), state.disabled)}
+              onClick={() => run(editor, (c) => c.deleteRow(), state.disabled)}
             >
               {labels.deleteRow}
-            </button>
-            <Separator className="my-1" />
-            <p className="px-2 pb-1 pt-1.5 text-xs font-medium text-muted-foreground">
-              {labels.columns}
-            </p>
-            <button
-              className={menuItemClass}
-              type="button"
-              onClick={() => run(editor!, (c) => c.addColumnBefore(), state.disabled)}
+            </DropdownMenuItem>
+            <Separator />
+            <p className="ext-table-toolbar-label">{labels.columns}</p>
+            <DropdownMenuItem
+              onClick={() =>
+                run(editor, (c) => c.addColumnBefore(), state.disabled)
+              }
             >
               {labels.addColumnLeft}
-            </button>
-            <button
-              className={menuItemClass}
-              type="button"
-              onClick={() => run(editor!, (c) => c.addColumnAfter(), state.disabled)}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() =>
+                run(editor, (c) => c.addColumnAfter(), state.disabled)
+              }
             >
               {labels.addColumnRight}
-            </button>
-            <button
-              className={menuItemClass}
+            </DropdownMenuItem>
+            <DropdownMenuItem
               disabled={!state.canDeleteColumn}
-              type="button"
-              onClick={() => run(editor!, (c) => c.deleteColumn(), state.disabled)}
+              onClick={() =>
+                run(editor, (c) => c.deleteColumn(), state.disabled)
+              }
             >
               {labels.deleteColumn}
-            </button>
-            <Separator className="my-1" />
-            <button
-              className={menuItemClass}
-              type="button"
-              onClick={() => run(editor!, (c) => c.toggleHeaderRow(), state.disabled)}
+            </DropdownMenuItem>
+            <Separator />
+            <DropdownMenuItem
+              onClick={() =>
+                run(editor, (c) => c.toggleHeaderRow(), state.disabled)
+              }
             >
-              <span className="flex-1">{labels.headerRow}</span>
-              {state.headerOn ? <CheckIcon className="size-4" /> : null}
-            </button>
-            <button
-              className={menuItemClass}
+              <span className="ext-table-toolbar-item-spacer">
+                {labels.headerRow}
+              </span>
+              {state.headerOn ? <CheckIcon /> : null}
+            </DropdownMenuItem>
+            <DropdownMenuItem
               disabled={!state.canMerge}
-              type="button"
-              onClick={() => run(editor!, (c) => c.mergeCells(), state.disabled)}
+              onClick={() => run(editor, (c) => c.mergeCells(), state.disabled)}
             >
               {labels.mergeCells}
-            </button>
-            <button
-              className={menuItemClass}
+            </DropdownMenuItem>
+            <DropdownMenuItem
               disabled={!state.canSplit}
-              type="button"
-              onClick={() => run(editor!, (c) => c.splitCell(), state.disabled)}
+              onClick={() => run(editor, (c) => c.splitCell(), state.disabled)}
             >
               {labels.splitCell}
-            </button>
-            <Separator className="my-1" />
-            <button
-              className={cn(
-                menuItemClass,
-                "text-destructive hover:bg-destructive/10 hover:text-destructive"
-              )}
-              type="button"
-              onClick={() => run(editor!, (c) => c.deleteTable(), state.disabled)}
+            </DropdownMenuItem>
+            <Separator />
+            <DropdownMenuItem
+              danger
+              onClick={() =>
+                run(editor, (c) => c.deleteTable(), state.disabled)
+              }
             >
               {labels.deleteTable}
-            </button>
+            </DropdownMenuItem>
           </div>
         ) : (
-          <div className="flex flex-col gap-1.5">
+          <div className="ext-table-grid-popover">
             <div
-              className="flex flex-col gap-1"
+              className="ext-table-grid ext-table-grid--picker"
               onPointerCancel={onPointerCancel}
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
@@ -295,15 +328,17 @@ export const TableToolbar = ({
               style={{ touchAction: "none" }}
             >
               {createRange(gridSize.rows).map((row) => (
-                <div className="flex gap-1" key={`table-row-${row}`}>
+                <div className="ext-table-grid-row" key={`table-row-${row}`}>
                   {createRange(gridSize.cols).map((col) => (
                     <div
-                      className={cn(
-                        "size-4 cursor-pointer rounded-[2px] border border-border transition-colors",
+                      className={[
+                        "ext-table-grid-cell",
                         col <= selected.cols &&
                           row <= selected.rows &&
-                          "border-primary bg-primary"
-                      )}
+                          "ext-table-grid-cell--selected",
+                      ]
+                        .filter(Boolean)
+                        .join(" ")}
                       data-cols={col}
                       data-rows={row}
                       data-table-grid-cell
@@ -313,7 +348,7 @@ export const TableToolbar = ({
                 </div>
               ))}
             </div>
-            <div className="rounded-sm bg-muted px-2 py-1 text-center text-xs font-medium text-muted-foreground">
+            <div className="ext-table-grid-result">
               {selected.rows} x {selected.cols}
             </div>
           </div>

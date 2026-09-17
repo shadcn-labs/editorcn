@@ -24,14 +24,6 @@ declare module "@tiptap/core" {
 }
 
 export const ImagePlaceholder = Node.create<ImagePlaceholderOptions>({
-  addOptions() {
-    return {
-      HTMLAttributes: {},
-    };
-  },
-  atom: true,
-  group: "block",
-  name: "imagePlaceholder",
   addCommands() {
     return {
       insertImagePlaceholder:
@@ -42,6 +34,17 @@ export const ImagePlaceholder = Node.create<ImagePlaceholderOptions>({
           }),
     };
   },
+  addNodeView() {
+    return ReactNodeViewRenderer(ImagePlaceholderNode);
+  },
+  addOptions() {
+    return {
+      HTMLAttributes: {},
+    };
+  },
+  atom: true,
+  group: "block",
+  name: "imagePlaceholder",
   parseHTML() {
     return [{ tag: `div[data-type="${this.name}"]` }];
   },
@@ -52,8 +55,5 @@ export const ImagePlaceholder = Node.create<ImagePlaceholderOptions>({
         "data-type": this.name,
       }),
     ];
-  },
-  addNodeView() {
-    return ReactNodeViewRenderer(ImagePlaceholderNode);
   },
 });

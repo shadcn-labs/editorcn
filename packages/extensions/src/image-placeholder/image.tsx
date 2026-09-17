@@ -3,10 +3,10 @@
 import { Image as TiptapImage } from "@tiptap/extension-image";
 import {
   NodeViewContent,
-  type NodeViewProps,
   NodeViewWrapper,
   ReactNodeViewRenderer,
 } from "@tiptap/react";
+import type { NodeViewProps } from "@tiptap/react";
 import {
   AlignCenter,
   AlignLeft,
@@ -17,40 +17,23 @@ import {
   Trash2,
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 
-import { Button } from "@editorcn/ui/components/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@editorcn/ui/components/dropdown-menu";
-import { Separator } from "@editorcn/ui/components/separator";
-import { cn } from "@editorcn/ui/lib/utils";
+import { Button } from "../ui/button";
+import { DropdownMenuContent } from "../ui/dropdown-content";
+import { DropdownMenuItem } from "../ui/dropdown-item";
+import { DropdownMenu } from "../ui/dropdown-menu";
+import { DropdownMenuSeparator } from "../ui/dropdown-separator";
+import { Separator } from "../ui/separator";
 
-export const ResizableImage = TiptapImage.extend({
-  addAttributes() {
-    return {
-      src: { default: null },
-      alt: { default: null },
-      title: { default: null },
-      width: { default: "100%" },
-      height: { default: null },
-      align: { default: "center" },
-    };
-  },
-  addNodeView: () => ReactNodeViewRenderer(ResizableImageNode),
-}).configure({ allowBase64: true });
-
-function ResizableImageNode({
+const ResizableImageNode = ({
   node,
   editor,
   selected,
   deleteNode,
   updateAttributes,
   getPos,
-}: NodeViewProps) {
+}: NodeViewProps) => {
   const imageRef = useRef<HTMLImageElement | null>(null);
   const nodeRef = useRef<HTMLDivElement | null>(null);
   const [resizing, setResizing] = useState(false);
@@ -60,9 +43,32 @@ function ResizableImageNode({
   const [resizeInitialWidth, setResizeInitialWidth] = useState(0);
   const [resizeInitialMouseX, setResizeInitialMouseX] = useState(0);
   const [openedMore, setOpenedMore] = useState(false);
+  const [actionBarRect, setActionBarRect] = useState<{
+    top: number;
+    right: number;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!selected || resizing) {
+      return;
+    }
+    let frame = 0;
+    const loop = () => {
+      const el = nodeRef.current;
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        setActionBarRect({ right: rect.right, top: rect.bottom + 12 });
+      }
+      frame = requestAnimationFrame(loop);
+    };
+    frame = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(frame);
+  }, [selected, resizing]);
 
   const resize = (event: MouseEvent) => {
-    if (!resizing) return;
+    if (!resizing) {
+      return;
+    }
     let dx = event.clientX - resizeInitialMouseX;
     if (resizingPosition === "left") {
       dx = resizeInitialMouseX - event.clientX;
@@ -80,8 +86,9 @@ function ResizableImageNode({
     setResizeInitialWidth(0);
   };
 
-  const handleMouseDown = (position: "left" | "right") => {
-    return (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseDown =
+    (position: "left" | "right") =>
+    (event: React.MouseEvent<HTMLDivElement>) => {
       event.preventDefault();
       setResizing(true);
       setResizingPosition(position);
@@ -90,13 +97,14 @@ function ResizableImageNode({
         setResizeInitialWidth(imageRef.current.offsetWidth);
       }
     };
-  };
 
-  const handleTouchStart = (position: "left" | "right") => {
-    return (event: React.TouchEvent) => {
+  const handleTouchStart =
+    (position: "left" | "right") => (event: React.TouchEvent) => {
       event.preventDefault();
-      const touch = event.touches[0];
-      if (!touch) return;
+      const touch = event.touches.item(0);
+      if (!touch) {
+        return;
+      }
       setResizing(true);
       setResizingPosition(position);
       setResizeInitialMouseX(touch.clientX);
@@ -104,12 +112,15 @@ function ResizableImageNode({
         setResizeInitialWidth(imageRef.current.offsetWidth);
       }
     };
-  };
 
   const handleTouchMove = (event: TouchEvent) => {
-    if (!resizing) return;
-    const touch = event.touches[0];
-    if (!touch) return;
+    if (!resizing) {
+      return;
+    }
+    const touch = event.touches.item(0);
+    if (!touch) {
+      return;
+    }
     let dx = touch.clientX - resizeInitialMouseX;
     if (resizingPosition === "left") {
       dx = resizeInitialMouseX - touch.clientX;
@@ -138,11 +149,19 @@ function ResizableImageNode({
       window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("touchend", handleTouchEnd);
     };
-  }, [resizing, resizeInitialMouseX, resizeInitialWidth]);
+  }, [
+    resizing,
+    resizeInitialMouseX,
+    resizeInitialWidth,
+    resize,
+    handleTouchMove,
+  ]);
 
   const duplicate = () => {
     const pos = getPos();
-    if (typeof pos !== "number" || !editor || editor.isDestroyed) return;
+    if (typeof pos !== "number" || !editor || editor.isDestroyed) {
+      return;
+    }
     editor
       .chain()
       .focus()
@@ -150,133 +169,147 @@ function ResizableImageNode({
       .run();
   };
 
-  return (
-    <NodeViewWrapper
-      ref={nodeRef}
-      className={cn(
-        "group relative flex flex-col rounded-md",
-        selected && "ring-2 ring-ring ring-offset-2",
-        node.attrs.align === "left" && "left-0 -translate-x-0",
-        node.attrs.align === "center" && "left-1/2 -translate-x-1/2",
-        node.attrs.align === "right" && "left-full -translate-x-full"
-      )}
-      style={{ width: node.attrs.width }}
-    >
-      <img
-        ref={imageRef}
-        className="rounded-md"
-        src={node.attrs.src}
-        alt={node.attrs.alt}
-        title={node.attrs.title}
-      />
-      {node.attrs.title ? (
-        <NodeViewContent className="pt-1.5 text-center text-sm text-muted-foreground">
-          {node.attrs.title}
-        </NodeViewContent>
-      ) : null}
+  const viewClass = [
+    "ext-image-view",
+    node.attrs.align === "left" ? "ext-image-view--left" : "",
+    node.attrs.align === "center" ? "ext-image-view--center" : "",
+    node.attrs.align === "right" ? "ext-image-view--right" : "",
+    selected ? "ext-image-view--selected" : "",
+    resizing ? "ext-image-view--resizing" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
-      {editor?.isEditable && (
-        <>
-          <div
-            className="absolute inset-y-0 z-20 flex w-4 cursor-col-resize items-center justify-start"
-            style={{ left: 0 }}
-            onMouseDown={handleMouseDown("left")}
-            onTouchStart={handleTouchStart("left")}
-          >
+  return (
+    <>
+      <NodeViewWrapper
+        ref={nodeRef}
+        className={viewClass}
+        style={{ width: node.attrs.width }}
+      >
+        <img
+          ref={imageRef}
+          className="ext-image-view-img"
+          src={node.attrs.src}
+          alt={node.attrs.alt}
+          title={node.attrs.title}
+        />
+        {node.attrs.title ? (
+          <NodeViewContent className="ext-image-view-caption">
+            {node.attrs.title}
+          </NodeViewContent>
+        ) : null}
+
+        {editor?.isEditable && (
+          <>
             <div
-              className={cn(
-                "h-16 w-1 rounded-full bg-primary opacity-0 transition-opacity group-hover:opacity-100",
-                resizing && "opacity-100"
-              )}
-            />
-          </div>
-          <div
-            className="absolute inset-y-0 z-20 flex w-4 cursor-col-resize items-center justify-end"
-            style={{ right: 0 }}
-            onMouseDown={handleMouseDown("right")}
-            onTouchStart={handleTouchStart("right")}
-          >
+              className="ext-image-resize ext-image-resize--left"
+              onMouseDown={handleMouseDown("left")}
+              onTouchStart={handleTouchStart("left")}
+            >
+              <div className="ext-image-resize-bar" />
+            </div>
             <div
-              className={cn(
-                "h-16 w-1 rounded-full bg-primary opacity-0 transition-opacity group-hover:opacity-100",
-                resizing && "opacity-100"
-              )}
-            />
-          </div>
+              className="ext-image-resize ext-image-resize--right"
+              onMouseDown={handleMouseDown("right")}
+              onTouchStart={handleTouchStart("right")}
+            >
+              <div className="ext-image-resize-bar" />
+            </div>
+          </>
+        )}
+      </NodeViewWrapper>
+
+      {editor?.isEditable &&
+        selected &&
+        actionBarRect &&
+        !resizing &&
+        createPortal(
           <div
-            className={cn(
-              "absolute right-0 top-full mt-2 flex items-center gap-1 rounded-lg border border-border bg-popover p-1 shadow-md transition-opacity",
-              !resizing && "opacity-0 group-hover:opacity-100",
-              (selected || openedMore) && "opacity-100"
-            )}
+            className="ext-image-actions ext-image-actions--floating"
+            style={{
+              right: window.innerWidth - actionBarRect.right,
+              top: actionBarRect.top,
+            }}
           >
             <Button
-              className={cn(
-                "size-7",
-                node.attrs.align === "left" && "bg-accent text-accent-foreground"
-              )}
-              data-active={node.attrs.align === "left" || undefined}
+              active={node.attrs.align === "left"}
               aria-label="Align left"
-              size="icon"
-              variant="ghost"
+              className="ext-image-action-btn"
               onClick={() => updateAttributes({ align: "left" })}
             >
-              <AlignLeft className="size-4" />
+              <AlignLeft />
             </Button>
             <Button
-              className={cn(
-                "size-7",
-                node.attrs.align === "center" && "bg-accent text-accent-foreground"
-              )}
-              data-active={node.attrs.align === "center" || undefined}
+              active={node.attrs.align === "center"}
               aria-label="Align center"
-              size="icon"
-              variant="ghost"
+              className="ext-image-action-btn"
               onClick={() => updateAttributes({ align: "center" })}
             >
-              <AlignCenter className="size-4" />
+              <AlignCenter />
             </Button>
             <Button
-              className={cn(
-                "size-7",
-                node.attrs.align === "right" && "bg-accent text-accent-foreground"
-              )}
-              data-active={node.attrs.align === "right" || undefined}
+              active={node.attrs.align === "right"}
               aria-label="Align right"
-              size="icon"
-              variant="ghost"
+              className="ext-image-action-btn"
               onClick={() => updateAttributes({ align: "right" })}
             >
-              <AlignRight className="size-4" />
+              <AlignRight />
             </Button>
-            <Separator orientation="vertical" className="h-5" />
-            <DropdownMenu open={openedMore} onOpenChange={setOpenedMore}>
-              <DropdownMenuTrigger
-                render={<Button aria-label="Image options" className="size-7" size="icon" variant="ghost" />}
-              >
-                <MoreHorizontal className="size-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="text-sm">
+            <Separator orientation="vertical" />
+            <DropdownMenu
+              open={openedMore}
+              onOpenChange={setOpenedMore}
+              trigger={
+                <Button
+                  aria-label="Image options"
+                  className="ext-image-action-btn"
+                >
+                  <MoreHorizontal />
+                </Button>
+              }
+            >
+              <DropdownMenuContent className="ext-image-more-content">
                 <DropdownMenuItem onClick={duplicate}>
-                  <Copy className="mr-2 size-4" /> Duplicate
+                  <Copy />
+                  Duplicate
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => updateAttributes({ width: "fit-content" })}
                 >
-                  <Maximize2 className="mr-2 size-4" /> Full width
+                  <Maximize2 />
+                  Full width
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                  variant="destructive"
-                  onClick={() => deleteNode()}
+                  danger
+                  onClick={() => {
+                    setOpenedMore(false);
+                    deleteNode();
+                  }}
                 >
-                  <Trash2 className="mr-2 size-4" /> Delete image
+                  <Trash2 />
+                  Delete image
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
-        </>
-      )}
-    </NodeViewWrapper>
+          </div>,
+          document.body
+        )}
+    </>
   );
-}
+};
+
+export const ResizableImage = TiptapImage.extend({
+  addAttributes() {
+    return {
+      align: { default: "center" },
+      alt: { default: null },
+      height: { default: null },
+      src: { default: null },
+      title: { default: null },
+      width: { default: "100%" },
+    };
+  },
+  addNodeView: () => ReactNodeViewRenderer(ResizableImageNode),
+}).configure({ allowBase64: true });

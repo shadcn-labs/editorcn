@@ -16,6 +16,8 @@
         "@tiptap/extension-superscript@>=2.11.5 <4",
         "@tiptap/extension-placeholder@>=2.11.5 <4",
         "@tiptap/extension-character-count@>=2.11.5 <4",
+        "@tiptap/extension-text-style@>=2.11.5 <4",
+        "@tiptap/extension-color@>=2.11.5 <4",
         "@tiptap/extension-code-block-lowlight@>=2.11.5 <4",
         "lowlight@>=3.0.0 <4",
         "@base-ui/react@^1.0.0",
@@ -83,6 +85,10 @@
           "type": "registry:component"
         },
         {
+          "path": "editor/bubble-menu/color-selector.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "editor/bubble-menu/text-buttons.tsx",
           "type": "registry:component"
         },
@@ -145,6 +151,50 @@
         {
           "path": "editor/ui/dialog.tsx",
           "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-button-group.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-icon.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-overlay.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-dropdown.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-dropdown-divider.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-dropdown-icon.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-color-swatch.tsx",
+          "type": "registry:component"
         }
       ],
       "name": "editor",
@@ -172,6 +222,9 @@
         "@tiptap/extension-drag-handle-react@>=2.11.5 <4",
         "@tiptap/suggestion@>=2.11.5 <4",
         "@tiptap/extension-code-block-lowlight@>=2.11.5 <4",
+        "@tiptap/extension-text-style@>=2.11.5 <4",
+        "@tiptap/extension-color@>=2.11.5 <4",
+        "@tiptap/extension-highlight@>=2.11.5 <4",
         "lowlight@>=3.0.0 <4",
         "@base-ui/react@^1.0.0",
         "@floating-ui/dom@^1.6.0",
@@ -216,6 +269,10 @@
         },
         {
           "path": "block-editor/bubble-menu/language-selector.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/bubble-menu/color-selector.tsx",
           "type": "registry:component"
         },
         {
@@ -299,6 +356,10 @@
           "type": "registry:component"
         },
         {
+          "path": "block-editor/ui/color-swatch.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "block-editor/ui/slash-menu.tsx",
           "type": "registry:component"
         },
@@ -364,14 +425,9 @@
     },
     {
       "dependencies": [
-        "@editorcn/editor@latest",
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
-        "@base-ui/react@^1.0.0",
-        "class-variance-authority@^0.7.1",
-        "clsx@^2.1.1",
         "lucide-react@>=0.400.0 <1.0.0",
-        "tailwind-merge@^3.0.0",
         "@tiptap/extension-image@>=3.0.0 <4"
       ],
       "description": "A Notion-style image placeholder node that lets you upload or embed an image by URL, with a resizable image node view and its own toolbar button.",
@@ -421,19 +477,11 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/tabs.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/input.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "extensions/ui/button.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/popover.tsx",
+          "path": "extensions/ui/use-floating.tsx",
           "type": "registry:component"
         },
         {
@@ -441,8 +489,48 @@
           "type": "registry:component"
         },
         {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/input.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover-content.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "extensions/ui/separator.tsx",
           "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/tabs.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/image-placeholder/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
         }
       ],
       "name": "image-placeholder",
@@ -451,20 +539,16 @@
     },
     {
       "dependencies": [
-        "@editorcn/editor@latest",
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
-        "@base-ui/react@^1.0.0",
-        "class-variance-authority@^0.7.1",
-        "clsx@^2.1.1",
         "lucide-react@>=0.400.0 <1.0.0",
-        "tailwind-merge@^3.0.0",
         "@tiptap/extension-table@>=3.0.0 <4",
         "@tiptap/extension-table-row@>=3.0.0 <4",
         "@tiptap/extension-table-cell@>=3.0.0 <4",
-        "@tiptap/extension-table-header@>=3.0.0 <4"
+        "@tiptap/extension-table-header@>=3.0.0 <4",
+        "@tiptap/extension-gapcursor@>=3.0.0 <4"
       ],
-      "description": "A table node with a toolbar that inserts tables from a grid-size picker and lets you add or delete rows and columns, merge and split cells, and toggle the header row.",
+      "description": "A table node with a toolbar that inserts tables from a grid-size picker, lets you add or delete rows and columns, merge and split cells, toggle the header row, and manage rows and columns from hover context handles. Columns are resizable and a gap cursor is included by default.",
       "files": [
         {
           "path": "extensions/core/index.ts",
@@ -503,83 +587,60 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/popover.tsx",
+          "path": "extensions/table/table-hover-overlay.tsx",
           "type": "registry:component"
         },
         {
           "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover-content.tsx",
           "type": "registry:component"
         },
         {
           "path": "extensions/ui/separator.tsx",
           "type": "registry:component"
+        },
+        {
+          "path": "extensions/table/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
         }
       ],
       "name": "table",
       "title": "Table",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@editorcn/editor@latest",
-        "@tiptap/core@>=3.0.0 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "@base-ui/react@^1.0.0",
-        "class-variance-authority@^0.7.1",
-        "clsx@^2.1.1",
-        "lucide-react@>=0.400.0 <1.0.0",
-        "tailwind-merge@^3.0.0",
-        "@tiptap/extension-highlight@>=3.0.0 <4"
-      ],
-      "description": "The multicolor highlight mark with a toolbar that applies a color from a popover palette and removes existing highlights.",
-      "files": [
-        {
-          "path": "extensions/core/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/commands.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/context.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/detection.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/editor-state.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/labels.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/types.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/highlight/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/highlight/toolbar.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/popover.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/button.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "highlight",
-      "title": "Highlight Color",
       "type": "registry:component"
     }
   ],

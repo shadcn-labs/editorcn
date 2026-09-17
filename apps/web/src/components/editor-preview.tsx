@@ -9,17 +9,30 @@ import {
   CodeBlock,
 } from "@editorcn/editor";
 import type { RichTextEditorVariant } from "@editorcn/editor";
+import {
+  ResizableImage,
+  ImagePlaceholder,
+} from "@editorcn/extensions/image-placeholder";
+import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-toolbar";
+import { Table } from "@editorcn/extensions/table";
+import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
+import { TableToolbar } from "@editorcn/extensions/table-toolbar";
 import { CharacterCount } from "@tiptap/extension-character-count";
+import { Color } from "@tiptap/extension-color";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
 import { TextAlign } from "@tiptap/extension-text-align";
+import { TextStyle } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 
 import "@editorcn/editor/style.css";
+import "@editorcn/extensions/image-placeholder/style.css";
+import "@editorcn/extensions/table/style.css";
+import "@editorcn/extensions/ui/style.css";
 
 const InsertStarControl = () => {
   const { editor } = useRichTextEditorContext();
@@ -89,6 +102,34 @@ const DEMO_CONTENT = `
 <p style="text-align: justify;">Justified text stretches each line to fill the container width, creating clean edges on both sides. This works best for longer paragraphs where readability matters.</p>
 <h2>Embeds</h2>
 <p>Use the <strong>YouTube</strong> and <strong>Twitter</strong> buttons in the toolbar to paste a URL and embed content. Select an embed to see the resize handles — drag to resize. Embeds maintain their dimensions in the document and can be aligned left, center, or right.</p>
+<h2>Table</h2>
+<p>Tables use fixed-width columns that you can resize by dragging the handles on column edges. Hover over the table to see the controls.</p>
+<table>
+  <thead>
+    <tr>
+      <th>Extension</th>
+      <th>Type</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Table</td>
+      <td>Block</td>
+      <td>Resizing</td>
+    </tr>
+    <tr>
+      <td>Image</td>
+      <td>Block</td>
+      <td>Placeholder</td>
+    </tr>
+    <tr>
+      <td>Highlight</td>
+      <td>Mark</td>
+      <td>Active</td>
+    </tr>
+  </tbody>
+</table>
 <hr>
 <p style="text-align: center; color: var(--muted-foreground);">Built with Tiptap, shadcn/ui, and TypeScript. MIT licensed.</p>
 `.trim();
@@ -106,7 +147,9 @@ export const EditorPreview = ({
       }),
       Link,
       Underline,
-      Highlight,
+      TextStyle,
+      Color.configure({ types: ["textStyle"] }),
+      Highlight.configure({ multicolor: true }),
       Subscript,
       Superscript,
       TwitterEmbed,
@@ -115,6 +158,9 @@ export const EditorPreview = ({
       Placeholder.configure({ placeholder: "Start typing..." }),
       CharacterCount,
       CodeBlock,
+      Table.configure({ resizable: true }),
+      ResizableImage,
+      ImagePlaceholder,
     ],
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,
@@ -163,13 +209,15 @@ export const EditorPreview = ({
           </RichTextEditor.ControlsGroup>
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.CodeBlock />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
             <InsertStarControl />
           </RichTextEditor.ControlsGroup>
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.YouTubeEmbed />
             <RichTextEditor.TwitterEmbed />
+          </RichTextEditor.ControlsGroup>
+          <RichTextEditor.ControlsGroup>
+            <ImagePlaceholderToolbar editor={editor} />
+            <TableToolbar editor={editor} />
           </RichTextEditor.ControlsGroup>
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.Undo />
@@ -180,6 +228,7 @@ export const EditorPreview = ({
         <RichTextEditor.Content className="px-2" />
         <RichTextEditor.Footer showWordCount />
       </RichTextEditor>
+      <TableHoverOverlay editor={editor} />
     </div>
   );
 };
