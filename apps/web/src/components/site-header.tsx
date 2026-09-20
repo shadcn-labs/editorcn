@@ -1,24 +1,21 @@
-import Link from "next/link";
-
+import { BrandContextMenu } from "@/components/brand-context-menu";
 import { CommandMenu } from "@/components/command-menu";
+import { LabsNav } from "@/components/labs-nav";
 import { LogoMark } from "@/components/logo";
 import { MainNav } from "@/components/main-nav";
 import { MobileNav } from "@/components/mobile-nav";
 import { NavItemGithub } from "@/components/nav-item-github";
+import { SiteSettings } from "@/components/site-settings";
+import { SponsorLink } from "@/components/sponsor-link";
 import { Button } from "@/components/ui/button";
 import { ROUTES } from "@/constants/routes";
 import { source } from "@/lib/source";
 
-import { BrandContextMenu } from "./brand-context-menu";
-import { LabsNav } from "./labs-nav";
-import { SiteSettings } from "./site-settings";
-import { SponsorLink } from "./sponser";
-
 const navItems = [
   { href: ROUTES.DOCS, label: "Docs" },
-  { href: "/docs/editor", label: "Editor" },
-  { href: "/docs/block-editor", label: "Block Editor" },
-  { href: "/docs/customization", label: "Customization" },
+  { href: ROUTES.DOCS_EDITOR, label: "Editor" },
+  { href: ROUTES.DOCS_BLOCK_EDITOR, label: "Block Editor" },
+  { href: ROUTES.DOCS_CUSTOMIZATION, label: "Customization" },
 ];
 
 export const SiteHeader = () => (
@@ -42,9 +39,13 @@ export const SiteHeader = () => (
               className="hover:bg-transparent focus-visible:bg-transparent dark:hover:bg-transparent lg:size-9"
               sound="click"
             >
-              <Link href="/" rel="noopener noreferrer" prefetch={false}>
+              <a
+                href="https://shadcn-labs.com"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 <LogoMark className="size-5" />
-              </Link>
+              </a>
             </Button>
           </BrandContextMenu>
           <span className="text-muted-foreground/50 ml-1">/</span>
