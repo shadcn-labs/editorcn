@@ -1,7 +1,16 @@
 "use client";
 
 import type { ChainedCommands } from "@tiptap/core";
-import { MoreHorizontal, MoreVertical, Plus, Trash2 } from "lucide-react";
+import {
+  MoreHorizontal,
+  MoreVertical,
+  Plus,
+  Trash2,
+  ArrowRight,
+  ArrowLeft,
+  ArrowUp,
+  ArrowDown,
+} from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useToolbar, useToolbarEditor } from "../core/context";
@@ -80,11 +89,13 @@ const ColumnControl = ({
         <DropdownMenuItem
           onClick={() => runColumnOp((c) => c.addColumnBefore())}
         >
+          <ArrowLeft />
           {labels.addColumnLeft}
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => runColumnOp((c) => c.addColumnAfter())}
         >
+          <ArrowRight />
           {labels.addColumnRight}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
@@ -146,9 +157,11 @@ const RowControl = ({
     >
       <DropdownMenuContent>
         <DropdownMenuItem onClick={() => runRowOp((c) => c.addRowBefore())}>
+          <ArrowUp />
           {labels.addRowAbove}
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => runRowOp((c) => c.addRowAfter())}>
+          <ArrowDown />
           {labels.addRowBelow}
         </DropdownMenuItem>
         <DropdownMenuSeparator />
