@@ -22,10 +22,10 @@ export interface ExtensionLabels {
 export type ExtensionLabelKey = keyof ExtensionLabels;
 
 export const DEFAULT_EXTENSION_LABELS: ExtensionLabels = {
-  addColumnLeft: "Add column left",
-  addColumnRight: "Add column right",
-  addRowAbove: "Add row above",
-  addRowBelow: "Add row below",
+  addColumnLeft: "Insert Left",
+  addColumnRight: "Insert Right",
+  addRowAbove: "Insert Above",
+  addRowBelow: "Insert Below",
   columnActions: "Column actions",
   columns: "Columns",
   deleteColumn: "Delete column",
