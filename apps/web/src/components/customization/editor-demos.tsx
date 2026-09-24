@@ -3,9 +3,17 @@
 import {
   RichTextEditor,
   Link,
+  hugeiconsEditorIcons,
+  phosphorEditorIcons,
+  remixEditorIcons,
+  tablerEditorIcons,
   useRichTextEditorContext,
 } from "@editorcn/editor";
-import type { RichTextEditorLabels } from "@editorcn/editor";
+import type {
+  EditorIconLibrary,
+  RichTextEditorIcons,
+  RichTextEditorLabels,
+} from "@editorcn/editor";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { Subscript } from "@tiptap/extension-subscript";
@@ -426,6 +434,75 @@ export const EditorCustomLabelsDemo = () => {
             <RichTextEditor.Unlink />
           </RichTextEditor.ControlsGroup>
           <RichTextEditor.ControlsGroup>
+            <RichTextEditor.Undo />
+            <RichTextEditor.Redo />
+          </RichTextEditor.ControlsGroup>
+        </RichTextEditor.Toolbar>
+        <RichTextEditor.Content />
+      </RichTextEditor>
+    </div>
+  );
+};
+
+const ICON_LIBRARIES: {
+  id: EditorIconLibrary;
+  label: string;
+  icons?: Partial<RichTextEditorIcons>;
+}[] = [
+  { icons: undefined, id: "lucide", label: "Lucide" },
+  { icons: phosphorEditorIcons, id: "phosphor", label: "Phosphor" },
+  { icons: tablerEditorIcons, id: "tabler", label: "Tabler" },
+  { icons: hugeiconsEditorIcons, id: "hugeicons", label: "HugeIcons" },
+  { icons: remixEditorIcons, id: "remixicon", label: "Remix" },
+];
+
+export const EditorIconLibraryDemo = () => {
+  const [library, setLibrary] = useState<EditorIconLibrary>("lucide");
+  const editor = useEditor({
+    content: EDITOR_CONTENT,
+    extensions,
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
+  });
+  const icons = ICON_LIBRARIES.find((entry) => entry.id === library)?.icons;
+
+  return (
+    <div className="overflow-hidden rounded-md border border-border">
+      <div className="flex flex-wrap gap-1.5 border-b border-border bg-muted/40 p-2">
+        {ICON_LIBRARIES.map((entry) => (
+          <button
+            key={entry.id}
+            onClick={() => setLibrary(entry.id)}
+            type="button"
+            data-active={library === entry.id}
+            className="rounded-md px-2.5 py-1 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground data-active:bg-primary data-active:text-primary-foreground"
+          >
+            {entry.label}
+          </button>
+        ))}
+      </div>
+      <RichTextEditor editor={editor} icons={icons}>
+        <RichTextEditor.Toolbar>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.Bold />
+            <RichTextEditor.Italic />
+            <RichTextEditor.Underline />
+            <RichTextEditor.Strikethrough />
+            <RichTextEditor.Highlight />
+          </RichTextEditor.ControlsGroup>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.H1 />
+            <RichTextEditor.H2 />
+            <RichTextEditor.BulletList />
+            <RichTextEditor.OrderedList />
+          </RichTextEditor.ControlsGroup>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.AlignLeft />
+            <RichTextEditor.AlignCenter />
+            <RichTextEditor.AlignRight />
+          </RichTextEditor.ControlsGroup>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.Link />
             <RichTextEditor.Undo />
             <RichTextEditor.Redo />
           </RichTextEditor.ControlsGroup>

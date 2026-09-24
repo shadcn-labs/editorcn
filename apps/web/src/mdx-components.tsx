@@ -20,6 +20,7 @@ import {
   EditorReadOnlyDemo,
   EditorCustomLabelsDemo,
   EditorCustomIconsDemo,
+  EditorIconLibraryDemo,
 } from "@/components/customization/editor-demos";
 import {
   ExtensionList,
@@ -74,6 +75,7 @@ export const mdxComponents = {
   EditorCustomControlsDemo,
   EditorCustomIconsDemo,
   EditorCustomLabelsDemo,
+  EditorIconLibraryDemo,
   EditorReadOnlyDemo,
   EditorStickyToolbarDemo,
   EditorThemingDemo,

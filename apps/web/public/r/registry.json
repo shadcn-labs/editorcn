@@ -65,6 +65,26 @@
           "type": "registry:component"
         },
         {
+          "path": "editor/icon-library.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/icons-phosphor.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/icons-tabler.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/icons-hugeicons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/icons-remix.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "editor/types.ts",
           "type": "registry:component"
         },
@@ -281,6 +301,26 @@
         },
         {
           "path": "block-editor/icons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/icon-library.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/icons-phosphor.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/icons-tabler.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/icons-hugeicons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/icons-remix.tsx",
           "type": "registry:component"
         },
         {
