@@ -143,9 +143,6 @@
   * {
     @apply border-border outline-ring/50;
   }
-  ::selection {
-    @apply bg-selection text-selection-foreground;
-  }
   html {
     @apply overscroll-y-none scroll-smooth;
   }
@@ -168,6 +165,12 @@
   button:active {
     @apply opacity-60 md:opacity-100;
   }
+}
+
+/* Unlayered so the themed selection wins over layered author rules.
+   `--selection` is near-black in light mode and near-white in dark mode. */
+::selection {
+  @apply bg-selection text-selection-foreground;
 }
 
 @utility border-grid {

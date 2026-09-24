@@ -331,5 +331,6 @@
 
 /* ── Selection ── */
 .rte-static-renderer ::selection {
-  background: color-mix(in srgb, var(--primary) 20%, transparent);
+  background: var(--selection);
+  color: var(--selection-foreground);
 }
