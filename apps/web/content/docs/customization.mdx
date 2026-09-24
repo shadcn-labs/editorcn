@@ -257,6 +257,35 @@ The `rte-editor-icon` class controls icon sizing in the toolbar. Apply it to you
 
 See the [Styling docs](/docs/styling#change-icon-size) for more on sizing.
 
+### Icon Library Presets
+
+The defaults above use **lucide-react**. If your `components.json` uses a
+different `iconLibrary`, import the matching preset instead of overriding
+icons one by one. Install the library's package first:
+
+| `iconLibrary` | Package(s) | Preset |
+| --- | --- | --- |
+| `lucide` (default) | `lucide-react` | built-in `DEFAULT_ICONS` |
+| `phosphor` | `@phosphor-icons/react` | `phosphorEditorIcons` |
+| `tabler` | `@tabler/icons-react` | `tablerEditorIcons` |
+| `hugeicons` | `@hugeicons/react` + `@hugeicons/core-free-icons` | `hugeiconsEditorIcons` |
+| `remixicon` | `@remixicon/react` | `remixEditorIcons` |
+
+<EditorIconLibraryDemo />
+
+```tsx
+import { phosphorEditorIcons } from "@/components/editor/icons-phosphor";
+
+<RichTextEditor editor={editor} icons={phosphorEditorIcons}>
+  ...
+</RichTextEditor>;
+```
+
+You can still override individual keys on top of a preset
+(`icons={{ ...phosphorEditorIcons, boldControlIcon: <CustomBold /> }}`).
+For files outside `icons.tsx`, run the shadcn CLI migration after install:
+`npx shadcn@latest migrate icons --from lucide --to phosphor "src/components/editor/**"`.
+
 ## BlockEditor
 
 ### Default
@@ -348,6 +377,23 @@ Custom items appear at the top of the menu. Built-in items with the same `id` ar
 ### Custom Icon Overrides
 
 Replace any built-in icon via the `icons` prop. All 28 icons accept a React node — use inline SVGs, emoji, or any icon library. The defaults come from **lucide-react** and inherit your theme automatically (`currentColor`).
+
+If your `components.json` uses a different `iconLibrary`, import the matching preset instead. Install the library's package first:
+
+| `iconLibrary` | Package(s) | Preset |
+| --- | --- | --- |
+| `lucide` (default) | `lucide-react` | built-in `DEFAULT_ICONS` |
+| `phosphor` | `@phosphor-icons/react` | `phosphorBlockEditorIcons` |
+| `tabler` | `@tabler/icons-react` | `tablerBlockEditorIcons` |
+| `hugeicons` | `@hugeicons/react` + `@hugeicons/core-free-icons` | `hugeiconsBlockEditorIcons` |
+| `remixicon` | `@remixicon/react` | `remixBlockEditorIcons` |
+
+```tsx
+import { BlockEditor } from "@/components/block-editor";
+import { phosphorBlockEditorIcons } from "@/components/block-editor/icons-phosphor";
+
+<BlockEditor editor={editor} icons={phosphorBlockEditorIcons} />;
+```
 
 ```tsx
 import { BlockEditor, DEFAULT_ICONS } from "@/components/block-editor";

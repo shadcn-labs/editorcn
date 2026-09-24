@@ -52,6 +52,36 @@ const editorFiles = [
   ),
   entry("editor/labels.ts", "registry:component", "editor", "labels.ts"),
   entry("editor/icons.tsx", "registry:component", "editor", "icons.tsx"),
+  entry(
+    "editor/icon-library.ts",
+    "registry:component",
+    "editor",
+    "icon-library.ts"
+  ),
+  entry(
+    "editor/icons-phosphor.tsx",
+    "registry:component",
+    "editor",
+    "icons-phosphor.tsx"
+  ),
+  entry(
+    "editor/icons-tabler.tsx",
+    "registry:component",
+    "editor",
+    "icons-tabler.tsx"
+  ),
+  entry(
+    "editor/icons-hugeicons.tsx",
+    "registry:component",
+    "editor",
+    "icons-hugeicons.tsx"
+  ),
+  entry(
+    "editor/icons-remix.tsx",
+    "registry:component",
+    "editor",
+    "icons-remix.tsx"
+  ),
   entry("editor/types.ts", "registry:component", "editor", "types.ts"),
   entry("editor/style.css", "registry:style", "editor", "style.css"),
   entry(
@@ -299,6 +329,36 @@ const blockEditorFiles = [
     "registry:component",
     "block-editor",
     "icons.tsx"
+  ),
+  entry(
+    "block-editor/icon-library.ts",
+    "registry:component",
+    "block-editor",
+    "icon-library.ts"
+  ),
+  entry(
+    "block-editor/icons-phosphor.tsx",
+    "registry:component",
+    "block-editor",
+    "icons-phosphor.tsx"
+  ),
+  entry(
+    "block-editor/icons-tabler.tsx",
+    "registry:component",
+    "block-editor",
+    "icons-tabler.tsx"
+  ),
+  entry(
+    "block-editor/icons-hugeicons.tsx",
+    "registry:component",
+    "block-editor",
+    "icons-hugeicons.tsx"
+  ),
+  entry(
+    "block-editor/icons-remix.tsx",
+    "registry:component",
+    "block-editor",
+    "icons-remix.tsx"
   ),
   entry(
     "block-editor/labels.ts",
