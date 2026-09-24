@@ -9,12 +9,15 @@
     "./image-placeholder": "./src/image-placeholder/index.ts",
     "./image-placeholder-toolbar": "./src/image-placeholder/toolbar.tsx",
     "./image-placeholder/style.css": "./src/image-placeholder/style.css",
+    "./ai": "./src/ai/index.ts",
+    "./ai-toolbar": "./src/ai/toolbar.tsx",
     "./table": "./src/table/index.ts",
     "./table-hover-overlay": "./src/table/table-hover-overlay.tsx",
     "./table-toolbar": "./src/table/toolbar.tsx",
     "./ui": "./src/ui/index.ts",
     "./ui/*": "./src/ui/*",
     "./ui/style.css": "./src/ui/style.css",
+    "./ai/style.css": "./src/ai/style.css",
     "./table/style.css": "./src/table/style.css",
     "./manifest.json": "./manifest.json"
   },
@@ -22,7 +25,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@ai-sdk/openai": "^4.0.74",
     "@tiptap/extension-gapcursor": "^3.30.0",
+    "ai": "^7.0.113",
     "lucide-react": "catalog:"
   },
   "devDependencies": {

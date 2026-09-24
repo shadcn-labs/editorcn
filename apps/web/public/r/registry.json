@@ -542,6 +542,85 @@
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <1.0.0",
+        "ai@^7.0.0",
+        "@ai-sdk/openai@^4.0.0"
+      ],
+      "description": "A toolbar button that sends a free prompt (plus the current selection as context) to OpenAI and inserts the generated text. Bring your own API key, no server needed.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ai/toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/input.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ai/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
+        }
+      ],
+      "name": "ai",
+      "title": "AI Assistant",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0",
         "@tiptap/extension-table@>=3.0.0 <4",
         "@tiptap/extension-table-row@>=3.0.0 <4",
         "@tiptap/extension-table-cell@>=3.0.0 <4",
