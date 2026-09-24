@@ -8,6 +8,7 @@ import {
 } from "@editorcn/block-editor";
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
 import { RichTextEditor } from "@editorcn/editor";
+import { AiToolbar } from "@editorcn/extensions/ai-toolbar";
 import { ToolbarProvider } from "@editorcn/extensions/core";
 import {
   ImagePlaceholder,
@@ -22,10 +23,12 @@ import { Placeholder } from "@tiptap/extension-placeholder";
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import type { ReactNode } from "react";
+import { useState } from "react";
 
 import "@editorcn/block-editor/style.css";
 import "@editorcn/editor/style.css";
 import "@editorcn/extensions/ui/style.css";
+import "@editorcn/extensions/ai/style.css";
 import "@editorcn/extensions/table/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 
@@ -139,6 +142,47 @@ const BlockEditorPreview = ({ config }: { config: PreviewConfig }) => {
   );
 };
 
+const AiPreview = () => {
+  const [apiKey, setApiKey] = useState("");
+  const editor = useEditor({
+    content:
+      "<p>Select some text, click the sparkles button, and ask AI to rewrite it. Without a selection the answer is inserted at the cursor.</p>",
+    extensions: [StarterKit],
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
+  });
+
+  return (
+    <div className="overflow-hidden rounded-md border border-border">
+      <div className="border-b border-border p-2">
+        <input
+          className="w-full rounded-md border border-input bg-transparent px-3 py-1.5 text-sm outline-none placeholder:text-muted-foreground"
+          onChange={(e) => setApiKey(e.target.value)}
+          placeholder="Paste your OpenAI API key (sk-…) — used only in your browser"
+          type="password"
+          value={apiKey}
+        />
+      </div>
+      <RichTextEditor editor={editor}>
+        <RichTextEditor.Toolbar>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.Bold />
+            <RichTextEditor.Italic />
+            <RichTextEditor.Undo />
+            <RichTextEditor.Redo />
+          </RichTextEditor.ControlsGroup>
+          <RichTextEditor.ControlsGroup>
+            <ToolbarProvider editor={editor}>
+              <AiToolbar apiKey={apiKey || undefined} endpoint="/api/ai" />
+            </ToolbarProvider>
+          </RichTextEditor.ControlsGroup>
+        </RichTextEditor.Toolbar>
+        <RichTextEditor.Content />
+      </RichTextEditor>
+    </div>
+  );
+};
+
 export const ExtensionPreview = ({
   slug,
   editor = "toolbar",
@@ -146,6 +190,9 @@ export const ExtensionPreview = ({
   slug: string;
   editor?: "toolbar" | "block";
 }) => {
+  if (slug === "ai") {
+    return <AiPreview />;
+  }
   const config = PREVIEW_CONFIGS[slug];
 
   if (editor === "block") {

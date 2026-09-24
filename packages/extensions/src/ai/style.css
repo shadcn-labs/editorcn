@@ -1,0 +1,28 @@
+/* AI assistant styles using shadcn CSS variables. */
+
+.ext-ai-popover {
+  width: 20rem;
+  max-width: calc(100vw - 2rem);
+}
+
+.ext-ai-form {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.ext-ai-input {
+  flex: 1;
+  min-width: 0;
+}
+
+.ext-ai-submit {
+  flex-shrink: 0;
+}
+
+.ext-ai-error {
+  margin: 0.5rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--destructive);
+}
