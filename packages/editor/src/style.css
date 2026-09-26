@@ -173,8 +173,8 @@ button.rte-control-button:active {
 }
 
 .rte-content .ProseMirror pre {
-  background-color: var(--muted);
-  color: var(--foreground);
+  background: #1e1e2e;
+  color: #cdd6f4;
   border-radius: var(--radius);
   border: 1px solid var(--border);
   padding: 1rem;
