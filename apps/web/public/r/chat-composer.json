@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "dependencies": [
+    "@tiptap/core@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+    "lucide-react@>=0.400.0 <1.0.0"
+  ],
+  "description": "A chat panel with a compact editor input, message bubbles, and an onSend hook for your backend.",
+  "files": [
+    {
+      "content": "\"use client\";\n\nimport { RichTextEditor } from \"@/components/editor\";\nimport { Placeholder } from \"@tiptap/extension-placeholder\";\nimport { useEditor } from \"@tiptap/react\";\nimport { StarterKit } from \"@tiptap/starter-kit\";\nimport { ArrowUp } from \"lucide-react\";\nimport { useCallback, useState } from \"react\";\n\nimport \"@/components/editor/style.css\";\n\nexport interface ChatMessage {\n  html: string;\n  id: string;\n  role: \"user\" | \"assistant\";\n}\n\nexport interface ChatComposerProps {\n  className?: string;\n  /**\n   * Called with the sent message HTML. When omitted, the message is appended\n   * locally and a placeholder assistant reply marks where to wire your API.\n   */\n  onSend?: (html: string) => void | Promise<void>;\n  placeholder?: string;\n}\n\nconst ASSISTANT_PLACEHOLDER =\n  \"<p>This is where the assistant reply goes — pass <code>onSend</code> to wire your backend.</p>\";\n\nconst isEmpty = (html: string) =>\n  html\n    .replaceAll(/<[^>]*>/g, \"\")\n    .replaceAll(\"&nbsp;\", \"\")\n    .trim() === \"\";\n\nexport const ChatComposer = ({\n  className,\n  onSend,\n  placeholder = \"Message…\",\n}: ChatComposerProps) => {\n  const [messages, setMessages] = useState<ChatMessage[]>([]);\n  const [sending, setSending] = useState(false);\n\n  const editor = useEditor({\n    content: \"\",\n    extensions: [\n      StarterKit.configure({\n        blockquote: false,\n        bulletList: false,\n        codeBlock: false,\n        heading: false,\n        horizontalRule: false,\n        orderedList: false,\n      }),\n      Placeholder.configure({ placeholder }),\n    ],\n    immediatelyRender: false,\n    shouldRerenderOnTransaction: false,\n  });\n\n  const send = useCallback(async () => {\n    if (!editor || editor.isDestroyed || sending) {\n      return;\n    }\n    const html = editor.getHTML();\n    if (isEmpty(html)) {\n      return;\n    }\n    setSending(true);\n    try {\n      await onSend?.(html);\n      setMessages((prev) => [\n        ...prev,\n        { html, id: `user-${Date.now()}`, role: \"user\" },\n        ...(onSend\n          ? []\n          : [\n              {\n                html: ASSISTANT_PLACEHOLDER,\n                id: `assistant-${Date.now()}`,\n                role: \"assistant\" as const,\n              },\n            ]),\n      ]);\n      editor.commands.clearContent();\n    } finally {\n      setSending(false);\n    }\n  }, [editor, onSend, sending]);\n\n  return (\n    <div\n      className={[\n        \"flex flex-col gap-3 rounded-xl border border-border bg-background p-3\",\n        className,\n      ]\n        .filter(Boolean)\n        .join(\" \")}\n    >\n      {messages.length > 0 ? (\n        <div className=\"flex max-h-72 flex-col gap-2 overflow-y-auto\">\n          {messages.map((message) => (\n            <div\n              key={message.id}\n              className={\n                message.role === \"user\"\n                  ? \"bg-primary text-primary-foreground ml-auto max-w-[85%] rounded-2xl rounded-br-md px-3 py-2 text-sm\"\n                  : \"bg-muted text-foreground mr-auto max-w-[85%] rounded-2xl rounded-bl-md px-3 py-2 text-sm\"\n              }\n              dangerouslySetInnerHTML={{ __html: message.html }}\n            />\n          ))}\n        </div>\n      ) : null}\n      <RichTextEditor editor={editor} variant=\"compact\">\n        <div className=\"flex items-end gap-2\">\n          <RichTextEditor.Content className=\"min-w-0 flex-1\" />\n          <button\n            aria-label=\"Send message\"\n            className=\"bg-primary text-primary-foreground mb-1 flex size-8 shrink-0 items-center justify-center rounded-full transition-opacity hover:opacity-90 disabled:opacity-40\"\n            disabled={sending}\n            onClick={() => {\n              send();\n            }}\n            onKeyDown={(e) => {\n              if (e.key === \"Enter\" && !e.shiftKey) {\n                e.preventDefault();\n                send();\n              }\n            }}\n            type=\"button\"\n          >\n            <ArrowUp className=\"size-4\" />\n          </button>\n        </div>\n      </RichTextEditor>\n    </div>\n  );\n};\n",
+      "path": "templates/chat-composer.tsx",
+      "target": "@components/templates/chat-composer.tsx",
+      "type": "registry:block"
+    }
+  ],
+  "name": "chat-composer",
+  "title": "Chat Composer",
+  "type": "registry:block",
+  "registryDependencies": [
+    "editor"
+  ]
+}

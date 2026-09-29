@@ -1,0 +1,26 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "dependencies": [
+    "@tiptap/core@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+    "@tiptap/extension-underline@>=3.0.0 <4"
+  ],
+  "description": "A titled document editor with a full toolbar and an onChange hook.",
+  "files": [
+    {
+      "content": "\"use client\";\n\nimport { RichTextEditor } from \"@/components/editor\";\nimport { Placeholder } from \"@tiptap/extension-placeholder\";\nimport { Underline } from \"@tiptap/extension-underline\";\nimport { useEditor } from \"@tiptap/react\";\nimport { StarterKit } from \"@tiptap/starter-kit\";\nimport { useState } from \"react\";\n\nimport \"@/components/editor/style.css\";\n\nexport interface DocumentEditorProps {\n  className?: string;\n  initialTitle?: string;\n  onChange?: (html: string) => void;\n  titlePlaceholder?: string;\n}\n\nexport const DocumentEditor = ({\n  className,\n  initialTitle = \"\",\n  onChange,\n  titlePlaceholder = \"Untitled document\",\n}: DocumentEditorProps) => {\n  const [title, setTitle] = useState(initialTitle);\n\n  const editor = useEditor({\n    content: \"<p>Start writing your document…</p>\",\n    extensions: [\n      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),\n      Underline,\n      Placeholder.configure({ placeholder: \"Start writing…\" }),\n    ],\n    immediatelyRender: false,\n    onUpdate: ({ editor: updated }) => onChange?.(updated.getHTML()),\n    shouldRerenderOnTransaction: false,\n  });\n\n  return (\n    <div\n      className={[\n        \"overflow-hidden rounded-xl border border-border bg-background\",\n        className,\n      ]\n        .filter(Boolean)\n        .join(\" \")}\n    >\n      <input\n        aria-label=\"Document title\"\n        className=\"w-full border-b border-border bg-transparent px-5 pt-5 pb-3 text-2xl font-bold tracking-tight outline-none placeholder:text-muted-foreground\"\n        onChange={(e) => setTitle(e.target.value)}\n        placeholder={titlePlaceholder}\n        value={title}\n      />\n      <RichTextEditor editor={editor}>\n        <RichTextEditor.Toolbar>\n          <RichTextEditor.ControlsGroup>\n            <RichTextEditor.Bold />\n            <RichTextEditor.Italic />\n            <RichTextEditor.Underline />\n            <RichTextEditor.Strikethrough />\n          </RichTextEditor.ControlsGroup>\n          <RichTextEditor.ControlsGroup>\n            <RichTextEditor.H1 />\n            <RichTextEditor.H2 />\n            <RichTextEditor.H3 />\n          </RichTextEditor.ControlsGroup>\n          <RichTextEditor.ControlsGroup>\n            <RichTextEditor.BulletList />\n            <RichTextEditor.OrderedList />\n            <RichTextEditor.Blockquote />\n          </RichTextEditor.ControlsGroup>\n          <RichTextEditor.ControlsGroup>\n            <RichTextEditor.Link />\n            <RichTextEditor.Unlink />\n          </RichTextEditor.ControlsGroup>\n          <RichTextEditor.ControlsGroup>\n            <RichTextEditor.Undo />\n            <RichTextEditor.Redo />\n          </RichTextEditor.ControlsGroup>\n        </RichTextEditor.Toolbar>\n        <RichTextEditor.Content className=\"min-h-64\" />\n      </RichTextEditor>\n    </div>\n  );\n};\n",
+      "path": "templates/document-editor.tsx",
+      "target": "@components/templates/document-editor.tsx",
+      "type": "registry:block"
+    }
+  ],
+  "name": "document-editor",
+  "title": "Document Editor",
+  "type": "registry:block",
+  "registryDependencies": [
+    "editor"
+  ]
+}

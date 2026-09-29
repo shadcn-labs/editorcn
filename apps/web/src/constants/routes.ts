@@ -25,4 +25,5 @@ export const ROUTES = {
   REGISTRY: "/r/registry.json",
   RSS: "/rss.xml",
   SPONSOR: "/sponsor",
+  TEMPLATES: "/templates",
 } as const;

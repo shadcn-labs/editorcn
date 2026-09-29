@@ -12,6 +12,22 @@ const entry = (path, type, pkg, src) => {
   return { content: read(pkg, src), path, target, type };
 };
 
+const readTemplate = (file) =>
+  readFileSync(
+    resolve(root, "apps", "web", "src", "components", "templates", file),
+    "utf-8"
+  ).replaceAll("@editorcn/editor", "@/components/editor");
+
+const templateEntry = (name) => {
+  const path = `templates/${name}.tsx`;
+  return {
+    content: readTemplate(`${name}.tsx`),
+    path,
+    target: `@components/${path}`,
+    type: "registry:block",
+  };
+};
+
 const editorFiles = [
   entry("editor/index.ts", "registry:component", "editor", "index.ts"),
   entry(
@@ -751,6 +767,84 @@ const catalogItem = (name, title, desc, depsList, fileList) => ({
   type: "registry:component",
 });
 
+const buildBlock = (name, title, desc, files, dependencies) =>
+  buildItemWithType(
+    name,
+    title,
+    desc,
+    files,
+    dependencies,
+    ["editor"],
+    "registry:block"
+  );
+
+const buildItemWithType = (
+  name,
+  title,
+  desc,
+  files,
+  dependencies,
+  registryDependencies,
+  type
+) => {
+  const item = buildItem(name, title, desc, files, dependencies);
+  item.type = type;
+  if (registryDependencies) {
+    item.registryDependencies = registryDependencies;
+  }
+  return item;
+};
+
+const templateDeps = {
+  "chat-composer": [
+    "@tiptap/core@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+    "lucide-react@>=0.400.0 <1.0.0",
+  ],
+  "comment-box": [
+    "@tiptap/core@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+  ],
+  "document-editor": [
+    "@tiptap/core@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+    "@tiptap/extension-underline@>=3.0.0 <4",
+  ],
+};
+
+const templateItems = [
+  {
+    deps: templateDeps["chat-composer"],
+    desc: "A chat panel with a compact editor input, message bubbles, and an onSend hook for your backend.",
+    files: [templateEntry("chat-composer")],
+    name: "chat-composer",
+    title: "Chat Composer",
+  },
+  {
+    deps: templateDeps["comment-box"],
+    desc: "A comment thread with a subtle editor input, avatar initials, and an onPost hook.",
+    files: [templateEntry("comment-box")],
+    name: "comment-box",
+    title: "Comment Box",
+  },
+  {
+    deps: templateDeps["document-editor"],
+    desc: "A titled document editor with a full toolbar and an onChange hook.",
+    files: [templateEntry("document-editor")],
+    name: "document-editor",
+    title: "Document Editor",
+  },
+];
+
 const outDir = resolve(root, "apps", "web", "public", "r");
 if (!existsSync(outDir)) {
   mkdirSync(outDir, { recursive: true });
@@ -810,6 +904,17 @@ for (const item of extensionsItems) {
   );
 }
 
+for (const item of templateItems) {
+  writeFileSync(
+    resolve(outDir, `${item.name}.json`),
+    JSON.stringify(
+      buildBlock(item.name, item.title, item.desc, item.files, item.deps),
+      null,
+      2
+    )
+  );
+}
+
 const catalog = {
   $schema: "https://ui.shadcn.com/schema/registry.json",
   homepage: "https://editorcn.vercel.app",
@@ -844,6 +949,14 @@ const catalog = {
         item.files
       )
     ),
+    ...templateItems.map((item) => ({
+      dependencies: item.deps,
+      description: item.desc,
+      files: item.files.map((f) => ({ path: f.path, type: f.type })),
+      name: item.name,
+      title: item.title,
+      type: "registry:block",
+    })),
   ],
   name: "editorcn",
 };
@@ -858,5 +971,8 @@ console.log("  apps/web/public/r/editor.json");
 console.log("  apps/web/public/r/block-editor.json");
 console.log("  apps/web/public/r/static-renderer.json");
 for (const item of extensionsItems) {
+  console.log(`  apps/web/public/r/${item.name}.json`);
+}
+for (const item of templateItems) {
   console.log(`  apps/web/public/r/${item.name}.json`);
 }

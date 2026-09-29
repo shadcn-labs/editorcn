@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "dependencies": [
+    "@tiptap/core@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4"
+  ],
+  "description": "A comment thread with a subtle editor input, avatar initials, and an onPost hook.",
+  "files": [
+    {
+      "content": "\"use client\";\n\nimport { RichTextEditor } from \"@/components/editor\";\nimport { Placeholder } from \"@tiptap/extension-placeholder\";\nimport { useEditor } from \"@tiptap/react\";\nimport { StarterKit } from \"@tiptap/starter-kit\";\nimport { useCallback, useState } from \"react\";\n\nimport \"@/components/editor/style.css\";\n\nexport interface CommentItem {\n  author: string;\n  html: string;\n  id: string;\n}\n\nexport interface CommentBoxProps {\n  className?: string;\n  currentAuthor?: string;\n  initialComments?: CommentItem[];\n  onPost?: (html: string) => void;\n  placeholder?: string;\n}\n\nconst initials = (name: string) =>\n  name\n    .split(\" \")\n    .map((part) => part[0])\n    .filter(Boolean)\n    .slice(0, 2)\n    .join(\"\")\n    .toUpperCase();\n\nconst isEmpty = (html: string) =>\n  html\n    .replaceAll(/<[^>]*>/g, \"\")\n    .replaceAll(\"&nbsp;\", \"\")\n    .trim() === \"\";\n\nexport const CommentBox = ({\n  className,\n  currentAuthor = \"You\",\n  initialComments = [],\n  onPost,\n  placeholder = \"Write a comment…\",\n}: CommentBoxProps) => {\n  const [comments, setComments] = useState<CommentItem[]>(initialComments);\n\n  const editor = useEditor({\n    content: \"\",\n    extensions: [\n      StarterKit.configure({\n        blockquote: false,\n        bulletList: false,\n        codeBlock: false,\n        heading: false,\n        horizontalRule: false,\n        orderedList: false,\n      }),\n      Placeholder.configure({ placeholder }),\n    ],\n    immediatelyRender: false,\n    shouldRerenderOnTransaction: false,\n  });\n\n  const post = useCallback(() => {\n    if (!editor || editor.isDestroyed) {\n      return;\n    }\n    const html = editor.getHTML();\n    if (isEmpty(html)) {\n      return;\n    }\n    onPost?.(html);\n    setComments((prev) => [\n      ...prev,\n      { author: currentAuthor, html, id: `comment-${Date.now()}` },\n    ]);\n    editor.commands.clearContent();\n  }, [currentAuthor, editor, onPost]);\n\n  return (\n    <div\n      className={[\"flex flex-col gap-4\", className].filter(Boolean).join(\" \")}\n    >\n      {comments.length > 0 ? (\n        <ul className=\"flex flex-col gap-3\">\n          {comments.map((comment) => (\n            <li key={comment.id} className=\"flex gap-3\">\n              <span\n                aria-hidden\n                className=\"bg-muted text-muted-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-medium\"\n              >\n                {initials(comment.author)}\n              </span>\n              <div className=\"min-w-0 flex-1\">\n                <p className=\"text-sm font-medium\">{comment.author}</p>\n                <div\n                  className=\"text-muted-foreground text-sm\"\n                  dangerouslySetInnerHTML={{ __html: comment.html }}\n                />\n              </div>\n            </li>\n          ))}\n        </ul>\n      ) : null}\n      <div className=\"flex gap-3\">\n        <span\n          aria-hidden\n          className=\"bg-muted text-muted-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-xs font-medium\"\n        >\n          {initials(currentAuthor)}\n        </span>\n        <div className=\"min-w-0 flex-1\">\n          <RichTextEditor editor={editor} variant=\"subtle\">\n            <RichTextEditor.Content />\n          </RichTextEditor>\n          <div className=\"mt-2 flex justify-end\">\n            <button\n              className=\"bg-primary text-primary-foreground rounded-md px-3 py-1.5 text-sm font-medium transition-opacity hover:opacity-90\"\n              onClick={post}\n              type=\"button\"\n            >\n              Post\n            </button>\n          </div>\n        </div>\n      </div>\n    </div>\n  );\n};\n",
+      "path": "templates/comment-box.tsx",
+      "target": "@components/templates/comment-box.tsx",
+      "type": "registry:block"
+    }
+  ],
+  "name": "comment-box",
+  "title": "Comment Box",
+  "type": "registry:block",
+  "registryDependencies": [
+    "editor"
+  ]
+}
