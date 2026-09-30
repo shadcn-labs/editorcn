@@ -1,13 +1,5 @@
 "use client";
 
-import { Node, nodeInputRule } from "@tiptap/core";
-import { ReactNodeViewRenderer, useEditorState } from "@tiptap/react";
-import type { NodeViewProps } from "@tiptap/react";
-import { useState, useCallback } from "react";
-
-import { RichTextEditorControl } from "../controls/rte-control";
-import { ResizableNodeView } from "../extensions/resizable-node-view";
-import { useRichTextEditorContext } from "../rte-context";
 import {
   Dialog,
   DialogTrigger,
@@ -17,8 +9,16 @@ import {
   DialogDescription,
   DialogFooter,
   DialogClose,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
+  Input,
+} from "@editorcn/editor-ui/editor";
+import { Node, nodeInputRule } from "@tiptap/core";
+import { ReactNodeViewRenderer, useEditorState } from "@tiptap/react";
+import type { NodeViewProps } from "@tiptap/react";
+import { useState, useCallback } from "react";
+
+import { RichTextEditorControl } from "../controls/rte-control";
+import { ResizableNodeView } from "../extensions/resizable-node-view";
+import { useRichTextEditorContext } from "../rte-context";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {

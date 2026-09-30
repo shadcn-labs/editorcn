@@ -1,15 +1,15 @@
-import type { Editor } from "@tiptap/react";
-import { useState } from "react";
-
-import { useBlockEditorContext } from "../context";
-import { DEFAULT_ICONS } from "../icons";
 import {
   BubbleButton,
   BubbleDropdown,
   BubbleDropdownIcon,
   BubbleDropdownItem,
   DropdownOverlay,
-} from "../ui";
+} from "@editorcn/editor-ui/block-editor";
+import type { Editor } from "@tiptap/react";
+import { useState } from "react";
+
+import { useBlockEditorContext } from "../context";
+import { DEFAULT_ICONS } from "../icons";
 import {
   CODE_BLOCK_LANGUAGES,
   getLanguageLabel,

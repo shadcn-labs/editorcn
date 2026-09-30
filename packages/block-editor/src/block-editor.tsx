@@ -1,3 +1,4 @@
+import { cn } from "@editorcn/editor-ui/lib/cn";
 import { DragHandle } from "@tiptap/extension-drag-handle-react";
 import type { Node } from "@tiptap/pm/model";
 import { EditorContent } from "@tiptap/react";
@@ -6,7 +7,6 @@ import { useCallback, useRef } from "react";
 
 import { BubbleMenu } from "./bubble-menu";
 import { BlockEditorProvider, useBlockEditorContext } from "./context";
-import { cn } from "./lib/utils";
 import type { BlockEditorProps } from "./types";
 
 const BlockEditorDragHandle = () => {

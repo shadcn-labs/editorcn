@@ -1,13 +1,5 @@
 "use client";
 
-import { Node, nodeInputRule } from "@tiptap/core";
-import { ReactNodeViewRenderer, useEditorState } from "@tiptap/react";
-import type { NodeViewProps } from "@tiptap/react";
-import { useState, useCallback, useEffect, useRef } from "react";
-
-import { RichTextEditorControl } from "../controls/rte-control";
-import { ResizableNodeView } from "../extensions/resizable-node-view";
-import { useRichTextEditorContext } from "../rte-context";
 import {
   Dialog,
   DialogClose,
@@ -17,8 +9,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../ui/dialog";
-import { Input } from "../ui/input";
+  Input,
+} from "@editorcn/editor-ui/editor";
+import { Node, nodeInputRule } from "@tiptap/core";
+import { ReactNodeViewRenderer, useEditorState } from "@tiptap/react";
+import type { NodeViewProps } from "@tiptap/react";
+import { useState, useCallback, useEffect, useRef } from "react";
+
+import { RichTextEditorControl } from "../controls/rte-control";
+import { ResizableNodeView } from "../extensions/resizable-node-view";
+import { useRichTextEditorContext } from "../rte-context";
 
 const WIDGET_SCRIPT_URL = "https://platform.twitter.com/widgets.js";
 const SCRIPT_LOAD_TIMEOUT_MS = 8000;

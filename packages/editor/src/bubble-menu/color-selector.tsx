@@ -1,6 +1,3 @@
-import type { Editor } from "@tiptap/react";
-import { useState } from "react";
-
 import {
   RteButton,
   RteColorSwatch,
@@ -8,7 +5,10 @@ import {
   RteDropdownDivider,
   RteIcon,
   RteOverlay,
-} from "../ui";
+} from "@editorcn/editor-ui/editor";
+import type { Editor } from "@tiptap/react";
+import { useState } from "react";
+
 import { useEditorState, shallowEqual } from "./utils";
 
 type SwatchType = "text" | "highlight";

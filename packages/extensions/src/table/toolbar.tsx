@@ -1,4 +1,11 @@
 "use client";
+import {
+  Button,
+  DropdownMenuItem,
+  Popover,
+  PopoverContent,
+  Separator,
+} from "@editorcn/editor-ui/extensions";
 import type { ChainedCommands, Editor } from "@tiptap/core";
 import { CheckIcon, Grid3x3 as GridIcon } from "lucide-react";
 import { useRef, useState } from "react";
@@ -7,11 +14,6 @@ import { useToolbar, useToolbarEditor } from "../core/context";
 import { extensionPresent } from "../core/detection";
 import { shallowEqual, useEditorState } from "../core/editor-state";
 import type { ToolbarComponentProps } from "../core/types";
-import { Button } from "../ui/button";
-import { DropdownMenuItem } from "../ui/dropdown-item";
-import { Popover } from "../ui/popover";
-import { PopoverContent } from "../ui/popover-content";
-import { Separator } from "../ui/separator";
 
 const GRID_INIT_SIZE = 6;
 const GRID_MAX_SIZE = 10;

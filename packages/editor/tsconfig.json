@@ -5,6 +5,8 @@
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "types": [],
     "paths": {
+      "@editorcn/editor-ui/editor": ["../editor-ui/src/editor/index.ts"],
+      "@editorcn/editor-ui/lib/cn": ["../editor-ui/src/lib/cn.ts"],
       "@editorcn/packages/editor/*": ["./src/*"]
     }
   },

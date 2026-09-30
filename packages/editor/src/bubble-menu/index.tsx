@@ -1,9 +1,9 @@
+import { RteSeparator } from "@editorcn/editor-ui/editor";
 import { isTextSelection } from "@tiptap/core";
 import type { Editor } from "@tiptap/react";
 import { BubbleMenu as TiptapBubbleMenu } from "@tiptap/react/menus";
 import { useCallback } from "react";
 
-import { RteSeparator } from "../ui";
 import { ColorSelector } from "./color-selector";
 import { LanguageSelector } from "./language-selector";
 import { TextButtons } from "./text-buttons";

@@ -1,5 +1,6 @@
+import { cn } from "@editorcn/editor-ui/lib/cn";
+
 import type { RichTextEditorControlsGroupProps } from "./types";
-import { cn } from "./ui/utils";
 
 export const ControlsGroup = ({
   children,

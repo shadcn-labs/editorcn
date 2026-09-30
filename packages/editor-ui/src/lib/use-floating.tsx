@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useLayoutEffect, useRef } from "react";
-import type { CSSProperties, ReactNode, ReactPortal } from "react";
+import type { CSSProperties, ReactNode, ReactPortal, RefObject } from "react";
 import { createPortal } from "react-dom";
 
 export type FloatingSide = "bottom" | "top" | "left" | "right";
@@ -13,6 +13,7 @@ export interface UseFloatingOptions {
   open: boolean;
   side?: FloatingSide;
   sideOffset?: number;
+  triggerRef?: RefObject<HTMLElement | null>;
 }
 
 const clamp = (value: number, max: number): number =>
@@ -24,8 +25,10 @@ export const useFloating = ({
   open,
   side = "bottom",
   sideOffset = 4,
+  triggerRef: externalTriggerRef,
 }: UseFloatingOptions) => {
-  const triggerRef = useRef<HTMLElement | null>(null);
+  const internalTriggerRef = useRef<HTMLElement | null>(null);
+  const triggerRef = externalTriggerRef ?? internalTriggerRef;
   const contentRef = useRef<HTMLDivElement | null>(null);
 
   const close = useCallback(() => {

@@ -1,0 +1,16 @@
+{
+  "extends": "@editorcn/config/tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "types": [],
+    "paths": {
+      "@editorcn/editor-ui/editor": ["./src/editor/index.ts"],
+      "@editorcn/editor-ui/block-editor": ["./src/block-editor/index.ts"],
+      "@editorcn/editor-ui/extensions": ["./src/extensions/index.ts"],
+      "@editorcn/editor-ui/lib/cn": ["./src/lib/cn.ts"]
+    }
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}

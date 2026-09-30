@@ -313,6 +313,9 @@ importers:
       '@base-ui/react':
         specifier: ^1.0.0
         version: 1.5.0(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@editorcn/editor-ui':
+        specifier: workspace:*
+        version: link:../editor-ui
       '@floating-ui/dom':
         specifier: ^1.7.6
         version: 1.7.6
@@ -394,6 +397,9 @@ importers:
       '@base-ui/react':
         specifier: ^1.0.0
         version: 1.5.0(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+      '@editorcn/editor-ui':
+        specifier: workspace:*
+        version: link:../editor-ui
       '@floating-ui/dom':
         specifier: ^1.6.0
         version: 1.7.6
@@ -453,6 +459,34 @@ importers:
         specifier: ^5
         version: 5.9.3
 
+  packages/editor-ui:
+    dependencies:
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
+      react:
+        specifier: ^18 || ^19
+        version: 19.2.7
+      react-dom:
+        specifier: ^18 || ^19
+        version: 19.2.7(react@19.2.7)
+      tailwind-merge:
+        specifier: ^3.0.0
+        version: 3.6.0
+    devDependencies:
+      '@editorcn/config':
+        specifier: workspace:*
+        version: link:../config
+      '@types/react':
+        specifier: ^19
+        version: 19.2.17
+      tsup:
+        specifier: ^8.4.0
+        version: 8.5.1(jiti@2.7.0)(postcss@8.5.23)(typescript@5.9.3)(yaml@2.9.0)
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+
   packages/env:
     dependencies:
       '@t3-oss/env-core':
@@ -480,6 +514,9 @@ importers:
 
   packages/extensions:
     dependencies:
+      '@editorcn/editor-ui':
+        specifier: workspace:*
+        version: link:../editor-ui
       '@tiptap/core':
         specifier: '>=3.0.0 <4'
         version: 3.30.5(@tiptap/pm@3.30.5)

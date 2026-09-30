@@ -1,0 +1,61 @@
+{
+  "name": "@editorcn/editor-ui",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./editor": {
+      "types": "./dist/editor/index.d.ts",
+      "import": "./dist/editor/index.js",
+      "require": "./dist/editor/index.cjs"
+    },
+    "./block-editor": {
+      "types": "./dist/block-editor/index.d.ts",
+      "import": "./dist/block-editor/index.js",
+      "require": "./dist/block-editor/index.cjs"
+    },
+    "./extensions": {
+      "types": "./dist/extensions/index.d.ts",
+      "import": "./dist/extensions/index.js",
+      "require": "./dist/extensions/index.cjs"
+    },
+    "./lib/cn": {
+      "types": "./dist/lib/cn.d.ts",
+      "import": "./dist/lib/cn.js",
+      "require": "./dist/lib/cn.cjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "pnpm build"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.0.0"
+  },
+  "devDependencies": {
+    "@editorcn/config": "workspace:*",
+    "@types/react": "^19",
+    "tsup": "^8.4.0",
+    "typescript": "^5"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  }
+}

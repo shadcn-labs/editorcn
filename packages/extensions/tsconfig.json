@@ -3,7 +3,11 @@
   "compilerOptions": {
     "jsx": "react-jsx",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
-    "types": []
+    "types": [],
+    "paths": {
+      "@editorcn/editor-ui/extensions": ["../editor-ui/src/extensions/index.ts"],
+      "@editorcn/editor-ui/lib/cn": ["../editor-ui/src/lib/cn.ts"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
   "exclude": ["node_modules"]

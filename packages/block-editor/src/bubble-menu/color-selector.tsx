@@ -1,14 +1,14 @@
-import type { Editor } from "@tiptap/react";
-import { useState, useCallback } from "react";
-
-import { chainFocus } from "../lib/commands";
 import {
   BubbleButton,
   BubbleDropdown,
   BubbleDropdownDivider,
   ColorSwatch,
   DropdownOverlay,
-} from "../ui";
+} from "@editorcn/editor-ui/block-editor";
+import type { Editor } from "@tiptap/react";
+import { useState, useCallback } from "react";
+
+import { chainFocus } from "../lib/commands";
 import { useEditorState, shallowEqual } from "./utils";
 
 type SwatchType = "text" | "highlight";

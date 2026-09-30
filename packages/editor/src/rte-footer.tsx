@@ -1,8 +1,8 @@
+import { cn } from "@editorcn/editor-ui/lib/cn";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useRichTextEditorContext } from "./rte-context";
 import type { RichTextEditorFooterProps } from "./types";
-import { cn } from "./ui/utils";
 
 export const Footer = ({
   children,

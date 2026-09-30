@@ -26,3 +26,4 @@ export { SlashMenuList } from "./slash-menu-list";
 export type { SlashMenuListProps } from "./slash-menu-list";
 export { SlashMenuItem } from "./slash-menu-item";
 export type { SlashMenuItemProps } from "./slash-menu-item";
+export { cn } from "../../lib/cn";

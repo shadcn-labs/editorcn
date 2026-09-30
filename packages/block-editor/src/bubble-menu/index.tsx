@@ -1,10 +1,13 @@
+import {
+  BubbleButton,
+  BubbleSeparator,
+} from "@editorcn/editor-ui/block-editor";
 import { isTextSelection } from "@tiptap/core";
 import type { Editor } from "@tiptap/react";
 import { BubbleMenu as TiptapBubbleMenu } from "@tiptap/react/menus";
 import { useState, useCallback } from "react";
 
 import { DEFAULT_ICONS } from "../icons";
-import { BubbleButton, BubbleSeparator } from "../ui";
 import { TextAlignSelector } from "./align-selector";
 import { ColorSelector } from "./color-selector";
 import { LanguageSelector } from "./language-selector";

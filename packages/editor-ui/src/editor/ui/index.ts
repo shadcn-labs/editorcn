@@ -1,7 +1,45 @@
 export { Button, buttonVariants } from "./button";
-export { Dialog } from "./dialog";
+export type {
+  ButtonProps,
+  ButtonSize,
+  ButtonVariant,
+  ButtonVariantsOptions,
+} from "./button";
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from "./dialog";
+export type {
+  DialogCloseProps,
+  DialogContentProps,
+  DialogFooterProps,
+  DialogOverlayProps,
+  DialogPortalProps,
+  DialogProps,
+  DialogTriggerProps,
+} from "./dialog";
 export { Input } from "./input";
-export { Popover, PopoverContent, PopoverTrigger } from "./popover";
+export {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "./popover";
+export type {
+  PopoverContentProps,
+  PopoverProps,
+  PopoverTriggerProps,
+} from "./popover";
 export { RteButton } from "./rte-button";
 export type { RteButtonProps } from "./rte-button";
 export { RteButtonGroup } from "./rte-button-group";
@@ -23,4 +61,4 @@ export type { RteDropdownDividerProps } from "./rte-dropdown-divider";
 export { RteDropdownIcon } from "./rte-dropdown-icon";
 export type { RteDropdownIconProps } from "./rte-dropdown-icon";
 export { Toggle, toggleVariants } from "./toggle";
-export { cn } from "./utils";
+export { cn } from "../../lib/cn";

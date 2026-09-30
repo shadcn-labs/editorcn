@@ -12,8 +12,6 @@
     "./table": "./src/table/index.ts",
     "./table-hover-overlay": "./src/table/table-hover-overlay.tsx",
     "./table-toolbar": "./src/table/toolbar.tsx",
-    "./ui": "./src/ui/index.ts",
-    "./ui/*": "./src/ui/*",
     "./ui/style.css": "./src/ui/style.css",
     "./table/style.css": "./src/table/style.css",
     "./manifest.json": "./manifest.json"
@@ -22,6 +20,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@editorcn/editor-ui": "workspace:*",
     "@tiptap/extension-gapcursor": "^3.30.0",
     "lucide-react": "catalog:"
   },

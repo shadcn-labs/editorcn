@@ -25,3 +25,4 @@ export type {
   TabsTriggerProps,
   TabsContentProps,
 } from "./tabs";
+export { cn } from "../../lib/cn";

@@ -23,6 +23,7 @@
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
+    "@editorcn/editor-ui": "workspace:*",
     "@floating-ui/dom": "^1.7.6",
     "clsx": "^2.1.1",
     "lucide-react": ">=0.400.0 <1.0.0",

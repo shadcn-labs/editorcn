@@ -1,5 +1,15 @@
 "use client";
 
+import {
+  Button,
+  Input,
+  Popover,
+  PopoverContent,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@editorcn/editor-ui/extensions";
 import type { NodeViewProps } from "@tiptap/react";
 import { NodeViewWrapper } from "@tiptap/react";
 import { Image, Link, Upload } from "lucide-react";
@@ -8,11 +18,6 @@ import { useCallback, useId, useState } from "react";
 
 import { isValidUrl } from "../core/commands";
 import { useToolbar } from "../core/context";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Popover } from "../ui/popover";
-import { PopoverContent } from "../ui/popover-content";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
   e.preventDefault();

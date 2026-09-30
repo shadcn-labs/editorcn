@@ -1,3 +1,4 @@
+import { cn } from "@editorcn/editor-ui/lib/cn";
 import { useMemo, useEffect } from "react";
 
 import { BubbleMenu } from "./bubble-menu/index";
@@ -14,7 +15,6 @@ import { ControlsGroup } from "./rte-controls-group";
 import { Footer } from "./rte-footer";
 import { Toolbar } from "./rte-toolbar";
 import type { RichTextEditorProps } from "./types";
-import { cn } from "./ui/utils";
 
 const RichTextEditorRoot = ({
   editor,

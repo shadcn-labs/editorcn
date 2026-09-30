@@ -25,6 +25,14 @@
       "@editorcn/ui/*": ["../../packages/ui/src/*"],
       "@editorcn/editor": ["../../packages/editor/src"],
       "@editorcn/editor/*": ["../../packages/editor/src/*"],
+      "@editorcn/editor-ui/editor": ["../../packages/editor-ui/src/editor/index.ts"],
+      "@editorcn/editor-ui/block-editor": [
+        "../../packages/editor-ui/src/block-editor/index.ts"
+      ],
+      "@editorcn/editor-ui/extensions": [
+        "../../packages/editor-ui/src/extensions/index.ts"
+      ],
+      "@editorcn/editor-ui/lib/cn": ["../../packages/editor-ui/src/lib/cn.ts"],
       "@editorcn/block-editor": ["../../packages/block-editor/src"],
       "@editorcn/block-editor/*": ["../../packages/block-editor/src/*"],
       "@tiptap/core": [
