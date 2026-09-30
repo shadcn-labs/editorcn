@@ -1,0 +1,103 @@
+/* ── Syntax Highlighting (lowlight / highlight.js) ── */
+__CONTENT_ROOT__ .ProseMirror pre .hljs-comment,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-quote {
+  color: #6c7086;
+}
+
+__CONTENT_ROOT__ .ProseMirror pre .hljs-variable,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-template-variable,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-attribute,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-tag,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-regexp,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-link,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-name,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-selector-id,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-selector-class {
+  color: #89b4fa;
+}
+
+__CONTENT_ROOT__ .ProseMirror pre .hljs-number,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-meta,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-built_in,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-builtin-name,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-literal,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-type,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-params {
+  color: #fab387;
+}
+
+__CONTENT_ROOT__ .ProseMirror pre .hljs-string,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-symbol,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-bullet {
+  color: #a6e3a1;
+}
+
+__CONTENT_ROOT__ .ProseMirror pre .hljs-title,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-section {
+  color: #f9e2af;
+}
+
+__CONTENT_ROOT__ .ProseMirror pre .hljs-keyword,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-selector-tag {
+  color: #cba6f7;
+}
+
+/* Object/JSON keys & HTML/XML attribute names (previously missing) */
+__CONTENT_ROOT__ .ProseMirror pre .hljs-attr {
+  color: #89b4fa;
+}
+
+/* JSDoc-style tags, e.g. @param, @returns */
+__CONTENT_ROOT__ .ProseMirror pre .hljs-doctag {
+  color: #f38ba8;
+  font-weight: 600;
+}
+
+/* Operators & punctuation (finer-grained grammars) */
+__CONTENT_ROOT__ .ProseMirror pre .hljs-operator,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-punctuation {
+  color: #9399b2;
+}
+
+/* CSS selector attributes/pseudo-classes, e.g. [type="text"], :hover */
+__CONTENT_ROOT__ .ProseMirror pre .hljs-selector-attr,
+__CONTENT_ROOT__ .ProseMirror pre .hljs-selector-pseudo {
+  color: #94e2d5;
+}
+
+/* Language-level variables, e.g. this, super */
+__CONTENT_ROOT__ .ProseMirror pre .hljs-variable.language_ {
+  color: #cba6f7;
+  font-style: italic;
+}
+
+/* Template literal substitutions, e.g. ${...} */
+__CONTENT_ROOT__ .ProseMirror pre .hljs-subst {
+  color: #cdd6f4;
+}
+
+__CONTENT_ROOT__ .ProseMirror pre .hljs-emphasis {
+  font-style: italic;
+}
+__CONTENT_ROOT__ .ProseMirror pre .hljs-strong {
+  font-weight: 700;
+}
+
+__CONTENT_ROOT__ .ProseMirror pre .hljs-addition {
+  color: #a6e3a1;
+  background-color: color-mix(in srgb, #a6e3a1 10%, transparent);
+}
+
+__CONTENT_ROOT__ .ProseMirror pre .hljs-deletion {
+  color: #f38ba8;
+  background-color: color-mix(in srgb, #f38ba8 10%, transparent);
+}
+
+__CONTENT_ROOT__ .ProseMirror code {
+  font-size: 0.875em;
+  font-weight: 500;
+  background: color-mix(in srgb, var(--muted) 70%, transparent);
+  padding: 0.125rem 0.375rem;
+  border-radius: calc(var(--radius) - 4px);
+  transition: background-color 150ms ease-out;
+}

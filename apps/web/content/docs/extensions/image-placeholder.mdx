@@ -17,7 +17,7 @@ Run the following command to install the extension, its toolbar component and th
 npx shadcn@latest add "https://editorcn.vercel.app/r/image-placeholder.json"
 ```
 
-This installs the node, the node view, the toolbar, `extensions/core/` and `extensions/ui/` into your project. It also installs `@tiptap/extension-image`, which the node view uses to insert the final image. Extension and shared UI styles are installed as `extensions/image-placeholder/style.css` and `extensions/ui/style.css`.
+This installs the node, the node view, the toolbar and `extensions/core/` into your project. It also installs `@tiptap/extension-image`, which the node view uses to insert the final image. Extension styles are installed as `extensions/image-placeholder/style.css`.
 
 To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/image-placeholder):
 
@@ -46,7 +46,6 @@ import { RichTextEditor } from "@/components/editor";
 
 import "@/components/editor/style.css";
 import "@/components/extensions/image-placeholder/style.css";
-import "@/components/extensions/ui/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
@@ -97,7 +96,6 @@ import {
 
 import "@/components/block-editor/style.css";
 import "@/components/extensions/image-placeholder/style.css";
-import "@/components/extensions/ui/style.css";
 
 export function MyBlockEditor() {
   const editor = useEditor({

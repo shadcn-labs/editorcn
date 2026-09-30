@@ -266,7 +266,7 @@ A floating formatting menu that appears when you select text inside the content 
 | -------- | ---------------- | ------- | -------------------------- |
 | `editor` | `Editor \| null` | —       | The Tiptap editor instance |
 
-The bubble menu uses Floating UI via `@tiptap/react/menus` and hides automatically when the editor becomes read-only (`editor.setEditable(false)`). Its visuals follow your shadcn theme tokens and can be customized with the `.rte-bubble-menu`, `.rte-bubble-btn`, and `.rte-bubble-dropdown` classes.
+The bubble menu uses Floating UI via `@tiptap/react/menus` and hides automatically when the editor becomes read-only (`editor.setEditable(false)`). Its buttons and popovers are composed from shadcn components (`@editorcn/editor-ui`), so they follow your shadcn theme tokens. You can still customize the menu shell and color swatches with the `.rte-bubble-menu` and `.rte-bubble-color-*` classes.
 
 ## Text color & highlight
 

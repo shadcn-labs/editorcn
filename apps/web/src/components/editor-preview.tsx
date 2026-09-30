@@ -6,7 +6,6 @@ import {
   useRichTextEditorContext,
   TwitterEmbed,
   YouTubeEmbed,
-  CodeBlock,
 } from "@editorcn/editor";
 import type { RichTextEditorVariant } from "@editorcn/editor";
 import {
@@ -32,7 +31,6 @@ import { StarterKit } from "@tiptap/starter-kit";
 import "@editorcn/editor/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/table/style.css";
-import "@editorcn/extensions/ui/style.css";
 
 const InsertStarControl = () => {
   const { editor } = useRichTextEditorContext();
@@ -157,7 +155,6 @@ export const EditorPreview = ({
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({ placeholder: "Start typing..." }),
       CharacterCount,
-      CodeBlock,
       Table.configure({ resizable: true }),
       ResizableImage,
       ImagePlaceholder,

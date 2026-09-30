@@ -1,3 +1,5 @@
+import { Toggle } from "@editorcn/editor-ui/editor/ui/toggle";
+import { cn } from "@editorcn/editor-ui/editor/ui/utils";
 import type { ChainedCommands, Editor } from "@tiptap/core";
 import { useEditorState } from "@tiptap/react";
 import React from "react";
@@ -6,8 +8,6 @@ import type { RichTextEditorIcons } from "../icons";
 import type { RichTextEditorLabels } from "../labels";
 import { useRichTextEditorContext } from "../rte-context";
 import type { RichTextEditorControlProps } from "../types";
-import { Toggle } from "../ui/toggle";
-import { cn } from "../ui/utils";
 
 type IsActiveConfig =
   | { name: string; attributes?: Record<string, unknown> | string }

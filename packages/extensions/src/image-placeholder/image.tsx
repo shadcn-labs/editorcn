@@ -1,5 +1,11 @@
 "use client";
 
+import { Button } from "@editorcn/editor-ui/extensions/ui/button";
+import { DropdownMenuContent } from "@editorcn/editor-ui/extensions/ui/dropdown-content";
+import { DropdownMenuItem } from "@editorcn/editor-ui/extensions/ui/dropdown-item";
+import { DropdownMenu } from "@editorcn/editor-ui/extensions/ui/dropdown-menu";
+import { DropdownMenuSeparator } from "@editorcn/editor-ui/extensions/ui/dropdown-separator";
+import { Separator } from "@editorcn/editor-ui/extensions/ui/separator";
 import { Image as TiptapImage } from "@tiptap/extension-image";
 import {
   NodeViewContent,
@@ -18,13 +24,6 @@ import {
 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-
-import { Button } from "../ui/button";
-import { DropdownMenuContent } from "../ui/dropdown-content";
-import { DropdownMenuItem } from "../ui/dropdown-item";
-import { DropdownMenu } from "../ui/dropdown-menu";
-import { DropdownMenuSeparator } from "../ui/dropdown-separator";
-import { Separator } from "../ui/separator";
 
 const ResizableImageNode = ({
   node,

@@ -34,6 +34,9 @@
       "type": "registry:style"
     }
   ],
+  "meta": {
+    "version": "0.2.2"
+  },
   "name": "static-renderer",
   "title": "Static Renderer",
   "type": "registry:component"

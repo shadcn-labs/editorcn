@@ -1,6 +1,7 @@
+import { cn } from "@editorcn/editor-ui/editor/ui/utils";
+
 import { useRichTextEditorContext } from "./rte-context";
 import type { RichTextEditorToolbarProps } from "./types";
-import { cn } from "./ui/utils";
 
 export const Toolbar = ({
   children,

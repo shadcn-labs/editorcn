@@ -1,7 +1,10 @@
+import {
+  BubbleButton,
+  BubbleButtonGroup,
+} from "@editorcn/editor-ui/block-editor/ui";
 import type { Editor } from "@tiptap/react";
 
 import { DEFAULT_ICONS } from "../icons";
-import { BubbleButton, BubbleButtonGroup } from "../ui";
 import { useEditorState, shallowEqual } from "./utils";
 
 interface TextSelectorResult {

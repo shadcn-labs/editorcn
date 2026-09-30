@@ -1,0 +1,40 @@
+{
+  "name": "@editorcn/editor-ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./editor/ui": "./src/editor/ui/index.ts",
+    "./editor/ui/utils": "./src/editor/ui/utils.ts",
+    "./editor/ui/style.css": "./src/editor/ui/style.css",
+    "./editor/ui/*": "./src/editor/ui/*.tsx",
+    "./block-editor/ui": "./src/block-editor/ui/index.ts",
+    "./block-editor/ui/style.css": "./src/block-editor/ui/style.css",
+    "./block-editor/ui/*": "./src/block-editor/ui/*.tsx",
+    "./extensions/ui": "./src/extensions/ui/index.ts",
+    "./extensions/ui/style.css": "./src/extensions/ui/style.css",
+    "./extensions/ui/*": "./src/extensions/ui/*.tsx",
+    "./styles/*": "./src/styles/*.css"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.0.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "cn": "^0.4.0",
+    "lucide-react": "catalog:",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@editorcn/config": "workspace:*",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "typescript": "catalog:"
+  },
+  "peerDependencies": {
+    "react": "^18 || ^19",
+    "react-dom": "^18 || ^19"
+  }
+}

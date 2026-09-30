@@ -13,7 +13,12 @@ const nextConfig = {
       },
     ];
   },
-  transpilePackages: ["@editorcn/extensions", "@editorcn/editor"],
+  transpilePackages: [
+    "@editorcn/extensions",
+    "@editorcn/editor",
+    "@editorcn/editor-ui",
+    "@editorcn/block-editor",
+  ],
 };
 
 const withMDX = createMDX();

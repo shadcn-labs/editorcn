@@ -17,7 +17,7 @@ Run the following command to install the extension, its toolbar component and th
 npx shadcn@latest add "https://editorcn.vercel.app/r/table.json"
 ```
 
-This installs `extensions/table`, `extensions/core/`, `extensions/ui/` and the `@tiptap/extension-table*` packages that the table node depends on. Table styles and shared UI styles are installed as `extensions/table/style.css` and `extensions/ui/style.css`.
+This installs `extensions/table`, `extensions/core/` and the `@tiptap/extension-table*` packages that the table node depends on. Table styles are installed as `extensions/table/style.css`.
 
 To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/table):
 
@@ -44,7 +44,6 @@ import { RichTextEditor } from "@/components/editor";
 
 import "@/components/editor/style.css";
 import "@/components/extensions/table/style.css";
-import "@/components/extensions/ui/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
@@ -97,7 +96,6 @@ import { TableHoverOverlay } from "@/components/extensions/table/table-hover-ove
 
 import "@/components/block-editor/style.css";
 import "@/components/extensions/table/style.css";
-import "@/components/extensions/ui/style.css";
 
 const tableItem: SlashCommandSuggestionItem = {
   command: ({ editor, range }) =>

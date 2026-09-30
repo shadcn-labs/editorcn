@@ -1,11 +1,11 @@
 "use client";
 
+import { Button } from "@editorcn/editor-ui/extensions/ui/button";
 import { Image } from "lucide-react";
 
 import { useToolbar, useToolbarEditor } from "../core/context";
 import { useEditorState } from "../core/editor-state";
 import type { ToolbarComponentProps } from "../core/types";
-import { Button } from "../ui/button";
 
 export const ImagePlaceholderToolbar = ({
   className,

@@ -1,7 +1,3 @@
-import type { Editor } from "@tiptap/react";
-import { useState } from "react";
-
-import { DEFAULT_ICONS, HeadingIcon } from "../icons";
 import {
   BubbleButton,
   BubbleDropdown,
@@ -9,7 +5,11 @@ import {
   BubbleDropdownIcon,
   BubbleDropdownItem,
   DropdownOverlay,
-} from "../ui";
+} from "@editorcn/editor-ui/block-editor/ui";
+import type { Editor } from "@tiptap/react";
+import { useState } from "react";
+
+import { DEFAULT_ICONS, HeadingIcon } from "../icons";
 import { useEditorState, copyBlock, deleteBlock, shallowEqual } from "./utils";
 
 interface SelectorResult {

@@ -7,18 +7,6 @@
     "image": "image-placeholder/image.tsx",
     "toolbar": "image-placeholder/toolbar.tsx",
     "css": ["image-placeholder/style.css"],
-    "ui": [
-      "button",
-      "dropdown-menu",
-      "dropdown-content",
-      "dropdown-item",
-      "dropdown-separator",
-      "input",
-      "popover",
-      "popover-content",
-      "separator",
-      "tabs"
-    ],
     "deps": ["@tiptap/extension-image@>=3.0.0 <4"]
   },
   "table": {
@@ -28,16 +16,6 @@
     "toolbar": "table/toolbar.tsx",
     "overlay": "table/table-hover-overlay.tsx",
     "css": ["table/style.css"],
-    "ui": [
-      "button",
-      "dropdown-menu",
-      "dropdown-content",
-      "dropdown-item",
-      "dropdown-separator",
-      "popover",
-      "popover-content",
-      "separator"
-    ],
     "deps": [
       "@tiptap/extension-table@>=3.0.0 <4",
       "@tiptap/extension-table-row@>=3.0.0 <4",

@@ -25,7 +25,6 @@ import type { ReactNode } from "react";
 
 import "@editorcn/block-editor/style.css";
 import "@editorcn/editor/style.css";
-import "@editorcn/extensions/ui/style.css";
 import "@editorcn/extensions/table/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 

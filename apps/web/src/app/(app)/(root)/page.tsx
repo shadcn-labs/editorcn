@@ -18,15 +18,11 @@ import Color from "@tiptap/extension-color";
 import Subscript from "@tiptap/extension-subscript";
 import Superscript from "@tiptap/extension-superscript";
 import { RichTextEditor, Link, YouTubeEmbed, TwitterEmbed, CodeBlock } from "@/components/editor";
-import { Table } from "@/components/extensions/table";
-import { TableToolbar } from "@/components/extensions/table-toolbar";
-import { TableHoverOverlay } from "@/components/extensions/table-hover-overlay";
-import { ResizableImage, ImagePlaceholder } from "@/components/extensions/image-placeholder";
-import { ImagePlaceholderToolbar } from "@/components/extensions/image-placeholder-toolbar";
+import { Table, TableToolbar, TableHoverOverlay } from "@/components/extensions/table";
+import { ResizableImage, ImagePlaceholder, ImagePlaceholderToolbar } from "@/components/extensions/image-placeholder";
 import "@/components/editor/style.css";
 import "@/components/extensions/table/style.css";
 import "@/components/extensions/image-placeholder/style.css";
-import "@/components/extensions/ui/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
@@ -137,8 +133,7 @@ import TaskList from "@tiptap/extension-task-list";
 import TaskItem from "@tiptap/extension-task-item";
 import Link from "@tiptap/extension-link";
 import { GripVerticalIcon } from "lucide-react";
-import { Table } from "@/components/extensions/table";
-import { TableHoverOverlay } from "@/components/extensions/table-hover-overlay";
+import { Table, TableToolbar, TableHoverOverlay } from "@/components/extensions/table";
 import { ResizableImage, ImagePlaceholder } from "@/components/extensions/image-placeholder";
 import {
   BlockEditor,
@@ -151,7 +146,6 @@ import type { SlashCommandSuggestionItem } from "@/components/block-editor";
 import "@/components/block-editor/style.css";
 import "@/components/extensions/table/style.css";
 import "@/components/extensions/image-placeholder/style.css";
-import "@/components/extensions/ui/style.css";
 
 const DEMO_CONTENT = "<h2>Getting Started</h2><p>The BlockEditor is a block-style editor.</p>";
 

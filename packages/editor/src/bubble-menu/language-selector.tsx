@@ -1,7 +1,3 @@
-import type { Editor } from "@tiptap/react";
-import { useState } from "react";
-
-import { useRichTextEditorContext } from "../rte-context";
 import {
   RteButton,
   RteDropdown,
@@ -9,7 +5,11 @@ import {
   RteDropdownItem,
   RteIcon,
   RteOverlay,
-} from "../ui";
+} from "@editorcn/editor-ui/editor/ui";
+import type { Editor } from "@tiptap/react";
+import { useState } from "react";
+
+import { useRichTextEditorContext } from "../rte-context";
 import {
   CODE_BLOCK_LANGUAGES,
   getLanguageLabel,

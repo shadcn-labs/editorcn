@@ -1,3 +1,10 @@
+import {
+  SlashMenu,
+  SlashMenuList,
+  SlashMenuItem,
+  SlashMenuSearch,
+  SlashMenuSearchInput,
+} from "@editorcn/editor-ui/block-editor/ui";
 import type {
   SuggestionKeyDownProps,
   SuggestionProps,
@@ -11,13 +18,6 @@ import {
 } from "react";
 
 import { DEFAULT_ICONS } from "../../icons";
-import {
-  SlashMenu,
-  SlashMenuList,
-  SlashMenuItem,
-  SlashMenuSearch,
-  SlashMenuSearchInput,
-} from "../../ui";
 import type { SlashCommandSuggestionItem } from "./slash-command";
 
 export type SuggestionListProps = SuggestionProps<

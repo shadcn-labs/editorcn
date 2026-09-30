@@ -93,6 +93,10 @@
           "type": "registry:component"
         },
         {
+          "path": "editor/bubble-menu/color-swatch.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "editor/controls/rte-control.tsx",
           "type": "registry:component"
         },
@@ -129,74 +133,37 @@
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/utils.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "editor/ui/button.tsx",
+          "path": "editor-ui/separator.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/toggle.tsx",
+          "path": "editor-ui/button.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/popover.tsx",
+          "path": "editor-ui/dropdown-menu.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/input.tsx",
+          "path": "editor-ui/popover.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/dialog.tsx",
+          "path": "editor-ui/toggle.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/index.ts",
+          "path": "editor-ui/input.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/rte-button.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-button-group.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-icon.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-separator.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-overlay.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-dropdown.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-dropdown-item.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-dropdown-divider.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-dropdown-icon.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-color-swatch.tsx",
+          "path": "editor-ui/dialog.tsx",
           "type": "registry:component"
         }
       ],
+      "meta": {
+        "version": "0.3.3"
+      },
       "name": "editor",
       "title": "Rich Text Editor",
       "type": "registry:component"
@@ -276,6 +243,10 @@
           "type": "registry:component"
         },
         {
+          "path": "block-editor/bubble-menu/color-swatch.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "block-editor/context.tsx",
           "type": "registry:component"
         },
@@ -320,74 +291,33 @@
           "type": "registry:component"
         },
         {
-          "path": "block-editor/ui/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-button.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-button-group.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-separator.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-dropdown.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-dropdown-item.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-dropdown-divider.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-dropdown-icon.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/dropdown-overlay.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/color-swatch.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/slash-menu.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/slash-menu-search.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/slash-menu-search-input.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/slash-menu-list.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/slash-menu-item.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "block-editor/lib/utils.ts",
           "type": "registry:lib"
         },
         {
           "path": "block-editor/lib/commands.ts",
           "type": "registry:lib"
+        },
+        {
+          "path": "editor-ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor-ui/separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor-ui/dropdown-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor-ui/popover.tsx",
+          "type": "registry:component"
         }
       ],
+      "meta": {
+        "version": "0.3.3"
+      },
       "name": "block-editor",
       "title": "Block Editor",
       "type": "registry:component"
@@ -419,6 +349,9 @@
           "type": "registry:style"
         }
       ],
+      "meta": {
+        "version": "0.2.2"
+      },
       "name": "static-renderer",
       "title": "Static Renderer",
       "type": "registry:component"
@@ -428,6 +361,10 @@
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <1.0.0",
+        "@base-ui/react@^1.0.0",
+        "class-variance-authority@^0.7.1",
+        "clsx@^2.1.1",
+        "tailwind-merge@^3.0.0",
         "@tiptap/extension-image@>=3.0.0 <4"
       ],
       "description": "A Notion-style image placeholder node that lets you upload or embed an image by URL, with a resizable image node view and its own toolbar button.",
@@ -477,62 +414,37 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/button.tsx",
+          "path": "editor-ui/button.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/use-floating.tsx",
+          "path": "editor-ui/input.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/dropdown-menu.tsx",
+          "path": "editor-ui/popover.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/dropdown-pill.tsx",
+          "path": "editor-ui/tabs.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/dropdown-content.tsx",
+          "path": "editor-ui/dropdown-menu.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/dropdown-item.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-separator.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/input.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/popover.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/popover-content.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/separator.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/tabs.tsx",
+          "path": "editor-ui/separator.tsx",
           "type": "registry:component"
         },
         {
           "path": "extensions/image-placeholder/style.css",
           "type": "registry:style"
-        },
-        {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
         }
       ],
+      "meta": {
+        "version": "0.1.0"
+      },
       "name": "image-placeholder",
       "title": "Image Placeholder",
       "type": "registry:component"
@@ -542,6 +454,10 @@
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <1.0.0",
+        "@base-ui/react@^1.0.0",
+        "class-variance-authority@^0.7.1",
+        "clsx@^2.1.1",
+        "tailwind-merge@^3.0.0",
         "@tiptap/extension-table@>=3.0.0 <4",
         "@tiptap/extension-table-row@>=3.0.0 <4",
         "@tiptap/extension-table-cell@>=3.0.0 <4",
@@ -591,54 +507,25 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/button.tsx",
+          "path": "editor-ui/button.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/use-floating.tsx",
+          "path": "editor-ui/dropdown-menu.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/dropdown-menu.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-pill.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-content.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-item.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-separator.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/popover.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/popover-content.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/separator.tsx",
+          "path": "editor-ui/popover.tsx",
           "type": "registry:component"
         },
         {
           "path": "extensions/table/style.css",
           "type": "registry:style"
-        },
-        {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
         }
       ],
+      "meta": {
+        "version": "0.1.0"
+      },
       "name": "table",
       "title": "Table",
       "type": "registry:component"

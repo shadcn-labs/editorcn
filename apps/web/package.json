@@ -11,6 +11,7 @@
   "dependencies": {
     "@editorcn/block-editor": "workspace:*",
     "@editorcn/editor": "workspace:*",
+    "@editorcn/editor-ui": "workspace:*",
     "@editorcn/env": "workspace:*",
     "@editorcn/extensions": "workspace:*",
     "@editorcn/static-renderer": "workspace:*",

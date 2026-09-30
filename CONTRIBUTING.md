@@ -15,13 +15,15 @@ cd editorcn
 pnpm install
 ```
 
+Before your first change, read [`docs/ARCHITECTURE.md`](./docs/ARCHITECTURE.md) for how the packages and the registry pipeline fit together, and [`docs/CONTEXT.md`](./docs/CONTEXT.md) for the conventions and gotchas in this repo.
+
 ## Development
 
 ```bash
 pnpm dev
 ```
 
-This starts the Next.js dev server with the documentation site at [http://localhost:3000](http://localhost:3000).
+This starts the Next.js dev server with the documentation site at [http://localhost:3001](http://localhost:3001).
 
 ## Building
 

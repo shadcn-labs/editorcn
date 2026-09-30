@@ -8,10 +8,10 @@ export default defineConfig({
     "react",
     "react-dom",
     /^@tiptap\//,
-    "lowlight",
     /^@base-ui\//,
     "class-variance-authority",
   ],
   format: ["esm", "cjs"],
+  noExternal: [/@editorcn\/editor-ui/],
   sourcemap: true,
 });

@@ -1,0 +1,35 @@
+/* ── Motion tokens ── */
+/*
+ * Single source for editor motion. Injected into every shipped stylesheet by
+ * `pnpm sync:styles`; edit here, never in the generated blocks.
+ *
+ * These are plain CSS custom properties on purpose: npm consumers import
+ * style.css without a Tailwind pipeline, so no @theme / @utility directive can
+ * be used here. Components reach them through Tailwind's arbitrary-value
+ * syntax, e.g. duration-(--editor-motion-duration-base).
+ *
+ * Anything that ships a tw-animate-css utility depends on tw-animate-css being
+ * installed. Registry items declare it as a dependency automatically.
+ */
+:root {
+  --editor-motion-duration-fast: 120ms;
+  --editor-motion-duration-base: 180ms;
+  --editor-motion-duration-slow: 240ms;
+  --editor-motion-ease-standard: cubic-bezier(0, 0, 0.2, 1);
+  --editor-motion-ease-entrance: cubic-bezier(0.22, 1, 0.36, 1);
+  --editor-motion-ease-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/*
+ * Reduced motion zeroes the durations instead of every component carrying a
+ * `motion-reduce:` variant. New animated components get this for free, and a
+ * token override in a consumer theme can slow motion down without touching
+ * component source.
+ */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --editor-motion-duration-fast: 1ms;
+    --editor-motion-duration-base: 1ms;
+    --editor-motion-duration-slow: 1ms;
+  }
+}

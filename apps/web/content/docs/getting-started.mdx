@@ -201,6 +201,70 @@ export function MyEditor() {
 
 > See the [@editorcn/editor docs](./editor) or [@editorcn/block-editor docs](./block-editor) for detailed API references.
 
+## Animations
+
+The editor surfaces animate with [tw-animate-css](https://github.com/tailwindlabs/tw-animate-css), and it is declared automatically when you install through the registry. If you install via npm, add it yourself:
+
+```bash
+npm install tw-animate-css
+```
+
+Then import it once in your global stylesheet, above your editor styles:
+
+```css
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* editor styles */
+```
+
+<Callout variant="destructive" title="Animations will look broken without this">
+  Missing this import is the most common reason popovers, dropdowns and dialogs
+  appear and disappear instantly. The components are fine; the keyframes are
+  missing.
+</Callout>
+
+Motion is driven by CSS custom properties that ship in the editor stylesheet, so
+you can retune it without touching component code:
+
+```css
+:root {
+  /* 120ms | 180ms | 240ms */
+  --editor-motion-duration-base: 180ms;
+  /* entrances, exits, hover easing */
+  --editor-motion-ease-entrance: cubic-bezier(0.22, 1, 0.36, 1);
+}
+```
+
+Setting those to `0ms` disables motion entirely. `prefers-reduced-motion: reduce`
+is already honoured — it zeroes the durations, so you do not need to add
+`motion-reduce:` variants anywhere.
+
+## Updating an installed copy
+
+Registry items are source files in your project, so an update means re-running
+the installer. There is no automatic merge: the installer overwrites the files it
+manages.
+
+Check what version you are on first — every item reports it in `meta.version` in
+its registry JSON, for example `https://editorcn.vercel.app/r/editor.json`.
+
+```bash
+# 1. see what you would be taking
+curl -s https://editorcn.vercel.app/r/editor.json | grep '"version"'
+
+# 2. commit or stash your local edits
+git add -A && git commit -m "wip: editor customization"
+
+# 3. re-add, then review what changed
+npx shadcn@latest add @editorcn/editor
+git diff
+```
+
+If you have customized the editor-ui primitives, review the diff file by file
+rather than accepting it wholesale. The files worth checking are the ones under
+`components/editor-ui/`.
+
 ## Peer dependencies
 
 All `@tiptap/*` packages are **peer dependencies** — you must install them in your project. This ensures a single copy of Tiptap's types and avoids "duplicate instance" TypeScript errors.

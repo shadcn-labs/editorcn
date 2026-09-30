@@ -31,7 +31,10 @@
     "tailwind-merge": "^3.0.0"
   },
   "devDependencies": {
+    "@editorcn/editor-ui": "workspace:*",
+    "@tiptap/extension-code-block-lowlight": "^3.0.0",
     "@types/react": "^19",
+    "lowlight": "^3.3.0",
     "tsup": "^8.4.0",
     "typescript": "^5"
   },

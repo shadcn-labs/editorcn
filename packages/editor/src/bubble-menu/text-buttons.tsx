@@ -1,6 +1,10 @@
+import {
+  RteButton,
+  RteButtonGroup,
+  RteIcon,
+} from "@editorcn/editor-ui/editor/ui";
 import type { Editor } from "@tiptap/react";
 
-import { RteButton, RteButtonGroup, RteIcon } from "../ui";
 import { useEditorState, shallowEqual } from "./utils";
 
 const Svg = ({

@@ -29,7 +29,6 @@ import { common, createLowlight } from "lowlight";
 
 import "@editorcn/block-editor/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
-import "@editorcn/extensions/ui/style.css";
 import "@editorcn/extensions/table/style.css";
 
 const DEMO_CONTENT = `

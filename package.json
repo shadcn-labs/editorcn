@@ -10,6 +10,8 @@
     "dev": "turbo dev",
     "build": "turbo build",
     "build:registry": "node scripts/build-registry.mjs",
+    "sync:styles": "node scripts/sync-styles.mjs",
+    "check:editor-ui": "node scripts/check-editor-ui.mjs",
     "typecheck": "turbo typecheck",
     "check": "ultracite check",
     "fix": "ultracite fix",
@@ -27,6 +29,7 @@
     "lefthook": "^2.1.6",
     "oxfmt": "^0.46.0",
     "oxlint": "^1.61.0",
+    "shadcn": "^4.21.0",
     "turbo": "^2.9.16",
     "typescript": "catalog:",
     "ultracite": "7.6.1"

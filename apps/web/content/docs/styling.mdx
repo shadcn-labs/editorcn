@@ -175,6 +175,9 @@ Every editor element has a scoped CSS class. Override any of these in your style
 | `.rte-link-editor`                      | Link editor popover                                  |
 | `.rte-link-editor-input`                | Link URL input field                                 |
 | `.rte-link-editor-save`                 | Link save button                                     |
+| `.rte-bubble-menu`                      | Floating bubble menu                                 |
+| `.rte-bubble-color-section`, `-label`, `-grid`, `-recent` | Bubble menu color sections             |
+| `.rte-bubble-color-swatch`, `--text`, `--highlight`, `--active` | Bubble menu color swatches        |
 | `.rte-task-list`                        | Task list container                                  |
 | `.rte-task-list li`                     | Task list items                                      |
 | `.rte-task-list input[type="checkbox"]` | Task checkboxes                                      |
@@ -203,12 +206,12 @@ Every editor element has a scoped CSS class. Override any of these in your style
 | `.block-editor-block-actions-dropdown`                                          | Block actions dropdown                       |
 | `.block-editor-block-actions-item`                                              | Block actions dropdown items                 |
 | `.block-editor-bubble-menu`                                                     | Floating bubble menu                         |
-| `.block-editor-bubble-group`                                                    | Bubble menu button group                     |
-| `.block-editor-bubble-btn`                                                      | Bubble menu buttons                          |
-| `.block-editor-bubble-btn-text`                                                 | Bubble menu button text label                |
-| `.block-editor-bubble-separator`                                                | Bubble menu separator lines                  |
-| `.block-editor-bubble-dropdown`                                                 | Bubble menu dropdown                         |
-| `.block-editor-bubble-dropdown-item`                                            | Dropdown items (heading select, align, etc.) |
+| `.block-editor-copy-icon`                                                      | Bubble menu copy button icon                 |
+| `.block-editor-color-icon`                                                      | Bubble menu text color icon                  |
+| `.block-editor-color-section`                                                   | Bubble menu color section wrapper            |
+| `.block-editor-color-label`                                                     | Bubble menu color section label              |
+| `.block-editor-color-grid`, `.block-editor-color-recent`                        | Bubble menu color swatch grid                |
+| `.block-editor-color-swatch`, `--text`, `--highlight`, `--active`               | Bubble menu color swatches                   |
 | `.block-editor-slash-menu`                                                      | Slash command popup                          |
 | `.block-editor-slash-menu-list`                                                 | Slash command list container                 |
 | `.block-editor-slash-menu-item`                                                 | Slash command items                          |
@@ -355,22 +358,31 @@ For the block editor:
 
 ### Customize the bubble menu (block editor)
 
+The bubble menu is composed from shadcn components (`@editorcn/editor-ui` `Button`, `Separator`, `DropdownMenu`, `Popover`), so buttons and dropdowns follow your theme tokens. The menu shell keeps its own class for layout:
+
 ```css
 .block-editor-bubble-menu {
   height: 2.5rem;
   padding: 0 0.5rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
 }
+```
 
-.block-editor-bubble-btn {
-  height: 2rem;
-  padding: 0 0.5rem;
-  font-size: 0.875rem;
+Active controls (bold, text color, link, …) are marked with a `data-active` attribute. It is styled with the accent tokens so the active state reads on the popover surface in both themes — restyle it here:
+
+```css
+.block-editor-bubble-menu [data-active] {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
 }
+```
 
-.block-editor-bubble-btn svg {
-  width: 1rem;
-  height: 1rem;
+The rich text editor bubble menu uses the same hooks, scoped to `.rte-bubble-menu`:
+
+```css
+.rte-bubble-menu [data-active] {
+  background: var(--secondary);
+  color: var(--secondary-foreground);
 }
 ```
 

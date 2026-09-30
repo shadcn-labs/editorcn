@@ -1,0 +1,25 @@
+{
+  "$schema": "https://ui.shadcn.com/schema.json",
+  "style": "base-nova",
+  "rsc": false,
+  "tsx": true,
+  "iconLibrary": "lucide",
+  "tailwind": {
+    "config": "",
+    "css": "src/style.css",
+    "baseColor": "neutral",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "@editorcn/editor-ui/components",
+    "utils": "@editorcn/editor-ui/lib/utils",
+    "ui": "@editorcn/editor-ui/components",
+    "lib": "@editorcn/editor-ui/lib",
+    "hooks": "@editorcn/editor-ui/hooks"
+  },
+  "registries": {
+    "@kibo-ui": "https://www.kibo-ui.com/r/{name}.json",
+    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+  }
+}

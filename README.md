@@ -42,6 +42,12 @@ The editorcn community lives on [GitHub](https://github.com/shadcn-labs/editorcn
 
 Contributions are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) to get the repo running locally and land a change, and use [issues](https://github.com/shadcn-labs/editorcn/issues) and [discussions](https://github.com/shadcn-labs/editorcn/discussions) to collaborate. By participating, you agree to the [Code of Conduct](./CODE_OF_CONDUCT.md).
 
+## Documentation
+
+- **Using the editors** — [editorcn.vercel.app/docs](https://editorcn.vercel.app/docs) (source in [`apps/web/content/docs`](./apps/web/content/docs)).
+- **Working on the repo** — [`docs/`](./docs): [PRD](./docs/PRD.md), [architecture](./docs/ARCHITECTURE.md), [context and gotchas](./docs/CONTEXT.md), [roadmap](./docs/ROADMAP.md), [decisions](./docs/DECISIONS.md).
+- **Session history** — [JOURNAL.md](./JOURNAL.md).
+
 ## Security
 
 Please do not open public issues for security vulnerabilities. Follow [SECURITY.md](./SECURITY.md) and report them privately through GitHub Security Advisories.

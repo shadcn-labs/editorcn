@@ -134,8 +134,13 @@ For the full API reference, props, and customization options, see the [Editor](.
 The registry is served as static JSON files from `https://editorcn.vercel.app/r/`:
 
 - **`registry.json`** — catalog listing all available packages with metadata
-- **`editor.json`** — item schema for the toolbar editor (42 files, 21 dependencies)
-- **`block-editor.json`** — item schema for the block editor (38 files, 29 dependencies)
+- **`editor.json`** — item schema for the toolbar editor (33 files, 22 dependencies)
+- **`block-editor.json`** — item schema for the block editor (28 files, 30 dependencies)
+
+Each item carries a `meta.version` field, so you can check what a given item
+currently points at before re-installing it. See
+[Getting Started](./getting-started#updating-an-installed-copy) for the
+update workflow.
 
 When you run `shadcn add @editorcn/editor`, the CLI:
 

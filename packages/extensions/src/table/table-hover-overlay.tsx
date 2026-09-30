@@ -1,5 +1,9 @@
 "use client";
 
+import { DropdownMenuContent } from "@editorcn/editor-ui/extensions/ui/dropdown-content";
+import { DropdownMenuItem } from "@editorcn/editor-ui/extensions/ui/dropdown-item";
+import { DropdownMenu } from "@editorcn/editor-ui/extensions/ui/dropdown-menu";
+import { DropdownMenuSeparator } from "@editorcn/editor-ui/extensions/ui/dropdown-separator";
 import type { ChainedCommands } from "@tiptap/core";
 import {
   MoreHorizontal,
@@ -17,10 +21,6 @@ import { useToolbar, useToolbarEditor } from "../core/context";
 import { extensionPresent } from "../core/detection";
 import type { ExtensionLabels } from "../core/labels";
 import type { ToolbarComponentProps } from "../core/types";
-import { DropdownMenuContent } from "../ui/dropdown-content";
-import { DropdownMenuItem } from "../ui/dropdown-item";
-import { DropdownMenu } from "../ui/dropdown-menu";
-import { DropdownMenuSeparator } from "../ui/dropdown-separator";
 
 interface TableColumnLayout {
   center: number;

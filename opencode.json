@@ -1,0 +1,14 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "shadcn": {
+      "type": "local",
+      "command": [
+        "node",
+        "C:\\Users\\Abdullah\\Desktop\\editorcn\\editorcn\\node_modules\\shadcn\\dist\\index.js",
+        "mcp"
+      ],
+      "enabled": true
+    }
+  }
+}
