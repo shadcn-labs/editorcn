@@ -16,6 +16,8 @@
     "@editorcn/static-renderer": "workspace:*",
     "@editorcn/ui": "workspace:*",
     "@floating-ui/dom": "^1.6.0",
+    "@ai-sdk/openai": "^4.0.74",
+    "ai": "^7.0.113",
     "@tiptap/core": "^3.0.0",
     "@tiptap/extension-character-count": "^3.0.0",
     "@tiptap/extension-code-block": "^3.0.0",

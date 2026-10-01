@@ -21,6 +21,19 @@
     ],
     "deps": ["@tiptap/extension-image@>=3.0.0 <4"]
   },
+  "ai": {
+    "title": "AI Assistant",
+    "description": "A toolbar button that sends a free prompt (plus the current selection as context) to OpenAI and inserts the generated text. Bring your own API key, no server needed.",
+    "toolbar": "ai/toolbar.tsx",
+    "css": ["ai/style.css"],
+    "ui": [
+      "button",
+      "input",
+      "popover",
+      "popover-content"
+    ],
+    "deps": ["ai@^7.0.0", "@ai-sdk/openai@^4.0.0"]
+  },
   "table": {
     "title": "Table",
     "description": "A table node with a toolbar that inserts tables from a grid-size picker, lets you add or delete rows and columns, merge and split cells, toggle the header row, and manage rows and columns from hover context handles. Columns are resizable and a gap cursor is included by default.",
