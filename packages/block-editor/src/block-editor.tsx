@@ -9,9 +9,21 @@ import { BlockEditorProvider, useBlockEditorContext } from "./context";
 import { cn } from "./lib/utils";
 import type { BlockEditorProps } from "./types";
 
+const computePositionConfig = {
+  placement: "left-start",
+  strategy: "absolute",
+} as const;
+
 const BlockEditorDragHandle = () => {
   const { editor, icons } = useBlockEditorContext();
   const dragNodeRef = useRef<{ node: Node; pos: number } | null>(null);
+
+  const handleNodeChange = useCallback(
+    ({ node, pos }: { node: Node | null; pos: number }) => {
+      dragNodeRef.current = node ? { node, pos } : null;
+    },
+    [],
+  );
 
   const handleAdd = useCallback(() => {
     const dragNode = dragNodeRef.current;
@@ -37,11 +49,9 @@ const BlockEditorDragHandle = () => {
 
   return (
     <DragHandle
-      computePositionConfig={{ placement: "left-start", strategy: "absolute" }}
+      computePositionConfig={computePositionConfig}
       editor={editor}
-      onNodeChange={({ node, pos }) => {
-        dragNodeRef.current = node ? { node, pos } : null;
-      }}
+      onNodeChange={handleNodeChange}
     >
       <button
         type="button"
