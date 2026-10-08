@@ -1,16 +1,56 @@
-import { readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  readdirSync,
+  readFileSync,
+  writeFileSync,
+} from "node:fs";
 import { resolve } from "node:path";
 
 const __dirname = import.meta.dirname;
 const root = resolve(__dirname, "..");
 
+const readText = (path) => readFileSync(path, "utf-8").replaceAll("\r\n", "\n");
+
 const read = (pkg, file) =>
-  readFileSync(resolve(root, "packages", pkg, "src", file), "utf-8");
+  readText(resolve(root, "packages", pkg, "src", file), "utf-8");
 
 const entry = (path, type, pkg, src) => {
   const target = `@components/${path}`;
   return { content: read(pkg, src), path, target, type };
 };
+
+const readTemplate = (file) =>
+  readText(
+    resolve(root, "apps", "web", "src", "components", "templates", file),
+    "utf-8"
+  )
+    .replaceAll("@editorcn/editor", "@/components/editor")
+    .replaceAll("@editorcn/static-renderer", "@/components/static-renderer")
+    .replaceAll(
+      "@editorcn/extensions/table-hover-overlay",
+      "@/components/extensions/table/table-hover-overlay"
+    )
+    .replaceAll("@editorcn/extensions/", "@/components/extensions/");
+
+const templateEntry = (name) =>
+  readdirSync(
+    resolve(root, "apps", "web", "src", "components", "templates", name)
+  )
+    .toSorted(
+      (a, b) =>
+        Number(b === "index.tsx") - Number(a === "index.tsx") ||
+        a.localeCompare(b)
+    )
+    .map((file) => {
+      const path = `templates/${name}/${file}`;
+      return {
+        content: readTemplate(`${name}/${file}`),
+        path,
+        target: `@components/${path}`,
+        type: "registry:block",
+      };
+    });
 
 const editorFiles = [
   entry("editor/index.ts", "registry:component", "editor", "index.ts"),
@@ -588,7 +628,7 @@ const extensionCoreFiles = [
 );
 
 const readUiComponent = (name) =>
-  readFileSync(
+  readText(
     resolve(root, "packages", "ui", "src", "components", `${name}.tsx`),
     "utf-8"
   );
@@ -615,10 +655,7 @@ const extensionsBaseDeps = [
 ];
 
 const extensionsManifest = JSON.parse(
-  readFileSync(
-    resolve(root, "packages", "extensions", "manifest.json"),
-    "utf-8"
-  )
+  readText(resolve(root, "packages", "extensions", "manifest.json"), "utf-8")
 );
 
 const extensionsConfig = Object.entries(extensionsManifest).map(
@@ -642,10 +679,7 @@ const collectExtensionUi = (name, out = new Map()) => {
   if (out.has(name) || !extensionUiExists(name)) {
     return out;
   }
-  const content = readFileSync(
-    resolve(extensionsUiDir, `${name}.tsx`),
-    "utf-8"
-  );
+  const content = readText(resolve(extensionsUiDir, `${name}.tsx`), "utf-8");
   const imported = [...content.matchAll(/from "\.\/([a-z-]+)"/g)].map(
     (match) => match[1]
   );
@@ -711,7 +745,7 @@ const buildExtensionItem = (config) => {
     styles.push("ui/style.css");
   }
   const styleEntries = styles.map((file) => ({
-    content: readFileSync(
+    content: readText(
       resolve(root, "packages", "extensions", "src", file),
       "utf-8"
     ),
@@ -836,6 +870,87 @@ const catalogItem = (name, title, desc, depsList, fileList) => ({
   type: "registry:component",
 });
 
+const buildItemWithType = (
+  name,
+  title,
+  desc,
+  files,
+  dependencies,
+  registryDependencies,
+  type
+) => {
+  const item = buildItem(name, title, desc, files, dependencies);
+  item.type = type;
+  if (registryDependencies) {
+    item.registryDependencies = registryDependencies;
+  }
+  return item;
+};
+
+const templateDeps = {
+  "comment-box": [
+    "@tiptap/core@>=3.0.0 <4",
+    "@tiptap/static-renderer@>=3.21.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+  ],
+  "simple-document-editor": [
+    "@tiptap/core@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+    "@tiptap/extension-link@>=3.0.0 <4",
+    "@tiptap/extension-highlight@>=3.0.0 <4",
+    "@tiptap/extension-task-list@>=3.0.0 <4",
+    "@tiptap/extension-task-item@>=3.0.0 <4",
+    "@tiptap/extension-text-align@>=3.0.0 <4",
+    "@tiptap/extension-text-style@>=3.0.0 <4",
+    "@tiptap/extension-color@>=3.0.0 <4",
+    "@tiptap/extension-font-family@>=3.0.0 <4",
+    "@tiptap/extension-subscript@>=3.0.0 <4",
+    "@tiptap/extension-superscript@>=3.0.0 <4",
+    "lucide-react@>=0.400.0 <1.0.0",
+  ],
+};
+
+const templateItems = [
+  {
+    deps: templateDeps["comment-box"],
+    desc: "A comment thread with avatars, relative times, emoji reactions, a delete menu, and an editor composer with onPost, onReact, and onDelete hooks.",
+    files: templateEntry("comment-box"),
+    name: "comment-box",
+    title: "Comment Box",
+    ui: [
+      "avatar",
+      "button",
+      "dropdown-menu",
+      "kbd",
+      "popover",
+      "https://editorcn.vercel.app/r/static-renderer.json",
+    ],
+  },
+  {
+    deps: templateDeps["simple-document-editor"],
+    desc: "A document page with a breadcrumb header, collaborators, a floating toolbar, task lists, and a status bar with word count and shortcuts.",
+    files: templateEntry("simple-document-editor"),
+    name: "simple-document-editor",
+    title: "Simple Document Editor",
+    ui: [
+      "avatar",
+      "button",
+      "dropdown-menu",
+      "kbd",
+      "popover",
+      "tooltip",
+      "https://editorcn.vercel.app/r/table.json",
+      "https://editorcn.vercel.app/r/image-placeholder.json",
+    ],
+  },
+];
+
 const outDir = resolve(root, "apps", "web", "public", "r");
 if (!existsSync(outDir)) {
   mkdirSync(outDir, { recursive: true });
@@ -889,6 +1004,25 @@ for (const item of extensionsItems) {
     resolve(outDir, `${item.name}.json`),
     JSON.stringify(
       buildItem(item.name, item.title, item.description, item.files, item.deps),
+      null,
+      2
+    )
+  );
+}
+
+for (const item of templateItems) {
+  writeFileSync(
+    resolve(outDir, `${item.name}.json`),
+    JSON.stringify(
+      buildItemWithType(
+        item.name,
+        item.title,
+        item.desc,
+        item.files,
+        item.deps,
+        ["https://editorcn.vercel.app/r/editor.json", ...item.ui],
+        "registry:block"
+      ),
       null,
       2
     )
@@ -967,6 +1101,14 @@ const catalog = {
         item.files
       )
     ),
+    ...templateItems.map((item) => ({
+      dependencies: item.deps,
+      description: item.desc,
+      files: item.files.map((f) => ({ path: f.path, type: f.type })),
+      name: item.name,
+      title: item.title,
+      type: "registry:block",
+    })),
     ...iconSetItems.map((item) =>
       catalogItem(
         item.name,
@@ -990,6 +1132,9 @@ console.log("  apps/web/public/r/editor.json");
 console.log("  apps/web/public/r/block-editor.json");
 console.log("  apps/web/public/r/static-renderer.json");
 for (const item of extensionsItems) {
+  console.log(`  apps/web/public/r/${item.name}.json`);
+}
+for (const item of templateItems) {
   console.log(`  apps/web/public/r/${item.name}.json`);
 }
 for (const item of iconSetItems) {

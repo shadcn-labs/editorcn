@@ -58,6 +58,7 @@ export const TOP_LEVEL_SECTIONS = [
   { href: ROUTES.DOCS_GETTING_STARTED, name: "Getting Started" },
   { href: ROUTES.DOCS_STYLING, name: "Styling" },
   { href: ROUTES.DOCS_CUSTOMIZATION, name: "Customization" },
+  { href: ROUTES.DOCS_TEMPLATES, name: "Templates" },
   { href: ROUTES.DOCS_OWNERSHIP, name: "Code Ownership" },
   { href: ROUTES.DOCS_MCP, name: "MCP" },
   { href: ROUTES.DOCS_REGISTRY, name: "Registry" },

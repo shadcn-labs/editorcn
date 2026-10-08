@@ -27,11 +27,6 @@ import {
 } from "@/components/customization/extensions";
 import { StaticRendererDemo } from "@/components/customization/static-renderer-demo";
 import {
-  DocumentEditorCard,
-  EnhancedEditorCard,
-  FullEditorCard,
-} from "@/components/customization/template-demos";
-import {
   HeadingSelectCard,
   InsertLinkDialogCard,
   HighlightColorPopoverCard,
@@ -40,6 +35,7 @@ import {
   FontFamilySelectCard,
   FontSizeCard,
 } from "@/components/customization/templates-demos";
+import { TemplateShowcase } from "@/components/template-showcase";
 import {
   Accordion,
   AccordionContent,
@@ -69,7 +65,6 @@ export const mdxComponents = {
   Callout,
   CodeBlockCommand,
   CodeTabs,
-  DocumentEditorCard,
   EditorClassNameDemo,
   EditorCustomControlsDemo,
   EditorCustomIconsDemo,
@@ -79,7 +74,6 @@ export const mdxComponents = {
   EditorThemingDemo,
   EditorVariantsDemo,
   EmojiMenuCard,
-  EnhancedEditorCard,
   ExtensionList,
   ExtensionPreview,
   FeatureCard: ({
@@ -111,7 +105,6 @@ export const mdxComponents = {
   ),
   FontFamilySelectCard,
   FontSizeCard,
-  FullEditorCard,
   HeadingSelectCard,
   HighlightColorPopoverCard,
   Image: ({
@@ -168,6 +161,7 @@ export const mdxComponents = {
       {...props}
     />
   ),
+  TemplateShowcase,
   a: ({ className, children, ...props }: React.ComponentProps<"a">) => (
     <a
       className={cn("font-medium underline underline-offset-4", className)}

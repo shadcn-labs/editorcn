@@ -5,6 +5,11 @@ import "@editorcn/env/web";
 const nextConfig = {
   // typedRoutes: true, // disabled due to Next.js 16 bug with @base-ui/react Form types
   reactCompiler: true,
+  redirects() {
+    return [
+      { destination: "/docs/templates", permanent: true, source: "/templates" },
+    ];
+  },
   rewrites() {
     return [
       {

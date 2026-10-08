@@ -26,7 +26,7 @@ interface CreateControlProps {
 }
 
 export const RichTextEditorControl = ({
-  active,
+  active = false,
   interactive: _interactive = true,
   className,
   children,
@@ -96,13 +96,9 @@ export const createControl = ({
     const { editor, labels, icons } = useRichTextEditorContext();
     const ariaLabel = labels[label] as string;
 
-    const editorState = useEditorState({
-      editor: editor ?? null,
-      selector: createSelector(isActive, isDisabled),
-    });
-
-    const active = editorState?.active ?? false;
-    const disabled = editorState?.disabled ?? true;
+    const selector = createSelector(isActive, isDisabled);
+    useEditorState({ editor: editor ?? null, selector });
+    const { active, disabled } = selector({ editor: editor ?? null });
 
     return (
       <RichTextEditorControl

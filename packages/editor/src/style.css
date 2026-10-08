@@ -701,11 +701,11 @@ button.rte-control-button:active {
   transition: opacity 150ms ease-out;
 }
 
-.rte-task-list li[data-checked] {
+.rte-task-list li[data-checked="true"] {
   opacity: 0.6;
 }
 
-.rte-task-list li[data-checked] > div {
+.rte-task-list li > div {
   flex: 1;
   min-width: 0;
 }
@@ -722,6 +722,7 @@ button.rte-control-button:active {
 .rte-task-list label {
   display: inline-flex;
   align-items: center;
+  height: 1.75em;
   cursor: pointer;
 }
 

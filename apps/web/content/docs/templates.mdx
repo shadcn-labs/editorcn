@@ -1,87 +1,111 @@
 ---
 title: Templates
-description: Prebuilt rich text editor configurations with custom controls baked in.
+description: Complete editors for common UI — comments and documents. Install one with a single command.
 ---
 
-Prebuilt editor configurations that come with custom controls already integrated. Each template is a complete `@editorcn/editor` setup with specific controls tailored to a use case — just install and go.
+Templates are complete editors built from `@editorcn/editor`. Each one installs as a shadcn block: the CLI adds the template, the editor, and every component and extension it depends on. You own the code after install, so you can change anything. Each template lands in its own folder, `components/templates/<name>/`, split into small files (types, constants, toolbar, panels and so on) with `index.tsx` as the entry point.
 
-Install the base editor and the controls you need, or install everything at once.
+<Callout title="Templates use Tailwind CSS">
+  The editor and static renderer ship plain CSS and work in any React app.
+  Templates are styled with Tailwind CSS v4 and built on shadcn/ui components,
+  so your project needs Tailwind and shadcn/ui. Run `npx shadcn@latest init`
+  first if it isn't set up.
+</Callout>
 
-<div className="rounded-lg border border-border p-6 mb-8">
+<Callout title="Already using Tiptap?">
+  Tiptap packages must all be on the same version. The CLI installs the latest
+  3.x, so if your project already has `@tiptap/*` packages on an older 3.x
+  release, npm stops with an `ERESOLVE` peer dependency error. Update the
+  packages you already have first, for example `npm install @tiptap/react@latest
+  @tiptap/pm@latest @tiptap/starter-kit@latest`, then add the template.
+</Callout>
 
-### Document Editor
+Templates work with shadcn/ui built on either Radix UI or Base UI.
 
-<div className="text-sm text-muted-foreground mb-4">
-  Font Family Select · Font Size · Highlight Color Popover
-</div>
+All templates store content as Tiptap JSON (`editor.getJSON()`) and display it with the [Static Renderer](/docs/static-renderer), which renders React elements instead of HTML. Content renders on the server, and stored content can't inject scripts. Use `generateHTML(json, extensions)` from `@tiptap/core` when you need HTML, for example in emails.
 
-A rich text editor focused on document styling — choose fonts, set text size, and highlight important content.
+## Comment Box
 
-**Install the editor:**
+A comment thread with avatars, relative times, emoji reactions, YouTube-style replies and a composer built on the editor. Replies are one level deep and collapse under each comment; replying to a reply adds to the same thread and starts with an @mention. People can copy any comment and delete their own.
 
-```bash
-npx shadcn@latest add @editorcn/editor
-```
+<TemplateShowcase name="comment-box" />
 
-**Then install the controls:**
-
-```bash
-npx shadcn@latest add "https://editorcn.vercel.app/r/custom-controls/font-family-select" "https://editorcn.vercel.app/r/custom-controls/font-size" "https://editorcn.vercel.app/r/custom-controls/highlight-color-popover"
-```
-
-<DocumentEditorCard />
-
-</div>
-
-<div className="rounded-lg border border-border p-6 mb-8">
-
-### Enhanced Editor
-
-<div className="text-sm text-muted-foreground mb-4">
-  Heading Select · Insert Link Dialog · Emoji Menu
-</div>
-
-A content-creation focused editor with a heading selector, link dialog, and emoji picker.
-
-**Install the editor:**
+### Installation
 
 ```bash
-npx shadcn@latest add @editorcn/editor
+npx shadcn@latest add "https://editorcn.vercel.app/r/comment-box.json"
 ```
 
-**Then install the controls:**
+### Usage
+
+Each callback fires after the change shows on screen, so you can save it to your backend. `onPost` receives the parent comment's id when the new comment is a reply.
+
+```tsx
+import { CommentBox } from "@/components/templates/comment-box";
+
+export const Comments = ({ comments, user }) => (
+  <CommentBox
+    currentUser={{ avatar: user.image, id: user.id, name: user.name }}
+    initialComments={comments}
+    onPost={(content, parentId) => saveComment({ content, parentId })}
+    onReact={(id, emoji) => toggleReaction(id, emoji)}
+    onDelete={(id) => deleteComment(id)}
+  />
+);
+```
+
+### Props
+
+| Prop              | Type            | Description                      |
+| ----------------- | --------------- | -------------------------------- |
+| `currentUser`     | `CommentAuthor` | The person writing               |
+| `initialComments` | `CommentItem[]` | Comments with optional `replies` |
+| `onPost`          | `function`      | Gets `(content, parentId?)`      |
+| `onReact`         | `function`      | Gets `(id, emoji)`               |
+| `onDelete`        | `function`      | Gets the deleted comment `id`    |
+| `title`           | `string`        | Header title, default `Comments` |
+| `placeholder`     | `string`        | Composer placeholder             |
+| `className`       | `string`        | Outer container classes          |
+
+## Simple Document Editor
+
+A document page: a breadcrumb header with collaborators, a floating toolbar, and a paper-style page with a large editable title. The toolbar covers text styles, fonts, text and highlight colors, superscript and subscript, lists with indent and outdent, alignment, and an Insert menu for images, tables, quotes, code blocks and dividers. A status bar shows word count, reading time and keyboard shortcuts.
+
+<TemplateShowcase name="simple-document-editor" />
+
+### Installation
 
 ```bash
-npx shadcn@latest add "https://editorcn.vercel.app/r/custom-controls/heading-select" "https://editorcn.vercel.app/r/custom-controls/insert-link-dialog" "https://editorcn.vercel.app/r/custom-controls/emoji-menu"
+npx shadcn@latest add "https://editorcn.vercel.app/r/simple-document-editor.json"
 ```
 
-<EnhancedEditorCard />
+The CLI also installs the [Image Placeholder](/docs/extensions/image-placeholder) and [Table](/docs/extensions/table) extensions.
 
-</div>
+### Usage
 
-<div className="rounded-lg border border-border p-6">
+```tsx
+import { SimpleDocumentEditor } from "@/components/templates/simple-document-editor";
 
-### Full Editor
-
-<div className="text-sm text-muted-foreground mb-4">
-  Heading Select · Font Family Select · Font Size · Insert Link Dialog · Emoji
-  Menu · Highlight Color Popover · Insert Table Dialog
-</div>
-
-Everything included — all custom controls in a feature-complete editor with a sticky toolbar.
-
-**Install the editor:**
-
-```bash
-npx shadcn@latest add @editorcn/editor
+export const Doc = ({ doc }) => (
+  <SimpleDocumentEditor
+    initialTitle={doc.title}
+    initialContent={doc.content}
+    onChange={(content) => saveDocument(doc.id, content)}
+    onTitleChange={(title) => renameDocument(doc.id, title)}
+    onShare={() => openShareDialog(doc.id)}
+  />
+);
 ```
 
-**Then install all controls at once:**
+### Props
 
-```bash
-npx shadcn@latest add "https://editorcn.vercel.app/r/custom-controls"
-```
-
-<FullEditorCard />
-
-</div>
+| Prop             | Type                     | Description                          |
+| ---------------- | ------------------------ | ------------------------------------ |
+| `initialContent` | `Content`                | Tiptap JSON or HTML to start with    |
+| `initialTitle`   | `string`                 | Title for the breadcrumb and page    |
+| `onChange`       | `function`               | Gets the document as Tiptap JSON     |
+| `onTitleChange`  | `function`               | Gets the new title                   |
+| `onShare`        | `function`               | Shows a Share button when set        |
+| `collaborators`  | `DocumentCollaborator[]` | Avatars in the header                |
+| `path`           | `string[]`               | Breadcrumb segments before the title |
+| `className`      | `string`                 | Outer container classes              |

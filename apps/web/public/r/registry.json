@@ -665,6 +665,96 @@
     },
     {
       "dependencies": [
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/static-renderer@>=3.21.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4",
+        "@tiptap/starter-kit@>=3.0.0 <4",
+        "@tiptap/extension-placeholder@>=3.0.0 <4"
+      ],
+      "description": "A comment thread with avatars, relative times, emoji reactions, a delete menu, and an editor composer with onPost, onReact, and onDelete hooks.",
+      "files": [
+        {
+          "path": "templates/comment-box/index.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/comment-box/composer.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/comment-box/thread.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/comment-box/types.ts",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/comment-box/utils.ts",
+          "type": "registry:block"
+        }
+      ],
+      "name": "comment-box",
+      "title": "Comment Box",
+      "type": "registry:block"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4",
+        "@tiptap/starter-kit@>=3.0.0 <4",
+        "@tiptap/extension-placeholder@>=3.0.0 <4",
+        "@tiptap/extension-link@>=3.0.0 <4",
+        "@tiptap/extension-highlight@>=3.0.0 <4",
+        "@tiptap/extension-task-list@>=3.0.0 <4",
+        "@tiptap/extension-task-item@>=3.0.0 <4",
+        "@tiptap/extension-text-align@>=3.0.0 <4",
+        "@tiptap/extension-text-style@>=3.0.0 <4",
+        "@tiptap/extension-color@>=3.0.0 <4",
+        "@tiptap/extension-font-family@>=3.0.0 <4",
+        "@tiptap/extension-subscript@>=3.0.0 <4",
+        "@tiptap/extension-superscript@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
+      ],
+      "description": "A document page with a breadcrumb header, collaborators, a floating toolbar, task lists, and a status bar with word count and shortcuts.",
+      "files": [
+        {
+          "path": "templates/simple-document-editor/index.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/constants.ts",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/header.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/shortcuts.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/toolbar.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/types.ts",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/utils.ts",
+          "type": "registry:block"
+        }
+      ],
+      "name": "simple-document-editor",
+      "title": "Simple Document Editor",
+      "type": "registry:block"
+    },
+    {
+      "dependencies": [
         "@phosphor-icons/react@^2.1.10"
       ],
       "description": "Phosphor Icons variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
