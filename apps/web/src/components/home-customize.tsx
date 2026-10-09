@@ -1,74 +1,88 @@
 "use client";
 
+import {
+  ArrowRightIcon,
+  PaletteIcon,
+  ShapesIcon,
+  SquarePlusIcon,
+} from "lucide-react";
 import Link from "next/link";
 
-import { ArrowRightIcon } from "@/components/animated-icons/arrow-right";
-import type { ArrowRightIconHandle } from "@/components/animated-icons/arrow-right";
 import {
   ControlsPreview,
   IconsPreview,
   ThemeCard,
   ThemePreview,
 } from "@/components/landing-previews";
-import { Button } from "@/components/ui/button";
-import { useIconAnimation } from "@/hooks/use-icon-animation";
 
-export const HomeCustomize = ({ className }: { className?: string }) => {
-  const { iconRef, onMouseEnter, onMouseLeave } =
-    useIconAnimation<ArrowRightIconHandle>();
+const FEATURES = [
+  {
+    description: "Swap any toolbar icon through the icons prop.",
+    href: "/docs/customization",
+    icon: ShapesIcon,
+    preview: <IconsPreview />,
+    title: "Icons",
+  },
+  {
+    description: "Override CSS variables for a completely different look.",
+    href: "/docs/customization",
+    icon: PaletteIcon,
+    preview: (
+      <ThemeCard>
+        <ThemePreview />
+      </ThemeCard>
+    ),
+    title: "Themes",
+  },
+  {
+    description: "Add your own toolbar buttons with RichTextEditor.Control.",
+    href: "/docs/customization",
+    icon: SquarePlusIcon,
+    preview: <ControlsPreview />,
+    title: "Controls",
+  },
+];
 
-  return (
-    <div className={className}>
-      <div>
-        <h2 className="mb-2 text-lg font-medium tracking-tight text-foreground">
-          Customize everything
-        </h2>
-        <p className="text-base text-muted-foreground">
-          Icons, colors, controls — every part of the editor is yours to shape.
-        </p>
-      </div>
-      <div className="mt-4 grid gap-6 lg:grid-cols-3">
-        <div className="space-y-3">
-          <span className="inline-flex h-5 items-center rounded-full bg-foreground px-2 text-[11px] font-medium tracking-wider text-background">
-            Icons
-          </span>
-          <p className="text-sm text-muted-foreground">
-            Swap any icon via the icons prop.
-          </p>
-          <IconsPreview />
-        </div>
-        <ThemeCard className="space-y-3">
-          <span className="inline-flex h-5 items-center rounded-full bg-primary px-2 text-[11px] font-medium tracking-wider text-primary-foreground">
-            Themes
-          </span>
-          <p className="text-sm text-muted-foreground">
-            Override CSS variables for a completely different look.
-          </p>
-          <ThemePreview />
-        </ThemeCard>
-        <div className="space-y-3">
-          <span className="inline-flex h-5 items-center rounded-full bg-foreground px-2 text-[11px] font-medium tracking-wider text-background">
-            Controls
-          </span>
-          <p className="text-sm text-muted-foreground">
-            Add custom toolbar buttons using RichTextEditor.Control.
-          </p>
-          <ControlsPreview />
-        </div>
-      </div>
-      <div className="mt-2">
-        <Button
-          asChild
-          variant="link"
-          className="px-0"
-          onMouseEnter={onMouseEnter}
-          onMouseLeave={onMouseLeave}
-        >
-          <Link href="/docs/customization" prefetch={false}>
-            Explore customization <ArrowRightIcon ref={iconRef} />
-          </Link>
-        </Button>
-      </div>
+export const HomeCustomize = ({ className }: { className?: string }) => (
+  <div className={className}>
+    <div className="mx-auto flex max-w-2xl flex-col items-center text-center">
+      <span className="text-sm text-muted-foreground">Customization</span>
+      <h2 className="mt-4 text-3xl font-medium tracking-tight text-balance text-foreground sm:text-5xl">
+        Shape the editor around your product
+      </h2>
+      <p className="mt-4 text-base text-balance text-muted-foreground sm:text-lg">
+        You own the code. Change icons, colors and controls without fighting the
+        library.
+      </p>
     </div>
-  );
-};
+
+    <h3 className="mt-16 mb-4 font-medium text-foreground">
+      Explore customization
+    </h3>
+    <div className="grid gap-4 lg:grid-cols-3">
+      {FEATURES.map((feature) => (
+        <div
+          key={feature.title}
+          className="flex flex-col gap-4 rounded-2xl border bg-card p-6"
+        >
+          <feature.icon className="size-6 text-foreground" />
+          <div>
+            <h4 className="font-medium text-foreground">{feature.title}</h4>
+            <p className="mt-1 text-sm text-muted-foreground">
+              {feature.description}
+            </p>
+          </div>
+          <div className="flex-1">{feature.preview}</div>
+          <Link
+            href={feature.href}
+            prefetch={false}
+            className="group inline-flex w-fit items-center gap-1 text-sm font-medium text-foreground"
+          >
+            Learn more
+            <ArrowRightIcon className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+          </Link>
+        </div>
+      ))}
+    </div>
+  </div>
+);

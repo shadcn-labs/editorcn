@@ -333,3 +333,9 @@
     --sidebar-ring: var(--color-violet-900);
   }
 } */
+
+@keyframes caret-blink {
+  50% {
+    opacity: 0;
+  }
+}

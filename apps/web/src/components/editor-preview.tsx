@@ -167,7 +167,7 @@ export const EditorPreview = ({
   });
 
   return (
-    <div className="overflow-hidden rounded-md border border-border font-inter [&_.ProseMirror]:text-[15px]">
+    <div className="font-inter [&_.ProseMirror]:text-[15px]">
       <RichTextEditor editor={editor} variant={variant}>
         <RichTextEditor.Toolbar>
           <RichTextEditor.ControlsGroup>
