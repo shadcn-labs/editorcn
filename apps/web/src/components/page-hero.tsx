@@ -18,15 +18,15 @@ export const PageHero = ({
   title,
   titleClassName,
 }: PageHeroProps) => (
-  <header className="relative flex flex-col items-center gap-4 text-center">
+  <header className="flex flex-col items-center gap-4 text-center">
     {showAnnouncement && (
-      <div className="absolute bottom-full left-1/2 mb-4 flex -translate-x-1/2">
+      <div className="mb-2">
         <Announcement />
       </div>
     )}
     <h1
       className={cn(
-        "from-foreground via-foreground to-foreground/65 bg-linear-to-b bg-clip-text text-4xl font-bold tracking-tight text-transparent sm:text-5xl md:text-6xl",
+        "from-foreground via-foreground to-foreground/65 bg-linear-to-b bg-clip-text text-4xl font-bold tracking-tighter text-balance text-transparent sm:text-5xl md:text-6xl",
         titleClassName
       )}
     >

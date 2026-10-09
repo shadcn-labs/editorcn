@@ -491,44 +491,55 @@ button.rte-control-button:active {
   }
 }
 
-/* ── Default variant: classic bordered toolbar ── */
+.rte-root[data-variant="default"] {
+  box-shadow: 0 1px 2px oklch(0 0 0 / 0.04);
+}
+.rte-root[data-variant="default"] .rte-toolbar {
+  gap: 0.25rem;
+  padding: 0.375rem 0.5rem;
+  background-color: var(--background);
+}
+.rte-root[data-variant="default"] .rte-content .ProseMirror {
+  padding: 1.25rem 1.5rem;
+}
 .rte-root[data-variant="default"] .rte-controls-group {
   display: flex;
   align-items: center;
-}
-.rte-root[data-variant="default"] .rte-controls-group > button {
-  border: 1px solid var(--border);
-  border-radius: 0;
-  min-width: 1.75rem;
-  height: 1.75rem;
-  background-color: var(--background);
-  color: var(--muted-foreground);
-  transition:
-    background-color 150ms ease-out,
-    color 150ms ease-out,
-    box-shadow 150ms ease-out;
+  gap: 0.125rem;
 }
 .rte-root[data-variant="default"]
   .rte-controls-group
-  > button:not(:last-of-type) {
-  border-inline-end-width: 0;
+  + .rte-controls-group::before {
+  content: "";
+  width: 1px;
+  height: 1.25rem;
+  margin-inline: 0.25rem;
+  background-color: var(--border);
+  flex-shrink: 0;
 }
-.rte-root[data-variant="default"] .rte-controls-group > button:first-of-type {
-  border-start-start-radius: calc(var(--radius) - 2px);
-  border-end-start-radius: calc(var(--radius) - 2px);
+.rte-root[data-variant="default"] .rte-controls-group > button {
+  border: none;
+  border-radius: calc(var(--radius) - 2px);
+  min-width: 2rem;
+  height: 2rem;
+  background-color: transparent;
+  color: var(--foreground);
+  transition:
+    background-color 150ms ease-out,
+    color 150ms ease-out;
 }
-.rte-root[data-variant="default"] .rte-controls-group > button:last-of-type {
-  border-start-end-radius: calc(var(--radius) - 2px);
-  border-end-end-radius: calc(var(--radius) - 2px);
+.rte-root[data-variant="default"]
+  .rte-controls-group
+  > button:hover:not(:disabled) {
+  background-color: var(--muted);
 }
-.rte-root[data-variant="default"] .rte-controls-group > button:hover {
-  background-color: var(--accent);
-  color: var(--accent-foreground);
+.rte-root[data-variant="default"] .rte-controls-group > button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
 }
 .rte-root[data-variant="default"] .rte-controls-group > button:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--primary) 40%, transparent);
-  outline-offset: -2px;
-  background-color: color-mix(in srgb, var(--primary) 8%, transparent);
+  outline-offset: 1px;
 }
 .rte-root[data-variant="default"] .rte-controls-group > button[data-state="on"],
 .rte-root[data-variant="default"]
@@ -536,7 +547,6 @@ button.rte-control-button:active {
   > button[aria-pressed="true"] {
   background-color: var(--accent);
   color: var(--accent-foreground);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 /* ── Subtle variant: elevated card with soft toolbar ── */
