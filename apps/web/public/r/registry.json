@@ -561,6 +561,83 @@
       "dependencies": [
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
+      ],
+      "description": "An always-visible AI prompt bar pinned to the bottom of the editor. Provider-agnostic: you pass an onGenerate function and connect it to any model or backend.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ai/toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ai/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
+        }
+      ],
+      "name": "ai",
+      "title": "AI Assistant",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <1.0.0",
         "@tiptap/extension-table@>=3.0.0 <4",
         "@tiptap/extension-table-row@>=3.0.0 <4",

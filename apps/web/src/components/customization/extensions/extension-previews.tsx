@@ -8,6 +8,8 @@ import {
 } from "@editorcn/block-editor";
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
 import { RichTextEditor } from "@editorcn/editor";
+import type { AiGenerateInput } from "@editorcn/extensions/ai";
+import { AiPromptBar } from "@editorcn/extensions/ai-toolbar";
 import { ToolbarProvider } from "@editorcn/extensions/core";
 import {
   ImagePlaceholder,
@@ -26,6 +28,7 @@ import type { ReactNode } from "react";
 import "@editorcn/block-editor/style.css";
 import "@editorcn/editor/style.css";
 import "@editorcn/extensions/ui/style.css";
+import "@editorcn/extensions/ai/style.css";
 import "@editorcn/extensions/table/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 
@@ -139,6 +142,102 @@ const BlockEditorPreview = ({ config }: { config: PreviewConfig }) => {
   );
 };
 
+const TYPOS: Record<string, string> = {
+  realy: "really",
+  recieve: "receive",
+  seperate: "separate",
+  teh: "the",
+  trafic: "traffic",
+};
+
+const sentences = (text: string) =>
+  text.split(/(?<=[.?!])\s+/).filter((sentence) => sentence.trim() !== "");
+
+const list = (title: string, items: string[]) =>
+  items.length === 0
+    ? `<p><strong>${title}:</strong> none found.</p>`
+    : `<p><strong>${title}</strong></p><ul>${items.map((item) => `<li><p>${item}</p></li>`).join("")}</ul>`;
+
+const mockGenerate = async ({ prompt, context, task }: AiGenerateInput) => {
+  const delay = Promise.withResolvers<null>();
+  setTimeout(() => delay.resolve(null), 700);
+  await delay.promise;
+  switch (task) {
+    case "fix-spelling": {
+      return context.replaceAll(/\b\w+\b/g, (word) => {
+        const fixed = TYPOS[word.toLowerCase()];
+        if (!fixed) {
+          return word;
+        }
+        return word[0] === word[0].toUpperCase()
+          ? fixed[0].toUpperCase() + fixed.slice(1)
+          : fixed;
+      });
+    }
+    case "tighten": {
+      return context
+        .replaceAll(/\b(really|realy|basically|actually|just|very)\s+/gi, "")
+        .replaceAll(/\bin order to\b/gi, "to");
+    }
+    case "summary": {
+      const summary = context
+        .split("\n")
+        .map((line) => sentences(line)[0])
+        .filter(Boolean)
+        .slice(0, 2)
+        .join(" ");
+      return `<p><strong>Summary:</strong> ${summary}</p>`;
+    }
+    case "checklist": {
+      return list(
+        "Checklist",
+        [...context.matchAll(/Todo:\s*([^.]+)/gi)].map((match) => match[1])
+      );
+    }
+    case "open-questions": {
+      return list(
+        "Open questions",
+        sentences(context.replaceAll("\n", " ")).filter(
+          (sentence) => sentence.includes("?") || /\bTBD\b/.test(sentence)
+        )
+      );
+    }
+    case "owners": {
+      return list("Owners", [...new Set(context.match(/@\w+/g))]);
+    }
+    default: {
+      return `(Demo) You asked: "${prompt}". Connect a real model with onGenerate.`;
+    }
+  }
+};
+
+const AiPreview = () => {
+  const editor = useEditor({
+    content:
+      "<p>We will realy only ship the new search when latency is basically under 200 ms. Teh rollout starts with 5% of trafic.</p><p>Rollout is owned by @maya and metrics are owned by @sam.</p><p>Should we keep the old index as a fallback? Pricing for the paid tier is TBD.</p><p>Todo: update the docs. Todo: notify support. Todo: add dashboards.</p>",
+    extensions: [StarterKit],
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
+  });
+
+  return (
+    <div className="overflow-hidden rounded-md border border-border">
+      <RichTextEditor editor={editor}>
+        <RichTextEditor.Toolbar>
+          <RichTextEditor.ControlsGroup>
+            <RichTextEditor.Bold />
+            <RichTextEditor.Italic />
+            <RichTextEditor.Undo />
+            <RichTextEditor.Redo />
+          </RichTextEditor.ControlsGroup>
+        </RichTextEditor.Toolbar>
+        <RichTextEditor.Content />
+        <AiPromptBar editor={editor} onGenerate={mockGenerate} />
+      </RichTextEditor>
+    </div>
+  );
+};
+
 export const ExtensionPreview = ({
   slug,
   editor = "toolbar",
@@ -146,6 +245,9 @@ export const ExtensionPreview = ({
   slug: string;
   editor?: "toolbar" | "block";
 }) => {
+  if (slug === "ai") {
+    return <AiPreview />;
+  }
   const config = PREVIEW_CONFIGS[slug];
 
   if (editor === "block") {

@@ -1,0 +1,157 @@
+---
+title: AI Assistant
+description: An always-visible AI prompt bar pinned to the bottom of the editor. Bring any model — you connect it with a single function.
+---
+
+The AI Assistant extension adds an `AiPromptBar` pinned to the bottom of any toolbar editor. Type a prompt, or pick a preset from the **Tasks** menu (fix spelling, tighten wording, write a summary, add a checklist, list open questions or owners). The context chip shows what is sent along: the selection, or the whole document when nothing is selected.
+
+<ExtensionPreview slug="ai" editor="toolbar" />
+
+The demo above runs on mock responses, so no API key is needed. The extension itself ships no AI SDK and no provider: you pass an `onGenerate` function and connect it to any model, provider or backend.
+
+## Installation
+
+Run the following command to install the extension, its prompt bar component and the shared extension runtime:
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/ai.json"
+```
+
+This installs `extensions/ai` and `extensions/core/`. AI styles are installed as `extensions/ai/style.css`. No AI packages are added — install whichever SDK your backend uses.
+
+To install the files manually instead, copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/ai).
+
+## Usage
+
+Render `AiPromptBar` after `RichTextEditor.Content` and pass the editor and an `onGenerate` function. The bar is `position: sticky` at the bottom of the editor, so it stays visible while a long document scrolls. No tiptap extension registration is needed.
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+
+import { RichTextEditor } from "@/components/editor";
+import { AiPromptBar } from "@/components/extensions/ai/toolbar";
+
+import "@/components/editor/style.css";
+import "@/components/extensions/ai/style.css";
+
+export function MyEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [StarterKit],
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+      <RichTextEditor.Content />
+      <AiPromptBar
+        editor={editor}
+        onGenerate={async (input) => {
+          const res = await fetch("/api/ai", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(input),
+          });
+          if (!res.ok) throw new Error("AI request failed.");
+          const { text } = await res.json();
+          return text;
+        }}
+      />
+    </RichTextEditor>
+  );
+}
+```
+
+## Connect any model
+
+`onGenerate` receives `{ prompt, context, scope, task }` and returns the text or HTML to insert. For presets, `prompt` already holds the task's instruction, so a generic backend handles them without extra code. Keep provider keys on your server and call the model from a route. With the [AI SDK](https://ai-sdk.dev), switching providers is a one-line change:
+
+```ts title="app/api/ai/route.ts"
+import { generateText } from "ai";
+import { openai } from "@ai-sdk/openai";
+// import { anthropic } from "@ai-sdk/anthropic";
+// import { google } from "@ai-sdk/google";
+
+export async function POST(request: Request) {
+  const { prompt, context } = await request.json();
+
+  const { text } = await generateText({
+    model: openai("gpt-4o-mini"),
+    // model: anthropic("claude-sonnet-5-5"),
+    // model: google("gemini-2.5-flash"),
+    system:
+      "You are a writing assistant inside a rich text editor. Follow the instruction about the provided text. Respond with plain text only.",
+    prompt: `Text:\n${context}\n\nInstruction:\n${prompt}`,
+  });
+
+  return Response.json({ text: text.trim() });
+}
+```
+
+Any other backend works the same way — OpenRouter, a local Ollama server, or your own API. Throw an error from `onGenerate` to show its message under the bar.
+
+## Settings
+
+### `onGenerate`
+
+Called on submit and when a task is picked. Receives the `prompt`, the `context` text, the `scope` (`"selection"` or `"document"`) and the `task` id when a preset was used. Return plain text or HTML to insert.
+
+```tsx
+<AiPromptBar
+  editor={editor}
+  onGenerate={async ({ prompt, context, scope }) =>
+    myBackend.ask(prompt, context)
+  }
+/>
+```
+
+### `tasks`
+
+Preset actions shown in the **Tasks** menu, grouped by `group`. Defaults to `DEFAULT_AI_TASKS`. `apply: "replace"` replaces the selection (or the whole document when nothing is selected); `apply: "append"` inserts after the selection (or at the end of the document). Pass `[]` to hide the menu.
+
+```tsx
+import { DEFAULT_AI_TASKS } from "@/components/extensions/ai";
+
+<AiPromptBar
+  editor={editor}
+  onGenerate={generate}
+  tasks={[
+    ...DEFAULT_AI_TASKS,
+    {
+      id: "translate",
+      group: "Edit",
+      label: "Translate to Spanish",
+      prompt: "Translate the text to Spanish.",
+      apply: "replace",
+    },
+  ]}
+/>;
+```
+
+### `disabled`
+
+Disables the bar, for example until the user signs in.
+
+```tsx
+<AiPromptBar editor={editor} onGenerate={generate} disabled={!user} />
+```
+
+### `labels`
+
+Override the prompt placeholder, submit label, Tasks chip and context chip labels.
+
+```tsx
+<AiPromptBar
+  editor={editor}
+  onGenerate={generate}
+  labels={{ placeholder: "Rewrite this…", submit: "Go" }}
+/>
+```
