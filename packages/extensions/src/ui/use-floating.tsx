@@ -101,7 +101,17 @@ export const useFloating = ({
     };
     window.addEventListener("scroll", handleScroll, true);
     window.addEventListener("resize", handleResize);
+    // The trigger can also move without a scroll or resize — a table grip
+    // shifts when its row or column is added or deleted. Follow it per frame
+    // so the open menu never detaches from its trigger.
+    let frame: number;
+    const follow = () => {
+      applyPosition();
+      frame = requestAnimationFrame(follow);
+    };
+    frame = requestAnimationFrame(follow);
     return () => {
+      cancelAnimationFrame(frame);
       window.removeEventListener("scroll", handleScroll, true);
       window.removeEventListener("resize", handleResize);
     };

@@ -5,7 +5,7 @@ description: A table node with a toolbar that inserts tables from a grid-size pi
 
 The Table extension extends Tiptap's `Table` with a `TableToolbar` that inserts a table by dragging across a grid-size picker (like Notion), then manages it while the cursor is inside a table: add or delete rows and columns, merge and split cells, and toggle the header row. Columns are resizable by dragging their edges. Each column has a fixed default width (8rem), so adding a column extends the table and shows a horizontal scroll instead of shrinking existing columns.
 
-While the cursor is inside a table, a hover overlay shows three-dot menu handles at the top of the hovered column and to the left of the hovered row. The handles detect hover over the entire `.tableWrapper` container, so they stay visible when the pointer is in the scroll area around the table. Hover a handle to reveal its `⋮` menu, or click it to open that row's or column's actions, or use the toolbar control. The `Gapcursor` extension is bundled automatically, so you can click between blocks to move the cursor into or past a table with no extra setup.
+While the cursor is inside a table, a hover overlay shows three-dot menu handles at the top of the hovered column and to the left of the hovered row. The handles detect hover over the entire `.tableWrapper` container, so they stay visible when the pointer is in the scroll area around the table. They are positioned from the editor's visible box, so they track the table while it scrolls sideways and are dropped as soon as the table, row or column scrolls out of view. Hover a handle to reveal its `⋮` menu, or click it to open that row's or column's actions, or use the toolbar control. The `Gapcursor` extension is bundled automatically, so you can click between blocks to move the cursor into or past a table with no extra setup.
 
 <ExtensionPreview slug="table" editor="toolbar" />
 
@@ -124,15 +124,17 @@ function MyBlockEditor() {
   });
 
   return (
-    <>
+    <div className="relative">
       <BlockEditor editor={editor} />
       <TableHoverOverlay editor={editor} />
-    </>
+    </div>
   );
 }
 ```
 
-Render `TableHoverOverlay` next to `BlockEditor`. Its hover handles on the hovered row and column are what add or delete rows and columns, merge or split cells, and toggle the header row — the `TableToolbar` control is only needed in toolbar editors.
+Render `TableHoverOverlay` next to `BlockEditor`, inside a positioned (`relative`) container so the overlay anchors to the editor. The overlay measures its controls against the editor's visible box and clips them to it, so a table that scrolls out of view drops its handles instead of leaving them floating over the surrounding UI. Its hover handles on the hovered row and column are what add or delete rows and columns, merge or split cells, and toggle the header row — the `TableToolbar` control is only needed in toolbar editors.
+
+Do not put `overflow-hidden` on that container: the editor's own bubble menu and drag handle are positioned inside it and would be clipped along with the table handles.
 
 ## Settings
 

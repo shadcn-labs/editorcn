@@ -132,7 +132,7 @@ const BlockEditorPreview = ({ config }: { config: PreviewConfig }) => {
   });
 
   return (
-    <div className="overflow-hidden rounded-md border border-border">
+    <div className="relative rounded-md border border-border">
       <BlockEditor editor={editor} />
       <TableHoverOverlay editor={editor} />
     </div>

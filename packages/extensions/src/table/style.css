@@ -1,6 +1,15 @@
 /* Table extension styles using shadcn CSS variables */
 
-/* ── Hover overlay ── */
+/* ── Hover overlay ──
+   The overlay is a zero-size origin box: the controls are absolutely positioned
+   and measured against it every frame. Keeping it zero-size means the handles
+   never take part in layout.
+
+   The inner clip box is sized and positioned to the editor's visible box every
+   frame and clips the handles to it, so a table scrolled out of view cannot
+   leave handles floating over the surrounding UI. Clipping here rather than on
+   the editor's own wrapper keeps the editor's bubble menu and drag handle
+   intact. */
 .ext-table-overlay {
   position: absolute;
   left: 0;
@@ -8,6 +17,19 @@
   width: 0;
   height: 0;
   overflow: visible;
+}
+
+.ext-table-clip {
+  position: absolute;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* The handles stay interactive even though the clip box ignores pointer
+   events, so hovering a handle still reaches the editor's pointer handlers. */
+.ext-table-control,
+.ext-table-add {
+  pointer-events: auto;
 }
 
 /* ── Table node view wrapper ──

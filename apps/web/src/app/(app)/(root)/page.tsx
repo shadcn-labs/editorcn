@@ -133,8 +133,9 @@ export function MyEditor() {
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 
-      <RichTextEditor.Content />
-      <TableHoverOverlay editor={editor} />
+      <RichTextEditor.Content>
+        <TableHoverOverlay editor={editor} />
+      </RichTextEditor.Content>
     </RichTextEditor>
   );
 }`;
@@ -233,7 +234,7 @@ export function MyBlockEditor() {
   });
 
   return (
-    <>
+    <div className="relative overflow-hidden">
       <BlockEditor
         editor={editor}
         icons={{
@@ -242,7 +243,7 @@ export function MyBlockEditor() {
         }}
       />
       <TableHoverOverlay editor={editor} />
-    </>
+    </div>
   );
 }`;
 

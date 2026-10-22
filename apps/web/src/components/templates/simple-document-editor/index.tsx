@@ -93,7 +93,7 @@ export const SimpleDocumentEditor = ({
   return (
     <div
       className={cn(
-        "bg-background text-foreground flex max-h-[41rem] flex-col overflow-hidden rounded-xl border shadow-sm",
+        "relative overflow-hidden bg-background text-foreground flex max-h-[41rem] flex-col rounded-xl border shadow-sm",
         className
       )}
     >
