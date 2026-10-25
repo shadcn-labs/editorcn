@@ -3,6 +3,7 @@ export const ROUTES = {
   AGENT_SKILLS_SITE_SKILL: "/.well-known/agent-skills/site-skill.md",
   API_CATALOG: "/.well-known/api-catalog",
   API_STATUS: "/api/status",
+  BLOG: "/blog",
   DOCS: "/docs",
   DOCS_BLOCK_EDITOR: "/docs/block-editor",
   DOCS_CHANGELOG: "/docs/changelog",

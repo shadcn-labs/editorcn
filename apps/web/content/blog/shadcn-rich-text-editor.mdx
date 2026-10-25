@@ -1,0 +1,303 @@
+---
+title: How to Add a Rich Text Editor to a shadcn/ui App
+description: A step-by-step guide to adding a Tiptap-based rich text editor to a Next.js app that uses shadcn/ui, from install to saving and rendering content.
+date: "2026-10-25"
+author: Abdullah Mukadam
+---
+
+shadcn/ui gives you buttons, dialogs, inputs, and dozens of other components, but no rich text editor. When you need one for blog posts, comments, notes, or a CMS, you usually end up wiring [Tiptap](https://tiptap.dev/) yourself and building a toolbar that matches the rest of your UI.
+
+[editorcn](/docs) is that missing piece. It's a set of Tiptap-based editors installed with the shadcn CLI and styled with your shadcn theme tokens. Like shadcn/ui, the source is copied into your project, so you own the code.
+
+In this guide you'll:
+
+1. Install the editor with the shadcn CLI
+2. Render a toolbar editor in a Next.js page
+3. Save the content
+4. Render saved content safely with the Static Renderer
+
+## Prerequisites
+
+- React 18 or 19
+- A project with shadcn/ui and Tailwind CSS v4 set up. If you don't have one yet, run `npx shadcn@latest init`.
+- Tiptap v3. The CLI installs it for you.
+
+## Step 1: Add the editorcn registry
+
+editorcn is a [shadcn registry](/docs/registry). Add it to `components.json` so the CLI knows where to find it:
+
+```json title="components.json"
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "registries": {
+    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+  }
+}
+```
+
+## Step 2: Install the editor
+
+```bash
+npx shadcn@latest add @editorcn/editor
+```
+
+The CLI copies the editor source into `components/editor/` and installs the Tiptap packages it needs. Nothing goes into `node_modules` as a black box. Toolbar controls, labels, icons, and styles are all files you can edit. See [Code Ownership](/docs/ownership) for the full file tree.
+
+<Callout title="Already using Tiptap?">
+  All `@tiptap/*` packages must be on the same version. If your project
+  already has older 3.x packages, update them first (for example `npm install
+  @tiptap/react@latest @tiptap/pm@latest @tiptap/starter-kit@latest`) to avoid
+  an `ERESOLVE` peer dependency error.
+</Callout>
+
+## Step 3: Import the styles
+
+Import your shadcn globals first, then the editor styles. The editor CSS reads the theme variables your globals define, so the order matters:
+
+```tsx title="app/layout.tsx"
+import "@/app/globals.css";
+import "@/components/editor/style.css";
+```
+
+## Step 4: Create the editor component
+
+The editor is a UI layer on top of Tiptap's `useEditor` hook. You configure Tiptap extensions as usual, and `RichTextEditor` gives you the toolbar, controls, and content area.
+
+```tsx title="components/post-editor.tsx"
+"use client";
+
+import { Placeholder } from "@tiptap/extension-placeholder";
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { Link, RichTextEditor } from "@/components/editor";
+
+export function PostEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
+    extensions: [
+      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      Link,
+      Placeholder.configure({ placeholder: "Write something..." }),
+    ],
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar sticky>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Strikethrough />
+          <RichTextEditor.Code />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.H1 />
+          <RichTextEditor.H2 />
+          <RichTextEditor.H3 />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.BulletList />
+          <RichTextEditor.OrderedList />
+          <RichTextEditor.Blockquote />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Link />
+          <RichTextEditor.Unlink />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Undo />
+          <RichTextEditor.Redo />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+Two settings matter in Next.js:
+
+- **`"use client"`**: the editor runs in the browser, so the component has to be a Client Component.
+- **`immediatelyRender: false`**: this stops Tiptap from rendering during server rendering, which avoids hydration mismatches.
+
+Now drop it into any page:
+
+```tsx title="app/new-post/page.tsx"
+import { PostEditor } from "@/components/post-editor";
+
+export default function NewPostPage() {
+  return <PostEditor />;
+}
+```
+
+That's a working editor that matches your shadcn theme in light and dark mode.
+
+### Adding more controls
+
+Each toolbar control matches a Tiptap extension. Add the extension, then the control. For example, text alignment needs `@tiptap/extension-text-align`:
+
+```tsx
+import { TextAlign } from "@tiptap/extension-text-align";
+
+// in extensions:
+TextAlign.configure({ types: ["heading", "paragraph"] }),
+
+// in the toolbar:
+<RichTextEditor.ControlsGroup>
+  <RichTextEditor.AlignLeft />
+  <RichTextEditor.AlignCenter />
+  <RichTextEditor.AlignRight />
+</RichTextEditor.ControlsGroup>
+```
+
+The same pattern works for highlight, subscript, superscript, YouTube and Twitter embeds, and the [table](/docs/extensions/table) and [image](/docs/extensions/image-placeholder) extensions. The [Toolbar Editor docs](/docs/editor) list every control.
+
+## Step 5: Save the content
+
+Tiptap gives you two formats:
+
+```ts
+const json = editor.getJSON(); // ProseMirror JSON document
+const html = editor.getHTML(); // HTML string
+```
+
+**Store JSON when you can.** It's structured, easy to validate, and can't carry script tags the way an HTML string can. Use HTML when another system needs it, for example an email template. The [serialization format docs](/docs/editor/serialization-format) cover both.
+
+A minimal save button:
+
+```tsx
+<button
+  type="button"
+  onClick={() => savePost(editor?.getJSON())}
+>
+  Publish
+</button>
+```
+
+## Step 6: Render saved content
+
+To show a published post, you don't need an editor instance. Install the Static Renderer:
+
+```bash
+npx shadcn@latest add @editorcn/static-renderer
+```
+
+Pass it the saved JSON and the same extensions the editor used:
+
+```tsx title="app/posts/[id]/page.tsx"
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { Link } from "@/components/editor";
+import { StaticRenderer } from "@/components/static-renderer";
+import "@/components/static-renderer/style.css";
+
+export default async function PostPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const post = await getPost(id);
+
+  return (
+    <StaticRenderer
+      content={post.content}
+      extensions={[StarterKit, Link]}
+    />
+  );
+}
+```
+
+JSON rendering produces React elements on the server, so the page is fast, fully indexable, and stored content can't inject scripts. If you render HTML strings instead, sanitize them first when users can submit content. See the [Static Renderer docs](/docs/static-renderer) for details.
+
+## Want a Notion-style editor instead?
+
+If you prefer slash commands, drag handles, and a floating bubble menu over a fixed toolbar, install the block editor:
+
+```bash
+npx shadcn@latest add @editorcn/block-editor
+```
+
+```tsx
+"use client";
+
+import { Placeholder } from "@tiptap/extension-placeholder";
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import {
+  BlockEditor,
+  SlashCommand,
+  getSlashCommandSuggestion,
+} from "@/components/block-editor";
+import "@/components/block-editor/style.css";
+
+export function NotesEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
+    extensions: [
+      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      Placeholder.configure({ placeholder: "Type / for commands..." }),
+      SlashCommand.configure({ suggestion: getSlashCommandSuggestion() }),
+    ],
+  });
+
+  return <BlockEditor editor={editor} />;
+}
+```
+
+Both editors save the same Tiptap JSON, so the Static Renderer works for either one. The [Block Editor docs](/docs/block-editor) cover custom slash commands.
+
+## Customizing the editor
+
+Because the code lives in your project, customizing it is just editing files:
+
+- **Theme**: the editor uses your shadcn CSS variables, so changing your theme changes the editor. See [Styling](/docs/styling).
+- **Variants**: `RichTextEditor` takes `variant="default" | "subtle" | "compact"`.
+- **Icons**: icon sets for Phosphor, Tabler, HugeIcons, and Remix Icon match your `components.json` `iconLibrary`. See [Customization](/docs/customization).
+- **Labels**: pass `labels` to override any button label or tooltip, for example to translate the UI.
+
+## Skip the setup with a template
+
+If you need a full feature rather than a bare editor, [templates](/docs/templates) install a complete, ready-made UI with one command. They include a comment box with replies and reactions, and a document editor with a floating toolbar and collaborator avatars:
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/comment-box.json"
+```
+
+## FAQ
+
+### Does shadcn/ui have a rich text editor?
+
+No. shadcn/ui doesn't ship a rich text editor. editorcn fills that gap with Tiptap-based editors that install through the same shadcn CLI and use the same theme tokens.
+
+### Is editorcn free?
+
+Yes. editorcn is open source and [available on GitHub](https://github.com/shadcn-labs/editorcn).
+
+### Can I install it from npm instead?
+
+Yes. `npm install @editorcn/editor` works too, but you won't own the source. The [Getting Started guide](/docs/getting-started) lists the npm commands and peer dependencies.
+
+### Does it work with Base UI as well as Radix?
+
+Yes. Templates work with shadcn/ui built on either Radix UI or Base UI.
+
+### Should I store HTML or JSON?
+
+JSON, in most cases. It's safer to render and easier to change later. Use `generateHTML(json, extensions)` from `@tiptap/core` when you need HTML on demand.
+
+## Next steps
+
+- [Getting Started](/docs/getting-started): full setup for both editors
+- [Toolbar Editor reference](/docs/editor): every control and prop
+- [Extensions](/docs/extensions): tables, images, and more
+- [Static Renderer](/docs/static-renderer): render saved content anywhere
