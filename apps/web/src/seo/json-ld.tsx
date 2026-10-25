@@ -47,6 +47,34 @@ export const WebSiteJsonLd = () => (
   />
 );
 
+export const BlogPostingJsonLd = ({
+  author,
+  date,
+  description,
+  path,
+  title,
+}: {
+  author: string;
+  date: string;
+  description?: string;
+  path: string;
+  title: string;
+}) => (
+  <JsonLdScript
+    data={{
+      "@context": "https://schema.org",
+      "@type": "BlogPosting",
+      author: { "@type": "Person", name: author },
+      datePublished: date,
+      description,
+      headline: title,
+      image: SITE.OG_IMAGE,
+      mainEntityOfPage: `${SITE.URL}${path}`,
+      publisher: { "@type": "Organization", name: SITE.NAME, url: SITE.URL },
+    }}
+  />
+);
+
 export const SoftwareApplicationJsonLd = () => (
   <JsonLdScript
     data={{
