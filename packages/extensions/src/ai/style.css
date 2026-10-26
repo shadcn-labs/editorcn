@@ -1,0 +1,181 @@
+/* AI assistant styles using shadcn CSS variables. */
+
+.ext-ai-bar {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  padding: 0.75rem;
+  background: linear-gradient(to top, var(--background) 70%, transparent);
+}
+
+.ext-ai-panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 36rem;
+  margin-inline: auto;
+  border: 1px solid transparent;
+  border-radius: calc(var(--radius) + 6px);
+  background:
+    linear-gradient(var(--card), var(--card)) padding-box,
+    linear-gradient(100deg, #22d3ee, #818cf8 50%, #f472b6) border-box;
+  box-shadow:
+    0 0 18px -6px rgb(34 211 238 / 0.45),
+    0 0 18px -6px rgb(244 114 182 / 0.45);
+  transition: opacity 150ms ease-out;
+}
+
+.ext-ai-panel[data-disabled] {
+  opacity: 0.6;
+}
+
+.ext-ai-context {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.ext-ai-tasks-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  height: 1.5rem;
+  padding: 0 0.5rem 0 0.625rem;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  background: var(--secondary);
+  color: var(--secondary-foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 150ms ease-out;
+}
+
+.ext-ai-tasks-trigger:hover:not(:disabled) {
+  background: var(--accent);
+}
+
+.ext-ai-tasks-trigger:disabled {
+  cursor: not-allowed;
+}
+
+.ext-ai-tasks-trigger:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.ext-ai-tasks-trigger svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  transition: transform 150ms ease-out;
+}
+
+.ext-ai-tasks-trigger[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.ext-ai-tasks {
+  width: 15rem;
+  max-width: calc(100vw - 2rem);
+}
+
+.ext-ai-tasks-label {
+  margin: 0;
+  padding: 0.375rem 0.5rem 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--muted-foreground);
+}
+
+.ext-ai-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.75rem;
+  line-height: 1;
+  color: var(--muted-foreground);
+}
+
+.ext-ai-chip svg {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.ext-ai-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.5rem 0.5rem 0.75rem;
+}
+
+.ext-ai-icon {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+  color: var(--muted-foreground);
+}
+
+.ext-ai-input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  font-size: 0.875rem;
+  color: var(--foreground);
+}
+
+.ext-ai-input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.ext-ai-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 9999px;
+  background: var(--primary);
+  color: var(--primary-foreground);
+  cursor: pointer;
+  transition: opacity 150ms ease-out;
+}
+
+.ext-ai-submit:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.ext-ai-submit:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.ext-ai-submit svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.ext-ai-spin {
+  animation: ext-ai-spin 1s linear infinite;
+}
+
+@keyframes ext-ai-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.ext-ai-error {
+  max-width: 36rem;
+  margin: 0.5rem auto 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--destructive);
+}
