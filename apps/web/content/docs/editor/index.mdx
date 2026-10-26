@@ -51,10 +51,10 @@ The `RichTextEditor` component does not manage state for you — controls just e
 "use client";
 
 import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
-import TextAlign from "@tiptap/extension-text-align";
-import Placeholder from "@tiptap/extension-placeholder";
+import { StarterKit } from "@tiptap/starter-kit";
+import { Underline } from "@tiptap/extension-underline";
+import { TextAlign } from "@tiptap/extension-text-align";
+import { Placeholder } from "@tiptap/extension-placeholder";
 import { RichTextEditor, Link } from "@/components/editor";
 import "@/components/editor/style.css";
 
@@ -288,9 +288,9 @@ npm install @tiptap/extension-text-style @tiptap/extension-color @tiptap/extensi
 ### Register the extensions
 
 ```tsx
-import TextStyle from "@tiptap/extension-text-style";
-import Color from "@tiptap/extension-color";
-import Highlight from "@tiptap/extension-highlight";
+import { TextStyle } from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
+import { Highlight } from "@tiptap/extension-highlight";
 
 const editor = useEditor({
   extensions: [
@@ -474,7 +474,7 @@ npm install @tiptap/extension-text-align
 ```
 
 ```tsx
-import TextAlign from "@tiptap/extension-text-align";
+import { TextAlign } from "@tiptap/extension-text-align";
 
 const editor = useEditor({
   extensions: [TextAlign.configure({ types: ["heading", "paragraph"] })],
@@ -610,7 +610,7 @@ npm install @tiptap/extension-placeholder
 ```
 
 ```tsx
-import Placeholder from "@tiptap/extension-placeholder";
+import { Placeholder } from "@tiptap/extension-placeholder";
 
 const editor = useEditor({
   extensions: [
@@ -629,7 +629,7 @@ To control the editor state, use the `onUpdate` callback on the `useEditor` hook
 
 ```tsx
 import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { StarterKit } from "@tiptap/starter-kit";
 import { RichTextEditor } from "@/components/editor";
 
 interface Props {

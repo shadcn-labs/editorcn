@@ -74,7 +74,7 @@ const DEMO_CONTENT = `
 </table>
 <h2>Code Block with Syntax Highlighting</h2>
 <pre><code class="language-javascript">import { BlockEditor } from "@editorcn/block-editor";
-import StarterKit from "@tiptap/starter-kit";
+import { StarterKit } from "@tiptap/starter-kit";
 
 function MyEditor() {
   const editor = useEditor({

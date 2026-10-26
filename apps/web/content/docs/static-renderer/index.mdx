@@ -110,7 +110,7 @@ function PostView({ html }: { html: string }) {
 
 ```tsx
 import { StaticRenderer } from "@editorcn/static-renderer";
-import StarterKit from "@tiptap/starter-kit";
+import { StarterKit } from "@tiptap/starter-kit";
 
 const extensions = [StarterKit];
 
@@ -164,7 +164,7 @@ export const Media = Node.create({
 
 import { RichTextEditor } from "@editorcn/editor";
 import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
+import { StarterKit } from "@tiptap/starter-kit";
 import { Media } from "./media";
 
 const extensions = [StarterKit, Media];
@@ -211,7 +211,7 @@ the reader-facing side of your app.
 
 ```tsx
 import { StaticRenderer } from "@editorcn/static-renderer";
-import StarterKit from "@tiptap/starter-kit";
+import { StarterKit } from "@tiptap/starter-kit";
 import type { Node } from "@tiptap/pm/model";
 import { Media } from "./media";
 
