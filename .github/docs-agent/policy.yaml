@@ -1,0 +1,36 @@
+version: 1
+default: block
+rules:
+  - id: only-editorcn
+    match: { tool: "*" }
+    except: { args: { repo: { eq: shadcn-labs/editorcn } } }
+    decision: block
+    reason: The docs agent only works on shadcn-labs/editorcn
+
+  - id: write-docs-only
+    match: { tool: repo_write_file }
+    except:
+      args:
+        {
+          path:
+            { regex: '^apps/web/content/docs/([\w-]+/)*[\w-]+\.(mdx|json)$' },
+        }
+    decision: block
+    reason: The agent may only edit docs and changelog files
+
+  - id: agent-branch-only
+    match: { tool: [repo_write_file, git_create_branch, github_open_pr] }
+    except: { args: { branch: { regex: '^docs-agent/[\w.-]+$' } } }
+    decision: block
+    reason: Never write to main or to contributor branches
+
+  - id: hold-open-pr
+    match: { tool: github_open_pr }
+    decision: hold
+    approvers: { roles: [admin, approver] }
+    timeoutSeconds: 1800
+    reason: A maintainer reviews the generated docs before the PR is opened
+
+  - id: allow-in-plan
+    match: { inPlan: true }
+    decision: allow
