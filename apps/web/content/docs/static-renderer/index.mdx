@@ -92,9 +92,11 @@ import "@editorcn/static-renderer/style.css";
 Pick a mode based on what you stored:
 
 - **HTML**: you saved `editor.getHTML()`. Simplest option; pass the string as
-  `content` and you're done.
+  `content`, and add `sanitize` if users can write it.
 - **JSON**: you saved `editor.getJSON()`, or render a document received from
   an API. Pass the document as `content` plus the `extensions` that built it.
+  JSON renders through React, never as raw HTML, so it is the safer choice for
+  user-generated content.
 
 ### HTML string
 
@@ -102,9 +104,51 @@ Pick a mode based on what you stored:
 import { StaticRenderer } from "@editorcn/static-renderer";
 
 function PostView({ html }: { html: string }) {
-  return <StaticRenderer content={html} />;
+  return <StaticRenderer content={html} sanitize />;
 }
 ```
+
+### Sanitizing HTML
+
+HTML strings are inserted with `dangerouslySetInnerHTML`. If the HTML can come
+from users (comments, posts, anything stored from a client), pass `sanitize`
+to prevent stored XSS:
+
+```tsx
+<StaticRenderer content={html} sanitize />
+```
+
+The built-in sanitizer works on the server and in the browser (it doesn't need
+`window`), so it is safe in React Server Components. It:
+
+- keeps only the tags and attributes the editors produce (headings, lists,
+  marks, links, images, tables, task lists, code blocks, and embeds)
+- removes `<script>`, `<style>`, SVG, forms, event handlers like `onerror`, and
+  any other unknown markup
+- strips `javascript:` and `data:` URLs from `href` and `src`, except raster
+  `data:image/*` sources on `<img>` (used by image uploads)
+- keeps inline styles limited to the properties the editors write (`color`,
+  `background-color`, `font-family`, `font-size`, `line-height`, `text-align`,
+  `width`, `min-width`)
+- allows `<iframe>` only from YouTube, Vimeo, and Twitter embed hosts over
+  HTTPS
+
+If your editor uses extensions that output other markup, pass your own
+sanitizer function instead. It receives the HTML string and returns the HTML to
+render:
+
+```tsx
+import DOMPurify from "isomorphic-dompurify";
+
+<StaticRenderer content={html} sanitize={(html) => DOMPurify.sanitize(html)} />;
+```
+
+The built-in sanitizer is also exported as `sanitizeHtml` if you need it
+outside the component.
+
+In development, `StaticRenderer` logs a one-time warning when it renders an
+HTML string without `sanitize`. If the HTML is trusted (for example, written
+only by your own team), pass `sanitize={false}` to silence it.
 
 ### JSON document
 
@@ -256,14 +300,15 @@ that wraps the image in a figure with a caption.
 `StaticRenderer` renders a wrapper with the `rte-static-renderer` class. It
 accepts the usual `HTMLAttributes` plus:
 
-| Prop                  | Type                                                          | Default | Description                                                         |
-| --------------------- | ------------------------------------------------------------- | ------- | ------------------------------------------------------------------- |
-| `content`             | `string \| JSONContent \| Node`                               | -       | HTML from `editor.getHTML()`, or a ProseMirror JSON document        |
-| `as`                  | `ElementType`                                                 | `"div"` | Root element to render                                              |
-| `className`           | `string`                                                      | -       | Merged with the wrapper class via `tailwind-merge`                  |
-| `extensions`          | `Extensions`                                                  | -       | Tiptap extensions used to render JSON content (JSON mode only)      |
-| `staticEditorOptions` | `StaticEditorOptions`                                         | -       | Editor-level options applied while rendering JSON                   |
-| `options`             | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>` | -       | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes |
+| Prop                  | Type                                                          | Default | Description                                                                                      |
+| --------------------- | ------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------ |
+| `content`             | `string \| JSONContent \| Node`                               | -       | HTML from `editor.getHTML()`, or a ProseMirror JSON document                                     |
+| `as`                  | `ElementType`                                                 | `"div"` | Root element to render                                                                           |
+| `className`           | `string`                                                      | -       | Merged with the wrapper class via `tailwind-merge`                                               |
+| `extensions`          | `Extensions`                                                  | -       | Tiptap extensions used to render JSON content (JSON mode only)                                   |
+| `staticEditorOptions` | `StaticEditorOptions`                                         | -       | Editor-level options applied while rendering JSON                                                |
+| `options`             | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>` | -       | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes                              |
+| `sanitize`            | `boolean \| (html: string) => string`                         | -       | Sanitize HTML strings with the built-in allowlist (`true`) or your own function (HTML mode only) |
 
 ## Styling
 
@@ -313,14 +358,17 @@ Wrap the renderer in a container and scope your overrides:
 
 ## Without the component
 
-Prefer plain HTML? Add the `rte-static-renderer` class yourself:
+Prefer plain HTML? Add the `rte-static-renderer` class yourself, and run
+user-written HTML through `sanitizeHtml` first:
 
 ```tsx
+import { sanitizeHtml } from "@editorcn/static-renderer";
+
 function RenderContent({ html }: { html: string }) {
   return (
     <div
       className="rte-static-renderer"
-      dangerouslySetInnerHTML={{ __html: html }}
+      dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
     />
   );
 }

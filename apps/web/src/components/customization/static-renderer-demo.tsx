@@ -169,7 +169,7 @@ export const StaticRendererDemo = () => {
             Static output — HTML
           </div>
           <div className="p-5">
-            <StaticRenderer content={doc} />
+            <StaticRenderer content={doc} sanitize />
           </div>
         </div>
         <div className="overflow-hidden rounded-md border border-border">

@@ -22,17 +22,29 @@
   "scripts": {
     "build": "tsup && node -e \"require('fs').copyFileSync('src/style.css','dist/style.css')\"",
     "dev": "tsup --watch",
+    "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "pnpm build"
   },
   "dependencies": {
     "clsx": "^2.1.1",
-    "tailwind-merge": "^3.0.0"
+    "tailwind-merge": "^3.0.0",
+    "xss": "^1.0.17"
   },
   "devDependencies": {
+    "@tiptap/extension-highlight": "^3.30.5",
+    "@tiptap/extension-image": "^3.30.5",
+    "@tiptap/extension-list": "^3.30.5",
+    "@tiptap/extension-subscript": "^3.30.5",
+    "@tiptap/extension-superscript": "^3.30.5",
+    "@tiptap/extension-table": "^3.30.5",
+    "@tiptap/extension-text-align": "^3.30.5",
+    "@tiptap/extension-text-style": "^3.30.5",
+    "@tiptap/starter-kit": "^3.30.5",
     "@types/react": "^19",
     "tsup": "^8.4.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.7"
   },
   "peerDependencies": {
     "@tiptap/core": ">=3.21.0 <4",

@@ -418,7 +418,8 @@
         "@tiptap/pm@>=3.21.0 <4",
         "@tiptap/static-renderer@>=3.21.0 <4",
         "clsx@^2.1.1",
-        "tailwind-merge@^3.0.0"
+        "tailwind-merge@^3.0.0",
+        "xss@^1.0.17"
       ],
       "description": "Read-only rendering and styling for HTML produced by editor and block-editor.",
       "files": [
@@ -429,6 +430,10 @@
         {
           "path": "static-renderer/static-renderer.tsx",
           "type": "registry:component"
+        },
+        {
+          "path": "static-renderer/sanitize.ts",
+          "type": "registry:lib"
         },
         {
           "path": "static-renderer/lib/utils.ts",
