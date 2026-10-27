@@ -10,7 +10,22 @@ const EMBED_HOSTS = new Set([
 ]);
 
 const RASTER_DATA_IMAGE = /^data:image\/(?:png|jpe?g|gif|webp|avif)[;,]/i;
-const DATA_URL = /^\s*data:/i;
+const DATA_URL = /^data:/i;
+
+const toCodePoint = (code: number) =>
+  code <= 1_114_111 ? String.fromCodePoint(code) : "";
+
+const decodeUrl = (value: string) =>
+  [
+    ...value
+      .replaceAll(/&#x([0-9a-f]+);?/gi, (_, hex: string) =>
+        toCodePoint(Number.parseInt(hex, 16))
+      )
+      .replaceAll(/&#(\d+);?/g, (_, dec: string) => toCodePoint(Number(dec)))
+      .replaceAll(/&colon;/gi, ":"),
+  ]
+    .filter((char) => (char.codePointAt(0) ?? 0) > 0x20)
+    .join("");
 
 const isEmbedUrl = (value: string) => {
   try {
@@ -48,9 +63,13 @@ const filter = new FilterXSS({
     if (tag === "iframe" && name === "src") {
       return isEmbedUrl(value) ? undefined : "";
     }
-    if ((name === "src" || name === "href") && DATA_URL.test(value)) {
+    if (name !== "src" && name !== "href") {
+      return;
+    }
+    const url = decodeUrl(value);
+    if (DATA_URL.test(url)) {
       const allowed =
-        tag === "img" && name === "src" && RASTER_DATA_IMAGE.test(value.trim());
+        tag === "img" && name === "src" && RASTER_DATA_IMAGE.test(url);
       return allowed ? undefined : "";
     }
   },

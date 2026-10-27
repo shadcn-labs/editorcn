@@ -135,12 +135,20 @@ The built-in sanitizer works on the server and in the browser (it doesn't need
 
 If your editor uses extensions that output other markup, pass your own
 sanitizer function instead. It receives the HTML string and returns the HTML to
-render:
+render. Your function replaces the built-in allowlist entirely, so configure it
+to allow your extensions' tags and attributes, and nothing broader. For example,
+with DOMPurify (which keeps `data-*` attributes by default but drops iframes):
 
 ```tsx
 import DOMPurify from "isomorphic-dompurify";
 
-<StaticRenderer content={html} sanitize={(html) => DOMPurify.sanitize(html)} />;
+const sanitize = (html: string) =>
+  DOMPurify.sanitize(html, {
+    ADD_ATTR: ["data-callout"],
+    ADD_TAGS: ["aside"],
+  });
+
+<StaticRenderer content={html} sanitize={sanitize} />;
 ```
 
 The built-in sanitizer is also exported as `sanitizeHtml` if you need it

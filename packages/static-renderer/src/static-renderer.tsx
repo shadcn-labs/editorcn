@@ -11,16 +11,20 @@ import type { ElementType, HTMLAttributes, ReactNode } from "react";
 import { cn } from "./lib/utils";
 import { sanitizeHtml } from "./sanitize";
 
-declare const process: { env: { NODE_ENV?: string } } | undefined;
+declare const process: { env: { NODE_ENV?: string } };
 
 let warnedUnsanitized = false;
 
+const isProduction = () => {
+  try {
+    return process.env.NODE_ENV === "production";
+  } catch {
+    return true;
+  }
+};
+
 const warnUnsanitized = () => {
-  if (
-    warnedUnsanitized ||
-    process === undefined ||
-    process.env.NODE_ENV === "production"
-  ) {
+  if (warnedUnsanitized || isProduction()) {
     return;
   }
   warnedUnsanitized = true;

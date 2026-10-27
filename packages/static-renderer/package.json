@@ -42,6 +42,7 @@
     "@tiptap/extension-text-style": "^3.30.5",
     "@tiptap/starter-kit": "^3.30.5",
     "@types/react": "^19",
+    "@types/react-dom": "^19.2.3",
     "tsup": "^8.4.0",
     "typescript": "^5",
     "vitest": "^3.2.7"

@@ -203,6 +203,16 @@ describe(sanitizeHtml, () => {
       /data:/i,
     ],
     [
+      "entity-encoded svg data: image",
+      '<img src="&#100;ata:image/svg+xml;base64,PHN2ZyBvbmxvYWQ9YWxlcnQoMSk+">',
+      /svg/i,
+    ],
+    [
+      "entity-encoded data: link",
+      '<a href="&#x64;&#x61;ta&colon;image/png;base64,AAAA">x</a>',
+      /href="[^"]/i,
+    ],
+    [
       "<svg onload>",
       "<svg onload=alert(1)><circle r=1 /></svg>",
       /svg|onload/i,
