@@ -46,9 +46,9 @@ Make sure your `components.json` includes the editorcn registry:
 "use client";
 
 import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Placeholder from "@tiptap/extension-placeholder";
-import Underline from "@tiptap/extension-underline";
+import { StarterKit } from "@tiptap/starter-kit";
+import { Placeholder } from "@tiptap/extension-placeholder";
+import { Underline } from "@tiptap/extension-underline";
 import { BlockEditor } from "@editorcn/block-editor";
 import "@editorcn/block-editor/style.css";
 

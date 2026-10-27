@@ -542,6 +542,12 @@ const staticRendererFiles = [
     "static-renderer.tsx"
   ),
   entry(
+    "static-renderer/sanitize.ts",
+    "registry:lib",
+    "static-renderer",
+    "sanitize.ts"
+  ),
+  entry(
     "static-renderer/lib/utils.ts",
     "registry:lib",
     "static-renderer",
@@ -835,6 +841,7 @@ const deps = {
     "@tiptap/static-renderer@>=3.21.0 <4",
     "clsx@^2.1.1",
     "tailwind-merge@^3.0.0",
+    "xss@^1.0.17",
   ],
 };
 

@@ -43,8 +43,8 @@ Make sure your `components.json` includes the editorcn registry:
 "use client";
 
 import { useEditor } from "@tiptap/react";
-import StarterKit from "@tiptap/starter-kit";
-import Underline from "@tiptap/extension-underline";
+import { StarterKit } from "@tiptap/starter-kit";
+import { Underline } from "@tiptap/extension-underline";
 import { RichTextEditor, Link } from "@editorcn/editor";
 import "@editorcn/editor/style.css";
 

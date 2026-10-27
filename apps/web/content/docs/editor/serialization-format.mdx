@@ -185,11 +185,16 @@ The editor runs in the browser only — `editor.getHTML()` / `editor.getJSON()` 
 1. **On the server**: Store the HTML or JSON blob (returned from the client's `onUpdate`) in your database
 2. **On the client**: Pass it back to `useEditor({ content })` when loading the editor
 
-To render editor content on the server (e.g. in a blog post view), use the HTML output with `dangerouslySetInnerHTML`. Make sure to sanitize the HTML if users can submit content:
+To render editor content on the server (e.g. in a blog post view), use the [Static Renderer](/docs/static-renderer). It works in React Server Components and renders either format:
+
+- **JSON** (recommended for user-generated content) renders through React, never as raw HTML.
+- **HTML** is inserted with `dangerouslySetInnerHTML`, so pass `sanitize` whenever users can submit content. It strips scripts, event handlers, and `javascript:` URLs, and keeps only the markup the editors produce:
 
 ```tsx
+import { StaticRenderer } from "@editorcn/static-renderer";
+
 function RenderContent({ html }: { html: string }) {
-  return <div className="prose" dangerouslySetInnerHTML={{ __html: html }} />;
+  return <StaticRenderer content={html} sanitize />;
 }
 ```
 

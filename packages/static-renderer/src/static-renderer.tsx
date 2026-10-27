@@ -9,6 +9,43 @@ import { createElement } from "react";
 import type { ElementType, HTMLAttributes, ReactNode } from "react";
 
 import { cn } from "./lib/utils";
+import { sanitizeHtml } from "./sanitize";
+
+declare const process: { env: { NODE_ENV?: string } };
+
+let warnedUnsanitized = false;
+
+const isProduction = () => {
+  try {
+    return process.env.NODE_ENV === "production";
+  } catch {
+    return true;
+  }
+};
+
+const warnUnsanitized = () => {
+  if (warnedUnsanitized || isProduction()) {
+    return;
+  }
+  warnedUnsanitized = true;
+  console.warn(
+    "StaticRenderer: rendering an HTML string without `sanitize`. Pass `sanitize` when the HTML can come from users, or `sanitize={false}` if it is trusted."
+  );
+};
+
+const toSafeHtml = (
+  html: string,
+  sanitize: StaticRendererProps["sanitize"]
+) => {
+  if (sanitize === undefined) {
+    warnUnsanitized();
+    return html;
+  }
+  if (typeof sanitize === "function") {
+    return sanitize(html);
+  }
+  return sanitize ? sanitizeHtml(html) : html;
+};
 
 const resolveUniqueExtensions = (extensions: Extensions) => {
   const byName = new Map<string, (typeof extensions)[number]>();
@@ -32,6 +69,7 @@ export type StaticRendererProps = Omit<
   staticEditorOptions?: StaticEditorOptions;
   // renderToReactElement options — nodeMapping/markMapping for custom nodes.
   options?: Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>;
+  sanitize?: boolean | ((html: string) => string);
 };
 
 export const StaticRenderer = ({
@@ -41,13 +79,14 @@ export const StaticRenderer = ({
   extensions,
   staticEditorOptions,
   options,
+  sanitize,
   ...props
 }: StaticRendererProps) => {
   if (typeof content === "string") {
     return createElement(Tag, {
       ...props,
       className: cn("rte-static-renderer", className),
-      dangerouslySetInnerHTML: { __html: content },
+      dangerouslySetInnerHTML: { __html: toSafeHtml(content, sanitize) },
     });
   }
 

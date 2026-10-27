@@ -18,6 +18,14 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
+const IMAGE_TYPES = [
+  "image/png",
+  "image/jpeg",
+  "image/gif",
+  "image/webp",
+  "image/avif",
+];
+
 let resolveCurrent: ((url: string | null) => void) | null = null;
 let listeners: (() => void)[] = [];
 let isOpen = false;
@@ -78,7 +86,8 @@ export const ImagePromptPortal = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (!file) {
+    if (!file || !IMAGE_TYPES.includes(file.type)) {
+      e.target.value = "";
       return;
     }
     const reader = new FileReader();
@@ -131,7 +140,7 @@ export const ImagePromptPortal = () => {
             <input
               ref={fileInputRef}
               type="file"
-              accept="image/*"
+              accept={IMAGE_TYPES.join(",")}
               className="hidden"
               onChange={handleFileChange}
             />
