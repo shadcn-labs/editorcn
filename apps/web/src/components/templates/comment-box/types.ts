@@ -2,6 +2,7 @@ import type { JSONContent } from "@tiptap/core";
 
 export interface CommentAuthor {
   avatar?: string;
+  description?: string;
   id: string;
   name: string;
 }
@@ -33,10 +34,12 @@ export interface CommentBoxProps {
   onReact?: (id: string, emoji: string) => void;
   placeholder?: string;
   title?: string;
+  users?: CommentAuthor[];
 }
 
 export interface ThreadActions {
   currentUser: CommentAuthor;
+  mentionable: CommentAuthor[];
   post: (content: JSONContent, parentId?: string) => void;
   react: (id: string, emoji: string) => void;
   remove: (id: string) => void;

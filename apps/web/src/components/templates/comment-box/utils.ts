@@ -1,21 +1,27 @@
+import { Mention } from "@editorcn/extensions/mention";
 import type { JSONContent } from "@tiptap/core";
 import { StarterKit } from "@tiptap/starter-kit";
 
-import type { CommentItem, CommentReaction, CommentReply } from "./types";
+import type {
+  CommentAuthor,
+  CommentItem,
+  CommentReaction,
+  CommentReply,
+} from "./types";
 
 export const EMOJIS = ["👍", "❤️", "🎉", "😄", "👀", "🚀"];
 
 export const ITEM =
   "rounded-md py-1 text-[13px] [&_svg:not([class*='size-'])]:size-3.5";
 
-export const EXTENSIONS = [
-  StarterKit.configure({
-    blockquote: false,
-    codeBlock: false,
-    heading: false,
-    horizontalRule: false,
-  }),
-];
+export const STARTER_KIT = StarterKit.configure({
+  blockquote: false,
+  codeBlock: false,
+  heading: false,
+  horizontalRule: false,
+});
+
+export const EXTENSIONS = [STARTER_KIT, Mention];
 
 const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
   ["year", 31_536_000],
@@ -61,12 +67,26 @@ export const toggleReaction = (
     .filter((r) => r.count > 0);
 };
 
-export const mention = (name: string): JSONContent => ({
+export const mention = (author: CommentAuthor): JSONContent => ({
   content: [
-    { content: [{ text: `@${name} `, type: "text" }], type: "paragraph" },
+    {
+      content: [
+        { attrs: { id: author.id, label: author.name }, type: "mention" },
+        { text: " ", type: "text" },
+      ],
+      type: "paragraph",
+    },
   ],
   type: "doc",
 });
+
+export const collectAuthors = (comments: CommentItem[]): CommentAuthor[] => [
+  ...new Map(
+    comments
+      .flatMap((c) => [c, ...(c.replies ?? [])])
+      .map((c) => [c.author.id, c.author] as const)
+  ).values(),
+];
 
 export const createId = () =>
   globalThis.crypto?.randomUUID?.() ??
