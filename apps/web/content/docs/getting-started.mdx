@@ -206,3 +206,22 @@ export function MyEditor() {
 All `@tiptap/*` packages are **peer dependencies** — you must install them in your project. This ensures a single copy of Tiptap's types and avoids "duplicate instance" TypeScript errors.
 
 This applies regardless of install method: npm installs list them explicitly as shown above, and the shadcn registry installer will prompt you to add any peer dependencies it detects are missing.
+
+### Keep Tiptap versions in sync
+
+Every `@tiptap/*` package requires the exact same version of the others. For example, `@tiptap/extension-mention@3.32.0` only works with `@tiptap/core@3.32.0`.
+
+The shadcn CLI installs the newest Tiptap version in the range an item lists. If your project is on an older Tiptap release, that newer package won't match the ones you already have, and npm stops with an error like this:
+
+```txt
+npm error code ERESOLVE
+npm error Conflicting peer dependency: @tiptap/pm@3.32.0
+```
+
+To fix it, upgrade all your `@tiptap/*` packages to the same version, then run the `shadcn add` command again:
+
+```bash
+npm install @tiptap/core@latest @tiptap/pm@latest @tiptap/react@latest @tiptap/starter-kit@latest
+```
+
+Include every `@tiptap/*` package listed in your `package.json`. If npm still reports a conflict, your lockfile is holding on to the old versions: delete `node_modules` and `package-lock.json` and run `npm install` again. With pnpm, run `pnpm up "@tiptap/*" --latest`.

@@ -1,0 +1,199 @@
+---
+title: Mention
+description: An @ picker that inserts inline mention nodes with a stable id and label.
+---
+
+The Mention extension extends Tiptap's `Mention` with a ready-made picker. Type `@` to open it, filter by typing, then pick an item with the mouse or keyboard. The selection is inserted as an inline atom node that stores the item's `id` and `label`, so your app can send notifications or link to a profile instead of parsing plain text.
+
+Items come from an `items` function that can be sync or async. Async calls are debounced, stale requests are aborted, and the picker shows loading and empty states. Backspace removes the whole mention in one keystroke.
+
+<ExtensionPreview slug="mention" editor="toolbar" />
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/mention.json"
+```
+
+This installs `extensions/mention`, `extensions/core/`, `extensions/ui/`, the styles at `extensions/mention/style.css` and `extensions/ui/style.css`, and the `@tiptap/extension-mention` and `@tiptap/suggestion` packages.
+
+To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/mention):
+
+```bash
+npm install @tiptap/core @tiptap/react @tiptap/pm @tiptap/extension-mention @tiptap/suggestion
+```
+
+## Usage
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { RichTextEditor } from "@/components/editor";
+import { Mention } from "@/components/extensions/mention";
+
+import "@/components/editor/style.css";
+import "@/components/extensions/mention/style.css";
+import "@/components/extensions/ui/style.css";
+
+export function MyEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [
+      StarterKit,
+      Mention.configure({
+        items: async (query) => {
+          const res = await fetch(`/api/users?q=${encodeURIComponent(query)}`);
+          return res.json(); // { id, label, avatar? }[]
+        },
+      }),
+    ],
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+### With `@editorcn/block-editor`
+
+Add `Mention` next to `SlashCommand`. Each uses its own trigger, so both pickers work in the same editor.
+
+<ExtensionPreview slug="mention" editor="block" />
+
+```tsx
+import {
+  BlockEditor,
+  SlashCommand,
+  getSlashCommandSuggestion,
+} from "@/components/block-editor";
+import { Mention } from "@/components/extensions/mention";
+
+const editor = useEditor({
+  immediatelyRender: false,
+  extensions: [
+    StarterKit,
+    Mention.configure({ items: fetchUsers }),
+    SlashCommand.configure({ suggestion: getSlashCommandSuggestion() }),
+  ],
+});
+
+return <BlockEditor editor={editor} />;
+```
+
+## Keyboard
+
+| Key             | Action                   |
+| --------------- | ------------------------ |
+| `↑` / `↓`       | Move the selection       |
+| `Enter` / `Tab` | Insert the selected item |
+| `Esc`           | Close the picker         |
+| `Backspace`     | Delete the whole mention |
+
+## Settings
+
+### `items`
+
+Returns the items for a query. Can return an array or a promise. Each item needs an `id` and a `label`, and can have an `avatar` image URL and a `description` shown as a second line under the name, such as a role or team. Rows show the avatar, or the label's first letter when there is no avatar or the image fails to load.
+
+```tsx
+Mention.configure({
+  items: (query) =>
+    users
+      .filter((u) => u.name.toLowerCase().includes(query.toLowerCase()))
+      .map((u) => ({
+        id: u.id,
+        label: u.name,
+        avatar: u.imageUrl,
+        description: u.title,
+      })),
+});
+```
+
+### `heading`
+
+A small label shown at the top of the picker. Off by default.
+
+```tsx
+Mention.configure({ heading: "People", items: fetchUsers });
+```
+
+### `trigger`
+
+The character that opens the picker. Defaults to `@`.
+
+```tsx
+Mention.configure({ trigger: "#", items: fetchTags });
+```
+
+### `debounce`
+
+Milliseconds to wait after typing stops before calling `items`. Defaults to `150`. Set it to `0` for local lists.
+
+```tsx
+Mention.configure({ debounce: 300, items: fetchUsers });
+```
+
+### `renderItem`
+
+Custom content for each row in the picker. Defaults to the avatar (or initial), the label and the description.
+
+```tsx
+Mention.configure({
+  items: fetchUsers,
+  renderItem: (item) => <UserRow {...item} />,
+});
+```
+
+### `HTMLAttributes`
+
+HTML attributes applied to the mention `<span>`. All `@tiptap/extension-mention` options are also supported, including `suggestion` to override any [Suggestion](https://tiptap.dev/docs/editor/api/utilities/suggestion) option.
+
+```tsx
+Mention.configure({
+  HTMLAttributes: { class: "font-semibold" },
+  items: fetchUsers,
+});
+```
+
+## Output
+
+Mentions keep their `id` and `label` in both formats:
+
+```json
+{
+  "type": "mention",
+  "attrs": { "id": "3", "label": "Grace Hopper", "mentionSuggestionChar": "@" }
+}
+```
+
+{/* prettier-ignore */}
+```html
+<span data-type="mention" data-id="3" data-label="Grace Hopper" data-mention-suggestion-char="@">@Grace Hopper</span>
+```
+
+To render saved content read-only, pass `Mention` to the [Static Renderer](/docs/static-renderer) and import `extensions/mention/style.css` for the mention chip style. The renderer's `sanitize` option keeps the mention attributes.
+
+```tsx
+<StaticRenderer content={json} extensions={[StarterKit, Mention]} />
+```
+
+## Helpers
+
+### `isMentionActive`
+
+Returns `true` while the picker is open. Use it when your editor has its own key handlers, so `Esc` or `Enter` close or pick in the picker instead of running your handler.
+
+```tsx
+editorProps: {
+  handleKeyDown: (view, event) => {
+    if (isMentionActive(view.state)) return false;
+    // your own shortcuts
+  },
+},
+```

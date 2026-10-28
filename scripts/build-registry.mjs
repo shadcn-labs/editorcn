@@ -703,6 +703,7 @@ const buildExtensionItem = (config) => {
     config.image,
     config.toolbar,
     config.overlay,
+    config.list,
   ].filter(Boolean);
   const entries = sourceFiles.map((file) =>
     entry(`extensions/${file}`, "registry:component", "extensions", file)
@@ -902,6 +903,7 @@ const templateDeps = {
     "@tiptap/pm@>=3.0.0 <4",
     "@tiptap/starter-kit@>=3.0.0 <4",
     "@tiptap/extension-placeholder@>=3.0.0 <4",
+    "@tiptap/extension-mention@>=3.0.0 <4",
   ],
   "simple-document-editor": [
     "@tiptap/core@>=3.0.0 <4",
@@ -937,6 +939,7 @@ const templateItems = [
       "kbd",
       "popover",
       "https://editorcn.vercel.app/r/static-renderer.json",
+      "https://editorcn.vercel.app/r/mention.json",
     ],
   },
   {

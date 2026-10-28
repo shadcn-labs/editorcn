@@ -7,9 +7,11 @@ import { cn } from "@/lib/utils";
 import { Composer } from "./composer";
 import { CommentThread } from "./thread";
 import type { CommentBoxProps, CommentItem, ThreadActions } from "./types";
-import { createId, mapThread, toggleReaction } from "./utils";
+import { collectAuthors, createId, mapThread, toggleReaction } from "./utils";
 
 import "@editorcn/editor/style.css";
+import "@editorcn/extensions/mention/style.css";
+import "@editorcn/extensions/ui/style.css";
 import "@editorcn/static-renderer/style.css";
 
 export const CommentBox = ({
@@ -21,6 +23,7 @@ export const CommentBox = ({
   onReact,
   placeholder = "Add a comment…",
   title = "Comments",
+  users,
 }: CommentBoxProps) => {
   const [comments, setComments] = useState<CommentItem[]>(initialComments);
   const total = comments.reduce(
@@ -28,8 +31,13 @@ export const CommentBox = ({
     0
   );
 
+  const mentionable = (users ?? collectAuthors(comments)).filter(
+    (user) => user.id !== currentUser.id
+  );
+
   const actions: ThreadActions = {
     currentUser,
+    mentionable,
     post: (content, parentId) => {
       onPost?.(content, parentId);
       const comment: CommentItem = {
@@ -95,6 +103,7 @@ export const CommentBox = ({
       <Composer
         author={currentUser}
         className="shrink-0 border-t px-4 py-4"
+        mentionable={mentionable}
         onPost={(content) => actions.post(content)}
         placeholder={placeholder}
       />

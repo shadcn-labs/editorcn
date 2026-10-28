@@ -14,6 +14,8 @@ import {
   ResizableImage,
 } from "@editorcn/extensions/image-placeholder";
 import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-toolbar";
+import { Mention } from "@editorcn/extensions/mention";
+import type { MentionItem } from "@editorcn/extensions/mention";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { TableToolbar } from "@editorcn/extensions/table-toolbar";
@@ -28,6 +30,7 @@ import "@editorcn/editor/style.css";
 import "@editorcn/extensions/ui/style.css";
 import "@editorcn/extensions/table/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
+import "@editorcn/extensions/mention/style.css";
 
 /* Table alignment + resize handle styling ships with
    @editorcn/extensions/table/style.css (see .ProseMirror.resize-cursor). */
@@ -38,6 +41,45 @@ interface PreviewConfig {
   toolbar: ReactNode;
   slashItems?: SlashCommandSuggestionItem[];
 }
+
+const avatar = (id: string) =>
+  `https://images.unsplash.com/photo-${id}?w=64&h=64&fit=crop&crop=faces`;
+
+const PEOPLE: MentionItem[] = [
+  {
+    avatar: avatar("1494790108377-be9c29b29330"),
+    description: "Analytics lead",
+    id: "1",
+    label: "Ada Lovelace",
+  },
+  {
+    avatar: avatar("1500648767791-00dcc994a43e"),
+    description: "Security engineer",
+    id: "2",
+    label: "Alan Turing",
+  },
+  {
+    avatar: avatar("1438761681033-6461ffad8d80"),
+    description: "Compiler team",
+    id: "3",
+    label: "Grace Hopper",
+  },
+  {
+    avatar: avatar("1507003211169-0a1dd7228f2d"),
+    description: "Kernel maintainer",
+    id: "4",
+    label: "Linus Torvalds",
+  },
+  {
+    avatar: avatar("1534528741775-53994a69daeb"),
+    description: "Flight software lead",
+    id: "5",
+    label: "Margaret Hamilton",
+  },
+];
+
+const searchPeople = (query: string) =>
+  PEOPLE.filter((p) => p.label.toLowerCase().includes(query.toLowerCase()));
 
 const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
   "image-placeholder": {
@@ -60,6 +102,15 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
       },
     ],
     toolbar: <ImagePlaceholderToolbar />,
+  },
+  mention: {
+    content:
+      '<p>Type <code>@</code> to mention someone, like <span data-type="mention" data-id="3" data-label="Grace Hopper"></span>. Use the arrow keys to move, Enter or Tab to pick, and Esc to close. Backspace removes the whole mention.</p>',
+    extensions: [
+      StarterKit,
+      Mention.configure({ heading: "People", items: searchPeople }),
+    ],
+    toolbar: null,
   },
   table: {
     content:
@@ -133,7 +184,7 @@ const BlockEditorPreview = ({ config }: { config: PreviewConfig }) => {
 
   return (
     <div className="relative rounded-md border border-border">
-      <BlockEditor editor={editor} />
+      <BlockEditor className="px-4 py-2" editor={editor} />
       <TableHoverOverlay editor={editor} />
     </div>
   );

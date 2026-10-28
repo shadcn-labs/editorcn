@@ -247,9 +247,8 @@ export const CommentThread = ({
         author={actions.currentUser}
         autoFocus
         className="mt-2"
-        initialContent={
-          to.id === comment.id ? undefined : mention(to.author.name)
-        }
+        initialContent={to.id === comment.id ? undefined : mention(to.author)}
+        mentionable={actions.mentionable}
         onCancel={() => setTarget(null)}
         onPost={(content) => {
           actions.post(content, comment.id);

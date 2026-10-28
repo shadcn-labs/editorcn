@@ -1,6 +1,7 @@
 "use client";
 
 import { RichTextEditor } from "@editorcn/editor";
+import { Mention, isMentionActive } from "@editorcn/extensions/mention";
 import type { JSONContent } from "@tiptap/core";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { useEditor, useEditorState } from "@tiptap/react";
@@ -28,7 +29,7 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { cn } from "@/lib/utils";
 
 import type { CommentAuthor } from "./types";
-import { EXTENSIONS, ITEM, initials } from "./utils";
+import { ITEM, STARTER_KIT, initials } from "./utils";
 
 export const UserAvatar = ({
   author,
@@ -108,6 +109,7 @@ export const Composer = ({
   autoFocus = false,
   className,
   initialContent,
+  mentionable = [],
   onCancel,
   onPost,
   placeholder,
@@ -117,6 +119,7 @@ export const Composer = ({
   autoFocus?: boolean;
   className?: string;
   initialContent?: JSONContent;
+  mentionable?: CommentAuthor[];
   onCancel?: () => void;
   onPost: (content: JSONContent) => void;
   placeholder: string;
@@ -125,12 +128,16 @@ export const Composer = ({
   const handlers = useRef<{ cancel?: () => void; post: () => void } | null>(
     null
   );
+  const people = useRef(mentionable);
 
   const editor = useEditor({
     autofocus: autoFocus ? "end" : false,
     content: initialContent ?? "",
     editorProps: {
-      handleKeyDown: (_view, event) => {
+      handleKeyDown: (view, event) => {
+        if (isMentionActive(view.state)) {
+          return false;
+        }
         if (event.key === "Escape" && handlers.current?.cancel) {
           handlers.current.cancel();
           return true;
@@ -142,7 +149,24 @@ export const Composer = ({
         return false;
       },
     },
-    extensions: [...EXTENSIONS, Placeholder.configure({ placeholder })],
+    extensions: [
+      STARTER_KIT,
+      Mention.configure({
+        debounce: 0,
+        heading: "People",
+        items: (query) =>
+          people.current
+            .filter((p) => p.name.toLowerCase().includes(query.toLowerCase()))
+            .slice(0, 6)
+            .map((p) => ({
+              avatar: p.avatar,
+              description: p.description,
+              id: p.id,
+              label: p.name,
+            })),
+      }),
+      Placeholder.configure({ placeholder }),
+    ],
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,
   });
@@ -163,7 +187,8 @@ export const Composer = ({
 
   useEffect(() => {
     handlers.current = { cancel: onCancel, post };
-  }, [onCancel, post]);
+    people.current = mentionable;
+  }, [mentionable, onCancel, post]);
 
   const mod = /Mac|iPhone|iPad/.test(globalThis.navigator?.userAgent ?? "")
     ? "⌘"
