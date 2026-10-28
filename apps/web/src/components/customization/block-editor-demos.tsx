@@ -99,7 +99,7 @@ export const BlockEditorVariantsDemo = () => {
   });
   return (
     <div className="overflow-hidden rounded-md border border-border">
-      <BlockEditor editor={editor} />
+      <BlockEditor className="px-4 py-2" editor={editor} />
     </div>
   );
 };
@@ -124,7 +124,7 @@ export const BlockEditorThemingDemo = () => {
         } as React.CSSProperties
       }
     >
-      <BlockEditor editor={editor} />
+      <BlockEditor className="px-4 py-2" editor={editor} />
     </div>
   );
 };
@@ -139,7 +139,7 @@ export const BlockEditorClassNameDemo = () => {
   return (
     <BlockEditor
       editor={editor}
-      className="border-2 border-dashed border-primary/50 rounded-xl"
+      className="border-2 border-dashed border-primary/50 rounded-xl px-4 py-2"
     />
   );
 };
@@ -220,7 +220,7 @@ export const BlockEditorCustomSlashCommandsDemo = () => {
   });
   return (
     <div className="overflow-hidden rounded-md border border-border">
-      <BlockEditor editor={editor} />
+      <BlockEditor className="px-4 py-2" editor={editor} />
     </div>
   );
 };

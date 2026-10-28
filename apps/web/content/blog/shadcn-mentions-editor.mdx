@@ -1,0 +1,201 @@
+---
+title: How to Add @Mentions to a shadcn/ui Rich Text Editor
+description: Add an @ picker to a Tiptap editor in a shadcn/ui app, load people from your API, and save mentions with a stable id you can use for notifications.
+date: "2026-10-28"
+author: Abdullah Mukadam
+---
+
+Comments, tasks, and docs all need a way to tag people. Typing `@Lena` as plain text looks fine, but your app can't tell who Lena is. It can't send her a notification, link to her profile, or survive her changing her name.
+
+The new [Mention extension](/docs/extensions/mention) fixes that. Type `@`, pick a person from a list with their photo and role, and the editor inserts a mention that stores their `id` and `label`.
+
+<ExtensionPreview slug="mention" editor="toolbar" />
+
+In this guide you'll:
+
+1. Install the Mention extension
+2. Add it to an editor
+3. Load people from your API
+4. Save mentions and read their ids
+5. Render saved content
+
+## Prerequisites
+
+- A shadcn/ui app with the [editorcn registry](/docs/registry) added to `components.json`
+- An editor from [editorcn](/docs/editor) or the [block editor](/docs/block-editor). The [first guide](/blog/shadcn-rich-text-editor) walks through setting one up.
+
+## Step 1: Install the extension
+
+```bash
+npx shadcn@latest add @editorcn/mention
+```
+
+This copies the extension into `components/extensions/mention`, along with the shared dropdown components it uses, and installs `@tiptap/extension-mention` and `@tiptap/suggestion`.
+
+## Step 2: Add it to your editor
+
+Register `Mention` and import its styles. `items` returns the people that match what the user typed after `@`.
+
+```tsx title="components/comment-editor.tsx"
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { RichTextEditor } from "@/components/editor";
+import { Mention } from "@/components/extensions/mention";
+
+import "@/components/editor/style.css";
+import "@/components/extensions/mention/style.css";
+import "@/components/extensions/ui/style.css";
+
+const PEOPLE = [
+  { id: "u_1", label: "Lena Hoffmann", description: "Engineering manager" },
+  { id: "u_2", label: "Daniel Okafor", description: "Support operations" },
+  { id: "u_3", label: "Maya Chen", description: "Product marketing" },
+];
+
+export function CommentEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [
+      StarterKit,
+      Mention.configure({
+        heading: "People",
+        items: (query) =>
+          PEOPLE.filter((p) =>
+            p.label.toLowerCase().includes(query.toLowerCase())
+          ),
+      }),
+    ],
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+Type `@` and the picker opens. Use the arrow keys to move, Enter or Tab to pick, and Esc to close. Backspace next to a mention deletes the whole thing in one keystroke.
+
+Each item can have:
+
+- `id`: your stable user id. This is what gets saved.
+- `label`: the name shown in the picker and in the text.
+- `avatar`: an image URL. If it's missing or fails to load, the row shows the first letter of the name.
+- `description`: a second line under the name, such as a role or team.
+
+## Step 3: Load people from your API
+
+Real apps have more people than fit in an array. `items` can return a promise, so you can search on the server:
+
+```tsx
+Mention.configure({
+  heading: "People",
+  debounce: 200,
+  items: async (query) => {
+    const res = await fetch(`/api/users?q=${encodeURIComponent(query)}`);
+    const users = await res.json();
+    return users.map((u) => ({
+      id: u.id,
+      label: u.name,
+      avatar: u.imageUrl,
+      description: u.title,
+    }));
+  },
+});
+```
+
+The picker waits until the user stops typing for `debounce` milliseconds before it calls `items`, and drops any older request that comes back late. While a request is running it shows "Searching…", and "No results" when nothing matches.
+
+## Step 4: Save mentions and read their ids
+
+Mentions are saved as their own node type, so the id is part of the content:
+
+```json
+{
+  "type": "mention",
+  "attrs": { "id": "u_1", "label": "Lena Hoffmann", "mentionSuggestionChar": "@" }
+}
+```
+
+In HTML they become a `span` with the same data:
+
+```html
+<span data-type="mention" data-id="u_1" data-label="Lena Hoffmann">@Lena Hoffmann</span>
+```
+
+To notify everyone who was mentioned, walk the saved JSON and collect the ids:
+
+```ts title="lib/mentions.ts"
+import type { JSONContent } from "@tiptap/core";
+
+export const mentionedIds = (node: JSONContent): string[] => [
+  ...new Set([
+    ...(node.type === "mention" && node.attrs?.id ? [node.attrs.id] : []),
+    ...(node.content ?? []).flatMap(mentionedIds),
+  ]),
+];
+```
+
+Call it when the user posts, then send notifications for each id on the server.
+
+## Step 5: Render saved content
+
+Pass `Mention` to the [Static Renderer](/docs/static-renderer) so saved comments show the mention chip without loading an editor:
+
+```tsx
+import { StaticRenderer } from "@/components/static-renderer";
+import { Mention } from "@/components/extensions/mention";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import "@/components/extensions/mention/style.css";
+
+<StaticRenderer content={comment.content} extensions={[StarterKit, Mention]} />;
+```
+
+If you store HTML and render it with `sanitize`, the mention `data-*` attributes are kept, so ids survive the sanitizer.
+
+## Use it with the block editor
+
+The block editor already uses `/` for its command menu. Mentions use `@`, so both work in the same editor:
+
+<ExtensionPreview slug="mention" editor="block" />
+
+```tsx
+extensions: [
+  StarterKit,
+  Mention.configure({ heading: "People", items: searchPeople }),
+  SlashCommand.configure({ suggestion: getSlashCommandSuggestion() }),
+],
+```
+
+## Or start from the comment box
+
+The [Comment Box template](/docs/templates) now uses the Mention extension. Replies to a reply start with a mention of that person, and the picker lists everyone in the thread. Pass a `users` prop to choose who can be mentioned instead.
+
+```bash
+npx shadcn@latest add @editorcn/comment-box
+```
+
+## FAQ
+
+### Can I use a different trigger, like `#` for tags?
+
+Yes. Set `trigger: "#"` and return tags from `items`. The saved node remembers which trigger it used, so `#design` renders as `#design`.
+
+### Can I change how rows look?
+
+Pass `renderItem` to render each row yourself. It receives the item, so you can show a status dot, a team badge, or anything else.
+
+### My editor has its own Escape or Enter shortcuts. Will they clash?
+
+Check `isMentionActive(view.state)` in your key handler and return `false` while the picker is open. The comment box template does this, so Esc closes the picker instead of cancelling the reply.
+
+## Next steps
+
+- [Mention extension docs](/docs/extensions/mention) for every option
+- [Static Renderer](/docs/static-renderer) for rendering saved content
+- [Templates](/docs/templates) for the comment box and other starting points
