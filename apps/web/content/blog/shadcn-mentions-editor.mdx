@@ -117,12 +117,17 @@ Mentions are saved as their own node type, so the id is part of the content:
 ```json
 {
   "type": "mention",
-  "attrs": { "id": "u_1", "label": "Lena Hoffmann", "mentionSuggestionChar": "@" }
+  "attrs": {
+    "id": "u_1",
+    "label": "Lena Hoffmann",
+    "mentionSuggestionChar": "@"
+  }
 }
 ```
 
 In HTML they become a `span` with the same data:
 
+{/* prettier-ignore */}
 ```html
 <span data-type="mention" data-id="u_1" data-label="Lena Hoffmann">@Lena Hoffmann</span>
 ```

@@ -67,7 +67,11 @@ Add `Mention` next to `SlashCommand`. Each uses its own trigger, so both pickers
 <ExtensionPreview slug="mention" editor="block" />
 
 ```tsx
-import { BlockEditor, SlashCommand, getSlashCommandSuggestion } from "@/components/block-editor";
+import {
+  BlockEditor,
+  SlashCommand,
+  getSlashCommandSuggestion,
+} from "@/components/block-editor";
 import { Mention } from "@/components/extensions/mention";
 
 const editor = useEditor({
@@ -84,12 +88,12 @@ return <BlockEditor editor={editor} />;
 
 ## Keyboard
 
-| Key | Action |
-| --- | --- |
-| `↑` / `↓` | Move the selection |
+| Key             | Action                   |
+| --------------- | ------------------------ |
+| `↑` / `↓`       | Move the selection       |
 | `Enter` / `Tab` | Insert the selected item |
-| `Esc` | Close the picker |
-| `Backspace` | Delete the whole mention |
+| `Esc`           | Close the picker         |
+| `Backspace`     | Delete the whole mention |
 
 ## Settings
 
@@ -162,9 +166,13 @@ Mention.configure({
 Mentions keep their `id` and `label` in both formats:
 
 ```json
-{ "type": "mention", "attrs": { "id": "3", "label": "Grace Hopper", "mentionSuggestionChar": "@" } }
+{
+  "type": "mention",
+  "attrs": { "id": "3", "label": "Grace Hopper", "mentionSuggestionChar": "@" }
+}
 ```
 
+{/* prettier-ignore */}
 ```html
 <span data-type="mention" data-id="3" data-label="Grace Hopper" data-mention-suggestion-char="@">@Grace Hopper</span>
 ```
