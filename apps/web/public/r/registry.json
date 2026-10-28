@@ -674,7 +674,7 @@
         "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <1.0.0",
         "@tiptap/extension-mention@>=3.0.0 <4",
-        "@tiptap/suggestion@>=3.0.0 <4",
+        "@tiptap/suggestion@>=3.27.0 <4",
         "@tiptap/pm@>=3.0.0 <4"
       ],
       "description": "An @ picker that inserts inline mention nodes with a stable id and label. Items load from a sync or async source with debounce, loading and empty states, and keyboard navigation. Backspace removes the whole mention.",

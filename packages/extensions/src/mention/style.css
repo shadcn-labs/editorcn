@@ -10,8 +10,8 @@ span[data-type="mention"] {
 
 .ext-mention-list {
   z-index: 60;
-  min-width: 14rem;
-  max-width: 20rem;
+  min-width: 18rem;
+  max-width: 24rem;
   max-height: 18rem;
   overflow-y: auto;
 }

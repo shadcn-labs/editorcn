@@ -55,7 +55,7 @@
     "ui": ["dropdown-content", "dropdown-item"],
     "deps": [
       "@tiptap/extension-mention@>=3.0.0 <4",
-      "@tiptap/suggestion@>=3.0.0 <4",
+      "@tiptap/suggestion@>=3.27.0 <4",
       "@tiptap/pm@>=3.0.0 <4"
     ]
   }

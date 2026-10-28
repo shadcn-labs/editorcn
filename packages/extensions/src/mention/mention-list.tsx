@@ -8,6 +8,7 @@ import type {
 } from "@tiptap/suggestion";
 import {
   forwardRef,
+  useId,
   useImperativeHandle,
   useLayoutEffect,
   useRef,
@@ -58,7 +59,8 @@ const DefaultItem = ({ avatar, description, label }: MentionItem) => {
 };
 
 const MentionList = forwardRef<MentionListHandle, MentionListProps>(
-  ({ command, heading, items, loading, renderItem }, ref) => {
+  ({ command, editor, heading, items, loading, renderItem }, ref) => {
+    const listId = useId();
     const [selected, setSelected] = useState(0);
     const [activeItem, setActiveItem] = useState<HTMLElement | null>(null);
     const listRef = useRef<HTMLDivElement>(null);
@@ -77,6 +79,18 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>(
       setActiveItem(item);
       item?.scrollIntoView({ block: "nearest" });
     }, [items, selected]);
+
+    useLayoutEffect(() => {
+      const { dom } = editor.view;
+      dom.setAttribute("aria-controls", listId);
+      if (items.length > 0) {
+        dom.setAttribute("aria-activedescendant", `${listId}-${selected}`);
+      }
+      return () => {
+        dom.removeAttribute("aria-activedescendant");
+        dom.removeAttribute("aria-controls");
+      };
+    }, [editor, items.length, listId, selected]);
 
     const select = (index: number) => {
       const item = items[index];
@@ -98,7 +112,8 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>(
           setSelected((selected + 1) % items.length);
           return true;
         }
-        if (event.key === "Enter" || event.key === "Tab") {
+        const composing = event.isComposing || event.keyCode === 229;
+        if ((event.key === "Enter" && !composing) || event.key === "Tab") {
           select(selected);
           return true;
         }
@@ -111,6 +126,7 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>(
         activeItem={items.length > 0 ? activeItem : null}
         aria-busy={loading}
         className="ext-mention-list"
+        id={listId}
         ref={listRef}
         role="listbox"
       >
@@ -123,6 +139,7 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>(
           items.map((item, index) => (
             <DropdownMenuItem
               aria-selected={index === selected}
+              id={`${listId}-${index}`}
               key={item.id}
               onClick={() => select(index)}
               onMouseDown={(e) => e.preventDefault()}
@@ -146,7 +163,9 @@ export const renderMentionList = (
   let unmount: (() => void) | null = null;
 
   return {
-    onExit: () => {
+    onExit: ({ editor }) => {
+      editor.view.dom.removeAttribute("aria-activedescendant");
+      editor.view.dom.removeAttribute("aria-controls");
       unmount?.();
       component?.destroy();
       component = null;
