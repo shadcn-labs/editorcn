@@ -671,11 +671,84 @@
     {
       "dependencies": [
         "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "@tiptap/extension-mention@>=3.0.0 <4",
+        "@tiptap/suggestion@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4"
+      ],
+      "description": "An @ picker that inserts inline mention nodes with a stable id and label. Items load from a sync or async source with debounce, loading and empty states, and keyboard navigation. Backspace removes the whole mention.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mention/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mention/mention-list.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mention/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
+        }
+      ],
+      "name": "mention",
+      "title": "Mention",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.0.0 <4",
         "@tiptap/static-renderer@>=3.21.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/starter-kit@>=3.0.0 <4",
-        "@tiptap/extension-placeholder@>=3.0.0 <4"
+        "@tiptap/extension-placeholder@>=3.0.0 <4",
+        "@tiptap/extension-mention@>=3.0.0 <4"
       ],
       "description": "A comment thread with avatars, relative times, emoji reactions, a delete menu, and an editor composer with onPost, onReact, and onDelete hooks.",
       "files": [

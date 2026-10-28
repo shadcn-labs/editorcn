@@ -283,6 +283,12 @@ describe(sanitizeHtml, () => {
       '<iframe src="https://player.vimeo.com/video/1" width="640"></iframe>';
     expect(sanitizeHtml(html)).toBe(html);
   });
+
+  it("keeps mention attributes", () => {
+    const html =
+      '<p><span data-type="mention" data-id="3" data-label="Grace" data-mention-suggestion-char="@">@Grace</span></p>';
+    expect(sanitizeHtml(html)).toBe(html);
+  });
 });
 
 describe("StaticRenderer sanitize prop", () => {

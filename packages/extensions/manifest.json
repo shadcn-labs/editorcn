@@ -45,5 +45,18 @@
       "@tiptap/extension-table-header@>=3.0.0 <4",
       "@tiptap/extension-gapcursor@>=3.0.0 <4"
     ]
+  },
+  "mention": {
+    "title": "Mention",
+    "description": "An @ picker that inserts inline mention nodes with a stable id and label. Items load from a sync or async source with debounce, loading and empty states, and keyboard navigation. Backspace removes the whole mention.",
+    "extension": "mention/index.ts",
+    "list": "mention/mention-list.tsx",
+    "css": ["mention/style.css"],
+    "ui": ["dropdown-content", "dropdown-item"],
+    "deps": [
+      "@tiptap/extension-mention@>=3.0.0 <4",
+      "@tiptap/suggestion@>=3.0.0 <4",
+      "@tiptap/pm@>=3.0.0 <4"
+    ]
   }
 }

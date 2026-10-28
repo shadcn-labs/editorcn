@@ -6,3 +6,5 @@ export { Table } from "./table";
 export type { TableConfigOptions } from "./table";
 export { TableHoverOverlay } from "./table/table-hover-overlay";
 export { TableToolbar } from "./table/toolbar";
+export { Mention, isMentionActive, mentionPluginKey } from "./mention";
+export type { MentionItem, MentionOptions } from "./mention";

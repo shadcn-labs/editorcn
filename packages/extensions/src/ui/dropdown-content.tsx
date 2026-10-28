@@ -2,13 +2,15 @@ import * as React from "react";
 
 import { useDropdownPill } from "./dropdown-pill";
 
-export type DropdownMenuContentProps = React.HTMLAttributes<HTMLDivElement>;
+export interface DropdownMenuContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  activeItem?: HTMLElement | null;
+}
 
 const DropdownMenuContent = React.forwardRef<
   HTMLDivElement,
   DropdownMenuContentProps
->(({ className = "", onMouseLeave, ...props }, ref) => {
-  const { handlers, pill } = useDropdownPill(onMouseLeave);
+>(({ activeItem, className = "", onMouseLeave, ...props }, ref) => {
+  const { handlers, pill } = useDropdownPill(onMouseLeave, activeItem);
 
   return (
     <div
