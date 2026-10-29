@@ -15,7 +15,6 @@ import {
 } from "@editorcn/extensions/image-placeholder";
 import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-toolbar";
 import { Mention } from "@editorcn/extensions/mention";
-import type { MentionItem } from "@editorcn/extensions/mention";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { TableToolbar } from "@editorcn/extensions/table-toolbar";
@@ -24,6 +23,8 @@ import { Placeholder } from "@tiptap/extension-placeholder";
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import type { ReactNode } from "react";
+
+import { searchPeople } from "@/lib/mention-people";
 
 import "@editorcn/block-editor/style.css";
 import "@editorcn/editor/style.css";
@@ -41,46 +42,6 @@ interface PreviewConfig {
   toolbar: ReactNode;
   slashItems?: SlashCommandSuggestionItem[];
 }
-
-const avatar = (id: string) =>
-  `https://images.unsplash.com/photo-${id}?w=64&h=64&fit=crop&crop=faces`;
-
-const PEOPLE: MentionItem[] = [
-  {
-    avatar: avatar("1494790108377-be9c29b29330"),
-    description: "Analytics lead",
-    id: "1",
-    label: "Ada Lovelace",
-  },
-  {
-    avatar: avatar("1500648767791-00dcc994a43e"),
-    description: "Security engineer",
-    id: "2",
-    label: "Alan Turing",
-  },
-  {
-    avatar: avatar("1438761681033-6461ffad8d80"),
-    description: "Compiler team",
-    id: "3",
-    label: "Grace Hopper",
-  },
-  {
-    avatar: avatar("1507003211169-0a1dd7228f2d"),
-    description: "Kernel maintainer",
-    id: "4",
-    label: "Linus Torvalds",
-  },
-  {
-    avatar: avatar("1534528741775-53994a69daeb"),
-    description: "Flight software lead",
-    id: "5",
-    label: "Margaret Hamilton",
-  },
-];
-
-const searchPeople = (query: string) =>
-  PEOPLE.filter((p) => p.label.toLowerCase().includes(query.toLowerCase()));
-
 const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
   "image-placeholder": {
     content:

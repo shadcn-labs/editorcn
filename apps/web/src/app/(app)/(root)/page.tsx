@@ -36,10 +36,16 @@ import { TableToolbar } from "@/components/extensions/table-toolbar";
 import { TableHoverOverlay } from "@/components/extensions/table-hover-overlay";
 import { ResizableImage, ImagePlaceholder } from "@/components/extensions/image-placeholder";
 import { ImagePlaceholderToolbar } from "@/components/extensions/image-placeholder-toolbar";
+import { Mention } from "@/components/extensions/mention";
 import "@/components/editor/style.css";
 import "@/components/extensions/table/style.css";
 import "@/components/extensions/image-placeholder/style.css";
+import "@/components/extensions/mention/style.css";
 import "@/components/extensions/ui/style.css";
+
+const PEOPLE = [{ id: "1", label: "Ada Lovelace" }, { id: "2", label: "Grace Hopper" }];
+const searchPeople = (query: string) =>
+  PEOPLE.filter((p) => p.label.toLowerCase().includes(query.toLowerCase()));
 
 export function MyEditor() {
   const editor = useEditor({
@@ -64,6 +70,7 @@ export function MyEditor() {
       Table.configure({ resizable: true }),
       ResizableImage,
       ImagePlaceholder,
+      Mention.configure({ heading: "People", items: searchPeople }),
     ],
   });
 
@@ -154,6 +161,7 @@ import { GripVerticalIcon } from "lucide-react";
 import { Table } from "@/components/extensions/table";
 import { TableHoverOverlay } from "@/components/extensions/table-hover-overlay";
 import { ResizableImage, ImagePlaceholder } from "@/components/extensions/image-placeholder";
+import { Mention } from "@/components/extensions/mention";
 import {
   BlockEditor,
   SlashCommand,
@@ -165,7 +173,12 @@ import type { SlashCommandSuggestionItem } from "@/components/block-editor";
 import "@/components/block-editor/style.css";
 import "@/components/extensions/table/style.css";
 import "@/components/extensions/image-placeholder/style.css";
+import "@/components/extensions/mention/style.css";
 import "@/components/extensions/ui/style.css";
+
+const PEOPLE = [{ id: "1", label: "Ada Lovelace" }, { id: "2", label: "Grace Hopper" }];
+const searchPeople = (query: string) =>
+  PEOPLE.filter((p) => p.label.toLowerCase().includes(query.toLowerCase()));
 
 const DEMO_CONTENT = "<h2>Getting Started</h2><p>The BlockEditor is a block-style editor.</p>";
 
@@ -226,6 +239,7 @@ export function MyBlockEditor() {
       Table.configure({ resizable: true }),
       ResizableImage,
       ImagePlaceholder,
+      Mention.configure({ heading: "People", items: searchPeople }),
       SlashCommand.configure({ suggestion: getSlashCommandSuggestion(myItems) }),
       CodeBlock,
       Link.configure({ openOnClick: true, autolink: true, defaultProtocol: "https", protocols: ["http", "https"] }),

@@ -8,10 +8,10 @@ span[data-type="mention"] {
   box-decoration-break: clone;
 }
 
-.ext-mention-list {
+.ext-dropdown-content.ext-mention-list {
   z-index: 60;
-  min-width: 18rem;
-  max-width: 24rem;
+  min-width: 16rem;
+  max-width: 22rem;
   max-height: 18rem;
   overflow-y: auto;
 }

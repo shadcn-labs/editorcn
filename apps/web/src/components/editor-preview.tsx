@@ -14,6 +14,7 @@ import {
   ImagePlaceholder,
 } from "@editorcn/extensions/image-placeholder";
 import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-toolbar";
+import { Mention } from "@editorcn/extensions/mention";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { TableToolbar } from "@editorcn/extensions/table-toolbar";
@@ -29,8 +30,11 @@ import { Underline } from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 
+import { searchPeople } from "@/lib/mention-people";
+
 import "@editorcn/editor/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
+import "@editorcn/extensions/mention/style.css";
 import "@editorcn/extensions/table/style.css";
 import "@editorcn/extensions/ui/style.css";
 
@@ -89,6 +93,8 @@ const DEMO_CONTENT = `
   <li>Second ordered item with a <a href="#">link</a></li>
   <li>Third ordered item</li>
 </ol>
+<h2>Mentions</h2>
+<p>Type <code>@</code> to mention someone, like <span data-type="mention" data-id="3" data-label="Grace Hopper"></span>. The picker filters as you type and inserts a mention with a stable id.</p>
 <h2>Blockquote &amp; Code</h2>
 <blockquote><p>A well-placed blockquote adds authority. The left border uses your theme's border color.</p></blockquote>
 <p>For longer code snippets, use a <strong>code block</strong>:</p>
@@ -161,6 +167,11 @@ export const EditorPreview = ({
       Table.configure({ resizable: true }),
       ResizableImage,
       ImagePlaceholder,
+      Mention.configure({
+        debounce: 0,
+        heading: "People",
+        items: searchPeople,
+      }),
     ],
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,

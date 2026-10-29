@@ -11,6 +11,7 @@ import {
   ImagePlaceholder,
   ResizableImage,
 } from "@editorcn/extensions/image-placeholder";
+import { Mention } from "@editorcn/extensions/mention";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
@@ -27,14 +28,17 @@ import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { common, createLowlight } from "lowlight";
 
+import { searchPeople } from "@/lib/mention-people";
+
 import "@editorcn/block-editor/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
+import "@editorcn/extensions/mention/style.css";
 import "@editorcn/extensions/ui/style.css";
 import "@editorcn/extensions/table/style.css";
 
 const DEMO_CONTENT = `
 <h1 style="text-align: center;">Block Editor</h1>
-<p>A block-style editor built on <strong>Tiptap</strong> and <strong>shadcn/ui</strong>. Type <code>/</code> to open the command menu and insert blocks. Drag the handle on the left to reorder any block.</p>
+<p>A block-style editor built on <strong>Tiptap</strong> and <strong>shadcn/ui</strong>. Type <code>/</code> to open the command menu and insert blocks, or <code>@</code> to mention someone like <span data-type="mention" data-id="1" data-label="Ada Lovelace"></span>. Drag the handle on the left to reorder any block.</p>
 <h2>Text Formatting</h2>
 <p>Select any text to see the <strong>bubble menu</strong> with <em>formatting</em> options. You can also use <u>underline</u>, <s>strikethrough</s>, and <code>inline code</code>.</p>
 <h2>Task List</h2>
@@ -207,6 +211,11 @@ export const BlockEditorPreview = () => {
       Table.configure({ resizable: true }),
       ResizableImage,
       ImagePlaceholder,
+      Mention.configure({
+        debounce: 0,
+        heading: "People",
+        items: searchPeople,
+      }),
       Link.configure({
         autolink: true,
         defaultProtocol: "https",
