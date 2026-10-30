@@ -211,6 +211,12 @@ const editorFiles = [
   ),
   entry("editor/ui/input.tsx", "registry:component", "editor", "ui/input.tsx"),
   entry(
+    "editor/ui/tooltip.tsx",
+    "registry:component",
+    "editor",
+    "ui/tooltip.tsx"
+  ),
+  entry(
     "editor/ui/dialog.tsx",
     "registry:component",
     "editor",
@@ -921,6 +927,7 @@ const templateDeps = {
     "@tiptap/extension-font-family@>=3.0.0 <4",
     "@tiptap/extension-subscript@>=3.0.0 <4",
     "@tiptap/extension-superscript@>=3.0.0 <4",
+    "@tiptap/markdown@>=3.30.0 <4",
     "lucide-react@>=0.400.0 <1.0.0",
   ],
 };
@@ -957,6 +964,7 @@ const templateItems = [
       "tooltip",
       "https://editorcn.vercel.app/r/table.json",
       "https://editorcn.vercel.app/r/image-placeholder.json",
+      "https://editorcn.vercel.app/r/markdown.json",
     ],
   },
 ];

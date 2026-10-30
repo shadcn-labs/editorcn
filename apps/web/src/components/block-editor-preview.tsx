@@ -11,6 +11,11 @@ import {
   ImagePlaceholder,
   ResizableImage,
 } from "@editorcn/extensions/image-placeholder";
+import {
+  Markdown,
+  downloadMarkdown,
+  importMarkdownFile,
+} from "@editorcn/extensions/markdown";
 import { Mention } from "@editorcn/extensions/mention";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
@@ -27,6 +32,7 @@ import { Underline } from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { common, createLowlight } from "lowlight";
+import { FileDown, FileUp } from "lucide-react";
 
 import { searchPeople } from "@/lib/mention-people";
 
@@ -182,6 +188,28 @@ const myItems: SlashCommandSuggestionItem[] = [
     keywords: ["table", "grid"],
     title: "Table",
   },
+  {
+    command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range).run();
+      importMarkdownFile(editor);
+    },
+    description: "Replace the document with a .md file.",
+    icon: <FileUp />,
+    id: "importMarkdown",
+    keywords: ["markdown", "md", "import", "upload"],
+    title: "Import Markdown",
+  },
+  {
+    command: ({ editor, range }) => {
+      editor.chain().focus().deleteRange(range).run();
+      downloadMarkdown(editor, "editorcn.md");
+    },
+    description: "Download the document as a .md file.",
+    icon: <FileDown />,
+    id: "exportMarkdown",
+    keywords: ["markdown", "md", "export", "download"],
+    title: "Export Markdown",
+  },
 ];
 
 const lowlight = createLowlight(common);
@@ -211,6 +239,7 @@ export const BlockEditorPreview = () => {
       Table.configure({ resizable: true }),
       ResizableImage,
       ImagePlaceholder,
+      Markdown.configure({ pasteMarkdown: true }),
       Mention.configure({
         debounce: 0,
         heading: "People",

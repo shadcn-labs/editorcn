@@ -157,6 +157,10 @@
           "type": "registry:component"
         },
         {
+          "path": "editor/ui/tooltip.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "editor/ui/dialog.tsx",
           "type": "registry:component"
         },
@@ -502,11 +506,11 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/button.tsx",
+          "path": "extensions/ui/use-floating.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/use-floating.tsx",
+          "path": "extensions/ui/button.tsx",
           "type": "registry:component"
         },
         {
@@ -616,11 +620,11 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/button.tsx",
+          "path": "extensions/ui/use-floating.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/use-floating.tsx",
+          "path": "extensions/ui/button.tsx",
           "type": "registry:component"
         },
         {
@@ -743,6 +747,85 @@
     {
       "dependencies": [
         "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "@tiptap/markdown@>=3.30.0 <4",
+        "@tiptap/pm@>=3.0.0 <4"
+      ],
+      "description": "Load, store, and paste markdown. Wraps the official Tiptap markdown extension so editor.getMarkdown() and contentType: \"markdown\" work, adds an opt-in pasteMarkdown option, and ships a toolbar button to import, export, or copy markdown.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/markdown/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/markdown/toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
+        }
+      ],
+      "name": "markdown",
+      "title": "Markdown",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.0.0 <4",
         "@tiptap/static-renderer@>=3.21.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/pm@>=3.0.0 <4",
@@ -794,6 +877,7 @@
         "@tiptap/extension-font-family@>=3.0.0 <4",
         "@tiptap/extension-subscript@>=3.0.0 <4",
         "@tiptap/extension-superscript@>=3.0.0 <4",
+        "@tiptap/markdown@>=3.30.0 <4",
         "lucide-react@>=0.400.0 <1.0.0"
       ],
       "description": "A document page with a breadcrumb header, collaborators, a floating toolbar, task lists, and a status bar with word count and shortcuts.",

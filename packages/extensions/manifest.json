@@ -58,5 +58,13 @@
       "@tiptap/suggestion@>=3.27.0 <4",
       "@tiptap/pm@>=3.0.0 <4"
     ]
+  },
+  "markdown": {
+    "title": "Markdown",
+    "description": "Load, store, and paste markdown. Wraps the official Tiptap markdown extension so editor.getMarkdown() and contentType: \"markdown\" work, adds an opt-in pasteMarkdown option, and ships a toolbar button to import, export, or copy markdown.",
+    "extension": "markdown/index.ts",
+    "toolbar": "markdown/toolbar.tsx",
+    "ui": ["button", "dropdown-item", "popover", "popover-content"],
+    "deps": ["@tiptap/markdown@>=3.30.0 <4", "@tiptap/pm@>=3.0.0 <4"]
   }
 }

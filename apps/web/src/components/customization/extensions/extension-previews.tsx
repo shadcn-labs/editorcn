@@ -14,6 +14,8 @@ import {
   ResizableImage,
 } from "@editorcn/extensions/image-placeholder";
 import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-toolbar";
+import { Markdown } from "@editorcn/extensions/markdown";
+import { MarkdownToolbar } from "@editorcn/extensions/markdown-toolbar";
 import { Mention } from "@editorcn/extensions/mention";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
@@ -63,6 +65,12 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
       },
     ],
     toolbar: <ImagePlaceholderToolbar />,
+  },
+  markdown: {
+    content:
+      "<p>Copy some markdown, like <code># Heading</code>, <code>- list item</code> or <code>**bold**</code>, and paste it here. It turns into formatted content. Pasting rich text from a web page keeps working as before.</p>",
+    extensions: [StarterKit, Markdown.configure({ pasteMarkdown: true })],
+    toolbar: <MarkdownToolbar />,
   },
   mention: {
     content:

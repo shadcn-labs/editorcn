@@ -1,3 +1,4 @@
+import { createInlineMarkdownSpec } from "@tiptap/core";
 import { Mention as TiptapMention } from "@tiptap/extension-mention";
 import type { MentionOptions as TiptapMentionOptions } from "@tiptap/extension-mention";
 import type { EditorState } from "@tiptap/pm/state";
@@ -30,6 +31,12 @@ const mentionText = (attrs: Record<string, unknown>) =>
   `${attrs.mentionSuggestionChar ?? "@"}${attrs.label ?? attrs.id}`;
 
 export const Mention = TiptapMention.extend<MentionOptions>({
+  ...createInlineMarkdownSpec({
+    allowedAttributes: ["id", "label"],
+    nodeName: "mention",
+    selfClosing: true,
+  }),
+
   addOptions() {
     return {
       ...(this.parent?.() as TiptapMentionOptions<MentionItem>),

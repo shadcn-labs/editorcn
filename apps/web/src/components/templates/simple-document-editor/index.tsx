@@ -5,6 +5,7 @@ import {
   ImagePlaceholder,
   ResizableImage,
 } from "@editorcn/extensions/image-placeholder";
+import { Markdown } from "@editorcn/extensions/markdown";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { Color } from "@tiptap/extension-color";
@@ -72,6 +73,7 @@ export const SimpleDocumentEditor = ({
       Table.configure({ resizable: true }),
       ResizableImage,
       ImagePlaceholder,
+      Markdown.configure({ pasteMarkdown: true }),
       TaskList.configure({ HTMLAttributes: { class: "rte-task-list" } }),
       TaskItem.configure({ nested: true }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -126,7 +128,7 @@ export const SimpleDocumentEditor = ({
               Share
             </Button>
           )}
-          <MoreMenu editor={editor} />
+          <MoreMenu editor={editor} title={title} />
         </div>
       </header>
 

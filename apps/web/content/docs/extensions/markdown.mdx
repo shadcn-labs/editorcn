@@ -1,0 +1,189 @@
+---
+title: Markdown
+description: Load, store, and paste markdown in either editor.
+---
+
+The Markdown extension wraps the official [`@tiptap/markdown`](https://tiptap.dev/docs/editor/markdown) extension. It lets you load markdown into the editor, get the content back as markdown, and, with `pasteMarkdown`, turn pasted markdown text into formatted content.
+
+Default nodes and marks, GFM tables, task lists, images, and the editorcn [Mention](/docs/extensions/mention), YouTube, and Twitter nodes all round-trip without losing data.
+
+<Callout>
+  Installed Mention or the editor before this release? Re-add them so their
+  markdown rules are included: `npx shadcn@latest add
+  "https://editorcn.vercel.app/r/mention.json"
+  "https://editorcn.vercel.app/r/editor.json"`. Without them, mentions and
+  embeds are written to markdown as plain text.
+</Callout>
+
+<ExtensionPreview slug="markdown" editor="toolbar" />
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/markdown.json"
+```
+
+This installs `extensions/markdown` with its toolbar, `extensions/core/`, `extensions/ui/`, the style at `extensions/ui/style.css`, and the `@tiptap/markdown` package.
+
+To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/markdown):
+
+```bash
+npm install @tiptap/core @tiptap/react @tiptap/pm @tiptap/markdown
+```
+
+## Usage
+
+Add `Markdown` to the extensions and set `contentType: "markdown"` to load a markdown string:
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { RichTextEditor } from "@/components/editor";
+import { Markdown } from "@/components/extensions/markdown";
+
+import "@/components/editor/style.css";
+
+export function MyEditor({ markdown }: { markdown: string }) {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [StarterKit, Markdown.configure({ pasteMarkdown: true })],
+    content: markdown,
+    contentType: "markdown",
+    onUpdate: ({ editor }) => save(editor.getMarkdown()),
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+Replace or insert markdown later with the `contentType` option:
+
+```tsx
+editor.commands.setContent("# Hello\n\n- item", { contentType: "markdown" });
+editor.commands.insertContent("**bold**", { contentType: "markdown" });
+```
+
+### With `@editorcn/block-editor`
+
+The block editor takes the same `editor` instance, so the setup is identical:
+
+<ExtensionPreview slug="markdown" editor="block" />
+
+```tsx
+const editor = useEditor({
+  immediatelyRender: false,
+  extensions: [
+    StarterKit,
+    Markdown.configure({ pasteMarkdown: true }),
+    SlashCommand.configure({ suggestion: getSlashCommandSuggestion() }),
+  ],
+  content: markdown,
+  contentType: "markdown",
+});
+
+return <BlockEditor editor={editor} />;
+```
+
+## Toolbar
+
+`MarkdownToolbar` adds a button with three actions:
+
+- **Import Markdown** opens a file picker and replaces the document with the chosen `.md` file. Press `Ctrl+Z` / `Cmd+Z` to undo.
+- **Export Markdown** downloads the document as a `.md` file.
+- **Copy as Markdown** copies the document to the clipboard.
+
+The button is disabled when the `Markdown` extension isn't added to the editor.
+
+```tsx
+import { MarkdownToolbar } from "@/components/extensions/markdown/toolbar";
+
+import "@/components/extensions/ui/style.css";
+
+<RichTextEditor.Toolbar>
+  <RichTextEditor.ControlsGroup>
+    <MarkdownToolbar editor={editor} filename="post.md" />
+  </RichTextEditor.ControlsGroup>
+</RichTextEditor.Toolbar>;
+```
+
+| Prop        | Default         | Description                       |
+| ----------- | --------------- | --------------------------------- |
+| `editor`    | toolbar context | The editor to read and write      |
+| `filename`  | `"document.md"` | Name of the exported file         |
+| `className` |                 | Extra classes for the button      |
+
+Rename the menu items with the `importMarkdown`, `exportMarkdown`, `copyMarkdown`, and `markdown` labels on `ToolbarProvider`.
+
+## Settings
+
+### `pasteMarkdown`
+
+Converts pasted plain text that looks like markdown (headings, lists, quotes, code fences, tables, links, or `**bold**`-style marks) into formatted content. Off by default.
+
+Pastes that carry rich HTML, such as copying from a web page, keep the default behavior. Pastes from VS Code are treated as markdown, and pasting inside a code block always inserts plain text.
+
+```tsx
+Markdown.configure({ pasteMarkdown: true });
+```
+
+### `indentation` and `markedOptions`
+
+All [`@tiptap/markdown` options](https://tiptap.dev/docs/editor/markdown) are supported, such as the list indentation style and options passed to [marked](https://marked.js.org).
+
+```tsx
+Markdown.configure({
+  indentation: { style: "space", size: 4 },
+  markedOptions: { gfm: true },
+});
+```
+
+## Output
+
+Standard nodes use standard markdown. Tables and task lists use GFM syntax. editorcn's custom nodes use the Tiptap shortcode syntax so their attributes survive:
+
+| Node    | Markdown                                                                       |
+| ------- | ------------------------------------------------------------------------------ |
+| Mention | `[mention id="3" label="Grace Hopper"]`                                        |
+| YouTube | `:::youtube {src="https://youtu.be/dQw4w9WgXcQ" width="560" height="315"} :::` |
+| Twitter | `:::twitter {tweetId="123456789"} :::`                                         |
+
+Formatting without a markdown equivalent (text color, font size and family, alignment, underline, subscript, superscript) is dropped on export. Use HTML or JSON when you need to keep it.
+
+To render markdown read-only, parse it with `MarkdownManager` and pass the JSON to the [Static Renderer](/docs/static-renderer):
+
+```tsx
+import { MarkdownManager } from "@tiptap/markdown";
+
+const extensions = [StarterKit, Mention];
+const json = new MarkdownManager({ extensions }).parse(markdown);
+
+<StaticRenderer content={json} extensions={extensions} />;
+```
+
+## Helpers
+
+### `importMarkdownFile`, `downloadMarkdown`, `copyMarkdown`
+
+The functions behind the toolbar. Use them to build your own menu, such as slash commands in the block editor:
+
+```tsx
+importMarkdownFile(editor);
+downloadMarkdown(editor, "post.md");
+await copyMarkdown(editor);
+```
+
+### `looksLikeMarkdown`
+
+The check `pasteMarkdown` uses to decide whether pasted text is markdown. Use it in your own paste or import handlers.
+
+```tsx
+looksLikeMarkdown("- item"); // true
+looksLikeMarkdown("a plain sentence"); // false
+```

@@ -7,4 +7,6 @@ The block editor uses the same underlying [Tiptap](https://tiptap.dev/) engine a
 
 Both editors support the same set of nodes and extensions. The embed nodes (YouTube, Twitter) are available from `@editorcn/editor` and can be used with either editor, see the [full reference](/docs/editor/serialization-format) for the complete serialization format including embeds.
 
-All serialization formats (HTML, JSON, plain text) and the API (`getHTML()`, `getJSON()`, `getText()`) work the same way regardless of which editor you use.
+All serialization formats (HTML, JSON, markdown, plain text) and the API (`getHTML()`, `getJSON()`, `getMarkdown()`, `getText()`) work the same way regardless of which editor you use.
+
+Markdown needs the [Markdown extension](/docs/extensions/markdown). See the [Markdown section](/docs/editor/serialization-format#markdown) for the output format.

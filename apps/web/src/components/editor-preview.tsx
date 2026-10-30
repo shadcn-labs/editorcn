@@ -14,6 +14,8 @@ import {
   ImagePlaceholder,
 } from "@editorcn/extensions/image-placeholder";
 import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-toolbar";
+import { Markdown } from "@editorcn/extensions/markdown";
+import { MarkdownToolbar } from "@editorcn/extensions/markdown-toolbar";
 import { Mention } from "@editorcn/extensions/mention";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
@@ -167,6 +169,7 @@ export const EditorPreview = ({
       Table.configure({ resizable: true }),
       ResizableImage,
       ImagePlaceholder,
+      Markdown.configure({ pasteMarkdown: true }),
       Mention.configure({
         debounce: 0,
         heading: "People",
@@ -229,6 +232,7 @@ export const EditorPreview = ({
           <RichTextEditor.ControlsGroup>
             <ImagePlaceholderToolbar editor={editor} />
             <TableToolbar editor={editor} />
+            <MarkdownToolbar editor={editor} filename="editorcn.md" />
           </RichTextEditor.ControlsGroup>
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.Undo />
