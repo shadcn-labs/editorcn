@@ -230,7 +230,7 @@ export const TableToolbar = ({
           active={state.inTable}
           className={["ext-btn--icon-sm", className].filter(Boolean).join(" ")}
           disabled={state.disabled}
-          title={labels.insertTable}
+          tooltip={labels.insertTable}
         >
           <GridIcon />
         </Button>

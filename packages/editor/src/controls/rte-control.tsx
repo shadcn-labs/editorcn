@@ -1,12 +1,16 @@
 import type { ChainedCommands, Editor } from "@tiptap/core";
 import { useEditorState } from "@tiptap/react";
-import React from "react";
+import React, { useContext } from "react";
 
 import type { RichTextEditorIcons } from "../icon-types";
 import type { RichTextEditorLabels } from "../labels";
-import { useRichTextEditorContext } from "../rte-context";
+import {
+  RichTextEditorContext,
+  useRichTextEditorContext,
+} from "../rte-context";
 import type { RichTextEditorControlProps } from "../types";
 import { Toggle } from "../ui/toggle";
+import { TooltipTrigger } from "../ui/tooltip";
 import { cn } from "../ui/utils";
 
 type IsActiveConfig =
@@ -25,6 +29,20 @@ interface CreateControlProps {
   operation: { name: string; attributes?: Record<string, unknown> | string };
 }
 
+export const RichTextEditorTooltip = ({
+  children,
+  label,
+}: {
+  children: React.ReactElement;
+  label: string;
+}) => {
+  const tooltip = useContext(RichTextEditorContext)?.tooltip;
+  if (!tooltip) {
+    return children;
+  }
+  return <TooltipTrigger handle={tooltip} payload={label} render={children} />;
+};
+
 export const RichTextEditorControl = ({
   active = false,
   interactive: _interactive = true,
@@ -34,23 +52,32 @@ export const RichTextEditorControl = ({
   onClick,
   disabled,
   ...props
-}: RichTextEditorControlProps) => (
-  <Toggle
-    size="sm"
-    pressed={active}
-    disabled={disabled}
-    aria-label={props["aria-label"]}
-    title={props.title}
-    className={cn("rte-control-button", className)}
-    onMouseDown={(e) => {
-      e.preventDefault();
-      onMouseDown?.(e);
-    }}
-    onPressedChange={() => onClick?.({} as React.MouseEvent<HTMLButtonElement>)}
-  >
-    {children}
-  </Toggle>
-);
+}: RichTextEditorControlProps) => {
+  const toggle = (
+    <Toggle
+      size="sm"
+      pressed={active}
+      disabled={disabled}
+      aria-label={props["aria-label"]}
+      className={cn("rte-control-button", className)}
+      onMouseDown={(e) => {
+        e.preventDefault();
+        onMouseDown?.(e);
+      }}
+      onPressedChange={() =>
+        onClick?.({} as React.MouseEvent<HTMLButtonElement>)
+      }
+    >
+      {children}
+    </Toggle>
+  );
+
+  return props.title ? (
+    <RichTextEditorTooltip label={props.title}>{toggle}</RichTextEditorTooltip>
+  ) : (
+    toggle
+  );
+};
 
 type EditorStateSelector = (ctx: { editor: Editor | null }) => {
   active: boolean;

@@ -1,7 +1,11 @@
-import { useMemo, useEffect } from "react";
+import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
+import { useEffect, useMemo, useState } from "react";
 
 import { BubbleMenu } from "./bubble-menu/index";
-import { RichTextEditorControl } from "./controls/rte-control";
+import {
+  RichTextEditorControl,
+  RichTextEditorTooltip,
+} from "./controls/rte-control";
 import * as controls from "./controls/rte-controls";
 import { LinkControl } from "./controls/rte-link-control";
 import { TwitterEmbedControl } from "./controls/rte-twitter-control";
@@ -14,6 +18,7 @@ import { ControlsGroup } from "./rte-controls-group";
 import { Footer } from "./rte-footer";
 import { Toolbar } from "./rte-toolbar";
 import type { RichTextEditorProps } from "./types";
+import { Tooltip, TooltipContent, TooltipProvider } from "./ui/tooltip";
 import { cn } from "./ui/utils";
 
 const RichTextEditorRoot = ({
@@ -31,6 +36,7 @@ const RichTextEditorRoot = ({
   );
 
   const mergedIcons = useMemo(() => ({ ...DEFAULT_ICONS, ...icons }), [icons]);
+  const [tooltip] = useState(() => TooltipPrimitive.createHandle<string>());
 
   useEffect(() => {
     if (editor && editor.isEditable !== editable) {
@@ -45,6 +51,7 @@ const RichTextEditorRoot = ({
         editor,
         icons: mergedIcons,
         labels: mergedLabels,
+        tooltip,
         variant,
       }}
     >
@@ -56,7 +63,14 @@ const RichTextEditorRoot = ({
         )}
         data-variant={variant}
       >
-        {children}
+        <TooltipProvider>
+          {children}
+          <Tooltip handle={tooltip}>
+            {({ payload }) => (
+              <TooltipContent side="bottom">{payload as string}</TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </RichTextEditorContext.Provider>
   );
@@ -94,6 +108,7 @@ export const RichTextEditor = Object.assign(RichTextEditorRoot, {
   Subscript: controls.SubscriptControl,
   Superscript: controls.SuperscriptControl,
   Toolbar,
+  Tooltip: RichTextEditorTooltip,
   TwitterEmbed: TwitterEmbedControl,
   Underline: controls.UnderlineControl,
   Undo: controls.UndoControl,
