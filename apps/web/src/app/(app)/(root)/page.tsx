@@ -8,6 +8,7 @@ import { HomeCtas } from "@/components/home-ctas";
 import { HomeCustomize } from "@/components/home-customize";
 import { PageHero } from "@/components/page-hero";
 import { PageTransition } from "@/components/page-transition";
+import { PromoCard } from "@/components/promo-card";
 import { TemplateDemo } from "@/components/template-demo";
 import type { TemplateName } from "@/components/template-demo";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -407,6 +408,7 @@ export const HomePage = async () => {
           <HomeCustomize className="container py-16 md:py-20 lg:py-24" />
         </section>
       </PageTransition>
+      <PromoCard variant="floating" />
     </>
   );
 };
