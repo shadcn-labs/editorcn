@@ -160,14 +160,16 @@ Add the [Markdown extension](/docs/extensions/markdown) to read and write markdo
 ```tsx
 const editor = useEditor({
   extensions: [StarterKit, Markdown],
-  content: "# Hello
-
-- item",
+  content: "# Hello\n\n- item",
   contentType: "markdown",
   onUpdate: ({ editor }) => save(editor.getMarkdown()),
 });
 
-editor?.commands.setContent(savedMarkdown, { contentType: "markdown" });
+useEffect(() => {
+  if (editor && savedMarkdown !== undefined) {
+    editor.commands.setContent(savedMarkdown, { contentType: "markdown" });
+  }
+}, [editor, savedMarkdown]);
 ```
 
 Default nodes and marks, GFM tables, task lists, and images use standard markdown. Mentions and embeds use shortcode syntax so their attributes survive:

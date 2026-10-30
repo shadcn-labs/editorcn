@@ -1,27 +1,28 @@
+import { getSchema } from "@tiptap/core";
 import { TaskItem, TaskList } from "@tiptap/extension-list";
 import { MarkdownManager } from "@tiptap/markdown";
 import { StarterKit } from "@tiptap/starter-kit";
 import { describe, expect, it } from "vitest";
 
-import { looksLikeMarkdown } from ".";
+import { looksLikeMarkdown, normalizeMarks } from ".";
 import { TwitterEmbed } from "../../../editor/src/controls/rte-twitter-control";
 import { YouTubeEmbed } from "../../../editor/src/controls/rte-youtube-control";
 import { ResizableImage } from "../image-placeholder";
 import { Mention } from "../mention";
 import { Table } from "../table";
 
-const manager = new MarkdownManager({
-  extensions: [
-    StarterKit,
-    TaskList,
-    TaskItem,
-    Mention,
-    Table,
-    ResizableImage,
-    TwitterEmbed,
-    YouTubeEmbed,
-  ],
-});
+const extensions = [
+  StarterKit,
+  TaskList,
+  TaskItem,
+  Mention,
+  Table,
+  ResizableImage,
+  TwitterEmbed,
+  YouTubeEmbed,
+];
+
+const manager = new MarkdownManager({ extensions });
 
 const roundTrip = (md: string) => manager.serialize(manager.parse(md)).trim();
 
@@ -98,6 +99,19 @@ describe("markdown", () => {
       id: "u1",
       label,
     });
+  });
+
+  it("drops marks the schema can't combine instead of crashing", () => {
+    const schema = getSchema(extensions);
+    const json = normalizeMarks(
+      schema,
+      manager.parse("See [`@tiptap/markdown`](https://x.com) and **`code`**.")
+    );
+    expect(() => schema.nodeFromJSON(json).check()).not.toThrow();
+    const marks = json.content?.[0]?.content?.map((node) =>
+      node.marks?.map((mark) => mark.type)
+    );
+    expect(marks).toContainEqual(["link"]);
   });
 
   it("detects markdown in pasted text", () => {

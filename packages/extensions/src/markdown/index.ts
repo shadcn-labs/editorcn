@@ -1,6 +1,7 @@
-import type { Editor } from "@tiptap/core";
+import type { Editor, JSONContent } from "@tiptap/core";
 import { Markdown as TiptapMarkdown } from "@tiptap/markdown";
 import type { MarkdownExtensionOptions as TiptapMarkdownOptions } from "@tiptap/markdown";
+import type { Mark, Schema } from "@tiptap/pm/model";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 
 export interface MarkdownOptions extends TiptapMarkdownOptions {
@@ -13,6 +14,37 @@ const MARKDOWN_PATTERN =
 export const looksLikeMarkdown = (text: string) => MARKDOWN_PATTERN.test(text);
 
 export const markdownPastePluginKey = new PluginKey("markdownPaste");
+
+const compatible = (marks: Mark[], mark: Mark) =>
+  marks.every(
+    (other) =>
+      !(other.type.excludes(mark.type) || mark.type.excludes(other.type))
+  );
+
+export const normalizeMarks = (
+  schema: Schema,
+  json: JSONContent
+): JSONContent => {
+  const marks: Mark[] = [];
+  const ordered = (json.marks ?? []).toSorted(
+    (a, b) =>
+      Number(schema.marks[a.type]?.spec.excludes === "_") -
+      Number(schema.marks[b.type]?.spec.excludes === "_")
+  );
+  for (const raw of ordered) {
+    const mark = schema.marks[raw.type] && schema.markFromJSON(raw);
+    if (mark && compatible(marks, mark)) {
+      marks.push(mark);
+    }
+  }
+  return {
+    ...json,
+    ...(json.marks && { marks: marks.map((mark) => mark.toJSON()) }),
+    ...(json.content && {
+      content: json.content.map((child) => normalizeMarks(schema, child)),
+    }),
+  };
+};
 
 export const downloadMarkdown = (editor: Editor, filename = "document.md") => {
   const url = URL.createObjectURL(
@@ -82,5 +114,21 @@ export const Markdown = TiptapMarkdown.extend<MarkdownOptions>({
         },
       }),
     ];
+  },
+
+  onBeforeCreate(event) {
+    this.parent?.(event);
+    const { editor } = this;
+    const manager = editor.markdown;
+    if (!manager) {
+      return;
+    }
+    const parse = manager.parse.bind(manager);
+    manager.parse = (markdown) =>
+      normalizeMarks(editor.schema, parse(markdown));
+    const { content } = editor.options;
+    if (content && typeof content === "object" && !Array.isArray(content)) {
+      editor.options.content = normalizeMarks(editor.schema, content);
+    }
   },
 });
