@@ -164,10 +164,10 @@ const editor = useEditor({
 
 - item",
   contentType: "markdown",
+  onUpdate: ({ editor }) => save(editor.getMarkdown()),
 });
 
-const markdown = editor.getMarkdown();
-editor.commands.setContent(markdown, { contentType: "markdown" });
+editor?.commands.setContent(savedMarkdown, { contentType: "markdown" });
 ```
 
 Default nodes and marks, GFM tables, task lists, and images use standard markdown. Mentions and embeds use shortcode syntax so their attributes survive:

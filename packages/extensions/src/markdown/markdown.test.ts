@@ -63,12 +63,41 @@ describe("markdown", () => {
   });
 
   it("keeps YouTube and Twitter embeds", () => {
-    const youtube = { attrs: { src: "https://youtu.be/abc" }, type: "youtube" };
-    const twitter = { attrs: { tweetId: "123" }, type: "twitter" };
+    const youtube = {
+      attrs: {
+        align: "left",
+        height: 360,
+        src: "https://youtu.be/abc",
+        width: 640,
+      },
+      type: "youtube",
+    };
+    const twitter = {
+      attrs: { align: "right", height: 300, tweetId: "123", width: 500 },
+      type: "twitter",
+    };
     const json = { content: [youtube, twitter], type: "doc" };
     const parsed = manager.parse(manager.serialize(json));
     expect(parsed.content?.[0]).toMatchObject(youtube);
     expect(parsed.content?.[1]).toMatchObject(twitter);
+  });
+
+  it("keeps mention labels with quotes and brackets", () => {
+    const label = 'Ada "The Countess" [L] & co';
+    const json = {
+      content: [
+        {
+          content: [{ attrs: { id: "u1", label }, type: "mention" }],
+          type: "paragraph",
+        },
+      ],
+      type: "doc",
+    };
+    const parsed = manager.parse(manager.serialize(json));
+    expect(parsed.content?.[0]?.content?.[0]?.attrs).toMatchObject({
+      id: "u1",
+      label,
+    });
   });
 
   it("detects markdown in pasted text", () => {

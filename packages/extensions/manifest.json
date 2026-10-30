@@ -65,6 +65,6 @@
     "extension": "markdown/index.ts",
     "toolbar": "markdown/toolbar.tsx",
     "ui": ["button", "dropdown-item", "popover", "popover-content"],
-    "deps": ["@tiptap/markdown@>=3.30.0 <4", "@tiptap/pm@>=3.0.0 <4"]
+    "deps": ["@tiptap/markdown@>=3.30.5 <4", "@tiptap/pm@>=3.0.0 <4"]
   }
 }

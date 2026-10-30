@@ -27,6 +27,26 @@ export const mentionPluginKey = new PluginKey("mention");
 export const isMentionActive = (state: EditorState): boolean =>
   Boolean(mentionPluginKey.getState(state)?.active);
 
+const ENCODED: Record<string, string> = {
+  '"': "&quot;",
+  "&": "&amp;",
+  "[": "&#91;",
+  "]": "&#93;",
+};
+
+const DECODED: Record<string, string> = Object.fromEntries(
+  Object.entries(ENCODED).map(([raw, safe]) => [safe, raw])
+);
+
+const encode = (value: unknown) =>
+  String(value).replaceAll(/[&"[\]]/g, (char) => ENCODED[char] ?? char);
+
+const decode = (value: string) =>
+  value.replaceAll(
+    /&(?:amp|quot|#91|#93);/g,
+    (entity) => DECODED[entity] ?? entity
+  );
+
 const mentionText = (attrs: Record<string, unknown>) =>
   `${attrs.mentionSuggestionChar ?? "@"}${attrs.label ?? attrs.id}`;
 
@@ -34,7 +54,19 @@ export const Mention = TiptapMention.extend<MentionOptions>({
   ...createInlineMarkdownSpec({
     allowedAttributes: ["id", "label"],
     nodeName: "mention",
+    parseAttributes: (text) =>
+      Object.fromEntries(
+        [...text.matchAll(/(\w+)="([^"]*)"/g)].map(([, key, value]) => [
+          key,
+          decode(value ?? ""),
+        ])
+      ),
     selfClosing: true,
+    serializeAttributes: (attrs) =>
+      Object.entries(attrs)
+        .filter(([, value]) => value !== null && value !== undefined)
+        .map(([key, value]) => `${key}="${encode(value)}"`)
+        .join(" "),
   }),
 
   addOptions() {

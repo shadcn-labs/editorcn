@@ -51,7 +51,10 @@ export const Collaborators = ({
 const ITEM = "rounded-md py-1 text-[13px] [&_svg]:size-3.5!";
 
 const toFilename = (title: string) =>
-  `${title.trim().replaceAll(/[^\w-]+/g, "-") || "untitled"}.md`;
+  `${
+    title.replaceAll(/[^\p{L}\p{N}_-]+/gu, "-").replaceAll(/^-+|-+$/g, "") ||
+    "untitled"
+  }.md`;
 
 export const MoreMenu = ({
   editor,

@@ -927,7 +927,7 @@ const templateDeps = {
     "@tiptap/extension-font-family@>=3.0.0 <4",
     "@tiptap/extension-subscript@>=3.0.0 <4",
     "@tiptap/extension-superscript@>=3.0.0 <4",
-    "@tiptap/markdown@>=3.30.0 <4",
+    "@tiptap/markdown@>=3.30.5 <4",
     "lucide-react@>=0.400.0 <1.0.0",
   ],
 };

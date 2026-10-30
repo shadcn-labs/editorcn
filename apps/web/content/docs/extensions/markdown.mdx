@@ -5,7 +5,7 @@ description: Load, store, and paste markdown in either editor.
 
 The Markdown extension wraps the official [`@tiptap/markdown`](https://tiptap.dev/docs/editor/markdown) extension. It lets you load markdown into the editor, get the content back as markdown, and, with `pasteMarkdown`, turn pasted markdown text into formatted content.
 
-Default nodes and marks, GFM tables, task lists, images, and the editorcn [Mention](/docs/extensions/mention), YouTube, and Twitter nodes all round-trip without losing data.
+Default nodes and marks, GFM tables, task lists, images, and the editorcn [Mention](/docs/extensions/mention), YouTube, and Twitter nodes all round-trip without losing data, as long as the extension for each node (Table, TaskList and TaskItem, Image, Mention, YouTube, Twitter) is registered alongside `Markdown`.
 
 <Callout>
   Installed Mention or the editor before this release? Re-add them so their
@@ -25,7 +25,7 @@ npx shadcn@latest add "https://editorcn.vercel.app/r/markdown.json"
 
 This installs `extensions/markdown` with its toolbar, `extensions/core/`, `extensions/ui/`, the style at `extensions/ui/style.css`, and the `@tiptap/markdown` package.
 
-To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/markdown):
+To install the files manually instead, install these packages and copy the `markdown`, `core`, and `ui` folders from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src):
 
 ```bash
 npm install @tiptap/core @tiptap/react @tiptap/pm @tiptap/markdown
@@ -113,11 +113,11 @@ import "@/components/extensions/ui/style.css";
 </RichTextEditor.Toolbar>;
 ```
 
-| Prop        | Default         | Description                       |
-| ----------- | --------------- | --------------------------------- |
-| `editor`    | toolbar context | The editor to read and write      |
-| `filename`  | `"document.md"` | Name of the exported file         |
-| `className` |                 | Extra classes for the button      |
+| Prop        | Default         | Description                  |
+| ----------- | --------------- | ---------------------------- |
+| `editor`    | toolbar context | The editor to read and write |
+| `filename`  | `"document.md"` | Name of the exported file    |
+| `className` |                 | Extra classes for the button |
 
 Rename the menu items with the `importMarkdown`, `exportMarkdown`, `copyMarkdown`, and `markdown` labels on `ToolbarProvider`.
 
