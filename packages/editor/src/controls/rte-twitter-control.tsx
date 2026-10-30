@@ -1,6 +1,11 @@
 "use client";
 
-import { Node, nodeInputRule } from "@tiptap/core";
+import {
+  createAtomBlockMarkdownSpec,
+  Node,
+  nodeInputRule,
+  parseAttributes,
+} from "@tiptap/core";
 import { ReactNodeViewRenderer, useEditorState } from "@tiptap/react";
 import type { NodeViewProps } from "@tiptap/react";
 import { useState, useCallback, useEffect, useRef } from "react";
@@ -256,6 +261,20 @@ const TwitterNodeView = (props: NodeViewProps) => {
 };
 
 export const TwitterEmbed = Node.create({
+  ...createAtomBlockMarkdownSpec({
+    allowedAttributes: ["tweetId", "width", "height", "align"],
+    nodeName: "twitter",
+    parseAttributes: (text) => {
+      const attrs = parseAttributes(text);
+      for (const key of ["width", "height"]) {
+        if (key in attrs) {
+          attrs[key] = Number(attrs[key]);
+        }
+      }
+      return attrs;
+    },
+    requiredAttributes: ["tweetId"],
+  }),
   addAttributes() {
     return {
       align: {

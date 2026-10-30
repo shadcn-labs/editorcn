@@ -192,6 +192,19 @@
   animation: ext-pop-in 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+/* ── Tooltip ── */
+.ext-tooltip {
+  padding: 0.375rem 0.75rem;
+  border-radius: 0;
+  background: var(--foreground);
+  color: var(--background);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  white-space: nowrap;
+  pointer-events: none;
+  animation: ext-pop-in 0.12s ease-out forwards;
+}
+
 /* ── Separator ── */
 .ext-separator {
   flex-shrink: 0;

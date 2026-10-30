@@ -23,4 +23,10 @@ export type { RteDropdownDividerProps } from "./rte-dropdown-divider";
 export { RteDropdownIcon } from "./rte-dropdown-icon";
 export type { RteDropdownIconProps } from "./rte-dropdown-icon";
 export { Toggle, toggleVariants } from "./toggle";
+export {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./tooltip";
 export { cn } from "./utils";

@@ -1,0 +1,24 @@
+---
+title: "October 29, 2026 - Markdown"
+description: "A new Markdown extension loads, stores, and pastes markdown in both editors, with lossless round-trips for tables, task lists, mentions, and embeds."
+date: "2026-10-29"
+---
+
+Both editors can now read and write markdown through the new [Markdown extension](/docs/extensions/markdown), built on the official `@tiptap/markdown`.
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/markdown.json"
+```
+
+## Highlights
+
+- **Load and export**: pass `contentType: "markdown"` to `useEditor` or `setContent`, and call `editor.getMarkdown()` to save.
+- **Markdown paste**: `Markdown.configure({ pasteMarkdown: true })` turns pasted markdown text into formatted content. Rich HTML pastes keep the default behavior, and code blocks always paste plain text.
+- **Import and export button**: `MarkdownToolbar` imports a `.md` file, exports the document as `.md`, or copies it as markdown. The landing page editors and the Simple Document Editor template now include it.
+- **Custom nodes round-trip**: Mention, YouTube, and Twitter nodes now define markdown rules, so their ids and attributes survive a markdown, JSON, markdown round trip. GFM tables and task lists work out of the box.
+- **Upgrade note**: re-add `mention` and `editor` with the shadcn CLI to get their markdown rules. Older copies write mentions and embeds as plain text.
+- **Static rendering**: parse markdown with `MarkdownManager` and pass the JSON to the Static Renderer.
+
+## Not included
+
+Text color, font size and family, alignment, underline, subscript, and superscript have no markdown equivalent and are dropped on export. Use HTML or JSON to keep them.

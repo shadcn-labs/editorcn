@@ -1,6 +1,11 @@
 "use client";
 
-import { Node, nodeInputRule } from "@tiptap/core";
+import {
+  createAtomBlockMarkdownSpec,
+  Node,
+  nodeInputRule,
+  parseAttributes,
+} from "@tiptap/core";
 import { ReactNodeViewRenderer, useEditorState } from "@tiptap/react";
 import type { NodeViewProps } from "@tiptap/react";
 import { useState, useCallback } from "react";
@@ -82,6 +87,20 @@ const YouTubeNodeView = (props: NodeViewProps) => {
 };
 
 export const YouTubeEmbed = Node.create({
+  ...createAtomBlockMarkdownSpec({
+    allowedAttributes: ["src", "width", "height", "align"],
+    nodeName: "youtube",
+    parseAttributes: (text) => {
+      const attrs = parseAttributes(text);
+      for (const key of ["width", "height"]) {
+        if (key in attrs) {
+          attrs[key] = Number(attrs[key]);
+        }
+      }
+      return attrs;
+    },
+    requiredAttributes: ["src"],
+  }),
   addAttributes() {
     return {
       align: {

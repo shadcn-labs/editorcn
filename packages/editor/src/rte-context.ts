@@ -1,3 +1,4 @@
+import type { Tooltip } from "@base-ui/react/tooltip";
 import type { Editor } from "@tiptap/react";
 import { createContext, useContext } from "react";
 
@@ -11,6 +12,7 @@ interface RichTextEditorContextValue {
   icons: RichTextEditorIcons;
   variant: RichTextEditorVariant;
   editable: boolean;
+  tooltip: Tooltip.Handle<string>;
 }
 
 export const RichTextEditorContext =

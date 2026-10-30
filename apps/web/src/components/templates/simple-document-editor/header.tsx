@@ -1,7 +1,12 @@
 "use client";
 
+import {
+  copyMarkdown,
+  downloadMarkdown,
+  importMarkdownFile,
+} from "@editorcn/extensions/markdown";
 import type { Editor } from "@tiptap/react";
-import { Copy, MoreHorizontal, Printer } from "lucide-react";
+import { Copy, FileDown, FileUp, MoreHorizontal, Printer } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -9,6 +14,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -42,7 +48,21 @@ export const Collaborators = ({
   </div>
 );
 
-export const MoreMenu = ({ editor }: { editor: Editor | null }) => (
+const ITEM = "rounded-md py-1 text-[13px] [&_svg]:size-3.5!";
+
+const toFilename = (title: string) =>
+  `${
+    title.replaceAll(/[^\p{L}\p{N}_-]+/gu, "-").replaceAll(/^-+|-+$/g, "") ||
+    "untitled"
+  }.md`;
+
+export const MoreMenu = ({
+  editor,
+  title,
+}: {
+  editor: Editor | null;
+  title: string;
+}) => (
   <DropdownMenu>
     <DropdownMenuTrigger asChild>
       <Button
@@ -54,18 +74,40 @@ export const MoreMenu = ({ editor }: { editor: Editor | null }) => (
         <MoreHorizontal />
       </Button>
     </DropdownMenuTrigger>
-    <DropdownMenuContent align="end" className="min-w-36 p-1">
+    <DropdownMenuContent align="end" className="min-w-44 p-1">
       <DropdownMenuItem
-        className="rounded-md py-1 text-[13px] [&_svg]:size-3.5!"
+        className={ITEM}
+        disabled={!editor}
+        onClick={() => editor && importMarkdownFile(editor)}
+      >
+        <FileUp />
+        Import Markdown
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        className={ITEM}
+        disabled={!editor}
+        onClick={() => editor && downloadMarkdown(editor, toFilename(title))}
+      >
+        <FileDown />
+        Export Markdown
+      </DropdownMenuItem>
+      <DropdownMenuItem
+        className={ITEM}
+        disabled={!editor}
+        onClick={() => editor && copyMarkdown(editor)}
+      >
+        <Copy />
+        Copy as Markdown
+      </DropdownMenuItem>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem
+        className={ITEM}
         onClick={() => navigator.clipboard.writeText(editor?.getHTML() ?? "")}
       >
         <Copy />
         Copy as HTML
       </DropdownMenuItem>
-      <DropdownMenuItem
-        className="rounded-md py-1 text-[13px] [&_svg]:size-3.5!"
-        onClick={() => window.print()}
-      >
+      <DropdownMenuItem className={ITEM} onClick={() => window.print()}>
         <Printer />
         Print
       </DropdownMenuItem>

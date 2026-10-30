@@ -1,0 +1,125 @@
+import { getSchema } from "@tiptap/core";
+import { TaskItem, TaskList } from "@tiptap/extension-list";
+import { MarkdownManager } from "@tiptap/markdown";
+import { StarterKit } from "@tiptap/starter-kit";
+import { describe, expect, it } from "vitest";
+
+import { looksLikeMarkdown, normalizeMarks } from ".";
+import { TwitterEmbed } from "../../../editor/src/controls/rte-twitter-control";
+import { YouTubeEmbed } from "../../../editor/src/controls/rte-youtube-control";
+import { ResizableImage } from "../image-placeholder";
+import { Mention } from "../mention";
+import { Table } from "../table";
+
+const extensions = [
+  StarterKit,
+  TaskList,
+  TaskItem,
+  Mention,
+  Table,
+  ResizableImage,
+  TwitterEmbed,
+  YouTubeEmbed,
+];
+
+const manager = new MarkdownManager({ extensions });
+
+const roundTrip = (md: string) => manager.serialize(manager.parse(md)).trim();
+
+describe("markdown", () => {
+  it("keeps default nodes and marks", () => {
+    const md = [
+      "# Title",
+      "Some **bold**, *italic*, ~~strike~~, `code`, and a [link](https://x.com).",
+      "> quote",
+      "- a\n- b\n  - nested",
+      "1. one\n2. two",
+      "```ts\nconst a = 1;\n```",
+      "![alt](https://x.com/a.png)",
+      "---",
+    ].join("\n\n");
+    expect(roundTrip(md)).toBe(md);
+  });
+
+  it("keeps GFM tables", () => {
+    const json = manager.parse("| A | B |\n| --- | --- |\n| 1 | 2 |");
+    expect(manager.parse(manager.serialize(json))).toStrictEqual(json);
+    expect(json.content?.[0]?.type).toBe("table");
+  });
+
+  it("keeps GFM task lists", () => {
+    const md = "- [ ] todo\n- [x] done";
+    expect(manager.parse(md).content?.[0]?.type).toBe("taskList");
+    expect(roundTrip(md)).toBe(md);
+  });
+
+  it("keeps mentions with id and label", () => {
+    const md = 'Hi [mention id="u1" label="Ada"]!';
+    const json = manager.parse(md);
+    expect(json.content?.[0]?.content?.[1]).toMatchObject({
+      attrs: { id: "u1", label: "Ada" },
+      type: "mention",
+    });
+    expect(roundTrip(md)).toBe(md);
+  });
+
+  it("keeps YouTube and Twitter embeds", () => {
+    const youtube = {
+      attrs: {
+        align: "left",
+        height: 360,
+        src: "https://youtu.be/abc",
+        width: 640,
+      },
+      type: "youtube",
+    };
+    const twitter = {
+      attrs: { align: "right", height: 300, tweetId: "123", width: 500 },
+      type: "twitter",
+    };
+    const json = { content: [youtube, twitter], type: "doc" };
+    const parsed = manager.parse(manager.serialize(json));
+    expect(parsed.content?.[0]).toMatchObject(youtube);
+    expect(parsed.content?.[1]).toMatchObject(twitter);
+  });
+
+  it("keeps mention labels with quotes and brackets", () => {
+    const label = 'Ada "The Countess" [L] & co';
+    const json = {
+      content: [
+        {
+          content: [{ attrs: { id: "u1", label }, type: "mention" }],
+          type: "paragraph",
+        },
+      ],
+      type: "doc",
+    };
+    const parsed = manager.parse(manager.serialize(json));
+    expect(parsed.content?.[0]?.content?.[0]?.attrs).toMatchObject({
+      id: "u1",
+      label,
+    });
+  });
+
+  it("drops marks the schema can't combine instead of crashing", () => {
+    const schema = getSchema(extensions);
+    const json = normalizeMarks(
+      schema,
+      manager.parse("See [`@tiptap/markdown`](https://x.com) and **`code`**.")
+    );
+    expect(() => schema.nodeFromJSON(json).check()).not.toThrow();
+    const marks = json.content?.[0]?.content?.map((node) =>
+      node.marks?.map((mark) => mark.type)
+    );
+    expect(marks).toContainEqual(["link"]);
+  });
+
+  it("detects markdown in pasted text", () => {
+    expect(looksLikeMarkdown("# Heading")).toBeTruthy();
+    expect(looksLikeMarkdown("- item")).toBeTruthy();
+    expect(looksLikeMarkdown("see **this**")).toBeTruthy();
+    expect(looksLikeMarkdown("[docs](https://x.com)")).toBeTruthy();
+    expect(looksLikeMarkdown("just a normal sentence.")).toBeFalsy();
+    expect(looksLikeMarkdown("snake_case_name")).toBeFalsy();
+  });
+});

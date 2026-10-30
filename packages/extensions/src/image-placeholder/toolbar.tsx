@@ -29,7 +29,7 @@ export const ImagePlaceholderToolbar = ({
       aria-label={labels.image}
       className={["ext-btn--icon-sm", className].filter(Boolean).join(" ")}
       disabled={disabled}
-      title={labels.image}
+      tooltip={labels.image}
       onClick={() => {
         if (editor && !editor.isDestroyed && !disabled) {
           editor.chain().focus().insertImagePlaceholder().run();
