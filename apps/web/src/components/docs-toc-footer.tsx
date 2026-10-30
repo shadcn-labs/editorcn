@@ -3,6 +3,7 @@
 import { SquarePenIcon } from "lucide-react";
 
 import { DiscordIcon, XIcon } from "@/components/icons";
+import { PromoCard } from "@/components/promo-card";
 import { GITHUB, LINK } from "@/constants/links";
 import { DOCS_DIR } from "@/lib/docs";
 import { trackEvent } from "@/lib/events";
@@ -16,6 +17,7 @@ export const DocsTocFooter = ({
   className?: string;
 }) => (
   <div className={cn("flex flex-col gap-2", className)}>
+    <PromoCard variant="sidebar" />
     {docId && (
       <a
         href={`${LINK.GITHUB}/edit/${GITHUB.branch}/apps/web/${DOCS_DIR}/${docId}`}

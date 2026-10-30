@@ -14,5 +14,7 @@ export const LINK = {
   PORTFOLIO: "https://abdullahmukadam.fun",
   SHADCN_MCP_DOCS: "https://ui.shadcn.com/docs/mcp",
   SPONSOR: `https://github.com/sponsors/AbdullahMukadam`,
+  TRISTACK_GITHUB: "https://github.com/AbdullahMukadam/tristack",
+  TRISTACK_NEW: "https://tristack.space/new",
   X_SHADCN_LABS: "https://x.com/shadcnlabs",
 } as const;
