@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import { ListCard } from "@/components/list-card";
 import { PageTransition } from "@/components/page-transition";
 import { ROUTES } from "@/constants/routes";
 import { TOOLS } from "@/lib/tools";
@@ -41,17 +40,12 @@ export default function ToolsPage() {
             </div>
             <div className="mb-24 flex flex-col gap-3">
               {TOOLS.map((tool) => (
-                <Link
-                  className="flex w-full flex-col gap-1 rounded-xl bg-surface px-4 py-4 text-surface-foreground transition-colors hover:bg-surface/80"
+                <ListCard
+                  description={tool.intro}
                   href={`${ROUTES.TOOLS}/${tool.slug}`}
                   key={tool.slug}
-                  prefetch={false}
-                >
-                  <h2 className="font-heading text-lg font-semibold tracking-tight">
-                    {tool.title}
-                  </h2>
-                  <p className="text-sm text-muted-foreground">{tool.intro}</p>
-                </Link>
+                  title={tool.title}
+                />
               ))}
             </div>
           </div>
