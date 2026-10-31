@@ -19,7 +19,9 @@ import "@editorcn/static-renderer/style.css";
 
 const load = (editor: Editor, input: string, from: Format) => {
   if (from === "json") {
-    editor.commands.setContent(JSON.parse(input));
+    editor.commands.setContent(JSON.parse(input), {
+      errorOnInvalidContent: true,
+    });
   } else if (from === "markdown") {
     editor.commands.setContent(input, { contentType: "markdown" });
   } else {
