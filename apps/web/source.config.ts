@@ -36,7 +36,9 @@ export const docs = defineDocs({
     postprocess: {
       includeProcessedMarkdown: true,
     },
-    schema: frontmatterSchema,
+    schema: frontmatterSchema.extend({
+      seoTitle: z.string().optional(),
+    }),
   },
   meta: {
     schema: metaSchema,

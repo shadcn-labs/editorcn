@@ -125,7 +125,7 @@ export const baseMetadata: Metadata = {
   },
   publisher: SITE.AUTHOR.NAME,
   title: {
-    default: `${SITE.NAME} - ${SITE.DESCRIPTION.SHORT}`,
+    default: `shadcn Rich Text Editor Components for React | ${SITE.NAME}`,
     template: `%s | ${SITE.NAME}`,
   },
   twitter: {
