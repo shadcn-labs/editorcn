@@ -42,7 +42,7 @@ export const generateMetadata = async (props: {
     description: doc.description,
     ogType: "article",
     path: page.url,
-    title: doc.title,
+    title: doc.seoTitle ?? doc.title,
   });
 };
 

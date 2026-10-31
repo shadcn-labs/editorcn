@@ -1,5 +1,4 @@
-import Link from "next/link";
-
+import { ListCard } from "@/components/list-card";
 import { PageTransition } from "@/components/page-transition";
 import { ROUTES } from "@/constants/routes";
 import { formatPostDate, getBlogPosts } from "@/lib/blog";
@@ -43,27 +42,20 @@ export default function BlogPage() {
             </div>
             <div className="mb-24 flex flex-col gap-3">
               {posts.map((post) => (
-                <Link
-                  className="flex w-full flex-col gap-1 rounded-xl bg-surface px-4 py-4 text-surface-foreground transition-colors hover:bg-surface/80"
+                <ListCard
+                  description={post.data.description}
                   href={post.url}
                   key={post.url}
-                  prefetch={false}
-                >
-                  <time
-                    className="text-xs text-muted-foreground"
-                    dateTime={post.data.date}
-                  >
-                    {formatPostDate(post.data.date)}
-                  </time>
-                  <h2 className="font-heading text-lg font-semibold tracking-tight">
-                    {post.data.title}
-                  </h2>
-                  {post.data.description && (
-                    <p className="text-sm text-muted-foreground">
-                      {post.data.description}
-                    </p>
-                  )}
-                </Link>
+                  meta={
+                    <time
+                      className="text-xs text-muted-foreground"
+                      dateTime={post.data.date}
+                    >
+                      {formatPostDate(post.data.date)}
+                    </time>
+                  }
+                  title={post.data.title}
+                />
               ))}
             </div>
           </div>

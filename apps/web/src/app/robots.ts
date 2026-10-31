@@ -1,5 +1,7 @@
 import type { MetadataRoute } from "next";
 
+import { SITE } from "@/constants/site";
+
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
@@ -7,6 +9,6 @@ export default function robots(): MetadataRoute.Robots {
       disallow: ["/api/"],
       userAgent: "*",
     },
-    sitemap: "https://editorcn.vercel.app/sitemap.xml",
+    sitemap: `${SITE.URL}/sitemap.xml`,
   };
 }

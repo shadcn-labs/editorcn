@@ -18,6 +18,7 @@ const navItems = [
   { href: ROUTES.DOCS_CUSTOMIZATION, label: "Customization" },
   { href: ROUTES.DOCS_TEMPLATES, label: "Templates" },
   { href: ROUTES.BLOG, label: "Blog" },
+  { href: ROUTES.TOOLS, label: "Tools" },
 ];
 
 export const SiteHeader = () => (

@@ -72,6 +72,8 @@ export const createPageMetadata = ({
   };
 };
 
+const HOME_TITLE = `shadcn Rich Text Editor Components for React | ${SITE.NAME}`;
+
 export const baseMetadata: Metadata = {
   alternates: {
     canonical: ROUTES.HOME,
@@ -119,13 +121,13 @@ export const baseMetadata: Metadata = {
     ],
     locale: "en_US",
     siteName: SITE.NAME,
-    title: SITE.NAME,
+    title: HOME_TITLE,
     type: "website",
     url: SITE.URL,
   },
   publisher: SITE.AUTHOR.NAME,
   title: {
-    default: `${SITE.NAME} - ${SITE.DESCRIPTION.SHORT}`,
+    default: HOME_TITLE,
     template: `%s | ${SITE.NAME}`,
   },
   twitter: {
@@ -134,6 +136,6 @@ export const baseMetadata: Metadata = {
     description: SITE.DESCRIPTION.LONG,
     images: [SITE.OG_IMAGE],
     site: SITE.AUTHOR.TWITTER,
-    title: SITE.NAME,
+    title: HOME_TITLE,
   },
 };
