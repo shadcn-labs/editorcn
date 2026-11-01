@@ -75,7 +75,11 @@ const BlockEditorContent = () => {
     <div className="block-editor">
       {editor && editor.isEditable && <BlockEditorDragHandle />}
       {editor && editor.isEditable && <BubbleMenu editor={editor} />}
-      <EditorContent editor={editor} className="block-editor-content" />
+      <EditorContent
+        editor={editor}
+        className="block-editor-content"
+        spellCheck={false}
+      />
       {editor && editor.isEditable && <BottomBar editor={editor} />}
     </div>
   );
