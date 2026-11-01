@@ -67,6 +67,7 @@
     "radix-ui": "^1.4.3",
     "react": "catalog:",
     "react-dom": "catalog:",
+    "react-fast-marquee": "^1.6.5",
     "react-hotkeys-hook": "^5.2.4",
     "rehype-pretty-code": "^0.14.5",
     "shadcn": "^4.11.0",

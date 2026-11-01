@@ -56,7 +56,7 @@
       "type": "registry:component"
     },
     {
-      "content": "import { EditorContent } from \"@tiptap/react\";\n\nimport { useRichTextEditorContext } from \"./rte-context\";\nimport type { RichTextEditorContentProps } from \"./types\";\nimport { cn } from \"./ui/utils\";\n\nexport const Content = ({\n  children,\n  className,\n}: RichTextEditorContentProps) => {\n  const { editor } = useRichTextEditorContext();\n\n  return (\n    <div className=\"relative\">\n      <EditorContent\n        editor={editor}\n        className={cn(\"rte-content w-full\", className)}\n      />\n      {children}\n    </div>\n  );\n};\n",
+      "content": "import { EditorContent } from \"@tiptap/react\";\n\nimport { useRichTextEditorContext } from \"./rte-context\";\nimport type { RichTextEditorContentProps } from \"./types\";\nimport { cn } from \"./ui/utils\";\n\nexport const Content = ({\n  children,\n  className,\n}: RichTextEditorContentProps) => {\n  const { editor } = useRichTextEditorContext();\n\n  return (\n    <div className=\"relative\">\n      <EditorContent\n        editor={editor}\n        className={cn(\"rte-content w-full\", className)}\n        spellCheck={false}\n      />\n      {children}\n    </div>\n  );\n};\n",
       "path": "editor/rte-content.tsx",
       "target": "@components/editor/rte-content.tsx",
       "type": "registry:component"

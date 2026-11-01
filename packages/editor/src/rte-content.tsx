@@ -15,6 +15,7 @@ export const Content = ({
       <EditorContent
         editor={editor}
         className={cn("rte-content w-full", className)}
+        spellCheck={false}
       />
       {children}
     </div>
