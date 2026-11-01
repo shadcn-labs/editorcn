@@ -75,6 +75,36 @@ export const BlogPostingJsonLd = ({
   />
 );
 
+export const WebApplicationJsonLd = ({
+  description,
+  name,
+  path,
+}: {
+  description: string;
+  name: string;
+  path: string;
+}) => (
+  <JsonLdScript
+    data={{
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      applicationCategory: "DeveloperApplication",
+      browserRequirements: "Requires JavaScript",
+      description,
+      isAccessibleForFree: true,
+      name,
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+      },
+      operatingSystem: "Any",
+      publisher: { "@type": "Organization", name: SITE.NAME, url: SITE.URL },
+      url: `${SITE.URL}${path}`,
+    }}
+  />
+);
+
 export const SoftwareApplicationJsonLd = () => (
   <JsonLdScript
     data={{
