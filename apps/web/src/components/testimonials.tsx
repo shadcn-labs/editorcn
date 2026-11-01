@@ -1,7 +1,10 @@
 "use client";
 
+import { PauseIcon, PlayIcon } from "lucide-react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Marquee from "react-fast-marquee";
 
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 
 interface Testimonial {
@@ -142,48 +145,105 @@ const TESTIMONIALS: Testimonial[] = [
 const TestimonialRow = ({
   data,
   direction,
+  play,
 }: {
   data: Testimonial[];
   direction?: "left" | "right";
-}) => (
-  <div className="relative w-full overflow-hidden">
-    <div className="absolute inset-y-0 left-0 z-10 w-24 bg-linear-to-r from-background to-transparent" />
-    <div className="absolute inset-y-0 right-0 z-10 w-24 bg-linear-to-l from-background to-transparent" />
-    <Marquee autoFill direction={direction} pauseOnHover>
-      {data.map((item) => (
-        <a
-          className="block h-full w-xs border-r transition-colors hover:bg-accent/40"
-          href={item.url}
-          key={item.url}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          <figure className="flex h-full flex-col">
-            <blockquote className="min-h-14 grow px-4 py-3 text-base text-pretty text-foreground">
-              <p>{item.quote}</p>
-            </blockquote>
-            <figcaption className="grid grid-cols-[auto_1fr] grid-rows-2 items-center gap-x-3.5 px-4 pt-1 pb-3">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt={item.authorName}
-                className="row-span-2 size-8 rounded-full ring-1 ring-black/10 select-none dark:ring-white/15"
-                src={item.authorAvatar}
-              />
-              <span className="text-sm/4.5 font-semibold text-foreground">
-                {item.authorName}
-              </span>
-              <span className="text-xs/4 text-balance text-muted-foreground">
-                {item.authorTagline}
-              </span>
-            </figcaption>
-          </figure>
-        </a>
-      ))}
-    </Marquee>
-  </div>
-);
+  play: boolean;
+}) => {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const root = ref.current;
+    if (!root) {
+      return;
+    }
+    const hideClones = () => {
+      for (const el of root.querySelectorAll(".rfm-child")) {
+        el.toggleAttribute(
+          "inert",
+          !el.closest(".rfm-initial-child-container")
+        );
+      }
+    };
+    hideClones();
+    const observer = new MutationObserver(hideClones);
+    observer.observe(root, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      className="group relative w-full overflow-hidden [&:has(:focus-visible)_.rfm-marquee]:animate-none!"
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) {
+          event.currentTarget.scrollLeft = 0;
+          event.currentTarget
+            .querySelector(".rfm-marquee-container")
+            ?.scrollTo({ left: 0 });
+        }
+      }}
+      onFocus={(event) => {
+        if (event.target.matches(":focus-visible")) {
+          event.target.scrollIntoView({ block: "nearest", inline: "nearest" });
+        }
+      }}
+      ref={ref}
+    >
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 group-has-focus-visible:hidden w-24 bg-linear-to-r from-background to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 group-has-focus-visible:hidden w-24 bg-linear-to-l from-background to-transparent" />
+      <Marquee autoFill direction={direction} pauseOnHover play={play}>
+        {data.map((item) => (
+          <a
+            className="block h-full w-xs border-r outline-none transition-colors hover:bg-accent/40 focus-visible:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+            href={item.url}
+            key={item.url}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <figure className="flex h-full flex-col">
+              <blockquote className="min-h-14 grow px-4 py-3 text-base text-pretty text-foreground">
+                <p>{item.quote}</p>
+              </blockquote>
+              <figcaption className="grid grid-cols-[auto_1fr] grid-rows-2 items-center gap-x-3.5 px-4 pt-1 pb-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  alt={item.authorName}
+                  className="row-span-2 size-8 rounded-full ring-1 ring-black/10 select-none dark:ring-white/15"
+                  src={item.authorAvatar}
+                />
+                <span className="text-sm/4.5 font-semibold text-foreground">
+                  {item.authorName}
+                </span>
+                <span className="text-xs/4 text-balance text-muted-foreground">
+                  {item.authorTagline}
+                </span>
+              </figcaption>
+            </figure>
+          </a>
+        ))}
+      </Marquee>
+    </div>
+  );
+};
+
+const REDUCED_MOTION = "(prefers-reduced-motion: reduce)";
+
+const subscribeReducedMotion = (onChange: () => void) => {
+  const query = window.matchMedia(REDUCED_MOTION);
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+};
 
 export const Testimonials = ({ className }: { className?: string }) => {
+  const reducedMotion = useSyncExternalStore(
+    subscribeReducedMotion,
+    () => window.matchMedia(REDUCED_MOTION).matches,
+    () => false
+  );
+  const [userPlay, setUserPlay] = useState<boolean | null>(null);
+  const play = userPlay ?? !reducedMotion;
+
   if (TESTIMONIALS.length === 0) {
     return null;
   }
@@ -199,14 +259,22 @@ export const Testimonials = ({ className }: { className?: string }) => {
         What people are saying about editorcn.
       </p>
       <div className="mt-6 flex w-full flex-col border-y">
-        <TestimonialRow data={TESTIMONIALS.slice(0, half)} />
+        <TestimonialRow data={TESTIMONIALS.slice(0, half)} play={play} />
         {TESTIMONIALS.length > 1 && (
           <>
             <div className="h-4 border-y" />
-            <TestimonialRow data={TESTIMONIALS.slice(half)} direction="right" />
+            <TestimonialRow
+              data={TESTIMONIALS.slice(half)}
+              direction="right"
+              play={play}
+            />
           </>
         )}
       </div>
+      <Button onClick={() => setUserPlay(!play)} size="sm" variant="ghost">
+        {play ? <PauseIcon /> : <PlayIcon />}
+        {play ? "Pause testimonials" : "Play testimonials"}
+      </Button>
     </div>
   );
 };
