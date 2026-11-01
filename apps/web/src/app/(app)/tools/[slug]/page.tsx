@@ -86,8 +86,8 @@ const ToolPage = async (props: { params: Promise<{ slug: string }> }) => {
   const highlighted = await highlightCode(code, "ts");
   const sections = TOOL_SECTIONS[tool.slug] ?? [];
   const steps = [
-    `Paste your ${FORMAT_LABEL[tool.from]} into the left panel, or upload a file.`,
-    `The ${FORMAT_LABEL[tool.to]} output on the right updates as you type.`,
+    `Paste your ${FORMAT_LABEL[tool.from]} into the input panel, or upload a file.`,
+    `The ${FORMAT_LABEL[tool.to]} output updates as you type.`,
     "Open the Preview tab to check how the content renders.",
     "Copy the result with the copy button.",
   ];

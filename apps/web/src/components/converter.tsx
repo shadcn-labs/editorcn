@@ -70,6 +70,9 @@ const createEditor = () =>
   });
 
 const convert = (editor: Editor, input: string, from: Format, to: Format) => {
+  if (from === "json" && !input.trim()) {
+    return { error: "", html: "", output: "" };
+  }
   try {
     load(editor, input, from);
     return { error: "", html: editor.getHTML(), output: read(editor, to) };
@@ -197,7 +200,7 @@ const ConverterClient = ({
             <PaneLabel id="converter-input">{FORMAT_LABEL[from]}</PaneLabel>
             <div className="flex items-center gap-1">
               <Button asChild size="sm" variant="ghost">
-                <label className="cursor-pointer">
+                <label className="cursor-pointer has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-[3px] has-[input:focus-visible]:ring-ring/50">
                   <UploadIcon />
                   <span className="sr-only sm:not-sr-only">Upload</span>
                   <input
@@ -288,12 +291,17 @@ const ConverterClient = ({
       <div className="flex flex-wrap items-center justify-between gap-2 border-t bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
         <span className="flex items-center gap-2">
           <span
+            aria-hidden
             className={cn(
               "size-2 rounded-full",
               error ? "bg-destructive" : "bg-emerald-500"
             )}
           />
-          {error ? "Couldn't convert this input" : "Converted in your browser"}
+          <output>
+            {error
+              ? "Couldn't convert this input"
+              : "Converted in your browser"}
+          </output>
         </span>
         <span className="tabular-nums">
           {input.length.toLocaleString()} → {output.length.toLocaleString()}{" "}
