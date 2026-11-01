@@ -11,6 +11,7 @@ import { PageTransition } from "@/components/page-transition";
 import { PromoCard } from "@/components/promo-card";
 import { TemplateDemo } from "@/components/template-demo";
 import type { TemplateName } from "@/components/template-demo";
+import { Testimonials } from "@/components/testimonials";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ROUTES } from "@/constants/routes";
 import { highlightCode } from "@/lib/highlight-code";
@@ -406,6 +407,10 @@ export const HomePage = async () => {
 
         <section className="container-wrapper">
           <HomeCustomize className="container py-16 md:py-20 lg:py-24" />
+        </section>
+
+        <section className="container-wrapper">
+          <Testimonials className="container pb-16 md:pb-20 lg:pb-24" />
         </section>
       </PageTransition>
       <PromoCard variant="floating" />
