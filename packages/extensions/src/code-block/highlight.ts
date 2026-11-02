@@ -20,12 +20,17 @@ const listeners = new Set<() => void>();
 const cache = new WeakMap<PMNode, Token[]>();
 
 const createShikiHighlighter = async () => {
-  const { createHighlighter } = await import("shiki");
-  highlighter = await createHighlighter({
-    langs: [],
-    themes: [THEMES.light, THEMES.dark],
-  });
-  return highlighter;
+  try {
+    const { createHighlighter } = await import("shiki");
+    highlighter = await createHighlighter({
+      langs: [],
+      themes: [THEMES.light, THEMES.dark],
+    });
+    return highlighter;
+  } catch (error) {
+    highlighterPromise = undefined;
+    throw error;
+  }
 };
 
 const requestLanguage = async (language: string) => {

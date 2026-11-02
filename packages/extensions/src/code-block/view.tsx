@@ -326,6 +326,7 @@ const MermaidPreview = ({ code }: { code: string }) => {
         mermaid.initialize({
           securityLevel: "strict",
           startOnLoad: false,
+          suppressErrorRendering: true,
           theme: document.documentElement.classList.contains("dark")
             ? "dark"
             : "default",
