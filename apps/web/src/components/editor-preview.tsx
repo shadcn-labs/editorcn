@@ -6,9 +6,9 @@ import {
   useRichTextEditorContext,
   TwitterEmbed,
   YouTubeEmbed,
-  CodeBlock,
 } from "@editorcn/editor";
 import type { RichTextEditorVariant } from "@editorcn/editor";
+import { CodeBlock } from "@editorcn/extensions/code-block";
 import {
   ResizableImage,
   ImagePlaceholder,
@@ -35,6 +35,7 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { searchPeople } from "@/lib/mention-people";
 
 import "@editorcn/editor/style.css";
+import "@editorcn/extensions/code-block/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/mention/style.css";
 import "@editorcn/extensions/table/style.css";
@@ -103,6 +104,11 @@ const DEMO_CONTENT = `
 <pre><code class="language-javascript">function greet(name) {
   return \`Hello, \${name}! Welcome to editorcn.\`;
 }</code></pre>
+<p>Set the language to <strong>Mermaid</strong> and the diagram renders live below the code:</p>
+<pre><code class="language-mermaid">graph LR
+  A[Type in the editor] --&gt; B{Code or diagram?}
+  B --&gt;|Code| C[Shiki highlighting]
+  B --&gt;|Mermaid| D[Live preview]</code></pre>
 <h2>Alignment</h2>
 <p style="text-align: left;">Left aligned — the default for most content.</p>
 <p style="text-align: center;">Center aligned — great for headings or callouts.</p>
@@ -151,6 +157,7 @@ export const EditorPreview = ({
     content: DEMO_CONTENT,
     extensions: [
       StarterKit.configure({
+        codeBlock: false,
         heading: { levels: [1, 2, 3, 4, 5, 6] },
       }),
       Link,

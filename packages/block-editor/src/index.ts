@@ -8,7 +8,6 @@ export {
   getSlashCommandSuggestion,
   defaultSlashCommandItems,
 } from "./extensions";
-export { CodeBlock } from "./extensions/code-block";
 export type { SlashCommandSuggestionItem, OnCommandSelect } from "./extensions";
 export type { BlockEditorProps, BlockEditorLabels } from "./types";
 export { DEFAULT_BLOCK_EDITOR_LABELS } from "./labels";

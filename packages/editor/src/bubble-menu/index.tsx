@@ -5,23 +5,13 @@ import { useCallback } from "react";
 
 import { RteSeparator } from "../ui";
 import { ColorSelector } from "./color-selector";
-import { LanguageSelector } from "./language-selector";
 import { TextButtons } from "./text-buttons";
-import { useEditorState, shallowEqual } from "./utils";
 
 export interface BubbleMenuProps {
   editor: Editor | null;
 }
 
 export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
-  const editorState = useEditorState(
-    editor,
-    (ed) => ({
-      isCodeBlock: ed.isActive("codeBlock"),
-    }),
-    shallowEqual
-  );
-
   const shouldShow = useCallback(
     ({
       editor: ed,
@@ -34,7 +24,7 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
       if (!ed.isEditable) {
         return false;
       }
-      if (selection.empty && !ed.isActive("codeBlock")) {
+      if (selection.empty || ed.isActive("codeBlock")) {
         return false;
       }
       if (!selection.empty && !isTextSelection(selection)) {
@@ -49,8 +39,6 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
     return null;
   }
 
-  const isCodeBlockActive = editorState?.isCodeBlock ?? false;
-
   return (
     <TiptapBubbleMenu
       editor={editor}
@@ -58,15 +46,9 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
       shouldShow={shouldShow}
     >
       <div className="rte-bubble-menu">
-        {isCodeBlockActive ? (
-          <LanguageSelector editor={editor} />
-        ) : (
-          <>
-            <TextButtons editor={editor} />
-            <RteSeparator />
-            <ColorSelector editor={editor} />
-          </>
-        )}
+        <TextButtons editor={editor} />
+        <RteSeparator />
+        <ColorSelector editor={editor} />
       </div>
     </TiptapBubbleMenu>
   );

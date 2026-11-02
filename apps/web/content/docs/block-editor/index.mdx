@@ -225,7 +225,7 @@ Type `/` to open the slash command menu. The menu shows available block types. N
 | Numbered List | Ordered list                                            |
 | Task List     | Checklist with checkboxes                               |
 | Quote         | Blockquote                                              |
-| Code          | Code block with syntax highlighting (requires lowlight) |
+| Code          | Code block (highlighted with the [Code Block extension](/docs/extensions/code-block)) |
 | Divider       | Horizontal rule                                         |
 
 ### Custom slash command items
@@ -519,7 +519,6 @@ All `@tiptap/*` packages are **peer dependencies** — you must install them in 
 | `@tiptap/react`                         | React bindings                            | Yes      |
 | `@tiptap/suggestion`                    | Slash command suggestion engine           | Yes      |
 | `@tiptap/extension-drag-handle-react`   | Block drag handle UI                      | Yes      |
-| `@tiptap/extension-code-block-lowlight` | Syntax highlighting (requires `lowlight`) | Optional |
 | `@tiptap/extension-placeholder`         | Placeholder text                          | Optional |
 | `@tiptap/extension-text-style`          | Text color - together with `Color`        | Optional |
 | `@tiptap/extension-color`               | Text color (requires Text Style)          | Optional |
@@ -529,22 +528,15 @@ Extensions for **Image**, **Table**, **Link**, and others are not included — a
 
 ## Syntax highlighting
 
-To enable syntax highlighting in code blocks, install `lowlight` and pass it to `@tiptap/extension-code-block-lowlight`:
-
-```bash
-npm install lowlight @tiptap/extension-code-block-lowlight
-```
+`StarterKit` includes a plain code block. For syntax highlighting, a language menu, copy, wrap, captions, formatting and Mermaid diagrams, install the [Code Block extension](/docs/extensions/code-block) and turn off the built-in one:
 
 ```tsx
-import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
-import { common, createLowlight } from "lowlight";
-
-const lowlight = createLowlight(common);
+import { CodeBlock } from "@/components/extensions/code-block";
 
 const editor = useEditor({
   extensions: [
     StarterKit.configure({ codeBlock: false }),
-    CodeBlockLowlight.configure({ lowlight }),
+    CodeBlock,
     SlashCommand.configure({
       suggestion: getSlashCommandSuggestion(),
     }),

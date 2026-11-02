@@ -926,26 +926,15 @@ function CustomBoldButton() {
 
 ## Code highlight
 
-`@editorcn/editor` ships with `@tiptap/extension-code-block-lowlight` and `lowlight` pre-configured. Code blocks automatically get syntax highlighting with 21 built-in languages — no extra setup needed.
-
-If you want to add additional languages, install the highlight.js language modules and register them:
-
-```bash
-npm install lowlight
-```
+`StarterKit` includes a plain code block without syntax highlighting. For highlighting, a language menu, copy, wrap, captions, formatting and Mermaid diagrams, install the [Code Block extension](/docs/extensions/code-block) and turn off the built-in one:
 
 ```tsx
-import { createLowlight, common } from "lowlight";
-import python from "highlight.js/lib/languages/python";
+import { CodeBlock } from "@/components/extensions/code-block";
 
-const lowlight = createLowlight(common);
-lowlight.register({ python });
-
-// Pass to CodeBlock extension in your editor config
-CodeBlock.configure({ lowlight });
+const editor = useEditor({
+  extensions: [StarterKit.configure({ codeBlock: false }), CodeBlock],
+});
 ```
-
-The editor styles include syntax highlighting tokens for `.hljs-*` classes that use your theme's CSS variables (`--primary`, `--muted-foreground`, `--destructive`, `--accent-foreground`).
 
 ## Styling
 

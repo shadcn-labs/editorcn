@@ -32,7 +32,8 @@ import { TextStyle } from "@tiptap/extension-text-style";
 import { Color } from "@tiptap/extension-color";
 import { Subscript } from "@tiptap/extension-subscript";
 import { Superscript } from "@tiptap/extension-superscript";
-import { RichTextEditor, Link, YouTubeEmbed, TwitterEmbed, CodeBlock } from "@/components/editor";
+import { RichTextEditor, Link, YouTubeEmbed, TwitterEmbed } from "@/components/editor";
+import { CodeBlock } from "@/components/extensions/code-block";
 import { Table } from "@/components/extensions/table";
 import { TableToolbar } from "@/components/extensions/table-toolbar";
 import { TableHoverOverlay } from "@/components/extensions/table-hover-overlay";
@@ -40,6 +41,7 @@ import { ResizableImage, ImagePlaceholder } from "@/components/extensions/image-
 import { ImagePlaceholderToolbar } from "@/components/extensions/image-placeholder-toolbar";
 import { Mention } from "@/components/extensions/mention";
 import "@/components/editor/style.css";
+import "@/components/extensions/code-block/style.css";
 import "@/components/extensions/table/style.css";
 import "@/components/extensions/image-placeholder/style.css";
 import "@/components/extensions/mention/style.css";
@@ -167,12 +169,13 @@ import { Mention } from "@/components/extensions/mention";
 import {
   BlockEditor,
   SlashCommand,
-  CodeBlock,
   defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@/components/block-editor";
 import type { SlashCommandSuggestionItem } from "@/components/block-editor";
+import { CodeBlock } from "@/components/extensions/code-block";
 import "@/components/block-editor/style.css";
+import "@/components/extensions/code-block/style.css";
 import "@/components/extensions/table/style.css";
 import "@/components/extensions/image-placeholder/style.css";
 import "@/components/extensions/mention/style.css";
@@ -230,7 +233,7 @@ export function MyBlockEditor() {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2, 3], codeBlock: false } }),
+      StarterKit.configure({ codeBlock: false, heading: { levels: [1, 2, 3] } }),
       Placeholder.configure({ placeholder: "Type / for commands..." }),
       Underline,
       TextStyle,
@@ -406,11 +409,11 @@ export const HomePage = async () => {
         </section>
 
         <section className="container-wrapper">
-          <HomeCustomize className="container py-16 md:py-20 lg:py-24" />
+          <Testimonials className="container pt-16 md:pt-20 lg:pt-24" />
         </section>
 
         <section className="container-wrapper">
-          <Testimonials className="container pb-16 md:pb-20 lg:pb-24" />
+          <HomeCustomize className="container py-16 md:py-20 lg:py-24" />
         </section>
       </PageTransition>
       <PromoCard variant="floating" />

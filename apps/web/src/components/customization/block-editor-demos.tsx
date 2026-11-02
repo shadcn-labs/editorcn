@@ -2,12 +2,12 @@
 
 import {
   BlockEditor,
-  CodeBlock,
   SlashCommand,
   defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@editorcn/block-editor";
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
+import { CodeBlock } from "@editorcn/extensions/code-block";
 import type { Editor, Range } from "@tiptap/core";
 import { Image } from "@tiptap/extension-image";
 import { Link } from "@tiptap/extension-link";
@@ -26,6 +26,7 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { showImagePrompt } from "@/components/image-prompt";
 
 import "@editorcn/block-editor/style.css";
+import "@editorcn/extensions/code-block/style.css";
 
 const BLOCK_CONTENT = `
 <h2>Getting Started</h2>

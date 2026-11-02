@@ -1,0 +1,179 @@
+---
+title: Code Block
+seoTitle: "Tiptap Code Block Extension with Shiki Highlighting for shadcn/ui"
+description: "A Notion-style Tiptap code block for shadcn/ui with Shiki syntax highlighting, a searchable language menu, copy, wrap, captions, Prettier formatting, and live Mermaid diagrams."
+---
+
+The Code Block extension replaces Tiptap's code block with a Notion-style one. Code is highlighted with [Shiki](https://shiki.style) and stays editable directly in the editor, so undo, redo, selection and collaboration keep working inside it.
+
+Hover a block to reveal its controls. The language label in the top-left corner opens a searchable language menu. The toolbar in the top-right corner copies the code, adds a caption, and opens an actions menu with search, where you can copy the code, toggle line wrapping, change the language from a side menu, and format the code with Prettier. Set the language to Mermaid and a live diagram renders below the code.
+
+<ExtensionPreview slug="code-block" editor="block" />
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/code-block.json"
+```
+
+This installs `extensions/code-block`, `extensions/core/`, `extensions/ui/`, the styles at `extensions/code-block/style.css` and `extensions/ui/style.css`, and the `@tiptap/extension-code-block`, `shiki`, `mermaid` and `prettier` packages.
+
+Shiki, its languages, Mermaid and Prettier are loaded with dynamic imports the first time a block needs them, so they stay out of your initial bundle.
+
+To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/code-block):
+
+```bash
+npm install @tiptap/core @tiptap/react @tiptap/pm @tiptap/extension-code-block shiki mermaid prettier
+```
+
+## Usage
+
+`StarterKit` ships its own code block under the same name, so turn it off when you add this one.
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { RichTextEditor } from "@/components/editor";
+import { CodeBlock } from "@/components/extensions/code-block";
+
+import "@/components/editor/style.css";
+import "@/components/extensions/code-block/style.css";
+import "@/components/extensions/ui/style.css";
+
+export function MyEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [StarterKit.configure({ codeBlock: false }), CodeBlock],
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.CodeBlock />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+<ExtensionPreview slug="code-block" editor="toolbar" />
+
+### With `@editorcn/block-editor`
+
+The default slash commands already include **Code**, so typing `/code` inserts the new block once the extension is registered. Typing ` ``` ` or ` ```ts ` followed by a space also works.
+
+```tsx
+import {
+  BlockEditor,
+  SlashCommand,
+  defaultSlashCommandItems,
+  getSlashCommandSuggestion,
+} from "@/components/block-editor";
+import { CodeBlock } from "@/components/extensions/code-block";
+
+import "@/components/block-editor/style.css";
+import "@/components/extensions/code-block/style.css";
+import "@/components/extensions/ui/style.css";
+
+const editor = useEditor({
+  immediatelyRender: false,
+  extensions: [
+    StarterKit.configure({ codeBlock: false }),
+    CodeBlock,
+    SlashCommand.configure({
+      suggestion: getSlashCommandSuggestion(defaultSlashCommandItems),
+    }),
+  ],
+});
+```
+
+## Keyboard
+
+| Where                      | Key                 | Action                                            |
+| -------------------------- | ------------------- | ------------------------------------------------- |
+| Language and actions menus | `↑` / `↓`           | Move through the list                             |
+| Language and actions menus | `Enter`             | Pick the highlighted item                         |
+| Actions menu               | `→`                 | Open the language side menu on **Language**       |
+| Language side menu         | `←` (empty search)  | Go back to the actions menu                       |
+| Any menu                   | `Esc`               | Close the menu                                    |
+| Caption                    | `Backspace` (empty) | Remove the caption and move back into the code    |
+| Code                       | `Enter` × 3         | Leave the block (Tiptap's `exitOnTripleEnter`)    |
+
+## Languages
+
+The language menu lists about 60 common languages, from Bash, C and Go to TypeScript, YAML and Zig, plus Plain Text and Mermaid. Each language's grammar is loaded the first time a block uses it.
+
+A block whose language is not in the list, for example one pasted from markdown, still highlights as long as Shiki supports that language id or one of its aliases. Unknown languages render as plain text.
+
+**Format code** appears in the actions menu for JavaScript, JSX, TypeScript, TSX, JSON, HTML, Vue, CSS, SCSS, Less, Markdown, YAML and GraphQL. If Prettier cannot parse the code, the block is left unchanged.
+
+## Mermaid
+
+Set a block's language to **Mermaid** and a live diagram renders below the code, updating 300ms after you stop typing. Syntax errors are shown in place of the diagram. Mermaid runs with `securityLevel: "strict"`, so diagram labels cannot inject scripts or HTML into the page.
+
+## Settings
+
+The extension extends Tiptap's [`CodeBlock`](https://tiptap.dev/docs/editor/extensions/nodes/code-block), so all of its options work with `.configure()`.
+
+### `defaultLanguage`
+
+Language for new code blocks. Defaults to `"javascript"`.
+
+```tsx
+CodeBlock.configure({ defaultLanguage: "typescript" });
+```
+
+### `enableTabIndentation`
+
+Indent with `Tab` and outdent with `Shift+Tab` inside the block. Defaults to `false`.
+
+```tsx
+CodeBlock.configure({ enableTabIndentation: true, tabSize: 2 });
+```
+
+### `exitOnTripleEnter`
+
+Leave the block after pressing `Enter` three times at the end. Defaults to `true`.
+
+### `HTMLAttributes`
+
+Custom HTML attributes added to the rendered `<pre>` element.
+
+## Attributes
+
+| Attribute  | Type             | Default            | Description                                              |
+| ---------- | ---------------- | ------------------ | -------------------------------------------------------- |
+| `language` | `string`         | `defaultLanguage`  | Shiki language id, such as `"typescript"` or `"mermaid"` |
+| `wrap`     | `boolean`        | `false`            | Wrap long lines instead of scrolling sideways            |
+| `caption`  | `string \| null` | `null`             | Caption below the block. `null` hides it                 |
+
+```tsx
+editor
+  .chain()
+  .focus()
+  .setCodeBlock({ language: "python" })
+  .updateAttributes("codeBlock", { caption: "main.py", wrap: true })
+  .run();
+```
+
+In a read-only editor, the wrap toggle only changes the current view and does not modify the document.
+
+## Output
+
+Wrap and caption are stored as data attributes on `<pre>`, so they survive HTML round trips:
+
+```html
+<pre data-wrap="" data-caption="main.py"><code class="language-python">print("hi")</code></pre>
+```
+
+## Styling
+
+Token colors come from the `github-light` and `github-dark` Shiki themes. Each highlighted token gets `--shiki-light` and `--shiki-dark` CSS variables, and `extensions/code-block/style.css` picks one based on a `.dark` class on an ancestor, which matches shadcn/ui's dark mode. Everything else, such as the background, menus and caption, uses your theme's CSS variables.

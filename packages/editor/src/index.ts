@@ -10,6 +10,5 @@ export type { RichTextEditorIcons } from "./icon-types";
 export { DEFAULT_ICONS } from "./icons";
 export { DEFAULT_LANGUAGE_ICONS } from "./language-icons";
 export { Link } from "./extensions";
-export { CodeBlock } from "./extensions/code-block";
 export { TwitterEmbed } from "./controls/rte-twitter-control";
 export { YouTubeEmbed } from "./controls/rte-youtube-control";

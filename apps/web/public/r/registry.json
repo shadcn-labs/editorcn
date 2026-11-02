@@ -18,8 +18,6 @@
         "@tiptap/extension-character-count@>=2.11.5 <4",
         "@tiptap/extension-text-style@>=2.11.5 <4",
         "@tiptap/extension-color@>=2.11.5 <4",
-        "@tiptap/extension-code-block-lowlight@>=2.11.5 <4",
-        "lowlight@>=3.0.0 <4",
         "@base-ui/react@^1.0.0",
         "class-variance-authority@^0.7.1",
         "clsx@^2.1.1",
@@ -89,10 +87,6 @@
           "type": "registry:component"
         },
         {
-          "path": "editor/bubble-menu/language-selector.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "editor/bubble-menu/color-selector.tsx",
           "type": "registry:component"
         },
@@ -114,10 +108,6 @@
         },
         {
           "path": "editor/extensions/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/extensions/code-block.ts",
           "type": "registry:component"
         },
         {
@@ -233,11 +223,9 @@
         "@tiptap/extension-drag-handle@>=2.11.5 <4",
         "@tiptap/extension-drag-handle-react@>=2.11.5 <4",
         "@tiptap/suggestion@>=2.11.5 <4",
-        "@tiptap/extension-code-block-lowlight@>=2.11.5 <4",
         "@tiptap/extension-text-style@>=2.11.5 <4",
         "@tiptap/extension-color@>=2.11.5 <4",
         "@tiptap/extension-highlight@>=2.11.5 <4",
-        "lowlight@>=3.0.0 <4",
         "@base-ui/react@^1.0.0",
         "@floating-ui/dom@^1.6.0",
         "class-variance-authority@^0.7.1",
@@ -284,10 +272,6 @@
           "type": "registry:component"
         },
         {
-          "path": "block-editor/bubble-menu/language-selector.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "block-editor/bubble-menu/color-selector.tsx",
           "type": "registry:component"
         },
@@ -321,10 +305,6 @@
         },
         {
           "path": "block-editor/extensions/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/extensions/code-block.ts",
           "type": "registry:component"
         },
         {
@@ -821,6 +801,112 @@
       ],
       "name": "markdown",
       "title": "Markdown",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "@tiptap/extension-code-block@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4",
+        "shiki@^4.0.0",
+        "mermaid@^11.0.0",
+        "prettier@^3.0.0"
+      ],
+      "description": "A Notion-style code block with Shiki syntax highlighting, a searchable language menu, copy, wrap toggle, captions, Prettier formatting, and a live Mermaid diagram preview. Code stays editable in the editor, so undo and collaboration keep working.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/code-block/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/code-block/view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/code-block/highlight.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/code-block/languages.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/input.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/code-block/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
+        }
+      ],
+      "name": "code-block",
+      "title": "Code Block",
       "type": "registry:component"
     },
     {

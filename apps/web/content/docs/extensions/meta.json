@@ -1,4 +1,11 @@
 {
   "title": "@editorcn/extensions",
-  "pages": ["index", "image-placeholder", "markdown", "mention", "table"]
+  "pages": [
+    "index",
+    "code-block",
+    "image-placeholder",
+    "markdown",
+    "mention",
+    "table"
+  ]
 }
