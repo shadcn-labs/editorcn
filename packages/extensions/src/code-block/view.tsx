@@ -383,7 +383,7 @@ export const CodeBlockView = ({
   const language = (node.attrs.language as string | null) || "plaintext";
   const caption = node.attrs.caption as string | null;
   const code = node.textContent;
-  const editable = editor.isEditable;
+  const [editable, setEditable] = useState(editor.isEditable);
   const [menu, setMenu] = useState<Menu>(null);
   const [copied, setCopied] = useState(false);
   const [viewWrap, setViewWrap] = useState<boolean>();
@@ -393,6 +393,14 @@ export const CodeBlockView = ({
 
   const openMenu = (next: Menu) => (open: boolean) =>
     setMenu(open ? next : null);
+
+  useEffect(() => {
+    const sync = () => setEditable(editor.isEditable);
+    editor.on("update", sync);
+    return () => {
+      editor.off("update", sync);
+    };
+  }, [editor]);
 
   useEffect(() => {
     if (focusCaption.current && caption !== null) {
