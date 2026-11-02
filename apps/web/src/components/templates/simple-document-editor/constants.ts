@@ -17,6 +17,9 @@ export const SAMPLE_CONTENT = `
   <li data-type="taskItem" data-checked="false"><p>Usability test with <strong>five</strong> new teams</p></li>
   <li data-type="taskItem" data-checked="false"><p>Ship behind the <code>onboarding-v2</code> flag</p></li>
 </ul>
+<h2>Feature flag</h2>
+<pre><code class="language-typescript">export const isOnboardingV2 = (team: Team) =&gt;
+  flags.enabled("onboarding-v2", { teamId: team.id });</code></pre>
 <blockquote><p>"I didn't know what to write first, so I closed the tab."</p></blockquote>
 <h2>Open questions</h2>
 <p>Should templates be picked by role or by use case? Research leans towards use case, but sales wants role-based starters for enterprise trials.</p>

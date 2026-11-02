@@ -7,6 +7,7 @@ import {
   getSlashCommandSuggestion,
 } from "@editorcn/block-editor";
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
+import { CodeBlock } from "@editorcn/extensions/code-block";
 import {
   ImagePlaceholder,
   ResizableImage,
@@ -19,7 +20,6 @@ import {
 import { Mention } from "@editorcn/extensions/mention";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
-import { CodeBlockLowlight } from "@tiptap/extension-code-block-lowlight";
 import { Color } from "@tiptap/extension-color";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Link } from "@tiptap/extension-link";
@@ -31,12 +31,12 @@ import { TextStyle } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { common, createLowlight } from "lowlight";
 import { FileDown, FileUp } from "lucide-react";
 
 import { searchPeople } from "@/lib/mention-people";
 
 import "@editorcn/block-editor/style.css";
+import "@editorcn/extensions/code-block/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/mention/style.css";
 import "@editorcn/extensions/ui/style.css";
@@ -93,6 +93,12 @@ function MyEditor() {
 
   return &lt;BlockEditor editor={editor} /&gt;;
 }</code></pre>
+<h2>Mermaid Diagram</h2>
+<p>Set a code block language to <strong>Mermaid</strong> to see a live diagram below the code.</p>
+<pre><code class="language-mermaid">graph LR
+  A[Type in the editor] --&gt; B{Code or diagram?}
+  B --&gt;|Code| C[Shiki highlighting]
+  B --&gt;|Mermaid| D[Live preview]</code></pre>
 <h2>Blockquote</h2>
 <blockquote><p>Block-level content with drag handles for reordering. Every block can be moved, edited, or deleted independently.</p></blockquote>
 <h2>Text Alignment</h2>
@@ -212,8 +218,6 @@ const myItems: SlashCommandSuggestionItem[] = [
   },
 ];
 
-const lowlight = createLowlight(common);
-
 export const BlockEditorPreview = () => {
   const editor = useEditor({
     content: DEMO_CONTENT,
@@ -229,7 +233,7 @@ export const BlockEditorPreview = () => {
       Highlight.configure({ multicolor: true }),
       TaskList,
       TaskItem.configure({ nested: true }),
-      CodeBlockLowlight.configure({ lowlight }),
+      CodeBlock,
       SlashCommand.configure({
         suggestion: getSlashCommandSuggestion(myItems),
       }),

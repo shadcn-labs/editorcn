@@ -119,12 +119,6 @@ const editorFiles = [
     "bubble-menu/utils.ts"
   ),
   entry(
-    "editor/bubble-menu/language-selector.tsx",
-    "registry:component",
-    "editor",
-    "bubble-menu/language-selector.tsx"
-  ),
-  entry(
     "editor/bubble-menu/color-selector.tsx",
     "registry:component",
     "editor",
@@ -159,12 +153,6 @@ const editorFiles = [
     "registry:component",
     "editor",
     "extensions/index.ts"
-  ),
-  entry(
-    "editor/extensions/code-block.ts",
-    "registry:component",
-    "editor",
-    "extensions/code-block.ts"
   ),
   entry(
     "editor/extensions/link.ts",
@@ -341,12 +329,6 @@ const blockEditorFiles = [
     "bubble-menu/link-selector.tsx"
   ),
   entry(
-    "block-editor/bubble-menu/language-selector.tsx",
-    "registry:component",
-    "block-editor",
-    "bubble-menu/language-selector.tsx"
-  ),
-  entry(
     "block-editor/bubble-menu/color-selector.tsx",
     "registry:component",
     "block-editor",
@@ -399,12 +381,6 @@ const blockEditorFiles = [
     "registry:component",
     "block-editor",
     "extensions/index.ts"
-  ),
-  entry(
-    "block-editor/extensions/code-block.ts",
-    "registry:component",
-    "block-editor",
-    "extensions/code-block.ts"
   ),
   entry(
     "block-editor/extensions/slash-command/index.ts",
@@ -710,6 +686,7 @@ const buildExtensionItem = (config) => {
     config.toolbar,
     config.overlay,
     config.list,
+    ...(config.files ?? []),
   ].filter(Boolean);
   const entries = sourceFiles.map((file) =>
     entry(`extensions/${file}`, "registry:component", "extensions", file)
@@ -807,11 +784,9 @@ const deps = {
     "@tiptap/extension-drag-handle@>=2.11.5 <4",
     "@tiptap/extension-drag-handle-react@>=2.11.5 <4",
     "@tiptap/suggestion@>=2.11.5 <4",
-    "@tiptap/extension-code-block-lowlight@>=2.11.5 <4",
     "@tiptap/extension-text-style@>=2.11.5 <4",
     "@tiptap/extension-color@>=2.11.5 <4",
     "@tiptap/extension-highlight@>=2.11.5 <4",
-    "lowlight@>=3.0.0 <4",
     "@base-ui/react@^1.0.0",
     "@floating-ui/dom@^1.6.0",
     "class-variance-authority@^0.7.1",
@@ -834,8 +809,6 @@ const deps = {
     "@tiptap/extension-character-count@>=2.11.5 <4",
     "@tiptap/extension-text-style@>=2.11.5 <4",
     "@tiptap/extension-color@>=2.11.5 <4",
-    "@tiptap/extension-code-block-lowlight@>=2.11.5 <4",
-    "lowlight@>=3.0.0 <4",
     "@base-ui/react@^1.0.0",
     "class-variance-authority@^0.7.1",
     "clsx@^2.1.1",
@@ -965,6 +938,7 @@ const templateItems = [
       "https://editorcn.vercel.app/r/table.json",
       "https://editorcn.vercel.app/r/image-placeholder.json",
       "https://editorcn.vercel.app/r/markdown.json",
+      "https://editorcn.vercel.app/r/code-block.json",
     ],
   },
 ];

@@ -8,7 +8,6 @@ export default defineConfig({
     "react",
     "react-dom",
     /^@tiptap\//,
-    "lowlight",
     /^@base-ui\//,
     "class-variance-authority",
   ],

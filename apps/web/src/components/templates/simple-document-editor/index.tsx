@@ -1,6 +1,7 @@
 "use client";
 
 import { Link, RichTextEditor } from "@editorcn/editor";
+import { CodeBlock } from "@editorcn/extensions/code-block";
 import {
   ImagePlaceholder,
   ResizableImage,
@@ -39,6 +40,7 @@ import type { SimpleDocumentEditorProps } from "./types";
 import { readState } from "./utils";
 
 import "@editorcn/editor/style.css";
+import "@editorcn/extensions/code-block/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/table/style.css";
 import "@editorcn/extensions/ui/style.css";
@@ -59,6 +61,7 @@ export const SimpleDocumentEditor = ({
     content: initialContent,
     extensions: [
       StarterKit.configure({
+        codeBlock: false,
         gapcursor: false,
         heading: { levels: [1, 2, 3] },
         link: false,
@@ -70,6 +73,7 @@ export const SimpleDocumentEditor = ({
       Highlight.configure({ multicolor: true }),
       Subscript,
       Superscript,
+      CodeBlock,
       Table.configure({ resizable: true }),
       ResizableImage,
       ImagePlaceholder,

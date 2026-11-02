@@ -1,3 +1,4 @@
+export { CodeBlock, CODE_BLOCK_LANGUAGES } from "./code-block";
 export { ImagePlaceholder } from "./image-placeholder";
 export { ResizableImage } from "./image-placeholder";
 export type { ImagePlaceholderOptions } from "./image-placeholder";

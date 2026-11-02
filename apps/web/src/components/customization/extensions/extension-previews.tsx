@@ -8,6 +8,7 @@ import {
 } from "@editorcn/block-editor";
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
 import { RichTextEditor } from "@editorcn/editor";
+import { CodeBlock } from "@editorcn/extensions/code-block";
 import { ToolbarProvider } from "@editorcn/extensions/core";
 import {
   ImagePlaceholder,
@@ -34,6 +35,7 @@ import "@editorcn/extensions/ui/style.css";
 import "@editorcn/extensions/table/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/mention/style.css";
+import "@editorcn/extensions/code-block/style.css";
 
 /* Table alignment + resize handle styling ships with
    @editorcn/extensions/table/style.css (see .ProseMirror.resize-cursor). */
@@ -45,6 +47,12 @@ interface PreviewConfig {
   slashItems?: SlashCommandSuggestionItem[];
 }
 const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
+  "code-block": {
+    content:
+      '<p>Hover the code block to change its language, copy the code, add a caption, or open the actions menu. Set the language to Mermaid to see a live diagram.</p><pre><code class="language-typescript">type User = { id: string; name: string };\n\nexport const greet = (user: User) =&gt; {\n  return "Hello, " + user.name;\n};</code></pre><pre><code class="language-mermaid">graph LR\n  A[Write code] --&gt; B{Looks good?}\n  B --&gt;|Yes| C[Ship it]\n  B --&gt;|No| A</code></pre>',
+    extensions: [StarterKit.configure({ codeBlock: false }), CodeBlock],
+    toolbar: null,
+  },
   "image-placeholder": {
     content:
       "<p>Click the image button in the toolbar to insert a placeholder, then upload a file or paste an image URL to replace it. The inserted image can be resized from its handles.</p>",
