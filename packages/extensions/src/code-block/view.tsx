@@ -159,13 +159,7 @@ const LanguageMenu = ({
   };
 
   return (
-    <DropdownMenuContent
-      ref={listRef}
-      id={listId}
-      role="listbox"
-      className="ext-code-block-languages"
-      activeItem={activeItem}
-    >
+    <div className="ext-code-block-languages">
       <SearchInput
         ref={inputRef}
         placeholder="Search for a language..."
@@ -181,25 +175,33 @@ const LanguageMenu = ({
         onKeyDown={onKeyDown}
       />
       <div className="ext-code-block-menu-label">Languages</div>
-      {items.length === 0 && (
-        <div className="ext-code-block-menu-label">No results</div>
-      )}
-      {items.map((lang, index) => (
-        <DropdownMenuItem
-          key={lang.value}
-          id={`${listId}-${index}`}
-          role="option"
-          aria-selected={lang.value === value}
-          onMouseEnter={() => setSelected(index)}
-          onClick={() => onSelect(lang.value)}
-        >
-          <span>{lang.label}</span>
-          {lang.value === value && (
-            <Check className="ext-code-block-trailing" />
-          )}
-        </DropdownMenuItem>
-      ))}
-    </DropdownMenuContent>
+      <DropdownMenuContent
+        ref={listRef}
+        id={listId}
+        role="listbox"
+        className="ext-code-block-language-list"
+        activeItem={activeItem}
+      >
+        {items.length === 0 && (
+          <div className="ext-code-block-menu-label">No results</div>
+        )}
+        {items.map((lang, index) => (
+          <DropdownMenuItem
+            key={lang.value}
+            id={`${listId}-${index}`}
+            role="option"
+            aria-selected={lang.value === value}
+            onMouseEnter={() => setSelected(index)}
+            onClick={() => onSelect(lang.value)}
+          >
+            <span>{lang.label}</span>
+            {lang.value === value && (
+              <Check className="ext-code-block-trailing" />
+            )}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </div>
   );
 };
 

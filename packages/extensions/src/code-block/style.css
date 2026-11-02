@@ -111,9 +111,51 @@ span.ext-code-block-lang {
 
 .ext-code-block-languages {
   width: 15rem;
-  max-height: 18rem;
+  padding: 0 0.25rem 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--popover);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  color: var(--popover-foreground);
+  animation: ext-pop-in 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.ext-dropdown-content.ext-code-block-language-list {
+  min-width: 0;
+  max-height: 15rem;
   overflow-y: auto;
-  padding-top: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
+}
+
+.ext-code-block-language-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ext-code-block-language-list::-webkit-scrollbar-track,
+.ext-code-block-language-list::-webkit-scrollbar-button {
+  display: none;
+  background: transparent;
+}
+
+.ext-code-block-language-list::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.ext-code-block-language-list::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .ext-code-block-language-list {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
 }
 
 .ext-code-block-search {
