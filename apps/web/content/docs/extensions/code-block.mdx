@@ -108,15 +108,15 @@ export function CodeBlockEditor() {
 
 ## Keyboard
 
-| Where                      | Key                 | Action                                            |
-| -------------------------- | ------------------- | ------------------------------------------------- |
-| Language and actions menus | `↑` / `↓`           | Move through the list                             |
-| Language and actions menus | `Enter`             | Pick the highlighted item                         |
-| Actions menu               | `→`                 | Open the language side menu on **Language**       |
-| Language side menu         | `←` (empty search)  | Go back to the actions menu                       |
-| Any menu                   | `Esc`               | Close the menu                                    |
-| Caption                    | `Backspace` (empty) | Remove the caption and move back into the code    |
-| Code                       | `Enter` × 3         | Leave the block (Tiptap's `exitOnTripleEnter`)    |
+| Where                      | Key                 | Action                                         |
+| -------------------------- | ------------------- | ---------------------------------------------- |
+| Language and actions menus | `↑` / `↓`           | Move through the list                          |
+| Language and actions menus | `Enter`             | Pick the highlighted item                      |
+| Actions menu               | `→`                 | Open the language side menu on **Language**    |
+| Language side menu         | `←` (empty search)  | Go back to the actions menu                    |
+| Any menu                   | `Esc`               | Close the menu                                 |
+| Caption                    | `Backspace` (empty) | Remove the caption and move back into the code |
+| Code                       | `Enter` × 3         | Leave the block (Tiptap's `exitOnTripleEnter`) |
 
 ## Languages
 
@@ -181,11 +181,11 @@ Custom HTML attributes added to the rendered `<pre>` element.
 
 ## Attributes
 
-| Attribute  | Type             | Default            | Description                                              |
-| ---------- | ---------------- | ------------------ | -------------------------------------------------------- |
-| `language` | `string`         | `defaultLanguage`  | Shiki language id, such as `"typescript"` or `"mermaid"` |
-| `wrap`     | `boolean`        | `false`            | Wrap long lines instead of scrolling sideways            |
-| `caption`  | `string \| null` | `null`             | Caption below the block. `null` hides it                 |
+| Attribute  | Type             | Default           | Description                                              |
+| ---------- | ---------------- | ----------------- | -------------------------------------------------------- |
+| `language` | `string`         | `defaultLanguage` | Shiki language id, such as `"typescript"` or `"mermaid"` |
+| `wrap`     | `boolean`        | `false`           | Wrap long lines instead of scrolling sideways            |
+| `caption`  | `string \| null` | `null`            | Caption below the block. `null` hides it                 |
 
 ```tsx
 editor
@@ -203,7 +203,10 @@ In a read-only editor, the wrap toggle only changes the current view and does no
 Wrap and caption are stored as data attributes on `<pre>`, so they survive HTML round trips:
 
 ```html
-<pre data-wrap="" data-caption="main.py"><code class="language-python">print("hi")</code></pre>
+<pre
+  data-wrap=""
+  data-caption="main.py"
+><code class="language-python">print("hi")</code></pre>
 ```
 
 ## Styling

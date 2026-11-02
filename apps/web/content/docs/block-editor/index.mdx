@@ -217,16 +217,16 @@ Type `/` to open the slash command menu. The menu shows available block types. N
 
 **Available commands:**
 
-| Command       | Description                                             |
-| ------------- | ------------------------------------------------------- |
-| Text          | Plain paragraph                                         |
-| Heading 1/2/3 | Section headings                                        |
-| Bullet List   | Unordered list                                          |
-| Numbered List | Ordered list                                            |
-| Task List     | Checklist with checkboxes                               |
-| Quote         | Blockquote                                              |
+| Command       | Description                                                                           |
+| ------------- | ------------------------------------------------------------------------------------- |
+| Text          | Plain paragraph                                                                       |
+| Heading 1/2/3 | Section headings                                                                      |
+| Bullet List   | Unordered list                                                                        |
+| Numbered List | Ordered list                                                                          |
+| Task List     | Checklist with checkboxes                                                             |
+| Quote         | Blockquote                                                                            |
 | Code          | Code block (highlighted with the [Code Block extension](/docs/extensions/code-block)) |
-| Divider       | Horizontal rule                                         |
+| Divider       | Horizontal rule                                                                       |
 
 ### Custom slash command items
 
@@ -512,17 +512,17 @@ On touch devices the drag handle, add-block button, and bubble menu are hidden, 
 
 All `@tiptap/*` packages are **peer dependencies** — you must install them in your project. This ensures there is only one copy of Tiptap's types, avoiding "duplicate instance" TypeScript errors. If you installed via the shadcn registry, the CLI will prompt you to add any missing peer dependencies automatically.
 
-| Extension                               | Purpose                                   | Required |
-| --------------------------------------- | ----------------------------------------- | -------- |
-| `@tiptap/starter-kit`                   | Core editor functionality                 | Yes      |
-| `@tiptap/pm`                            | ProseMirror runtime                       | Yes      |
-| `@tiptap/react`                         | React bindings                            | Yes      |
-| `@tiptap/suggestion`                    | Slash command suggestion engine           | Yes      |
-| `@tiptap/extension-drag-handle-react`   | Block drag handle UI                      | Yes      |
-| `@tiptap/extension-placeholder`         | Placeholder text                          | Optional |
-| `@tiptap/extension-text-style`          | Text color - together with `Color`        | Optional |
-| `@tiptap/extension-color`               | Text color (requires Text Style)          | Optional |
-| `@tiptap/extension-highlight`           | Highlight (with `multicolor: true`)       | Optional |
+| Extension                             | Purpose                             | Required |
+| ------------------------------------- | ----------------------------------- | -------- |
+| `@tiptap/starter-kit`                 | Core editor functionality           | Yes      |
+| `@tiptap/pm`                          | ProseMirror runtime                 | Yes      |
+| `@tiptap/react`                       | React bindings                      | Yes      |
+| `@tiptap/suggestion`                  | Slash command suggestion engine     | Yes      |
+| `@tiptap/extension-drag-handle-react` | Block drag handle UI                | Yes      |
+| `@tiptap/extension-placeholder`       | Placeholder text                    | Optional |
+| `@tiptap/extension-text-style`        | Text color - together with `Color`  | Optional |
+| `@tiptap/extension-color`             | Text color (requires Text Style)    | Optional |
+| `@tiptap/extension-highlight`         | Highlight (with `multicolor: true`) | Optional |
 
 Extensions for **Image**, **Table**, **Link**, and others are not included — add them as needed for your custom slash commands.
 
