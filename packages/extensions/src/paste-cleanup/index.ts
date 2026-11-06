@@ -21,24 +21,66 @@ const ALLOWED_ATTRIBUTES = new Set([
   "width",
 ]);
 
+// Kept only on task lists, so pasted task lists from other Tiptap pages still parse.
+const TASK_ATTRIBUTES = new Set(["data-checked", "data-type"]);
+const TASK_TYPE = /^task(List|Item)$/;
+
 const decoration = ({ style }: HTMLElement) =>
   `${style.textDecoration} ${style.textDecorationLine}`;
 
-const STYLE_TAGS: [string, (element: HTMLElement) => boolean][] = [
-  ["strong", ({ style }) => /^(bold|bolder|[6-9]00)$/.test(style.fontWeight)],
-  ["em", ({ style }) => /^(italic|oblique)/.test(style.fontStyle)],
+// Each test returns true (sets the format), false (resets it), or undefined
+// (not specified here, so the nearest ancestor decides).
+const STYLE_TAGS: [string, (element: HTMLElement) => boolean | undefined][] = [
+  [
+    "strong",
+    ({ style }) =>
+      style.fontWeight
+        ? /^(bold|bolder|[6-9]00)$/.test(style.fontWeight)
+        : undefined,
+  ],
+  [
+    "em",
+    ({ style }) =>
+      style.fontStyle ? /^(italic|oblique)/.test(style.fontStyle) : undefined,
+  ],
+  // Text decorations can't be reset by a child in CSS, so they only ever add.
   [
     "u",
     (element) =>
-      decoration(element).includes("underline") && !element.closest("a"),
+      (decoration(element).includes("underline") && !element.closest("a")) ||
+      undefined,
   ],
-  ["s", (element) => decoration(element).includes("line-through")],
-  ["sub", ({ style }) => style.verticalAlign === "sub"],
-  ["sup", ({ style }) => style.verticalAlign === "super"],
+  ["s", (element) => decoration(element).includes("line-through") || undefined],
+  [
+    "sub",
+    ({ style }) =>
+      style.verticalAlign ? style.verticalAlign === "sub" : undefined,
+  ],
+  [
+    "sup",
+    ({ style }) =>
+      style.verticalAlign ? style.verticalAlign === "super" : undefined,
+  ],
 ];
 
 const MSO_LIST = /mso-list:\s*l(\d+)\s+level(\d+)/i;
+const MSO_IGNORE = /mso-list:\s*ignore/i;
 const ORDERED_MARKER = /^\w+[.)]$/;
+// Word supports nine list levels; clamping also guards against huge values.
+const MAX_LIST_DEPTH = 9;
+
+// Removes Word's typed bullet/number and reports the list it implies.
+const takeListMarker = (paragraph: HTMLElement) => {
+  const marker = [
+    ...paragraph.querySelectorAll<HTMLElement>("span[style]"),
+  ].find((span) => MSO_IGNORE.test(span.getAttribute("style") ?? ""));
+  const text = marker?.textContent?.trim() ?? "";
+  marker?.remove();
+  return {
+    start: Number.parseInt(text, 10),
+    tag: ORDERED_MARKER.test(text) ? "ol" : "ul",
+  };
+};
 
 const convertWordLists = (doc: Document) => {
   let stack: HTMLElement[] = [];
@@ -51,12 +93,8 @@ const convertWordLists = (doc: Document) => {
       continue;
     }
     const [, id, level] = match;
-    const depth = Number(level);
-    const marker = paragraph.querySelector("span[style*='mso-list:Ignore']");
-    const tag = ORDERED_MARKER.test(marker?.textContent?.trim() ?? "")
-      ? "ol"
-      : "ul";
-    marker?.remove();
+    const depth = Math.min(Math.max(Number(level), 1), MAX_LIST_DEPTH);
+    const { start, tag } = takeListMarker(paragraph);
 
     if (paragraph.previousElementSibling !== stack[0] || id !== lastId) {
       stack = [];
@@ -68,6 +106,9 @@ const convertWordLists = (doc: Document) => {
     }
     while (stack.length < depth) {
       const list = doc.createElement(stack.length === depth - 1 ? tag : "ul");
+      if (list.localName === "ol" && start > 1) {
+        list.setAttribute("start", String(start));
+      }
       const parent = stack.at(-1);
       if (parent) {
         (parent.lastElementChild ?? parent).append(list);
@@ -82,25 +123,62 @@ const convertWordLists = (doc: Document) => {
   }
 };
 
+// Wraps each text node in the formatting its nearest styled ancestors give it,
+// so a reset like font-weight:normal inside a bold span stays plain.
+const convertStyleTags = (body: HTMLElement) => {
+  const walker = body.ownerDocument.createTreeWalker(
+    body,
+    NodeFilter.SHOW_TEXT
+  );
+  const textNodes: Text[] = [];
+  while (walker.nextNode()) {
+    textNodes.push(walker.currentNode as Text);
+  }
+  for (const text of textNodes) {
+    if (!text.data.trim()) {
+      continue;
+    }
+    let node: ChildNode = text;
+    for (const [tag, test] of STYLE_TAGS) {
+      let active: boolean | undefined;
+      for (
+        let element = text.parentElement;
+        element && element !== body && active === undefined;
+        element = element.parentElement
+      ) {
+        active = test(element);
+      }
+      if (active) {
+        const wrapper = body.ownerDocument.createElement(tag);
+        node.before(wrapper);
+        wrapper.append(node);
+        node = wrapper;
+      }
+    }
+  }
+};
+
 const cleanAttributes = (element: HTMLElement) => {
-  const tags = STYLE_TAGS.filter(([, test]) => test(element));
+  const { whiteSpace } = element.style;
+  const isTask = TASK_TYPE.test(element.dataset.type ?? "");
   for (const name of element.getAttributeNames()) {
-    if (!ALLOWED_ATTRIBUTES.has(name)) {
+    if (
+      !(ALLOWED_ATTRIBUTES.has(name) || (isTask && TASK_ATTRIBUTES.has(name)))
+    ) {
       element.removeAttribute(name);
     }
   }
-  for (const [tag] of tags) {
-    const wrapper = element.ownerDocument.createElement(tag);
-    wrapper.append(...element.childNodes);
-    element.append(wrapper);
+  // The editor keeps spaces and line breaks only while this style is present.
+  if (whiteSpace.startsWith("pre")) {
+    element.setAttribute("style", `white-space: ${whiteSpace}`);
   }
 };
 
 export const cleanPastedHtml = (html: string, options: PasteCleanupOptions) => {
-  if (html.includes("data-pm-slice")) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  if (doc.querySelector("[data-pm-slice]")) {
     return html;
   }
-  const doc = new DOMParser().parseFromString(html, "text/html");
 
   if (options.convertWord) {
     convertWordLists(doc);
@@ -119,6 +197,7 @@ export const cleanPastedHtml = (html: string, options: PasteCleanupOptions) => {
     }
   }
   if (options.stripStyles) {
+    convertStyleTags(doc.body);
     for (const element of doc.body.querySelectorAll<HTMLElement>("*")) {
       cleanAttributes(element);
     }
