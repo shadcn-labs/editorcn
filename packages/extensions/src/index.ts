@@ -20,3 +20,9 @@ export {
 export { MarkdownToolbar } from "./markdown/toolbar";
 export type { MarkdownToolbarProps } from "./markdown/toolbar";
 export type { MarkdownOptions } from "./markdown";
+export {
+  PasteCleanup,
+  cleanPastedHtml,
+  pasteCleanupPluginKey,
+} from "./paste-cleanup";
+export type { PasteCleanupOptions } from "./paste-cleanup";

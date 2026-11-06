@@ -17,6 +17,7 @@ import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-
 import { Markdown } from "@editorcn/extensions/markdown";
 import { MarkdownToolbar } from "@editorcn/extensions/markdown-toolbar";
 import { Mention } from "@editorcn/extensions/mention";
+import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { TableToolbar } from "@editorcn/extensions/table-toolbar";
@@ -177,6 +178,7 @@ export const EditorPreview = ({
       ResizableImage,
       ImagePlaceholder,
       Markdown.configure({ pasteMarkdown: true }),
+      PasteCleanup,
       Mention.configure({
         debounce: 0,
         heading: "People",

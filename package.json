@@ -11,6 +11,7 @@
     "build": "turbo build",
     "build:registry": "node scripts/build-registry.mjs",
     "typecheck": "turbo typecheck",
+    "test": "turbo test",
     "check": "ultracite check",
     "fix": "ultracite fix",
     "dev:web": "turbo -F web dev",

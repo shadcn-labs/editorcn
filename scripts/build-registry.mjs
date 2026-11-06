@@ -938,6 +938,7 @@ const templateItems = [
       "https://editorcn.vercel.app/r/table.json",
       "https://editorcn.vercel.app/r/image-placeholder.json",
       "https://editorcn.vercel.app/r/markdown.json",
+      "https://editorcn.vercel.app/r/paste-cleanup.json",
       "https://editorcn.vercel.app/r/code-block.json",
     ],
   },
