@@ -1,0 +1,90 @@
+---
+title: Paste Cleanup
+seoTitle: "Tiptap Paste Cleanup: Google Docs, Notion, Word"
+description: "Clean up HTML pasted into a Tiptap editor from Google Docs, Notion, Word, and web pages. Keeps bold, italic, links, and lists, and drops fonts, colors, and empty lines."
+---
+
+Pasting from Google Docs, Notion, Word, or a web page brings in inline styles, `<span>` noise, empty paragraphs, and fonts and colors that don't match your theme. Word lists arrive as indented paragraphs with fake bullets.
+
+The Paste Cleanup extension cleans the pasted HTML before the editor parses it:
+
+- Strips `class`, `id`, `data-*`, and inline styles such as fonts, sizes, colors, and margins.
+- Keeps formatting written as styles, so Google Docs bold, italic, underline, strikethrough, subscript, and superscript still come through.
+- Turns Word `mso-list` paragraphs into real nested bullet and numbered lists.
+- Removes empty paragraphs and the blank lines Google Docs adds between blocks.
+- Leaves copy and paste between editors untouched, so mentions, task lists, and other custom nodes keep their attributes.
+
+<ExtensionPreview slug="paste-cleanup" editor="toolbar" />
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/paste-cleanup.json"
+```
+
+This installs `extensions/paste-cleanup` and `extensions/core/`.
+
+To install the files manually instead, install these packages and copy the `paste-cleanup` folder from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src):
+
+```bash
+npm install @tiptap/core @tiptap/pm
+```
+
+## Usage
+
+Add `PasteCleanup` to the extensions. It works the same way in `@editorcn/editor` and `@editorcn/block-editor`:
+
+```tsx
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { PasteCleanup } from "@/components/extensions/paste-cleanup";
+
+const editor = useEditor({
+  immediatelyRender: false,
+  extensions: [StarterKit, PasteCleanup],
+});
+```
+
+Formatting only survives when the editor has an extension for it. For example, add `Subscript` and `Superscript` to keep subscript and superscript text.
+
+### Plain text paste
+
+Press `Ctrl+Shift+V` (`Cmd+Shift+V` on Mac) to paste plain text without any formatting. This is built into the editor and works with or without this extension.
+
+### Pasting links
+
+Paste a URL over selected text to turn the text into a link. This comes from the Link extension's `linkOnPaste` option, which is on by default.
+
+## Settings
+
+All settings are on by default.
+
+```tsx
+PasteCleanup.configure({
+  stripStyles: true,
+  convertWord: true,
+  removeEmptyParagraphs: true,
+});
+```
+
+| Option                  | Description                                                                                                                                                                       |
+| ----------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `stripStyles`           | Removes classes, ids, inline styles, and other attributes. Bold, italic, underline, strikethrough, subscript, and superscript set through styles are turned into real tags first. |
+| `convertWord`           | Turns Word list paragraphs into nested `ul` and `ol` lists.                                                                                                                       |
+| `removeEmptyParagraphs` | Removes paragraphs with no text or image, and line breaks between blocks.                                                                                                         |
+
+## Helpers
+
+### `cleanPastedHtml`
+
+The function the extension runs on every paste. Use it to clean HTML from other sources, such as an import:
+
+```tsx
+import {
+  cleanPastedHtml,
+  PasteCleanup,
+} from "@/components/extensions/paste-cleanup";
+
+editor.commands.setContent(cleanPastedHtml(html, PasteCleanup.options));
+```

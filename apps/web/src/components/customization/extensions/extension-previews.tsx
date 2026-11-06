@@ -18,6 +18,7 @@ import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-
 import { Markdown } from "@editorcn/extensions/markdown";
 import { MarkdownToolbar } from "@editorcn/extensions/markdown-toolbar";
 import { Mention } from "@editorcn/extensions/mention";
+import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { TableToolbar } from "@editorcn/extensions/table-toolbar";
@@ -87,6 +88,12 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
       StarterKit,
       Mention.configure({ heading: "People", items: searchPeople }),
     ],
+    toolbar: null,
+  },
+  "paste-cleanup": {
+    content:
+      "<p>Copy a few paragraphs from Google Docs, Notion, Word, or a web page and paste them here. Bold, italic, links, and lists come through, while fonts, colors, and empty lines are dropped. Press Ctrl+Shift+V (Cmd+Shift+V on Mac) to paste plain text.</p>",
+    extensions: [StarterKit, PasteCleanup],
     toolbar: null,
   },
   table: {

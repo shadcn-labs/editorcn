@@ -67,6 +67,12 @@
     "ui": ["button", "dropdown-item", "popover", "popover-content"],
     "deps": ["@tiptap/markdown@>=3.30.5 <4", "@tiptap/pm@>=3.0.0 <4"]
   },
+  "paste-cleanup": {
+    "title": "Paste Cleanup",
+    "description": "Cleans HTML pasted from Google Docs, Notion, Word, and web pages. Strips classes, ids, fonts, and colors, keeps bold, italic, underline, and links, turns Word list paragraphs into real nested lists, and drops empty paragraphs.",
+    "extension": "paste-cleanup/index.ts",
+    "deps": ["@tiptap/pm@>=3.0.0 <4"]
+  },
   "code-block": {
     "title": "Code Block",
     "description": "A Notion-style code block with Shiki syntax highlighting, a searchable language menu, copy, wrap toggle, captions, Prettier formatting, and a live Mermaid diagram preview. Code stays editable in the editor, so undo and collaboration keep working.",

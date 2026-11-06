@@ -7,6 +7,7 @@ import {
   ResizableImage,
 } from "@editorcn/extensions/image-placeholder";
 import { Markdown } from "@editorcn/extensions/markdown";
+import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { Color } from "@tiptap/extension-color";
@@ -78,6 +79,7 @@ export const SimpleDocumentEditor = ({
       ResizableImage,
       ImagePlaceholder,
       Markdown.configure({ pasteMarkdown: true }),
+      PasteCleanup,
       TaskList.configure({ HTMLAttributes: { class: "rte-task-list" } }),
       TaskItem.configure({ nested: true }),
       TextAlign.configure({ types: ["heading", "paragraph"] }),

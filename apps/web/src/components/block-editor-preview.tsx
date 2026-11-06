@@ -18,6 +18,7 @@ import {
   importMarkdownFile,
 } from "@editorcn/extensions/markdown";
 import { Mention } from "@editorcn/extensions/mention";
+import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { Color } from "@tiptap/extension-color";
@@ -244,6 +245,7 @@ export const BlockEditorPreview = () => {
       ResizableImage,
       ImagePlaceholder,
       Markdown.configure({ pasteMarkdown: true }),
+      PasteCleanup,
       Mention.configure({
         debounce: 0,
         heading: "People",

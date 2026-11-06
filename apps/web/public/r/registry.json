@@ -808,6 +808,52 @@
         "@tiptap/core@>=3.30.5 <4",
         "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <1.0.0",
+        "@tiptap/pm@>=3.0.0 <4"
+      ],
+      "description": "Cleans HTML pasted from Google Docs, Notion, Word, and web pages. Strips classes, ids, fonts, and colors, keeps bold, italic, underline, and links, turns Word list paragraphs into real nested lists, and drops empty paragraphs.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/paste-cleanup/index.ts",
+          "type": "registry:component"
+        }
+      ],
+      "name": "paste-cleanup",
+      "title": "Paste Cleanup",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0",
         "@tiptap/extension-code-block@>=3.0.0 <4",
         "@tiptap/pm@>=3.0.0 <4",
         "shiki@^4.0.0",

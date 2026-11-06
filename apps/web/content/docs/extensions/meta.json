@@ -6,6 +6,7 @@
     "image-placeholder",
     "markdown",
     "mention",
+    "paste-cleanup",
     "table"
   ]
 }
