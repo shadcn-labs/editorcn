@@ -329,6 +329,87 @@
   justify-content: center;
 }
 
+/* ── Callout ── */
+.rte-static-renderer div[data-type="callout"] {
+  --ext-callout-info: oklch(0.6 0.17 250);
+  --ext-callout-tip: oklch(0.62 0.15 155);
+  --ext-callout-warning: oklch(0.72 0.16 70);
+  --ext-callout-danger: var(--destructive);
+  --ext-callout-note: var(--muted-foreground);
+  --ext-callout-accent: var(--ext-callout-info);
+  --ext-callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 16v-4'/%3E%3Cpath d='M12 8h.01'/%3E%3C/svg%3E");
+  position: relative;
+  margin: 0.75em 0;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  border: 1px solid
+    color-mix(in oklab, var(--ext-callout-accent) 30%, var(--border));
+  border-radius: var(--radius);
+  background: color-mix(
+    in oklab,
+    var(--ext-callout-accent) 8%,
+    var(--background)
+  );
+}
+
+.dark .rte-static-renderer div[data-type="callout"] {
+  --ext-callout-info: oklch(0.72 0.14 250);
+  --ext-callout-tip: oklch(0.74 0.15 155);
+  --ext-callout-warning: oklch(0.8 0.15 75);
+}
+
+.rte-static-renderer div[data-type="callout"]::before {
+  content: "";
+  position: absolute;
+  top: 0.9rem;
+  left: 1rem;
+  width: 1.125rem;
+  height: 1.125rem;
+  background: var(--ext-callout-accent);
+  mask: var(--ext-callout-icon) center / contain no-repeat;
+}
+
+.rte-static-renderer div[data-type="callout"][data-emoji]::before {
+  content: attr(data-emoji);
+  top: 0.8rem;
+  background: none;
+  mask: none;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.rte-static-renderer div[data-type="callout"] > :first-child {
+  margin-top: 0;
+}
+
+.rte-static-renderer div[data-type="callout"] > :last-child {
+  margin-bottom: 0;
+}
+
+.rte-static-renderer div[data-type="callout"][data-variant="info"] {
+  --ext-callout-accent: var(--ext-callout-info);
+  --ext-callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 16v-4'/%3E%3Cpath d='M12 8h.01'/%3E%3C/svg%3E");
+}
+
+.rte-static-renderer div[data-type="callout"][data-variant="tip"] {
+  --ext-callout-accent: var(--ext-callout-tip);
+  --ext-callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5'/%3E%3Cpath d='M9 18h6'/%3E%3Cpath d='M10 22h4'/%3E%3C/svg%3E");
+}
+
+.rte-static-renderer div[data-type="callout"][data-variant="warning"] {
+  --ext-callout-accent: var(--ext-callout-warning);
+  --ext-callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3'/%3E%3Cpath d='M12 9v4'/%3E%3Cpath d='M12 17h.01'/%3E%3C/svg%3E");
+}
+
+.rte-static-renderer div[data-type="callout"][data-variant="danger"] {
+  --ext-callout-accent: var(--ext-callout-danger);
+  --ext-callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 16h.01'/%3E%3Cpath d='M12 8v4'/%3E%3Cpath d='M15.312 2a2 2 0 0 1 1.414.586l4.688 4.688A2 2 0 0 1 22 8.688v6.624a2 2 0 0 1-.586 1.414l-4.688 4.688a2 2 0 0 1-1.414.586H8.688a2 2 0 0 1-1.414-.586l-4.688-4.688A2 2 0 0 1 2 15.312V8.688a2 2 0 0 1 .586-1.414l4.688-4.688A2 2 0 0 1 8.688 2z'/%3E%3C/svg%3E");
+}
+
+.rte-static-renderer div[data-type="callout"][data-variant="note"] {
+  --ext-callout-accent: var(--ext-callout-note);
+  --ext-callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z'/%3E%3Cpath d='M15 3v5a1 1 0 0 0 1 1h5'/%3E%3C/svg%3E");
+}
+
 /* ── Selection ── */
 .rte-static-renderer ::selection {
   background: color-mix(in srgb, var(--primary) 20%, transparent);

@@ -1,0 +1,193 @@
+---
+title: Callout
+seoTitle: "Tiptap Callout Extension: Info, Tip, Warning Boxes for shadcn/ui"
+description: "A Tiptap callout block for shadcn/ui with info, tip, warning, danger, and note styles, an icon menu to switch the type, GitHub alert markdown, and dark mode."
+---
+
+The Callout extension adds highlighted boxes for notes, tips, and warnings. A callout holds any block content, such as paragraphs, lists, and code blocks.
+
+- Five variants: `info`, `tip`, `warning`, `danger`, and `note`, with an optional custom emoji in place of the icon.
+- Click the icon to switch the variant or remove the callout. The content stays.
+- Type `> [!NOTE]` (or `[!NOTE]`) followed by a space to create one, using [GitHub alert](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#alerts) syntax.
+- Press `Enter` on an empty last line to leave the callout.
+- Colors are mixed from your theme's `--background` and `--border` tokens, so they work in light and dark mode.
+
+<ExtensionPreview slug="callout" editor="toolbar" />
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/callout.json"
+```
+
+This installs `extensions/callout`, `extensions/core/`, `extensions/ui/`, and the styles at `extensions/callout/style.css` and `extensions/ui/style.css`.
+
+To install the files manually instead, install these packages and copy the `callout` folder from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src/callout), plus `button.tsx`, `dropdown-menu.tsx`, `dropdown-content.tsx`, `dropdown-item.tsx`, `dropdown-separator.tsx`, `dropdown-pill.tsx`, `popover.tsx`, `use-floating.tsx`, and `style.css` from [`extensions/ui`](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src/ui):
+
+```bash
+npm install @tiptap/core @tiptap/react @tiptap/pm lucide-react
+```
+
+## Usage
+
+Add `Callout` to the extensions and `CalloutToolbar` to the toolbar. The toolbar button inserts a callout of the chosen variant, or changes the variant when the cursor is already in one.
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { RichTextEditor } from "@/components/editor";
+import { Callout } from "@/components/extensions/callout";
+import { CalloutToolbar } from "@/components/extensions/callout/toolbar";
+
+import "@/components/editor/style.css";
+import "@/components/extensions/callout/style.css";
+import "@/components/extensions/ui/style.css";
+
+export function MyEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [StarterKit, Callout],
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <CalloutToolbar editor={editor} />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+### With `@editorcn/block-editor`
+
+Add a **Callout** item to the slash commands:
+
+```tsx
+import {
+  BlockEditor,
+  SlashCommand,
+  defaultSlashCommandItems,
+  getSlashCommandSuggestion,
+} from "@/components/block-editor";
+import type { SlashCommandSuggestionItem } from "@/components/block-editor";
+import { Callout } from "@/components/extensions/callout";
+import { MessageSquareWarning } from "lucide-react";
+
+const items: SlashCommandSuggestionItem[] = [
+  ...defaultSlashCommandItems,
+  {
+    command: ({ editor, range }) =>
+      editor
+        .chain()
+        .focus()
+        .deleteRange(range)
+        .setCallout({ variant: "info" })
+        .run(),
+    description: "Highlight a note, tip, or warning.",
+    icon: <MessageSquareWarning />,
+    id: "callout",
+    keywords: ["callout", "note", "tip", "warning", "alert"],
+    title: "Callout",
+  },
+];
+
+const editor = useEditor({
+  immediatelyRender: false,
+  extensions: [
+    StarterKit,
+    Callout,
+    SlashCommand.configure({ suggestion: getSlashCommandSuggestion(items) }),
+  ],
+});
+
+return <BlockEditor editor={editor} />;
+```
+
+<ExtensionPreview slug="callout" editor="block" />
+
+## Commands
+
+```tsx
+editor.commands.setCallout({ variant: "info" });
+editor.commands.toggleCallout({ variant: "tip" });
+editor.commands.updateCallout({ variant: "warning", emoji: "🔥" });
+editor.commands.unsetCallout();
+```
+
+| Command         | Description                                                                                                    |
+| --------------- | -------------------------------------------------------------------------------------------------------------- |
+| `setCallout`    | Wraps the selected blocks in a callout. Takes an optional `variant` and `emoji`.                               |
+| `toggleCallout` | Removes the callout around the cursor, or wraps the selected blocks in a new one.                              |
+| `updateCallout` | Changes the `variant` or `emoji` of the callout around the cursor. Pass `emoji: null` to use the variant icon. |
+| `unsetCallout`  | Removes the callout around the cursor and keeps its content.                                                   |
+
+## Settings
+
+### `HTMLAttributes`
+
+HTML attributes added to the callout `<div>`.
+
+```tsx
+Callout.configure({ HTMLAttributes: { class: "my-callout" } });
+```
+
+### Colors
+
+Each variant reads a CSS variable. Override them to match your brand:
+
+```css
+.ext-callout,
+.ext-callout-menu-item {
+  --ext-callout-info: oklch(0.6 0.17 250);
+  --ext-callout-tip: oklch(0.62 0.15 155);
+  --ext-callout-warning: oklch(0.72 0.16 70);
+  --ext-callout-danger: var(--destructive);
+  --ext-callout-note: var(--muted-foreground);
+}
+```
+
+## Output
+
+{/* prettier-ignore */}
+```html
+<div data-type="callout" data-emoji="🔥" data-variant="warning"><p>Hot</p></div>
+```
+
+```json
+{
+  "type": "callout",
+  "attrs": { "variant": "warning", "emoji": "🔥" },
+  "content": [
+    { "type": "paragraph", "content": [{ "type": "text", "text": "Hot" }] }
+  ]
+}
+```
+
+With the [Markdown extension](/docs/extensions/markdown), callouts are written as GitHub alerts, so they render on GitHub too. The custom emoji is not kept in markdown.
+
+| Variant   | Markdown         |
+| --------- | ---------------- |
+| `note`    | `> [!NOTE]`      |
+| `tip`     | `> [!TIP]`       |
+| `info`    | `> [!IMPORTANT]` |
+| `warning` | `> [!WARNING]`   |
+| `danger`  | `> [!CAUTION]`   |
+
+`[!INFO]` and `[!DANGER]` are also accepted when typing or parsing markdown.
+
+## Static Renderer
+
+The [Static Renderer](/docs/static-renderer) styles callouts, with the same icons and colors, from both HTML and JSON content. The `sanitize` option keeps the callout attributes. For JSON content, pass `Callout` in `extensions`:
+
+```tsx
+<StaticRenderer content={json} extensions={[StarterKit, Callout]} />
+```

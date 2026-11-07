@@ -289,6 +289,15 @@ describe(sanitizeHtml, () => {
       '<p><span data-type="mention" data-id="3" data-label="Grace" data-mention-suggestion-char="@">@Grace</span></p>';
     expect(sanitizeHtml(html)).toBe(html);
   });
+
+  it("keeps callout attributes", () => {
+    const html =
+      '<div data-type="callout" data-variant="warning" data-emoji="🔥"><p>Hot</p></div>';
+    expect(sanitizeHtml(html)).toBe(html);
+    expect(
+      sanitizeHtml('<div data-type="callout" onclick="alert(1)"><p>x</p></div>')
+    ).toBe('<div data-type="callout"><p>x</p></div>');
+  });
 });
 
 describe("StaticRenderer sanitize prop", () => {

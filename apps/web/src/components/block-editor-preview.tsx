@@ -7,6 +7,7 @@ import {
   getSlashCommandSuggestion,
 } from "@editorcn/block-editor";
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
+import { Callout } from "@editorcn/extensions/callout";
 import { CodeBlock } from "@editorcn/extensions/code-block";
 import {
   ImagePlaceholder,
@@ -32,11 +33,12 @@ import { TextStyle } from "@tiptap/extension-text-style";
 import { Underline } from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { FileDown, FileUp } from "lucide-react";
+import { FileDown, FileUp, MessageSquareWarning } from "lucide-react";
 
 import { searchPeople } from "@/lib/mention-people";
 
 import "@editorcn/block-editor/style.css";
+import "@editorcn/extensions/callout/style.css";
 import "@editorcn/extensions/code-block/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/mention/style.css";
@@ -100,6 +102,8 @@ function MyEditor() {
   A[Type in the editor] --&gt; B{Code or diagram?}
   B --&gt;|Code| C[Shiki highlighting]
   B --&gt;|Mermaid| D[Live preview]</code></pre>
+<h2>Callout</h2>
+<div data-type="callout" data-variant="info"><p>Type <code>/callout</code> to insert a callout, or <code>&gt; [!WARNING]</code> and a space. Click the icon to switch between info, tip, warning, danger, and note.</p></div>
 <h2>Blockquote</h2>
 <blockquote><p>Block-level content with drag handles for reordering. Every block can be moved, edited, or deleted independently.</p></blockquote>
 <h2>Text Alignment</h2>
@@ -197,6 +201,21 @@ const myItems: SlashCommandSuggestionItem[] = [
   },
   {
     command: ({ editor, range }) => {
+      editor
+        .chain()
+        .focus()
+        .deleteRange(range)
+        .setCallout({ variant: "info" })
+        .run();
+    },
+    description: "Highlight a note, tip, or warning.",
+    icon: <MessageSquareWarning />,
+    id: "callout",
+    keywords: ["callout", "note", "tip", "warning", "alert", "info"],
+    title: "Callout",
+  },
+  {
+    command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
       importMarkdownFile(editor);
     },
@@ -235,6 +254,7 @@ export const BlockEditorPreview = () => {
       TaskList,
       TaskItem.configure({ nested: true }),
       CodeBlock,
+      Callout,
       SlashCommand.configure({
         suggestion: getSlashCommandSuggestion(myItems),
       }),

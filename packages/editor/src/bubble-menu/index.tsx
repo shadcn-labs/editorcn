@@ -5,7 +5,7 @@ import { useCallback } from "react";
 
 import { RteSeparator } from "../ui";
 import { ColorSelector } from "./color-selector";
-import { TextButtons } from "./text-buttons";
+import { TextButtons, getTextItems } from "./text-buttons";
 
 export interface BubbleMenuProps {
   editor: Editor | null;
@@ -39,6 +39,15 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
     return null;
   }
 
+  const hasText = getTextItems(editor).length > 0;
+  const hasColor = editor.extensionManager.extensions.some(
+    (ext) => ext.name === "color" || ext.name === "highlight"
+  );
+
+  if (!(hasText || hasColor)) {
+    return null;
+  }
+
   return (
     <TiptapBubbleMenu
       editor={editor}
@@ -46,9 +55,9 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
       shouldShow={shouldShow}
     >
       <div className="rte-bubble-menu">
-        <TextButtons editor={editor} />
-        <RteSeparator />
-        <ColorSelector editor={editor} />
+        {hasText && <TextButtons editor={editor} />}
+        {hasText && hasColor && <RteSeparator />}
+        {hasColor && <ColorSelector editor={editor} />}
       </div>
     </TiptapBubbleMenu>
   );

@@ -1,0 +1,124 @@
+.ext-callout,
+.ext-callout-menu-item {
+  --ext-callout-info: oklch(0.6 0.17 250);
+  --ext-callout-tip: oklch(0.62 0.15 155);
+  --ext-callout-warning: oklch(0.72 0.16 70);
+  --ext-callout-danger: var(--destructive);
+  --ext-callout-note: var(--muted-foreground);
+  --ext-callout-accent: var(--ext-callout-info);
+}
+
+.dark .ext-callout,
+.dark .ext-callout-menu-item {
+  --ext-callout-info: oklch(0.72 0.14 250);
+  --ext-callout-tip: oklch(0.74 0.15 155);
+  --ext-callout-warning: oklch(0.8 0.15 75);
+}
+
+.ext-callout[data-variant="info"] {
+  --ext-callout-accent: var(--ext-callout-info);
+}
+
+.ext-callout[data-variant="tip"] {
+  --ext-callout-accent: var(--ext-callout-tip);
+}
+
+.ext-callout[data-variant="warning"] {
+  --ext-callout-accent: var(--ext-callout-warning);
+}
+
+.ext-callout[data-variant="danger"] {
+  --ext-callout-accent: var(--ext-callout-danger);
+}
+
+.ext-callout[data-variant="note"] {
+  --ext-callout-accent: var(--ext-callout-note);
+}
+
+.ext-callout-menu-item[data-variant="info"] {
+  --ext-callout-accent: var(--ext-callout-info);
+}
+
+.ext-callout-menu-item[data-variant="tip"] {
+  --ext-callout-accent: var(--ext-callout-tip);
+}
+
+.ext-callout-menu-item[data-variant="warning"] {
+  --ext-callout-accent: var(--ext-callout-warning);
+}
+
+.ext-callout-menu-item[data-variant="danger"] {
+  --ext-callout-accent: var(--ext-callout-danger);
+}
+
+.ext-callout-menu-item[data-variant="note"] {
+  --ext-callout-accent: var(--ext-callout-note);
+}
+
+.ext-callout {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.75em 0;
+  padding: 0.625rem 1rem 0.625rem 0.625rem;
+  border: 1px solid
+    color-mix(in oklab, var(--ext-callout-accent) 30%, var(--border));
+  border-radius: var(--radius);
+  background: color-mix(
+    in oklab,
+    var(--ext-callout-accent) 8%,
+    var(--background)
+  );
+}
+
+.ext-callout-icon {
+  display: flex;
+  flex-shrink: 0;
+  align-items: flex-start;
+  user-select: none;
+}
+
+.ext-callout-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  color: var(--ext-callout-accent);
+}
+
+.ext-callout-trigger svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.ext-btn.ext-callout-trigger:hover {
+  background: color-mix(in oklab, var(--ext-callout-accent) 15%, transparent);
+  color: var(--ext-callout-accent);
+}
+
+.ext-callout-emoji {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.ext-callout-content {
+  flex: 1;
+  min-width: 0;
+  padding-top: 0.125rem;
+}
+
+.ext-callout-content > [data-node-view-content-react] > :first-child {
+  margin-top: 0;
+}
+
+.ext-callout-content > [data-node-view-content-react] > :last-child {
+  margin-bottom: 0;
+}
+
+.ext-callout-menu-item > svg:first-child {
+  color: var(--ext-callout-accent);
+}
+
+.ext-callout-check {
+  margin-left: auto;
+}

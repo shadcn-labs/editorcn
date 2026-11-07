@@ -2,6 +2,7 @@
   "title": "@editorcn/extensions",
   "pages": [
     "index",
+    "callout",
     "code-block",
     "image-placeholder",
     "markdown",
