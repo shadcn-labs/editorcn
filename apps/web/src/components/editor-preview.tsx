@@ -8,6 +8,8 @@ import {
   YouTubeEmbed,
 } from "@editorcn/editor";
 import type { RichTextEditorVariant } from "@editorcn/editor";
+import { Callout } from "@editorcn/extensions/callout";
+import { CalloutToolbar } from "@editorcn/extensions/callout-toolbar";
 import { CodeBlock } from "@editorcn/extensions/code-block";
 import {
   ResizableImage,
@@ -36,6 +38,7 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { searchPeople } from "@/lib/mention-people";
 
 import "@editorcn/editor/style.css";
+import "@editorcn/extensions/callout/style.css";
 import "@editorcn/extensions/code-block/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/mention/style.css";
@@ -99,6 +102,8 @@ const DEMO_CONTENT = `
 </ol>
 <h2>Mentions</h2>
 <p>Type <code>@</code> to mention someone, like <span data-type="mention" data-id="3" data-label="Grace Hopper"></span>. The picker filters as you type and inserts a mention with a stable id.</p>
+<h2>Callouts</h2>
+<div data-type="callout" data-variant="tip"><p>Use the <strong>callout</strong> button in the toolbar, or type <code>&gt; [!NOTE]</code> and a space, to highlight a note, tip, or warning. Click the icon to change its type.</p></div>
 <h2>Blockquote &amp; Code</h2>
 <blockquote><p>A well-placed blockquote adds authority. The left border uses your theme's border color.</p></blockquote>
 <p>For longer code snippets, use a <strong>code block</strong>:</p>
@@ -174,6 +179,7 @@ export const EditorPreview = ({
       Placeholder.configure({ placeholder: "Start typing..." }),
       CharacterCount,
       CodeBlock,
+      Callout,
       Table.configure({ resizable: true }),
       ResizableImage,
       ImagePlaceholder,
@@ -239,6 +245,7 @@ export const EditorPreview = ({
             <RichTextEditor.TwitterEmbed />
           </RichTextEditor.ControlsGroup>
           <RichTextEditor.ControlsGroup>
+            <CalloutToolbar editor={editor} />
             <ImagePlaceholderToolbar editor={editor} />
             <TableToolbar editor={editor} />
             <MarkdownToolbar editor={editor} filename="editorcn.md" />

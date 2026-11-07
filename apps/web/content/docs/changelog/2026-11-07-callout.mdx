@@ -1,0 +1,24 @@
+---
+title: "November 7, 2026 - Callout"
+description: "A new Callout extension adds info, tip, warning, danger, and note boxes that hold rich content, with GitHub alert markdown and Static Renderer support."
+date: "2026-11-07"
+---
+
+Docs, blog, and knowledge-base editors can now highlight notes, tips, and warnings with the new [Callout extension](/docs/extensions/callout).
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/callout.json"
+```
+
+## Highlights
+
+- **Five variants**: info, tip, warning, danger, and note, with an optional custom emoji instead of the icon.
+- **Rich content**: callouts hold paragraphs, lists, code blocks, and other blocks.
+- **Icon menu**: click the icon to switch the variant or remove the callout without losing its content.
+- **Shortcuts**: type `> [!NOTE]` and a space to create a callout. Press Enter on an empty last line to leave it.
+- **Toolbar and slash command**: a `CalloutToolbar` button for the toolbar editor and a **Callout** slash command item for the block editor.
+- **GitHub alert markdown**: with the Markdown extension, callouts are written as `> [!NOTE]`, `> [!TIP]`, `> [!WARNING]`, and so on.
+- **Theme colors**: mixed from your shadcn tokens, in light and dark mode.
+- **Static Renderer**: callouts render with the same icons and colors, and `sanitize` keeps their attributes.
+
+The landing page editors now include it.

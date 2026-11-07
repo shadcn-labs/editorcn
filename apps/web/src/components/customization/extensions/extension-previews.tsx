@@ -8,6 +8,8 @@ import {
 } from "@editorcn/block-editor";
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
 import { RichTextEditor } from "@editorcn/editor";
+import { Callout } from "@editorcn/extensions/callout";
+import { CalloutToolbar } from "@editorcn/extensions/callout-toolbar";
 import { CodeBlock } from "@editorcn/extensions/code-block";
 import { ToolbarProvider } from "@editorcn/extensions/core";
 import {
@@ -37,6 +39,7 @@ import "@editorcn/extensions/table/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/mention/style.css";
 import "@editorcn/extensions/code-block/style.css";
+import "@editorcn/extensions/callout/style.css";
 
 /* Table alignment + resize handle styling ships with
    @editorcn/extensions/table/style.css (see .ProseMirror.resize-cursor). */
@@ -48,6 +51,27 @@ interface PreviewConfig {
   slashItems?: SlashCommandSuggestionItem[];
 }
 const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
+  callout: {
+    content:
+      '<div data-type="callout" data-variant="info"><p>Click the icon to switch the callout type or remove it. Callouts hold any block content, like lists:</p><ul><li><p>Press Enter on an empty last line to leave the callout.</p></li></ul></div><div data-type="callout" data-variant="tip"><p>Type <code>&gt; [!WARNING]</code> followed by a space in an empty line to create a warning callout.</p></div><div data-type="callout" data-variant="warning" data-emoji="🔥"><p>Callouts can show a custom emoji instead of the icon.</p></div><p></p>',
+    extensions: [StarterKit, Callout],
+    slashItems: [
+      {
+        command: ({ editor, range }) =>
+          editor
+            .chain()
+            .focus()
+            .deleteRange(range)
+            .setCallout({ variant: "info" })
+            .run(),
+        description: "Highlight a note, tip, or warning",
+        id: "callout",
+        keywords: ["callout", "note", "tip", "warning", "alert", "info"],
+        title: "Callout",
+      },
+    ],
+    toolbar: <CalloutToolbar />,
+  },
   "code-block": {
     content:
       '<p>Hover the code block to change its language, copy the code, add a caption, or open the actions menu. Set the language to Mermaid to see a live diagram.</p><pre><code class="language-typescript">type User = { id: string; name: string };\n\nexport const greet = (user: User) =&gt; {\n  return "Hello, " + user.name;\n};</code></pre><pre><code class="language-mermaid">graph LR\n  A[Write code] --&gt; B{Looks good?}\n  B --&gt;|Yes| C[Ship it]\n  B --&gt;|No| A</code></pre>',
