@@ -158,6 +158,18 @@ describe("callout", () => {
     expect(target.getHTML()).toBe("<p>[!FOO] </p>");
   });
 
+  it("keeps data-type when HTMLAttributes sets one", () => {
+    const target = new Editor({
+      content: '<div data-type="callout"><p>a</p></div>',
+      extensions: [
+        StarterKit.configure({ trailingNode: false }),
+        HeadlessCallout.configure({ HTMLAttributes: { "data-type": "x" } }),
+      ],
+    });
+    expect(target.getHTML()).toContain('data-type="callout"');
+    target.destroy();
+  });
+
   it("rejects unsupported variants", () => {
     const target = create(
       '<div data-type="callout" data-variant="tip"><p>a</p></div><p>b</p>'

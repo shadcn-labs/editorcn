@@ -216,10 +216,12 @@ export const Callout = Node.create<CalloutOptions>({
   renderHTML({ HTMLAttributes }) {
     return [
       "div",
+      // data-type stays first in the output and can't be overridden.
       mergeAttributes(
         { "data-type": "callout" },
         this.options.HTMLAttributes,
-        HTMLAttributes
+        HTMLAttributes,
+        { "data-type": "callout" }
       ),
       0,
     ];
