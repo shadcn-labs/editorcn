@@ -1,0 +1,278 @@
+---
+title: How to Add a WYSIWYG Editor to a shadcn/ui App
+description: Add a WYSIWYG editor that matches your shadcn/ui theme. A Tiptap toolbar editor with a bubble menu, clean pasting from Google Docs and Word, and safe rendering of saved content.
+date: "2026-11-08"
+author: Abdullah Mukadam
+---
+
+A WYSIWYG ("what you see is what you get") editor lets users format text the way it will look when published: bold is bold, headings are headings, and links are clickable. No markup, no preview pane.
+
+shadcn/ui doesn't include one. The usual options are an iframe-based editor that ignores your theme, or wiring [Tiptap](https://tiptap.dev/) yourself and building every toolbar button. This guide takes a shorter route with [editorcn](/docs): Tiptap-based editors installed with the shadcn CLI and styled with your shadcn theme tokens.
+
+In this guide you'll:
+
+1. Install a WYSIWYG editor with the shadcn CLI
+2. Build a toolbar with the controls you need
+3. Add a floating bubble menu for selected text
+4. Clean up content pasted from Google Docs, Notion, and Word
+5. Save the content and render it on a public page
+
+<EditorStickyToolbarDemo />
+
+## What to look for in a WYSIWYG editor
+
+Before picking one, check that it:
+
+- **Matches your design system.** Buttons, menus, and focus rings should look like the rest of your shadcn/ui app, in light and dark mode.
+- **Stores structured content.** JSON is safer to store and render than raw HTML strings.
+- **Handles pasting.** Content copied from Google Docs or Word brings fonts, colors, and empty lines with it.
+- **Lets you own the code.** You'll want to change labels, icons, and behavior without forking a package.
+
+editorcn covers all four. Like shadcn/ui, the CLI copies the source into your project.
+
+## Prerequisites
+
+- React 18 or 19
+- A project with shadcn/ui and Tailwind CSS v4 set up. If you don't have one yet, run `npx shadcn@latest init`.
+- The editorcn registry added to `components.json`:
+
+```json title="components.json"
+{
+  "registries": {
+    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+  }
+}
+```
+
+## Step 1: Install the editor
+
+```bash
+npx shadcn@latest add @editorcn/editor
+```
+
+This copies the editor into `components/editor/` and installs the Tiptap packages it needs. Import its styles after your shadcn globals, because the editor reads your theme variables:
+
+```tsx title="app/layout.tsx"
+import "@/app/globals.css";
+import "@/components/editor/style.css";
+```
+
+## Step 2: Build the toolbar
+
+`RichTextEditor` is a UI layer over Tiptap's `useEditor` hook. Add the Tiptap extensions you need, then a toolbar control for each one:
+
+```tsx title="components/wysiwyg-editor.tsx"
+"use client";
+
+import { Placeholder } from "@tiptap/extension-placeholder";
+import { TextAlign } from "@tiptap/extension-text-align";
+import { Underline } from "@tiptap/extension-underline";
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { Link, RichTextEditor } from "@/components/editor";
+
+export function WysiwygEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
+    extensions: [
+      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      Underline,
+      Link,
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      Placeholder.configure({ placeholder: "Start writing..." }),
+    ],
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar sticky>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Underline />
+          <RichTextEditor.Strikethrough />
+          <RichTextEditor.ClearFormatting />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.H1 />
+          <RichTextEditor.H2 />
+          <RichTextEditor.H3 />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.BulletList />
+          <RichTextEditor.OrderedList />
+          <RichTextEditor.Blockquote />
+          <RichTextEditor.Hr />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.AlignLeft />
+          <RichTextEditor.AlignCenter />
+          <RichTextEditor.AlignRight />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Link />
+          <RichTextEditor.Unlink />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Undo />
+          <RichTextEditor.Redo />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+`Underline` and `TextAlign` aren't part of StarterKit, so install them:
+
+```bash
+npm install @tiptap/extension-underline @tiptap/extension-text-align
+```
+
+In Next.js, keep `"use client"` at the top and `immediatelyRender: false` in the options. Together they stop Tiptap from rendering on the server and avoid hydration mismatches.
+
+The [Toolbar Controls](/docs/editor/toolbar) page lists every control, including highlight, subscript, superscript, code blocks, and YouTube and Twitter embeds.
+
+### Pick a look
+
+`RichTextEditor` takes a `variant` prop:
+
+```tsx
+<RichTextEditor editor={editor} variant="subtle">
+```
+
+<EditorVariantsDemo />
+
+Use `"default"` for a bordered editor, `"subtle"` for a lighter frame, and `"compact"` for tight spaces such as comment boxes.
+
+## Step 3: Add a bubble menu
+
+A bubble menu appears next to selected text, so users can format without reaching for the toolbar. Add it inside `RichTextEditor`:
+
+```tsx
+<RichTextEditor editor={editor}>
+  <RichTextEditor.Toolbar sticky>{/* ...controls */}</RichTextEditor.Toolbar>
+  <RichTextEditor.BubbleMenu editor={editor} />
+  <RichTextEditor.Content />
+</RichTextEditor>
+```
+
+It shows bold, italic, underline, strikethrough, and code. If you register `@tiptap/extension-highlight` with `multicolor: true`, or the text style and color extensions, it also shows a color picker. It hides when the editor is read-only.
+
+## Step 4: Clean up pasted content
+
+Text pasted from Google Docs, Notion, or Word brings inline fonts, colors, and empty paragraphs that clash with your theme. The [Paste Cleanup](/docs/extensions/paste-cleanup) extension removes them and keeps the formatting that matters: bold, italic, links, and lists.
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/paste-cleanup.json"
+```
+
+```tsx
+import { PasteCleanup } from "@/components/extensions/paste-cleanup";
+
+// in extensions:
+PasteCleanup,
+```
+
+It also turns Word's fake bullet paragraphs into real nested lists.
+
+<ExtensionPreview slug="paste-cleanup" editor="toolbar" />
+
+## Step 5: Save and render the content
+
+Tiptap gives you JSON and HTML:
+
+```ts
+const json = editor.getJSON(); // structured document
+const html = editor.getHTML(); // HTML string
+```
+
+Store JSON when you can. It's easy to validate and can't carry script tags the way an HTML string can. See the [serialization format](/docs/editor/serialization-format) docs for both formats.
+
+To show saved content, install the [Static Renderer](/docs/static-renderer). It turns the JSON into React elements on the server, so you don't load an editor on public pages:
+
+```bash
+npx shadcn@latest add @editorcn/static-renderer
+```
+
+```tsx title="app/posts/[id]/page.tsx"
+import { TextAlign } from "@tiptap/extension-text-align";
+import { Underline } from "@tiptap/extension-underline";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { Link } from "@/components/editor";
+import { StaticRenderer } from "@/components/static-renderer";
+import "@/components/static-renderer/style.css";
+
+const extensions = [
+  StarterKit,
+  Underline,
+  Link,
+  TextAlign.configure({ types: ["heading", "paragraph"] }),
+];
+
+export default async function PostPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const post = await getPost(id);
+
+  return <StaticRenderer content={post.content} extensions={extensions} />;
+}
+```
+
+Pass the same extensions the editor used, so every node renders the way the writer saw it.
+
+## Need markdown instead?
+
+If your app stores markdown, add the [Markdown extension](/docs/extensions/markdown). Users keep the WYSIWYG editing, and you load and save markdown with `contentType: "markdown"` and `editor.getMarkdown()`. The [shadcn markdown editor guide](/blog/shadcn-markdown-editor) walks through it.
+
+## Prefer a Notion-style editor?
+
+The [block editor](/docs/block-editor) is WYSIWYG too, but replaces the fixed toolbar with slash commands, drag handles, and a bubble menu:
+
+```bash
+npx shadcn@latest add @editorcn/block-editor
+```
+
+Both editors save the same Tiptap JSON, so the Static Renderer works for either.
+
+## FAQ
+
+### Does shadcn/ui have a WYSIWYG editor?
+
+No. shadcn/ui doesn't ship a WYSIWYG or rich text editor. editorcn fills that gap with Tiptap editors that install through the shadcn CLI and use your theme tokens.
+
+### What's the difference between a WYSIWYG editor and a rich text editor?
+
+In practice, nothing. Both let users format text visually. "WYSIWYG" stresses that the editing view matches the published result.
+
+### Does it work with Next.js App Router?
+
+Yes. Put the editor in a Client Component with `"use client"` and set `immediatelyRender: false`. Render saved content in Server Components with the Static Renderer.
+
+### Can I change the icons and labels?
+
+Yes. The code is in your project, so you can edit anything. Icon sets for Phosphor, Tabler, HugeIcons, and Remix Icon follow the `iconLibrary` in `components.json`, and the `labels` prop overrides any button label or tooltip. See [Customization](/docs/customization).
+
+### Is it free?
+
+Yes. editorcn is open source and [available on GitHub](https://github.com/shadcn-labs/editorcn).
+
+## Next steps
+
+- [Toolbar Editor](/docs/editor): every control and prop
+- [Templates](/docs/templates): a ready-made comment box and document editor
+- [Extensions](/docs/extensions): tables, images, code blocks, and mentions
+- [Styling](/docs/styling): match the editor to your theme
