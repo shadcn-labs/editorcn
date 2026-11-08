@@ -17,6 +17,8 @@ In this guide you'll:
 4. Clean up content pasted from Google Docs, Notion, and Word
 5. Save the content and render it on a public page
 
+<EditorStickyToolbarDemo />
+
 ## What to look for in a WYSIWYG editor
 
 Before picking one, check that it:
@@ -148,6 +150,8 @@ The [Toolbar Controls](/docs/editor/toolbar) page lists every control, including
 <RichTextEditor editor={editor} variant="subtle">
 ```
 
+<EditorVariantsDemo />
+
 Use `"default"` for a bordered editor, `"subtle"` for a lighter frame, and `"compact"` for tight spaces such as comment boxes.
 
 ## Step 3: Add a bubble menu
@@ -180,6 +184,8 @@ PasteCleanup,
 ```
 
 It also turns Word's fake bullet paragraphs into real nested lists.
+
+<ExtensionPreview slug="paste-cleanup" editor="toolbar" />
 
 ## Step 5: Save and render the content
 
