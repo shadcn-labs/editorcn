@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./callout": "./src/callout/index.ts",
+    "./callout-toolbar": "./src/callout/toolbar.tsx",
+    "./callout/style.css": "./src/callout/style.css",
     "./code-block": "./src/code-block/index.ts",
     "./code-block/style.css": "./src/code-block/style.css",
     "./core": "./src/core/index.ts",

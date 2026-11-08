@@ -1,5 +1,6 @@
 "use client";
 
+import { Callout } from "@editorcn/extensions/callout";
 import { Markdown } from "@editorcn/extensions/markdown";
 import { Table } from "@editorcn/extensions/table";
 import { StaticRenderer } from "@editorcn/static-renderer";
@@ -65,6 +66,7 @@ const createEditor = () =>
       TaskList,
       TaskItem.configure({ nested: true }),
       Table,
+      Callout,
       Markdown,
     ],
   });

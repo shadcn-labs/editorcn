@@ -82,7 +82,7 @@ const filter = new FilterXSS({
     code: ["class"],
     col: ["span", "style"],
     colgroup: [],
-    div: [...EMBED_ATTRS, "style"],
+    div: [...EMBED_ATTRS, "data-variant", "data-emoji", "style"],
     em: [],
     h1: ["style"],
     h2: ["style"],

@@ -1,5 +1,11 @@
 import type { Editor } from "@tiptap/core";
-import { useCallback, useRef, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 
 const defaultEqual = <T>(a: T, b: T): boolean => a === b;
 
@@ -72,4 +78,40 @@ export const useEditorState = <T>(
   );
 
   return useSyncExternalStore(subscribe, computeSnapshot, computeSnapshot);
+};
+
+export const useEditable = (editor: Editor | null): boolean => {
+  const [editable, setEditable] = useState(() =>
+    Boolean(editor && !editor.isDestroyed && editor.isEditable)
+  );
+
+  useEffect(() => {
+    if (!editor || editor.isDestroyed) {
+      setEditable(false);
+      return;
+    }
+    const sync = () => setEditable(!editor.isDestroyed && editor.isEditable);
+    sync();
+    const observer = new MutationObserver(sync);
+    const attach = () => {
+      sync();
+      observer.observe(editor.view.dom, {
+        attributeFilter: ["contenteditable"],
+        attributes: true,
+      });
+    };
+    if (editor.isInitialized) {
+      attach();
+    } else {
+      editor.on("create", attach);
+    }
+    editor.on("update", sync);
+    return () => {
+      observer.disconnect();
+      editor.off("create", attach);
+      editor.off("update", sync);
+    };
+  }, [editor]);
+
+  return editable;
 };

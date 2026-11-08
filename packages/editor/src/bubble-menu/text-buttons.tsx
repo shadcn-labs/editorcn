@@ -58,6 +58,7 @@ const textItems = [
       </Icon>
     ),
     isActive: (s: TextSelectorResult) => s.isBold,
+    mark: "bold",
   },
   {
     command: (e: Editor) =>
@@ -72,6 +73,7 @@ const textItems = [
       </Icon>
     ),
     isActive: (s: TextSelectorResult) => s.isItalic,
+    mark: "italic",
   },
   {
     command: (e: Editor) =>
@@ -85,6 +87,7 @@ const textItems = [
       </Icon>
     ),
     isActive: (s: TextSelectorResult) => s.isUnderline,
+    mark: "underline",
   },
   {
     command: (e: Editor) =>
@@ -99,6 +102,7 @@ const textItems = [
       </Icon>
     ),
     isActive: (s: TextSelectorResult) => s.isStrike,
+    mark: "strike",
   },
   {
     command: (e: Editor) =>
@@ -112,8 +116,12 @@ const textItems = [
       </Icon>
     ),
     isActive: (s: TextSelectorResult) => s.isCode,
+    mark: "code",
   },
 ];
+
+export const getTextItems = (editor: Editor) =>
+  textItems.filter((item) => Boolean(editor.schema.marks[item.mark]));
 
 export const TextButtons = ({ editor }: { editor: Editor }) => {
   const editorState = useEditorState(
@@ -130,9 +138,9 @@ export const TextButtons = ({ editor }: { editor: Editor }) => {
 
   return (
     <RteButtonGroup>
-      {textItems.map((item, i) => (
+      {getTextItems(editor).map((item) => (
         <RteButton
-          key={i}
+          key={item.mark}
           active={item.isActive(editorState)}
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => item.command(editor)}

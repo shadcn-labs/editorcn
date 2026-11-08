@@ -854,6 +854,108 @@
         "@tiptap/core@>=3.30.5 <4",
         "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <1.0.0",
+        "@tiptap/pm@>=3.0.0 <4"
+      ],
+      "description": "Info, tip, warning, danger, and note boxes that hold rich content. Switch the type or remove the callout from its icon menu, insert one from a toolbar button, or type > [!NOTE] to create one. Round-trips as GitHub alert syntax in markdown.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/callout/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/callout/view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/callout/toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/callout/menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/callout/utils.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/callout/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
+        }
+      ],
+      "name": "callout",
+      "title": "Callout",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0",
         "@tiptap/extension-code-block@>=3.0.0 <4",
         "@tiptap/pm@>=3.0.0 <4",
         "shiki@^4.0.0",

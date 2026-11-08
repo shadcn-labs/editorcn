@@ -154,6 +154,7 @@ Standard nodes use standard markdown. Tables and task lists use GFM syntax. edit
 | Mention | `[mention id="3" label="Grace Hopper"]`                                        |
 | YouTube | `:::youtube {src="https://youtu.be/dQw4w9WgXcQ" width="560" height="315"} :::` |
 | Twitter | `:::twitter {tweetId="123456789"} :::`                                         |
+| Callout | `> [!NOTE]` followed by `>` lines (GitHub alert syntax)                        |
 
 Formatting without a markdown equivalent (text color, font size and family, alignment, underline, subscript, superscript) is dropped on export. Use HTML or JSON when you need to keep it.
 
@@ -162,7 +163,7 @@ To render markdown read-only, parse it with `MarkdownManager` and pass the JSON 
 ```tsx
 import { MarkdownManager } from "@tiptap/markdown";
 
-const extensions = [StarterKit, Mention];
+const extensions = [StarterKit, Mention, Callout];
 const json = new MarkdownManager({ extensions }).parse(markdown);
 
 <StaticRenderer content={json} extensions={extensions} />;

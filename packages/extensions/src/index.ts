@@ -1,3 +1,16 @@
+export {
+  CALLOUT_VARIANTS,
+  Callout,
+  isCalloutVariant,
+  toCalloutVariant,
+  unwrapCallout,
+} from "./callout";
+export type {
+  CalloutAttributes,
+  CalloutOptions,
+  CalloutVariant,
+} from "./callout";
+export { CalloutToolbar } from "./callout/toolbar";
 export { CodeBlock, CODE_BLOCK_LANGUAGES } from "./code-block";
 export { ImagePlaceholder } from "./image-placeholder";
 export { ResizableImage } from "./image-placeholder";
