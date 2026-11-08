@@ -11,7 +11,7 @@ import {
   TriangleAlert,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 
 import { useToolbar } from "../core/context";
@@ -73,25 +73,38 @@ export const CalloutMenu = ({
     ) ?? []),
   ];
 
+  // Read during the first render so StrictMode's second effect run doesn't
+  // pick up the menu item that already has focus.
+  const [returnTo] = useState(() =>
+    typeof document !== "undefined" &&
+    document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null
+  );
+  const restoreFocus = useRef(false);
+
   useEffect(() => {
-    const trigger =
-      document.activeElement instanceof HTMLElement
-        ? document.activeElement
-        : null;
-    let escaped = false;
     const onEscape = (event: globalThis.KeyboardEvent) => {
       if (event.key === "Escape") {
-        escaped = true;
+        restoreFocus.current = true;
       }
     };
-    document.addEventListener("keydown", onEscape, true);
+    // Window capture runs before the dropdown's document listener closes us.
+    window.addEventListener("keydown", onEscape, true);
     return () => {
-      document.removeEventListener("keydown", onEscape, true);
-      if (escaped && trigger?.isConnected) {
-        trigger.focus();
+      window.removeEventListener("keydown", onEscape, true);
+      const lost =
+        !document.activeElement || document.activeElement === document.body;
+      if (restoreFocus.current && lost && returnTo?.isConnected) {
+        returnTo.focus();
       }
     };
-  }, []);
+  }, [returnTo]);
+
+  const choose = (action: () => void) => () => {
+    restoreFocus.current = true;
+    action();
+  };
 
   useEffect(() => {
     const all = items();
@@ -129,7 +142,7 @@ export const CalloutMenu = ({
             aria-checked={variant === value}
             className="ext-callout-menu-item"
             data-variant={variant}
-            onClick={() => onSelect(variant)}
+            onClick={choose(() => onSelect(variant))}
           >
             <Icon />
             <span>{labels[label]}</span>
@@ -139,7 +152,7 @@ export const CalloutMenu = ({
       })}
       {(onResetEmoji || onRemove) && <DropdownMenuSeparator />}
       {onResetEmoji && (
-        <DropdownMenuItem onClick={onResetEmoji}>
+        <DropdownMenuItem onClick={choose(onResetEmoji)}>
           <SmilePlus />
           <span>{labels.resetCalloutIcon}</span>
         </DropdownMenuItem>
