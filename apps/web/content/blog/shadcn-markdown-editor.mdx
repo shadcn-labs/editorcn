@@ -1,0 +1,295 @@
+---
+title: How to Build a shadcn Markdown Editor in React
+description: Build a markdown editor for a shadcn/ui app with Tiptap. Load and save markdown, paste markdown as formatted text, import and export .md files, and render it read-only.
+date: "2026-11-08"
+author: Abdullah Mukadam
+---
+
+Most apps that store markdown still don't want users typing `**` and `##` by hand. Writers expect a formatted editor, while your database, API, or Git repo expects plain markdown.
+
+This guide builds a **markdown editor for a shadcn/ui app** that gives you both. Users edit formatted text, and you load and save markdown. It uses [editorcn](/docs), a set of Tiptap editors installed with the shadcn CLI, and its [Markdown extension](/docs/extensions/markdown).
+
+<ExtensionPreview slug="markdown" editor="toolbar" />
+
+In this guide you'll:
+
+1. Install the editor and the Markdown extension
+2. Load a markdown string into the editor
+3. Save the content back as markdown
+4. Turn pasted markdown into formatted text
+5. Add import, export, and copy buttons
+6. Render markdown read-only on the server
+
+## Two kinds of markdown editor
+
+When people search for a markdown editor, they usually mean one of two things:
+
+- **Split view**: a textarea on the left and a rendered preview on the right. Simple to build, but users see raw syntax while they write.
+- **Formatted (WYSIWYG) editing with markdown in and out**: users see headings, lists, and links as they type, and the app reads and writes markdown behind the scenes.
+
+This guide builds the second kind. It suits non-technical users better, and you still store plain markdown.
+
+## Prerequisites
+
+- React 18 or 19
+- A project with shadcn/ui and Tailwind CSS v4 set up. If you don't have one yet, run `npx shadcn@latest init`.
+- The editorcn registry added to `components.json`:
+
+```json title="components.json"
+{
+  "registries": {
+    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+  }
+}
+```
+
+## Step 1: Install the editor and the Markdown extension
+
+```bash
+npx shadcn@latest add @editorcn/editor
+npx shadcn@latest add "https://editorcn.vercel.app/r/markdown.json"
+```
+
+The first command copies the toolbar editor into `components/editor/`. The second adds `components/extensions/markdown`, which wraps the official [`@tiptap/markdown`](https://tiptap.dev/docs/editor/markdown) package. The source lives in your project, so you can change any of it.
+
+Import the styles after your shadcn globals:
+
+```tsx title="app/layout.tsx"
+import "@/app/globals.css";
+import "@/components/editor/style.css";
+import "@/components/extensions/ui/style.css";
+```
+
+## Step 2: Load markdown into the editor
+
+Add `Markdown` to the extensions and set `contentType: "markdown"`. The `content` option then takes a markdown string instead of HTML or JSON:
+
+```tsx title="components/markdown-editor.tsx"
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { Link, RichTextEditor } from "@/components/editor";
+import { Markdown } from "@/components/extensions/markdown";
+
+export function MarkdownEditor({ markdown }: { markdown: string }) {
+  const editor = useEditor({
+    immediatelyRender: false,
+    shouldRerenderOnTransaction: false,
+    extensions: [
+      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      Link,
+      Markdown,
+    ],
+    content: markdown,
+    contentType: "markdown",
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar sticky>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Strikethrough />
+          <RichTextEditor.Code />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.H1 />
+          <RichTextEditor.H2 />
+          <RichTextEditor.H3 />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.BulletList />
+          <RichTextEditor.OrderedList />
+          <RichTextEditor.Blockquote />
+          <RichTextEditor.CodeBlock />
+        </RichTextEditor.ControlsGroup>
+
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Link />
+          <RichTextEditor.Unlink />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+Two settings matter in Next.js:
+
+- **`"use client"`**: the editor runs in the browser, so it has to be a Client Component.
+- **`immediatelyRender: false`**: stops Tiptap from rendering on the server, which avoids hydration mismatches.
+
+To replace or insert markdown later, pass the same option to the command:
+
+```tsx
+editor.commands.setContent("# Hello\n\n- item", { contentType: "markdown" });
+editor.commands.insertContent("**bold**", { contentType: "markdown" });
+```
+
+## Step 3: Save the content as markdown
+
+`editor.getMarkdown()` returns the document as a markdown string. Save it on every change, or from a button:
+
+```tsx
+const editor = useEditor({
+  // ...same options as above
+  onUpdate: ({ editor }) => saveDraft(editor.getMarkdown()),
+});
+```
+
+```tsx
+<button type="button" onClick={() => publish(editor?.getMarkdown())}>
+  Publish
+</button>
+```
+
+For autosave, debounce `onUpdate` so you don't send a request on every keystroke.
+
+### What survives the round trip
+
+Standard nodes and marks become standard markdown. Tables and task lists use GitHub Flavored Markdown (GFM). editorcn's custom nodes keep their data too:
+
+| Content                              | Markdown output                         |
+| ------------------------------------ | --------------------------------------- |
+| Tables                               | GFM tables                              |
+| Task lists                           | `- [ ]` and `- [x]`                     |
+| [Mentions](/docs/extensions/mention) | `[mention id="3" label="Grace Hopper"]` |
+| [Callouts](/docs/extensions/callout) | `> [!NOTE]` (GitHub alert syntax)       |
+| YouTube embeds                       | `:::youtube {src="..."} :::`            |
+
+Each node needs its extension registered alongside `Markdown`, for example `Table` for tables.
+
+<Callout title="Formatting markdown can't hold">
+  Text color, font size, alignment, underline, subscript, and superscript have
+  no markdown syntax, so they are dropped on export. If users need them, store
+  Tiptap JSON instead and convert to markdown only when you need it.
+</Callout>
+
+## Step 4: Turn pasted markdown into formatted text
+
+Developers often paste markdown from a README, an AI chat, or VS Code. Turn on `pasteMarkdown` and the editor converts it into headings, lists, and code blocks instead of showing raw `#` and `*` characters:
+
+```tsx
+Markdown.configure({ pasteMarkdown: true });
+```
+
+It only kicks in for plain text that looks like markdown. Rich HTML pasted from a web page keeps the normal behavior, and pasting inside a code block always inserts plain text.
+
+If users also paste from Google Docs, Notion, or Word, add the [Paste Cleanup](/docs/extensions/paste-cleanup) extension to strip their inline styles.
+
+## Step 5: Add import, export, and copy buttons
+
+`MarkdownToolbar` adds one toolbar button with three actions:
+
+- **Import Markdown**: opens a file picker and loads a `.md` file. `Ctrl+Z` / `Cmd+Z` undoes it.
+- **Export Markdown**: downloads the document as a `.md` file.
+- **Copy as Markdown**: copies the document to the clipboard.
+
+```tsx
+import { MarkdownToolbar } from "@/components/extensions/markdown/toolbar";
+
+<RichTextEditor.Toolbar>
+  {/* ...other controls */}
+  <RichTextEditor.ControlsGroup>
+    <MarkdownToolbar editor={editor} filename="post.md" />
+  </RichTextEditor.ControlsGroup>
+</RichTextEditor.Toolbar>;
+```
+
+To build your own menu instead, use the helpers behind it: `importMarkdownFile(editor)`, `downloadMarkdown(editor, "post.md")`, and `copyMarkdown(editor)`.
+
+## Step 6: Render markdown read-only
+
+To show saved markdown on a public page, you don't need an editor instance. Install the [Static Renderer](/docs/static-renderer):
+
+```bash
+npx shadcn@latest add @editorcn/static-renderer
+```
+
+Parse the markdown into Tiptap JSON with `MarkdownManager`, then render it with the same extensions the editor used:
+
+```tsx title="app/posts/[id]/page.tsx"
+import { MarkdownManager } from "@tiptap/markdown";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { Link } from "@/components/editor";
+import { StaticRenderer } from "@/components/static-renderer";
+import "@/components/static-renderer/style.css";
+
+const extensions = [StarterKit, Link];
+
+export default async function PostPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const post = await getPost(id);
+  const json = new MarkdownManager({ extensions }).parse(post.markdown);
+
+  return <StaticRenderer content={json} extensions={extensions} />;
+}
+```
+
+This runs on the server, so the page loads fast, search engines can index it, and you never inject a raw HTML string into the page.
+
+## Prefer a Notion-style markdown editor?
+
+The [block editor](/docs/block-editor) takes the same `editor` instance, so the Markdown setup is identical. You get slash commands, drag handles, and a bubble menu instead of a fixed toolbar:
+
+```bash
+npx shadcn@latest add @editorcn/block-editor
+```
+
+```tsx
+const editor = useEditor({
+  immediatelyRender: false,
+  extensions: [
+    StarterKit,
+    Markdown.configure({ pasteMarkdown: true }),
+    SlashCommand.configure({ suggestion: getSlashCommandSuggestion() }),
+  ],
+  content: markdown,
+  contentType: "markdown",
+});
+
+return <BlockEditor editor={editor} />;
+```
+
+<ExtensionPreview slug="markdown" editor="block" />
+
+## FAQ
+
+### Does shadcn/ui have a markdown editor?
+
+No. shadcn/ui doesn't ship a markdown or rich text editor. editorcn adds one that installs through the same shadcn CLI and uses your shadcn theme tokens.
+
+### Should I store markdown or JSON?
+
+Store markdown when other tools need to read it: a Git-based CMS, a static site generator, or an API that returns markdown. Store Tiptap JSON when you need formatting markdown can't express, such as text color or alignment. You can convert between them at any time.
+
+### Can I convert markdown to HTML without an editor?
+
+Yes. Parse it with `MarkdownManager` and pass the JSON to `generateHTML` from `@tiptap/core`. For quick one-off conversions, use the free [Markdown to HTML](/tools/markdown-to-html) and [HTML to Markdown](/tools/html-to-markdown) converters.
+
+### Does it support GitHub Flavored Markdown?
+
+Yes. Tables and task lists are written as GFM. Callouts use GitHub's `> [!NOTE]` alert syntax, so they render on GitHub too.
+
+### Is it free?
+
+Yes. editorcn is open source and [available on GitHub](https://github.com/shadcn-labs/editorcn).
+
+## Next steps
+
+- [Markdown extension reference](/docs/extensions/markdown): every option and helper
+- [Toolbar Editor](/docs/editor): all toolbar controls and props
+- [How to Add a Rich Text Editor to a shadcn/ui App](/blog/shadcn-rich-text-editor): the full editor setup
+- [Static Renderer](/docs/static-renderer): render saved content anywhere

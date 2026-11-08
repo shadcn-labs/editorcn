@@ -72,7 +72,7 @@ export const createPageMetadata = ({
   };
 };
 
-const HOME_TITLE = `shadcn Rich Text Editor Components for React | ${SITE.NAME}`;
+const HOME_TITLE = `shadcn Rich Text Editor for React, Built on Tiptap | ${SITE.NAME}`;
 
 export const baseMetadata: Metadata = {
   alternates: {
