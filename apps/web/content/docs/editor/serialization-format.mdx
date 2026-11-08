@@ -182,7 +182,7 @@ Default nodes and marks, GFM tables, task lists, and images use standard markdow
 :::twitter {tweetId="123456789"} :::
 ```
 
-[Callouts](/docs/extensions/callout) use GitHub alert syntax, such as `> [!NOTE]`. Register `Callout` alongside `Markdown`, or alerts are parsed as plain blockquotes.
+[Callouts](/docs/extensions/callout) use GitHub alert syntax, such as `> [!NOTE]`. Register `Callout` alongside `Markdown` in every editor that reads alerts. Tiptap shares markdown tokenizers across editors in the same page, so an editor without `Callout` may drop the alert header and blockquote wrapper instead of keeping a plain blockquote. Custom callout emoji are not kept in markdown, so use HTML or JSON if you need them.
 
 Text color, font size and family, alignment, underline, subscript, and superscript have no markdown equivalent and are dropped. Use HTML or JSON to keep them. Set `pasteMarkdown: true` on the extension to turn pasted markdown into formatted content.
 

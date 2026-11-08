@@ -41,7 +41,19 @@ declare module "@tiptap/core" {
 const ALERT_INPUT = /^>?\s?\[!(\w+)\]\s$/;
 const ALERT_BLOCK =
   /^ {0,3}>[ \t]*\[!(\w+)\][ \t]*(?:\n|$)((?: {0,3}>.*(?:\n|$))*)/;
-const ALERT_START = /^ {0,3}>[ \t]*\[!\w+\]/m;
+const ALERT_START = /^ {0,3}>[ \t]*\[!(\w+)\]/gm;
+
+const findAlertStart = (src: string) => {
+  for (const match of src.matchAll(ALERT_START)) {
+    if (alertToVariant(match[1])) {
+      return match.index;
+    }
+  }
+  return -1;
+};
+
+const isValidVariant = ({ variant }: CalloutAttributes) =>
+  variant === undefined || isCalloutVariant(variant);
 
 export const Callout = Node.create<CalloutOptions>({
   addAttributes() {
@@ -64,11 +76,12 @@ export const Callout = Node.create<CalloutOptions>({
       setCallout:
         (attributes = {}) =>
         ({ commands }) =>
-          commands.wrapIn(this.name, attributes),
+          isValidVariant(attributes) && commands.wrapIn(this.name, attributes),
       toggleCallout:
         (attributes = {}) =>
         ({ commands, state }) =>
-          isNodeActive(state, this.type)
+          isNodeActive(state, this.type) &&
+          findCallout(state.selection, this.name)
             ? commands.unsetCallout()
             : commands.setCallout(attributes),
       unsetCallout:
@@ -87,7 +100,7 @@ export const Callout = Node.create<CalloutOptions>({
         (attributes) =>
         ({ state, tr, dispatch }) => {
           const callout = findCallout(state.selection, this.name);
-          if (!callout) {
+          if (!(callout && isValidVariant(attributes))) {
             return false;
           }
           if (dispatch) {
@@ -169,7 +182,7 @@ export const Callout = Node.create<CalloutOptions>({
   markdownTokenizer: {
     level: "block",
     name: "callout",
-    start: (src) => src.search(ALERT_START),
+    start: findAlertStart,
     tokenize: (src, _tokens, lexer) => {
       const match = ALERT_BLOCK.exec(src);
       const variant = match && alertToVariant(match[1]);

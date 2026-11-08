@@ -157,6 +157,20 @@ describe("callout", () => {
     type(target, "[!FOO] ");
     expect(target.getHTML()).toBe("<p>[!FOO] </p>");
   });
+
+  it("rejects unsupported variants", () => {
+    const target = create(
+      '<div data-type="callout" data-variant="tip"><p>a</p></div><p>b</p>'
+    );
+    target.commands.setTextSelection(2);
+    const bogus = { variant: "bogus" as never };
+    expect(target.commands.updateCallout(bogus)).toBeFalsy();
+    target.commands.setTextSelection(6);
+    expect(target.commands.setCallout(bogus)).toBeFalsy();
+    expect(target.getHTML()).toBe(
+      '<div data-type="callout" data-variant="tip"><p>a</p></div><p>b</p>'
+    );
+  });
 });
 
 describe("callout markdown", () => {
@@ -182,6 +196,14 @@ describe("callout markdown", () => {
   it("leaves plain blockquotes alone", () => {
     const json = manager.parse("> just a quote");
     expect(json.content?.[0]?.type).toBe("blockquote");
+  });
+
+  it("skips unknown alerts and still finds later ones", () => {
+    const json = manager.parse("> [!FOO]\n> x\n\n> [!TIP]\n> y");
+    expect(json.content?.map((node) => node.type)).toStrictEqual([
+      "blockquote",
+      "callout",
+    ]);
   });
 
   it("keeps surrounding content", () => {
