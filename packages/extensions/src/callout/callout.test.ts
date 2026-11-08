@@ -3,7 +3,7 @@ import { MarkdownManager } from "@tiptap/markdown";
 import { StarterKit } from "@tiptap/starter-kit";
 import { afterEach, describe, expect, it } from "vitest";
 
-import { Callout } from ".";
+import { Callout, toCalloutVariant } from ".";
 
 const HeadlessCallout = Callout.extend({ addNodeView: () => null });
 
@@ -120,6 +120,35 @@ describe("callout", () => {
     expect(target.getHTML()).toBe(
       '<div data-type="callout" data-variant="tip"><p></p></div>'
     );
+  });
+
+  it("ignores inherited object keys as alert types", () => {
+    const target = create("<p></p>");
+    target.commands.focus("end");
+    type(target, "[!constructor] ");
+    expect(target.getHTML()).toBe("<p>[!constructor] </p>");
+    expect(toCalloutVariant("constructor")).toBe("info");
+    expect(toCalloutVariant("__proto__")).toBe("info");
+  });
+
+  it("updates and removes a callout selected as a node", () => {
+    const target = create(
+      '<div data-type="callout" data-variant="info"><p>x</p></div>'
+    );
+    target.commands.setNodeSelection(0);
+    target.commands.updateCallout({ variant: "tip" });
+    expect(target.getJSON().content?.[0]?.attrs?.variant).toBe("tip");
+    target.commands.unsetCallout();
+    expect(target.getHTML()).toBe("<p>x</p>");
+  });
+
+  it("toggles off inside a chain that moves the selection", () => {
+    const target = create(
+      '<p>a</p><div data-type="callout" data-variant="info"><p>b</p></div>'
+    );
+    target.commands.setTextSelection(1);
+    target.chain().setTextSelection(5).toggleCallout().run();
+    expect(target.getHTML()).toBe("<p>a</p><p>b</p>");
   });
 
   it("ignores unknown alert types", () => {

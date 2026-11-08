@@ -1,10 +1,11 @@
-import { InputRule, Node, findParentNode, mergeAttributes } from "@tiptap/core";
+import { InputRule, Node, isNodeActive, mergeAttributes } from "@tiptap/core";
 import { findWrapping } from "@tiptap/pm/transform";
 import { ReactNodeViewRenderer } from "@tiptap/react";
 
 import {
   ALERT_BY_VARIANT,
-  VARIANT_BY_ALERT,
+  alertToVariant,
+  findCallout,
   isCalloutVariant,
   toCalloutVariant,
   unwrapCallout,
@@ -16,6 +17,8 @@ export {
   CALLOUT_VARIANTS,
   isCalloutVariant,
   toCalloutVariant,
+  alertToVariant,
+  findCallout,
   unwrapCallout,
 } from "./utils";
 export type { CalloutAttributes, CalloutVariant } from "./utils";
@@ -64,16 +67,14 @@ export const Callout = Node.create<CalloutOptions>({
           commands.wrapIn(this.name, attributes),
       toggleCallout:
         (attributes = {}) =>
-        ({ commands, editor }) =>
-          editor.isActive(this.name)
+        ({ commands, state }) =>
+          isNodeActive(state, this.type)
             ? commands.unsetCallout()
             : commands.setCallout(attributes),
       unsetCallout:
         () =>
         ({ state, tr, dispatch }) => {
-          const callout = findParentNode(
-            (node) => node.type.name === this.name
-          )(state.selection);
+          const callout = findCallout(state.selection, this.name);
           if (!callout) {
             return false;
           }
@@ -85,9 +86,7 @@ export const Callout = Node.create<CalloutOptions>({
       updateCallout:
         (attributes) =>
         ({ state, tr, dispatch }) => {
-          const callout = findParentNode(
-            (node) => node.type.name === this.name
-          )(state.selection);
+          const callout = findCallout(state.selection, this.name);
           if (!callout) {
             return false;
           }
@@ -106,7 +105,7 @@ export const Callout = Node.create<CalloutOptions>({
       new InputRule({
         find: ALERT_INPUT,
         handler: ({ state, range, match }) => {
-          const variant = VARIANT_BY_ALERT[match[1]?.toLowerCase() ?? ""];
+          const variant = alertToVariant(match[1]);
           if (!variant) {
             return null;
           }
@@ -173,7 +172,7 @@ export const Callout = Node.create<CalloutOptions>({
     start: (src) => src.search(ALERT_START),
     tokenize: (src, _tokens, lexer) => {
       const match = ALERT_BLOCK.exec(src);
-      const variant = match && VARIANT_BY_ALERT[match[1]?.toLowerCase() ?? ""];
+      const variant = match && alertToVariant(match[1]);
       if (!(match && variant)) {
         return;
       }
@@ -224,7 +223,7 @@ export const Callout = Node.create<CalloutOptions>({
       const text =
         helpers.renderChild?.(child, index) ?? helpers.renderChildren([child]);
       for (const line of text.split("\n")) {
-        lines.push(line.trim() === "" ? ">" : `> ${line}`);
+        lines.push(line === "" ? ">" : `> ${line}`);
       }
     }
     return lines.join("\n");

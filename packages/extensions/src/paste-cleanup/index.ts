@@ -21,9 +21,10 @@ const ALLOWED_ATTRIBUTES = new Set([
   "width",
 ]);
 
-// Kept only on task lists, so pasted task lists from other Tiptap pages still parse.
+// Kept only on task lists and callouts, so they still parse when pasted from other Tiptap pages.
 const TASK_ATTRIBUTES = new Set(["data-checked", "data-type"]);
 const TASK_TYPE = /^task(List|Item)$/;
+const CALLOUT_ATTRIBUTES = new Set(["data-emoji", "data-type", "data-variant"]);
 
 const decoration = ({ style }: HTMLElement) =>
   `${style.textDecoration} ${style.textDecorationLine}`;
@@ -158,13 +159,22 @@ const convertStyleTags = (body: HTMLElement) => {
   }
 };
 
+const keptDataAttributes = (element: HTMLElement) => {
+  const { type = "" } = element.dataset;
+  if (TASK_TYPE.test(type)) {
+    return TASK_ATTRIBUTES;
+  }
+  if (type === "callout" && element.tagName === "DIV") {
+    return CALLOUT_ATTRIBUTES;
+  }
+  return null;
+};
+
 const cleanAttributes = (element: HTMLElement) => {
   const { whiteSpace } = element.style;
-  const isTask = TASK_TYPE.test(element.dataset.type ?? "");
+  const kept = keptDataAttributes(element);
   for (const name of element.getAttributeNames()) {
-    if (
-      !(ALLOWED_ATTRIBUTES.has(name) || (isTask && TASK_ATTRIBUTES.has(name)))
-    ) {
+    if (!(ALLOWED_ATTRIBUTES.has(name) || kept?.has(name))) {
       element.removeAttribute(name);
     }
   }

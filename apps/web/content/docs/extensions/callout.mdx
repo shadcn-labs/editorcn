@@ -22,10 +22,10 @@ npx shadcn@latest add "https://editorcn.vercel.app/r/callout.json"
 
 This installs `extensions/callout`, `extensions/core/`, `extensions/ui/`, and the styles at `extensions/callout/style.css` and `extensions/ui/style.css`.
 
-To install the files manually instead, install these packages and copy the `callout` folder from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src/callout), plus `button.tsx`, `dropdown-menu.tsx`, `dropdown-content.tsx`, `dropdown-item.tsx`, `dropdown-separator.tsx`, `dropdown-pill.tsx`, `popover.tsx`, `use-floating.tsx`, and `style.css` from [`extensions/ui`](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src/ui):
+To install the files manually instead, install these packages and copy the `callout` and `core` folders from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src) into `extensions/`, plus `button.tsx`, `dropdown-menu.tsx`, `dropdown-content.tsx`, `dropdown-item.tsx`, `dropdown-separator.tsx`, `dropdown-pill.tsx`, `popover.tsx`, `use-floating.tsx`, and `style.css` from [`extensions/ui`](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src/ui):
 
 ```bash
-npm install @tiptap/core @tiptap/react @tiptap/pm lucide-react
+npm install @tiptap/core @tiptap/react @tiptap/pm @tiptap/starter-kit lucide-react
 ```
 
 ## Usage
@@ -72,6 +72,12 @@ export function MyEditor() {
 Add a **Callout** item to the slash commands:
 
 ```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+import { MessageSquareWarning } from "lucide-react";
+
 import {
   BlockEditor,
   SlashCommand,
@@ -80,7 +86,6 @@ import {
 } from "@/components/block-editor";
 import type { SlashCommandSuggestionItem } from "@/components/block-editor";
 import { Callout } from "@/components/extensions/callout";
-import { MessageSquareWarning } from "lucide-react";
 
 const items: SlashCommandSuggestionItem[] = [
   ...defaultSlashCommandItems,
@@ -100,16 +105,18 @@ const items: SlashCommandSuggestionItem[] = [
   },
 ];
 
-const editor = useEditor({
-  immediatelyRender: false,
-  extensions: [
-    StarterKit,
-    Callout,
-    SlashCommand.configure({ suggestion: getSlashCommandSuggestion(items) }),
-  ],
-});
+export function MyBlockEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [
+      StarterKit,
+      Callout,
+      SlashCommand.configure({ suggestion: getSlashCommandSuggestion(items) }),
+    ],
+  });
 
-return <BlockEditor editor={editor} />;
+  return <BlockEditor editor={editor} />;
+}
 ```
 
 <ExtensionPreview slug="callout" editor="block" />

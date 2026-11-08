@@ -150,6 +150,16 @@ describe("paste cleanup", () => {
     );
   });
 
+  it("keeps callout attributes", () => {
+    const html = cleanPastedHtml(
+      '<div data-type="callout" data-variant="warning" data-emoji="🔥" class="x" data-id="1"><p>Hot</p></div><p data-variant="tip">x</p>',
+      options
+    );
+    expect(html).toBe(
+      '<div data-type="callout" data-variant="warning" data-emoji="🔥"><p>Hot</p></div><p>x</p>'
+    );
+  });
+
   it("only skips cleanup for real editor slices", () => {
     expect(
       cleanPastedHtml('<p class="x">Use data-pm-slice here</p>', options)

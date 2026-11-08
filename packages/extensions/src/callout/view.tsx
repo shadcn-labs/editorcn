@@ -2,9 +2,10 @@
 
 import type { ReactNodeViewProps } from "@tiptap/react";
 import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useToolbar } from "../core/context";
+import { useEditable } from "../core/editor-state";
 import { Button } from "../ui/button";
 import { DropdownMenu } from "../ui/dropdown-menu";
 import { CalloutIcon, CalloutMenu } from "./menu";
@@ -20,31 +21,31 @@ export const CalloutView = ({
   const { labels } = useToolbar();
   const variant = toCalloutVariant(node.attrs.variant);
   const emoji = (node.attrs.emoji as string | null) || null;
-  const [editable, setEditable] = useState(editor.isEditable);
+  const editable = useEditable(editor);
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    const sync = () => setEditable(editor.isEditable);
-    editor.on("update", sync);
-    return () => {
-      editor.off("update", sync);
-    };
-  }, [editor]);
+  if (open && !editable) {
+    setOpen(false);
+  }
 
   const select = (next: CalloutVariant) => {
     setOpen(false);
-    updateAttributes({ variant: next });
+    if (editor.isEditable) {
+      updateAttributes({ variant: next });
+    }
   };
 
   const resetEmoji = () => {
     setOpen(false);
-    updateAttributes({ emoji: null });
+    if (editor.isEditable) {
+      updateAttributes({ emoji: null });
+    }
   };
 
   const remove = () => {
     setOpen(false);
     const pos = getPos();
-    if (typeof pos !== "number") {
+    if (!editor.isEditable || typeof pos !== "number") {
       return;
     }
     editor

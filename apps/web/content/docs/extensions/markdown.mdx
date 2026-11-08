@@ -163,7 +163,7 @@ To render markdown read-only, parse it with `MarkdownManager` and pass the JSON 
 ```tsx
 import { MarkdownManager } from "@tiptap/markdown";
 
-const extensions = [StarterKit, Mention];
+const extensions = [StarterKit, Mention, Callout];
 const json = new MarkdownManager({ extensions }).parse(markdown);
 
 <StaticRenderer content={json} extensions={extensions} />;

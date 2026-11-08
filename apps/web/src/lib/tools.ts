@@ -206,7 +206,7 @@ export const TOOLS: Tool[] = [
       },
       {
         answer:
-          "This tool uses StarterKit plus images, tables, and task lists. Your app may register different extensions, so its output can differ.",
+          "This tool uses StarterKit plus images, tables, task lists, and callouts. Your app may register different extensions, so its output can differ.",
         question: "Which extensions are used?",
       },
       {

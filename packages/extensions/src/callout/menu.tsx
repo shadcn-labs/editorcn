@@ -74,6 +74,26 @@ export const CalloutMenu = ({
   ];
 
   useEffect(() => {
+    const trigger =
+      document.activeElement instanceof HTMLElement
+        ? document.activeElement
+        : null;
+    let escaped = false;
+    const onEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") {
+        escaped = true;
+      }
+    };
+    document.addEventListener("keydown", onEscape, true);
+    return () => {
+      document.removeEventListener("keydown", onEscape, true);
+      if (escaped && trigger?.isConnected) {
+        trigger.focus();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
     const all = items();
     const index = Math.max(
       0,

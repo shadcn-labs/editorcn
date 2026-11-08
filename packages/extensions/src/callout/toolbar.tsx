@@ -5,7 +5,11 @@ import { useState } from "react";
 
 import { useToolbar, useToolbarEditor } from "../core/context";
 import { extensionPresent } from "../core/detection";
-import { shallowEqual, useEditorState } from "../core/editor-state";
+import {
+  shallowEqual,
+  useEditable,
+  useEditorState,
+} from "../core/editor-state";
 import type { ToolbarComponentProps } from "../core/types";
 import { Button } from "../ui/button";
 import { Popover } from "../ui/popover";
@@ -20,6 +24,7 @@ export const CalloutToolbar = ({
   const { labels } = useToolbar();
   const editor = useToolbarEditor(editorProp);
   const [open, setOpen] = useState(false);
+  const editable = useEditable(editor);
 
   const state = useEditorState(
     editor,
@@ -36,10 +41,15 @@ export const CalloutToolbar = ({
     },
     shallowEqual
   ) ?? { disabled: true, variant: null };
+  const disabled = state.disabled || !editable;
+
+  if (open && disabled) {
+    setOpen(false);
+  }
 
   const select = (variant: CalloutVariant) => {
     setOpen(false);
-    if (!editor || state.disabled) {
+    if (!editor || disabled || !editor.isEditable) {
       return;
     }
     const chain = editor.chain().focus();
@@ -52,7 +62,9 @@ export const CalloutToolbar = ({
 
   const remove = () => {
     setOpen(false);
-    editor?.chain().focus().unsetCallout().run();
+    if (editor?.isEditable) {
+      editor.chain().focus().unsetCallout().run();
+    }
   };
 
   return (
@@ -67,7 +79,7 @@ export const CalloutToolbar = ({
           aria-label={labels.callout}
           active={Boolean(state.variant)}
           className={["ext-btn--icon-sm", className].filter(Boolean).join(" ")}
-          disabled={state.disabled}
+          disabled={disabled}
           tooltip={labels.callout}
         >
           <MessageSquareWarning />
