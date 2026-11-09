@@ -8,6 +8,27 @@ const nextConfig = {
   redirects() {
     return [
       { destination: "/docs/templates", permanent: true, source: "/templates" },
+      // Custom controls were replaced by the extensions docs.
+      {
+        destination: "/docs/extensions.md",
+        permanent: true,
+        source: "/docs/custom-controls.md",
+      },
+      {
+        destination: "/docs/extensions/table",
+        permanent: true,
+        source: "/docs/custom-controls/table",
+      },
+      {
+        destination: "/docs/extensions/image-placeholder",
+        permanent: true,
+        source: "/docs/custom-controls/image",
+      },
+      {
+        destination: "/docs/extensions",
+        permanent: true,
+        source: "/docs/custom-controls/:path*",
+      },
     ];
   },
   rewrites() {
