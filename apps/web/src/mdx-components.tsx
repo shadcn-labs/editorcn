@@ -331,7 +331,7 @@ export const mdxComponents = {
     <strong className={cn("font-medium", className)} {...props} />
   ),
   table: ({ className, ...props }: React.ComponentProps<"table">) => (
-    <div className="my-6 no-scrollbar w-full overflow-y-auto rounded-xl border">
+    <div className="my-6 no-scrollbar w-full overflow-y-auto rounded-lg border border-border/60">
       <table
         className={cn(
           "relative w-full overflow-hidden border-none text-sm [&_tbody_tr:last-child]:border-b-0",
