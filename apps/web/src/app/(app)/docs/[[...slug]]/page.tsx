@@ -96,15 +96,15 @@ const Page = async (props: { params: Promise<{ slug?: string[] }> }) => {
       <PageTransition>
         <div
           data-slot="docs"
-          className="flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full"
+          className="flex items-stretch text-[15px] xl:w-full"
         >
           <div className="flex min-w-0 flex-1 flex-col">
             <div className="h-(--top-spacing) shrink-0" />
-            <div className="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 px-4 py-6 text-neutral-800 md:px-0 lg:py-8 dark:text-neutral-300">
+            <div className="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 px-4 py-6 text-foreground/85 md:px-0 lg:py-8">
               <div className="flex flex-col gap-2">
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center justify-between">
-                    <h1 className="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
+                    <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                       {doc.title}
                     </h1>
                     <div className="docs-nav flex items-center gap-2">
@@ -149,15 +149,19 @@ const Page = async (props: { params: Promise<{ slug?: string[] }> }) => {
                     </div>
                   </div>
                   {doc.description && (
-                    <p className="text-muted-foreground text-[1.05rem] text-balance sm:text-base">
+                    <p className="text-base leading-relaxed text-balance text-muted-foreground">
                       {doc.description}
                     </p>
                   )}
                 </div>
                 {links ? (
-                  <div className="flex items-center space-x-2 pt-4">
+                  <div className="flex items-center gap-2 pt-3">
                     {links?.doc && (
-                      <Badge asChild variant="secondary">
+                      <Badge
+                        asChild
+                        className="h-7 rounded-md border-border/60 bg-background px-2.5 font-medium text-foreground hover:bg-muted"
+                        variant="outline"
+                      >
                         <Link
                           href={links.doc}
                           target="_blank"
@@ -169,7 +173,11 @@ const Page = async (props: { params: Promise<{ slug?: string[] }> }) => {
                       </Badge>
                     )}
                     {links?.api && (
-                      <Badge asChild variant="secondary">
+                      <Badge
+                        asChild
+                        className="h-7 rounded-md border-border/60 bg-background px-2.5 font-medium text-foreground hover:bg-muted"
+                        variant="outline"
+                      >
                         <Link
                           href={links.api}
                           target="_blank"
@@ -187,27 +195,45 @@ const Page = async (props: { params: Promise<{ slug?: string[] }> }) => {
                 <MdxContent components={mdxComponents} />
               </div>
             </div>
-            <div className="mx-auto hidden h-16 w-full max-w-2xl items-center gap-2 px-4 sm:flex md:px-0">
-              {neighbours.previous && (
-                <DocsNavLink
+            <nav
+              aria-label="Pagination"
+              className="mx-auto mb-8 hidden w-full max-w-2xl grid-cols-2 gap-3 px-4 sm:grid md:px-0"
+            >
+              {neighbours.previous ? (
+                <Link
+                  className="group flex flex-col gap-1 rounded-lg border border-border/60 bg-card px-4 py-3 text-card-foreground transition-colors duration-150 ease-out outline-none hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none"
                   href={neighbours.previous.url}
+                  prefetch={false}
                   transitionTypes={["nav-back"]}
-                  size="sm"
                 >
-                  {neighbours.previous.name}
-                </DocsNavLink>
+                  <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                    <ArrowLeftIcon aria-hidden className="size-3.5" />
+                    Previous
+                  </span>
+                  <span className="text-sm font-medium">
+                    {neighbours.previous.name}
+                  </span>
+                </Link>
+              ) : (
+                <span />
               )}
-              {neighbours.next && (
-                <DocsNavLink
+              {neighbours.next ? (
+                <Link
+                  className="group flex flex-col items-end gap-1 rounded-lg border border-border/60 bg-card px-4 py-3 text-right text-card-foreground transition-colors duration-150 ease-out outline-none hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none"
                   href={neighbours.next.url}
+                  prefetch={false}
                   transitionTypes={["nav-forward"]}
-                  className="ml-auto"
-                  size="sm"
                 >
-                  {neighbours.next.name}
-                </DocsNavLink>
-              )}
-            </div>
+                  <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+                    Next
+                    <ArrowRightIcon aria-hidden className="size-3.5" />
+                  </span>
+                  <span className="text-sm font-medium">
+                    {neighbours.next.name}
+                  </span>
+                </Link>
+              ) : null}
+            </nav>
           </div>
           <div className="sticky top-[calc(var(--header-height)+1px)] z-30 ml-auto hidden h-[calc(100svh-var(--footer-height)+2rem)] w-72 flex-col gap-4 overflow-hidden overscroll-none pb-8 xl:flex">
             <div className="h-(--top-spacing) shrink-0" />

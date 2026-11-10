@@ -237,8 +237,8 @@
     background-color: var(--color-code);
     color: var(--color-code-foreground);
     border-radius: var(--radius-lg);
-    border-width: 0px;
-    border-color: var(--border);
+    border-width: 1px;
+    border-color: color-mix(in oklab, var(--border) 60%, transparent);
     margin-top: calc(var(--spacing) * 6);
     overflow: hidden;
     font-size: var(--text-sm);
@@ -252,7 +252,7 @@
   }
 
   [data-rehype-pretty-code-title] {
-    border-bottom: color-mix(in oklab, var(--border) 30%, transparent);
+    border-bottom-color: color-mix(in oklab, var(--border) 60%, transparent);
     border-bottom-width: 1px;
     border-bottom-style: solid;
     padding-block: calc(var(--spacing) * 2.5);

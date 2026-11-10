@@ -169,9 +169,9 @@ export const DocsCopyPage = ({
 
   const trigger = (
     <Button
-      variant="secondary"
+      variant="ghost"
       size="sm"
-      className="peer -ml-0.5 size-8 md:size-7 md:text-[0.8rem]"
+      className="peer -ml-0.5 size-8 rounded-l-none md:size-7 md:text-[0.8rem]"
     >
       <ChevronDownIcon className="rotate-180 sm:rotate-0" />
     </Button>
@@ -179,14 +179,14 @@ export const DocsCopyPage = ({
 
   return (
     <Popover sounds>
-      <div className="group/buttons relative flex rounded-lg bg-secondary *:data-[slot=button]:focus-visible:relative *:data-[slot=button]:focus-visible:z-10">
+      <div className="group/buttons relative flex rounded-lg border border-border/60 bg-background *:data-[slot=button]:focus-visible:relative *:data-[slot=button]:focus-visible:z-10">
         <PopoverAnchor />
         <CopyButton
           value={copyValue}
           showTooltip={false}
           sound="copy"
-          variant="secondary"
-          className="md:h-7 md:text-[0.8rem]"
+          variant="ghost"
+          className="rounded-r-none md:h-7 md:text-[0.8rem]"
         >
           Copy Page
         </CopyButton>
@@ -207,7 +207,7 @@ export const DocsCopyPage = ({
         </DropdownMenu>
         <Separator
           orientation="vertical"
-          className="absolute top-1 right-8 z-0 h-6! bg-foreground/5! peer-focus-visible:opacity-0 sm:right-7 sm:h-5!"
+          className="absolute top-1 right-8 z-0 h-6! bg-border! peer-focus-visible:opacity-0 sm:right-7 sm:h-5!"
         />
         <PopoverTrigger asChild className="flex sm:hidden">
           {trigger}

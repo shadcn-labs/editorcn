@@ -195,17 +195,17 @@ const TestimonialRow = ({
       <Marquee autoFill direction={direction} pauseOnHover play={play}>
         {data.map((item) => (
           <a
-            className="block h-full w-xs border-r outline-none transition-colors hover:bg-accent/40 focus-visible:bg-accent/40 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
+            className="mx-1 block h-full w-xs rounded-xl border border-border/60 bg-card text-card-foreground outline-none transition-colors duration-150 ease-out hover:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset motion-reduce:transition-none"
             href={item.url}
             key={item.url}
             rel="noopener noreferrer"
             target="_blank"
           >
             <figure className="flex h-full flex-col">
-              <blockquote className="min-h-14 grow px-4 py-3 text-base text-pretty text-foreground">
+              <blockquote className="min-h-14 grow px-5 pt-4 pb-3 text-sm leading-relaxed text-pretty text-foreground">
                 <p>{item.quote}</p>
               </blockquote>
-              <figcaption className="grid grid-cols-[auto_1fr] grid-rows-2 items-center gap-x-3.5 px-4 pt-1 pb-3">
+              <figcaption className="grid grid-cols-[auto_1fr] grid-rows-2 items-center gap-x-3 px-5 pt-1 pb-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   alt={item.authorName}
@@ -252,17 +252,16 @@ export const Testimonials = ({ className }: { className?: string }) => {
 
   return (
     <div className={cn("flex flex-col items-center gap-4", className)}>
-      <h2 className="text-center text-3xl font-semibold tracking-tight">
+      <h2 className="text-center text-2xl font-semibold tracking-tight text-balance text-foreground sm:text-3xl">
         Loved by developers
       </h2>
       <p className="text-center text-base text-balance text-muted-foreground">
         What people are saying about editorcn.
       </p>
-      <div className="mt-6 flex w-full flex-col border-y">
+      <div className="mt-6 flex w-full flex-col gap-2 [&_.rfm-marquee]:items-stretch [&_.rfm-child]:self-stretch">
         <TestimonialRow data={TESTIMONIALS.slice(0, half)} play={play} />
         {TESTIMONIALS.length > 1 && (
           <>
-            <div className="h-4 border-y" />
             <TestimonialRow
               data={TESTIMONIALS.slice(half)}
               direction="right"
@@ -271,7 +270,12 @@ export const Testimonials = ({ className }: { className?: string }) => {
           </>
         )}
       </div>
-      <Button onClick={() => setUserPlay(!play)} size="sm" variant="ghost">
+      <Button
+        className="rounded-lg"
+        onClick={() => setUserPlay(!play)}
+        size="sm"
+        variant="ghost"
+      >
         {play ? <PauseIcon /> : <PlayIcon />}
         {play ? "Pause testimonials" : "Play testimonials"}
       </Button>

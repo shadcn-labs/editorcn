@@ -1,4 +1,6 @@
-import { ListCard } from "@/components/list-card";
+import { ChevronRightIcon, RssIcon } from "lucide-react";
+import Link from "next/link";
+
 import { PageTransition } from "@/components/page-transition";
 import { ROUTES } from "@/constants/routes";
 import { formatPostDate, getBlogPosts } from "@/lib/blog";
@@ -29,34 +31,66 @@ export default function BlogPage() {
         ]}
       />
       <PageTransition>
-        <div className="flex min-w-0 flex-1 flex-col text-[1.05rem] sm:text-[15px]">
+        <div className="flex min-w-0 flex-1 flex-col">
           <div className="h-(--top-spacing) shrink-0" />
-          <div className="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 px-4 py-6 text-neutral-800 md:px-0 lg:py-8 dark:text-neutral-300">
-            <div className="flex flex-col gap-2">
-              <h1 className="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
+          <div className="mx-auto flex w-full max-w-3xl min-w-0 flex-1 flex-col gap-6 px-4 py-8 lg:py-12">
+            <header className="flex flex-col gap-2">
+              <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 Blog
               </h1>
-              <p className="text-muted-foreground text-[1.05rem] text-balance sm:text-base">
+              <p className="max-w-2xl text-sm leading-relaxed text-balance text-muted-foreground">
                 {DESCRIPTION}
               </p>
-            </div>
-            <div className="mb-24 flex flex-col gap-3">
-              {posts.map((post) => (
-                <ListCard
-                  description={post.data.description}
-                  href={post.url}
-                  key={post.url}
-                  meta={
-                    <time
-                      className="text-xs text-muted-foreground"
-                      dateTime={post.data.date}
+            </header>
+
+            <div className="mb-24 rounded-xl border border-border/60 bg-muted/50 p-1">
+              <ul className="divide-y divide-border/60 overflow-hidden rounded-lg border border-border/60 bg-card text-card-foreground">
+                {posts.map((post) => (
+                  <li key={post.url}>
+                    <Link
+                      className="group flex items-start gap-4 px-4 py-4 transition-colors duration-150 ease-out outline-none hover:bg-muted/50 focus-visible:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset motion-reduce:transition-none sm:px-5"
+                      href={post.url}
+                      prefetch={false}
                     >
-                      {formatPostDate(post.data.date)}
-                    </time>
-                  }
-                  title={post.data.title}
-                />
-              ))}
+                      <div className="flex min-w-0 flex-1 flex-col gap-1">
+                        <time
+                          className="text-xs text-muted-foreground tabular-nums"
+                          dateTime={post.data.date}
+                        >
+                          {formatPostDate(post.data.date)}
+                        </time>
+                        <h2 className="text-sm font-semibold sm:text-base">
+                          {post.data.title}
+                        </h2>
+                        {post.data.description ? (
+                          <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                            {post.data.description}
+                          </p>
+                        ) : null}
+                      </div>
+                      <ChevronRightIcon
+                        aria-hidden
+                        className="mt-6 size-4 shrink-0 text-muted-foreground transition-colors duration-150 group-hover:text-foreground"
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <div className="flex items-center justify-between gap-2 px-3 pt-2 pb-1.5 text-xs text-muted-foreground">
+                <span>
+                  <span className="text-foreground tabular-nums">
+                    {posts.length}
+                  </span>{" "}
+                  posts
+                </span>
+                <a
+                  className="inline-flex items-center gap-1 rounded-md font-medium text-foreground outline-none hover:underline hover:underline-offset-4 focus-visible:ring-2 focus-visible:ring-ring/50"
+                  href={ROUTES.BLOG_RSS}
+                >
+                  <RssIcon aria-hidden className="size-3.5" />
+                  RSS
+                </a>
+              </div>
             </div>
           </div>
         </div>

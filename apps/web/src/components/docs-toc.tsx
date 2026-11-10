@@ -1,7 +1,16 @@
 "use client";
 
 import { MenuIcon } from "lucide-react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  Children,
+  cloneElement,
+  isValidElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+import type { ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,6 +21,22 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useFeedback } from "@/hooks/use-feedback";
 import { cn } from "@/lib/utils";
+
+// Headings can contain links (for example `### [@editorcn/editor](/docs/editor)`).
+// TOC entries are already links, so unwrap nested ones to avoid <a> inside <a>.
+const stripLinks = (node: ReactNode): ReactNode =>
+  Children.map(node, (child) => {
+    if (!isValidElement<{ children?: ReactNode; href?: string }>(child)) {
+      return child;
+    }
+    if (child.type === "a" || typeof child.props.href === "string") {
+      return stripLinks(child.props.children);
+    }
+    if (child.props.children === undefined) {
+      return child;
+    }
+    return cloneElement(child, undefined, stripLinks(child.props.children));
+  });
 
 const headingById = (id: string): Element | null =>
   document.querySelector(`#${CSS.escape(id)}`);
@@ -108,7 +133,7 @@ export const DocsTableOfContents = ({
               data-depth={item.depth}
               className="data-[depth=3]:pl-6 data-[depth=4]:pl-8"
             >
-              <a href={item.url}>{item.title}</a>
+              <a href={item.url}>{stripLinks(item.title)}</a>
             </DropdownMenuItem>
           ))}
         </DropdownMenuContent>
@@ -130,7 +155,7 @@ export const DocsTableOfContents = ({
           data-depth={item.depth}
           onClick={playTick}
         >
-          {item.title}
+          {stripLinks(item.title)}
         </a>
       ))}
     </div>

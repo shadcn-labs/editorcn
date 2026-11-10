@@ -5,7 +5,7 @@ import { SITE, UTM_PARAMS } from "@/constants/site";
 import { useFeedback } from "@/hooks/use-feedback";
 import { addQueryParams } from "@/lib/url";
 
-export const SiteFooter = () => {
+export const SiteFooter = ({ children }: { children?: React.ReactNode }) => {
   const playClick = useFeedback({ sound: "click" });
 
   return (
@@ -14,6 +14,7 @@ export const SiteFooter = () => {
       style={{ viewTransitionName: "site-footer" }}
     >
       <div className="container-wrapper px-4 xl:px-6">
+        {children}
         <div className="flex h-(--footer-height) items-center justify-between">
           <div className="text-muted-foreground w-full px-1 text-center text-xs leading-loose sm:text-sm">
             Built by{" "}

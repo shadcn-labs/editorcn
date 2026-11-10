@@ -1,5 +1,8 @@
-import { ListCard } from "@/components/list-card";
+import { ChevronRightIcon } from "lucide-react";
+import Link from "next/link";
+
 import { PageTransition } from "@/components/page-transition";
+import { ToolFormatLabel, ToolIcon } from "@/components/tool-icon";
 import { ROUTES } from "@/constants/routes";
 import { TOOLS } from "@/lib/tools";
 import { BreadcrumbJsonLd } from "@/seo/json-ld";
@@ -27,26 +30,56 @@ export default function ToolsPage() {
         ]}
       />
       <PageTransition>
-        <div className="flex min-w-0 flex-1 flex-col text-[1.05rem] sm:text-[15px]">
+        <div className="flex min-w-0 flex-1 flex-col">
           <div className="h-(--top-spacing) shrink-0" />
-          <div className="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 px-4 py-6 text-neutral-800 md:px-0 lg:py-8 dark:text-neutral-300">
-            <div className="flex flex-col gap-2">
-              <h1 className="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">
+          <div className="mx-auto flex w-full max-w-3xl min-w-0 flex-1 flex-col gap-6 px-4 py-8 lg:py-12">
+            <header className="flex flex-col gap-2">
+              <h1 className="scroll-m-20 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
                 Free rich text tools
               </h1>
-              <p className="text-muted-foreground text-[1.05rem] text-balance sm:text-base">
+              <p className="max-w-2xl text-sm leading-relaxed text-balance text-muted-foreground">
                 {DESCRIPTION}
               </p>
-            </div>
-            <div className="mb-24 flex flex-col gap-3">
-              {TOOLS.map((tool) => (
-                <ListCard
-                  description={tool.intro}
-                  href={`${ROUTES.TOOLS}/${tool.slug}`}
-                  key={tool.slug}
-                  title={tool.title}
-                />
-              ))}
+            </header>
+
+            <div className="mb-24 rounded-xl border border-border/60 bg-muted/50 p-1">
+              <ul className="divide-y divide-border/60 overflow-hidden rounded-lg border border-border/60 bg-card text-card-foreground">
+                {TOOLS.map((tool) => (
+                  <li key={tool.slug}>
+                    <Link
+                      className="group flex items-start gap-3 px-4 py-4 transition-colors duration-150 ease-out outline-none hover:bg-muted/50 focus-visible:bg-muted/50 focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-inset motion-reduce:transition-none sm:items-center sm:gap-4 sm:px-5"
+                      href={`${ROUTES.TOOLS}/${tool.slug}`}
+                      prefetch={false}
+                    >
+                      <ToolIcon format={tool.from} />
+                      <div className="flex min-w-0 flex-1 flex-col gap-1">
+                        <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+                          <h2 className="text-sm font-semibold">
+                            {tool.title}
+                          </h2>
+                          <ToolFormatLabel from={tool.from} to={tool.to} />
+                        </div>
+                        <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                          {tool.intro}
+                        </p>
+                      </div>
+                      <ChevronRightIcon
+                        aria-hidden
+                        className="mt-2 size-4 shrink-0 text-muted-foreground transition-colors duration-150 group-hover:text-foreground sm:mt-0"
+                      />
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <p className="flex items-center justify-between gap-2 px-3 pt-2 pb-1.5 text-xs text-muted-foreground">
+                <span>
+                  <span className="text-foreground tabular-nums">
+                    {TOOLS.length}
+                  </span>{" "}
+                  converters
+                </span>
+                <span>Runs in your browser</span>
+              </p>
             </div>
           </div>
         </div>

@@ -43,9 +43,12 @@ export const DocsNavLink = ({
 
   const link = (
     <Button
-      variant="secondary"
+      variant="ghost"
       size={size}
-      className={cn("shadow-none", className)}
+      className={cn(
+        "border border-border/60 bg-background shadow-none hover:bg-muted",
+        className
+      )}
       asChild
       sound="click"
       onMouseEnter={handleMouseEnter}
