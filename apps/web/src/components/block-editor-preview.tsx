@@ -348,7 +348,7 @@ export const BlockEditorPreview = () => {
   });
 
   return (
-    <div className="relative rounded-md border border-border font-inter [&_.ProseMirror]:text-[15px]">
+    <div className="relative rounded-2xl border border-border/60 bg-card text-card-foreground font-inter [&_.ProseMirror]:text-[15px]">
       <BlockEditor
         editor={editor}
         className="px-2"

@@ -43,14 +43,16 @@ const PromoBody = ({
 }) => (
   <Card
     className={cn(
-      "relative gap-3 p-4",
-      variant === "floating" ? "shadow-lg" : "shadow-none"
+      "relative gap-3 rounded-xl border-border/60 p-4",
+      variant === "floating"
+        ? "shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)]"
+        : "shadow-none"
     )}
   >
     {onDismiss && (
       <Button
         aria-label="Dismiss promotion"
-        className="absolute top-2 right-2 size-7 text-muted-foreground"
+        className="absolute top-2 right-2 size-7 rounded-md text-muted-foreground"
         onClick={onDismiss}
         size="icon"
         variant="ghost"
@@ -61,7 +63,7 @@ const PromoBody = ({
     <div className="flex items-center gap-3">
       <Image
         alt=""
-        className="size-9 rounded-md border"
+        className="size-8 rounded-md border"
         height={36}
         src={PROMO.logo}
         width={36}
@@ -75,7 +77,7 @@ const PromoBody = ({
     </div>
     <p className="text-[0.8rem] text-muted-foreground">{PROMO.description}</p>
     {variant === "floating" && (
-      <div className="flex items-center justify-between gap-2 rounded-md border bg-muted/50 py-1 pr-1 pl-3">
+      <div className="flex items-center justify-between gap-2 rounded-lg border border-border/60 bg-muted/50 py-0.5 pr-0.5 pl-3">
         <code className="truncate font-mono text-xs">{PROMO.command}</code>
         <CopyButton
           aria-label="Copy command"
@@ -91,7 +93,7 @@ const PromoBody = ({
         variant === "floating" && "grid-cols-[1fr_auto]"
       )}
     >
-      <Button asChild size="sm">
+      <Button asChild className="rounded-lg" size="sm">
         <a
           href={PROMO.cta.href}
           onClick={() => track(variant, "cta")}
@@ -102,7 +104,7 @@ const PromoBody = ({
           <ArrowUpRightIcon />
         </a>
       </Button>
-      <Button asChild size="sm" variant="outline">
+      <Button asChild className="rounded-lg" size="sm" variant="outline">
         <a
           href={PROMO.secondary.href}
           onClick={() => track(variant, "github")}

@@ -26,7 +26,7 @@ export const PageHero = ({
     )}
     <h1
       className={cn(
-        "from-foreground via-foreground to-foreground/65 bg-linear-to-b bg-clip-text text-4xl font-bold tracking-tighter text-balance text-transparent sm:text-5xl md:text-6xl",
+        "text-4xl font-semibold tracking-tight text-balance text-foreground sm:text-5xl",
         titleClassName
       )}
     >
