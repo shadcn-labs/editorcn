@@ -85,7 +85,7 @@ export default function BlogPage() {
                 </span>
                 <a
                   className="inline-flex items-center gap-1 rounded-md font-medium text-foreground outline-none hover:underline hover:underline-offset-4 focus-visible:ring-2 focus-visible:ring-ring/50"
-                  href={ROUTES.RSS}
+                  href={ROUTES.BLOG_RSS}
                 >
                   <RssIcon aria-hidden className="size-3.5" />
                   RSS
