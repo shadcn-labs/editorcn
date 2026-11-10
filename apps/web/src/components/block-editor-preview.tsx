@@ -22,6 +22,7 @@ import { Mention } from "@editorcn/extensions/mention";
 import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
+import { Toggle, toggleSlashCommandItem } from "@editorcn/extensions/toggle";
 import { Color } from "@tiptap/extension-color";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Link } from "@tiptap/extension-link";
@@ -44,6 +45,7 @@ import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/mention/style.css";
 import "@editorcn/extensions/ui/style.css";
 import "@editorcn/extensions/table/style.css";
+import "@editorcn/extensions/toggle/style.css";
 
 const DEMO_CONTENT = `
 <h1 style="text-align: center;">Block Editor</h1>
@@ -104,6 +106,8 @@ function MyEditor() {
   B --&gt;|Mermaid| D[Live preview]</code></pre>
 <h2>Callout</h2>
 <div data-type="callout" data-variant="info"><p>Type <code>/callout</code> to insert a callout, or <code>&gt; [!WARNING]</code> and a space. Click the icon to switch between info, tip, warning, danger, and note.</p></div>
+<h2>Toggle</h2>
+<details open><summary>Shipping updates</summary><div data-type="detailsContent"><p>Click the chevron to collapse this section. Type <code>+++</code> on an empty line to insert a toggle, and press <code>Enter</code> in the title to jump into the content. Toggles hold any block content, including other toggles:</p><details><summary>A nested toggle</summary><div data-type="detailsContent"><p>Collapsed by default. Click the chevron to open it.</p></div></details></div></details>
 <h2>Blockquote</h2>
 <blockquote><p>Block-level content with drag handles for reordering. Every block can be moved, edited, or deleted independently.</p></blockquote>
 <h2>Text Alignment</h2>
@@ -214,6 +218,7 @@ const myItems: SlashCommandSuggestionItem[] = [
     keywords: ["callout", "note", "tip", "warning", "alert", "info"],
     title: "Callout",
   },
+  toggleSlashCommandItem,
   {
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();
@@ -255,6 +260,7 @@ export const BlockEditorPreview = () => {
       TaskItem.configure({ nested: true }),
       CodeBlock,
       Callout,
+      Toggle,
       SlashCommand.configure({
         suggestion: getSlashCommandSuggestion(myItems),
       }),

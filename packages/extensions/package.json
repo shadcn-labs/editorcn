@@ -26,6 +26,8 @@
     "./ui/*": "./src/ui/*",
     "./ui/style.css": "./src/ui/style.css",
     "./table/style.css": "./src/table/style.css",
+    "./toggle": "./src/toggle/index.ts",
+    "./toggle/style.css": "./src/toggle/style.css",
     "./manifest.json": "./manifest.json"
   },
   "scripts": {
@@ -33,6 +35,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@tiptap/extension-details": "^3.33.0",
     "@tiptap/extension-gapcursor": "^3.30.0",
     "lucide-react": "catalog:"
   },

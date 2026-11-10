@@ -1,0 +1,56 @@
+/* The editor node view renders a `div[data-type="details"]` wrapper with a
+   chevron button. The static renderer outputs native `<details>/<summary>`
+   instead — its mirror styles live in @editorcn/static-renderer. */
+
+div[data-type="details"] {
+  position: relative;
+  margin: 0.75em 0;
+  padding-left: 1.75rem;
+}
+
+div[data-type="details"] > .ext-toggle-button {
+  position: absolute;
+  top: 0.1em;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: none;
+  border-radius: calc(var(--radius) - 2px);
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+
+div[data-type="details"] > .ext-toggle-button:hover {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
+div[data-type="details"] > .ext-toggle-button svg {
+  transition: transform 0.15s ease;
+}
+
+div[data-type="details"].is-open > .ext-toggle-button svg {
+  transform: rotate(90deg);
+}
+
+div[data-type="details"] summary {
+  font-weight: 500;
+  cursor: text;
+}
+
+div[data-type="details"] summary::-webkit-details-marker {
+  display: none;
+}
+
+div[data-type="details"] div[data-type="detailsContent"] > :first-child {
+  margin-top: 0;
+}
+
+div[data-type="details"] div[data-type="detailsContent"] > :last-child {
+  margin-bottom: 0;
+}

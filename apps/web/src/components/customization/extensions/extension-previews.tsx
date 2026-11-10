@@ -24,6 +24,7 @@ import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { TableToolbar } from "@editorcn/extensions/table-toolbar";
+import { Toggle, toggleSlashCommandItem } from "@editorcn/extensions/toggle";
 import type { AnyExtension } from "@tiptap/core";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { useEditor } from "@tiptap/react";
@@ -40,6 +41,7 @@ import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/mention/style.css";
 import "@editorcn/extensions/code-block/style.css";
 import "@editorcn/extensions/callout/style.css";
+import "@editorcn/extensions/toggle/style.css";
 
 /* Table alignment + resize handle styling ships with
    @editorcn/extensions/table/style.css (see .ProseMirror.resize-cursor). */
@@ -140,6 +142,13 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
       },
     ],
     toolbar: <TableToolbar />,
+  },
+  toggle: {
+    content:
+      '<p>Click the chevron to collapse or expand a section. Press <code>Enter</code> in the title to jump into the content, and <code>Backspace</code> on an empty title to remove the toggle. Toggles hold any block content, including other toggles:</p><details open><summary>What can go inside?</summary><div data-type="detailsContent"><p>Paragraphs, lists, code blocks, tables — and more toggles:</p><details><summary>A nested toggle</summary><div data-type="detailsContent"><p>Collapsed by default. Click the chevron to open it.</p></div></details></div></details><p></p>',
+    extensions: [StarterKit, Toggle],
+    slashItems: [toggleSlashCommandItem],
+    toolbar: null,
   },
 };
 
