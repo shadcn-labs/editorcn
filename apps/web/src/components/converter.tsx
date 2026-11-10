@@ -150,7 +150,7 @@ const Highlighted = ({ code, html }: { code: string; html: string }) =>
 const PANE_HEIGHT = "h-[clamp(28rem,65vh,48rem)]";
 
 const paneHeaderClassName =
-  "flex h-11 items-center justify-between gap-2 border-b bg-muted/40 px-3";
+  "flex h-11 items-center justify-between gap-2 border-b border-border/60 pr-1.5 pl-3";
 
 const scrollAreaClassName = cn(
   PANE_HEIGHT,
@@ -195,13 +195,18 @@ const ConverterClient = ({
   };
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-card text-card-foreground shadow-sm">
-      <div className="grid md:grid-cols-2 md:divide-x">
-        <div className="flex min-w-0 flex-col border-b md:border-b-0">
+    <div className="rounded-xl border border-border/60 bg-muted/50 p-1">
+      <div className="grid overflow-hidden rounded-lg border border-border/60 bg-card text-card-foreground md:grid-cols-2 md:divide-x md:divide-border/60">
+        <div className="flex min-w-0 flex-col border-b border-border/60 md:border-b-0">
           <div className={paneHeaderClassName}>
             <PaneLabel id="converter-input">{FORMAT_LABEL[from]}</PaneLabel>
             <div className="flex items-center gap-1">
-              <Button asChild size="sm" variant="ghost">
+              <Button
+                asChild
+                className="h-7 rounded-md px-2 text-xs"
+                size="sm"
+                variant="ghost"
+              >
                 <label className="cursor-pointer has-[input:focus-visible]:border-ring has-[input:focus-visible]:ring-[3px] has-[input:focus-visible]:ring-ring/50">
                   <UploadIcon />
                   <span className="sr-only sm:not-sr-only">Upload</span>
@@ -214,6 +219,7 @@ const ConverterClient = ({
                 </label>
               </Button>
               <Button
+                className="h-7 rounded-md px-2 text-xs"
                 onClick={() => setInput(sample)}
                 size="sm"
                 variant="ghost"
@@ -221,7 +227,12 @@ const ConverterClient = ({
                 <RotateCcwIcon />
                 <span className="sr-only sm:not-sr-only">Sample</span>
               </Button>
-              <Button onClick={() => setInput("")} size="sm" variant="ghost">
+              <Button
+                className="h-7 rounded-md px-2 text-xs"
+                onClick={() => setInput("")}
+                size="sm"
+                variant="ghost"
+              >
                 <Trash2Icon />
                 <span className="sr-only sm:not-sr-only">Clear</span>
               </Button>
@@ -256,15 +267,21 @@ const ConverterClient = ({
 
         <Tabs className="min-w-0 gap-0" defaultValue="code">
           <div className={paneHeaderClassName}>
-            <TabsList className="h-8">
-              <TabsTrigger className="text-xs" value="code">
+            <TabsList className="h-8 rounded-lg border border-border/60 bg-background p-0.5">
+              <TabsTrigger
+                className="h-7 rounded-md px-2.5 text-xs data-[state=active]:bg-muted data-[state=active]:shadow-none dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-muted"
+                value="code"
+              >
                 {FORMAT_LABEL[to]}
               </TabsTrigger>
-              <TabsTrigger className="text-xs" value="preview">
+              <TabsTrigger
+                className="h-7 rounded-md px-2.5 text-xs data-[state=active]:bg-muted data-[state=active]:shadow-none dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-muted"
+                value="preview"
+              >
                 Preview
               </TabsTrigger>
             </TabsList>
-            <CopyButton className="static" value={output} />
+            <CopyButton className="static size-7 rounded-md" value={output} />
           </div>
           <TabsContent value="code">
             <div className={scrollAreaClassName}>
@@ -290,12 +307,12 @@ const ConverterClient = ({
         </Tabs>
       </div>
 
-      <div className="flex flex-wrap items-center justify-between gap-2 border-t bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-3 pt-2 pb-1.5 text-xs text-muted-foreground">
         <span className="flex items-center gap-2">
           <span
             aria-hidden
             className={cn(
-              "size-2 rounded-full",
+              "size-1.5 rounded-full",
               error ? "bg-destructive" : "bg-emerald-500"
             )}
           />
@@ -316,7 +333,7 @@ const ConverterClient = ({
 
 export const Converter = dynamic(() => Promise.resolve(ConverterClient), {
   loading: () => (
-    <div className="h-[calc(clamp(28rem,65vh,48rem)+4.75rem)] animate-pulse rounded-xl border bg-muted/40" />
+    <div className="h-[calc(clamp(28rem,65vh,48rem)+4.75rem)] animate-pulse rounded-xl border border-border/60 bg-muted/50" />
   ),
   ssr: false,
 });
