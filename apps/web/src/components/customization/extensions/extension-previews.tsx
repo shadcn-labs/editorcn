@@ -145,7 +145,7 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
   },
   toggle: {
     content:
-      '<p>Click the chevron to collapse or expand a section. Press <code>Enter</code> in the title to jump into the content, and <code>Backspace</code> on an empty title to remove the toggle. Toggles hold any block content, including other toggles:</p><details open><summary>What can go inside?</summary><div data-type="detailsContent"><p>Paragraphs, lists, code blocks, tables — and more toggles:</p><details><summary>A nested toggle</summary><div data-type="detailsContent"><p>Collapsed by default. Click the chevron to open it.</p></div></details></div></details><p></p>',
+      '<p>Click the triangle to collapse or expand a section. Press <code>Enter</code> in the title to jump into the content, and <code>Backspace</code> on an empty title to remove the toggle. Toggles hold any block content, including other toggles:</p><details open><summary>What can go inside?</summary><div data-type="detailsContent"><p>Paragraphs, lists, code blocks, tables — and more toggles:</p><details><summary>A nested toggle</summary><div data-type="detailsContent"><p>Collapsed by default. Click the triangle to open it.</p></div></details></div></details><p></p>',
     extensions: [StarterKit, Toggle],
     slashItems: [toggleSlashCommandItem],
     toolbar: null,

@@ -107,7 +107,7 @@ function MyEditor() {
 <h2>Callout</h2>
 <div data-type="callout" data-variant="info"><p>Type <code>/callout</code> to insert a callout, or <code>&gt; [!WARNING]</code> and a space. Click the icon to switch between info, tip, warning, danger, and note.</p></div>
 <h2>Toggle</h2>
-<details open><summary>Shipping updates</summary><div data-type="detailsContent"><p>Click the chevron to collapse this section. Type <code>+++</code> on an empty line to insert a toggle, and press <code>Enter</code> in the title to jump into the content. Toggles hold any block content, including other toggles:</p><details><summary>A nested toggle</summary><div data-type="detailsContent"><p>Collapsed by default. Click the chevron to open it.</p></div></details></div></details>
+<details open><summary>Shipping updates</summary><div data-type="detailsContent"><p>Click the triangle to collapse this section. Type <code>+++</code> on an empty line to insert a toggle, and press <code>Enter</code> in the title to jump into the content. Toggles hold any block content, including other toggles:</p><details><summary>A nested toggle</summary><div data-type="detailsContent"><p>Collapsed by default. Click the triangle to open it.</p></div></details></div></details>
 <h2>Blockquote</h2>
 <blockquote><p>Block-level content with drag handles for reordering. Every block can be moved, edited, or deleted independently.</p></blockquote>
 <h2>Text Alignment</h2>

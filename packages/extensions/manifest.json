@@ -117,7 +117,7 @@
   },
   "toggle": {
     "title": "Toggle",
-    "description": "A Notion-style collapsible section that holds any block content, including other toggles. Click the chevron to collapse or expand, insert one from the slash menu or by typing +++ on an empty line, and press Enter in the title to jump into the content. The open state is saved with the document and native details HTML keeps it working in the static renderer without JavaScript.",
+    "description": "A Notion-style collapsible section that holds any block content, including other toggles. Click the triangle to collapse or expand, insert one from the slash menu or by typing +++ on an empty line, and press Enter in the title to jump into the content. The open state is saved with the document and native details HTML keeps it working in the static renderer without JavaScript.",
     "extension": "toggle/index.ts",
     "files": ["toggle/slash-command-item.ts"],
     "css": ["toggle/style.css"],

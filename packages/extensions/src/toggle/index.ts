@@ -16,10 +16,11 @@ export type {
 export { toggleSlashCommandItem } from "./slash-command-item";
 export type { ToggleSlashCommandItem } from "./slash-command-item";
 
-// Inline copy of the lucide chevron-right icon. The toggle button is rendered
-// by the official vanilla node view, so it needs a plain SVG, not a React node.
-const CHEVRON_SVG =
-  '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
+// A small filled triangle pointing right; CSS rotates it down when open. The
+// toggle button is rendered by the official vanilla node view, so it needs a
+// plain SVG, not a React node.
+const TRIANGLE_SVG =
+  '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 1.75v8.5L10.25 6z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
 
 const renderToggleButton = ({
   element,
@@ -31,7 +32,7 @@ const renderToggleButton = ({
     isOpen ? "Collapse section" : "Expand section"
   );
   if (!element.firstChild) {
-    element.innerHTML = CHEVRON_SVG;
+    element.innerHTML = TRIANGLE_SVG;
   }
 };
 
@@ -39,7 +40,7 @@ const renderToggleButton = ({
  * The official `details` node, configured for editorcn:
  *
  * - `persist: true` keeps the open state in the document (`open` attribute in
- *   HTML, `attrs.open` in JSON), and makes the chevron button update the doc.
+ *   HTML, `attrs.open` in JSON), and makes the triangle button update the doc.
  * - `+++` on an empty line inserts a toggle.
  * - Enter in the summary opens the toggle and moves the selection into the
  *   content. Backspace at the start of an empty summary unwraps the toggle.

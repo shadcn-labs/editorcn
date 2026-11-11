@@ -1,12 +1,12 @@
 ---
 title: Toggle
 seoTitle: "Tiptap Toggle Extension: Collapsible Sections for shadcn/ui"
-description: "A Notion-style toggle block for shadcn/ui with collapsible sections, a chevron node view, a saved open state, slash commands, a +++ input rule, markdown fences, and native details output."
+description: "A Notion-style toggle block for shadcn/ui with collapsible sections, a triangle node view, a saved open state, slash commands, a +++ input rule, markdown fences, and native details output."
 ---
 
 The Toggle extension adds collapsible sections, like Notion. A toggle holds any block content, such as paragraphs, lists, code blocks, tables, and other toggles.
 
-- Click the chevron to collapse or expand the section. The open state is saved with the document.
+- Click the triangle to collapse or expand the section. The open state is saved with the document.
 - Type `+++` on an empty line to create one, or pick **Toggle** from the slash menu.
 - Press `Enter` in the title to open the toggle and jump into the content.
 - Press `Backspace` at the start of an empty title to remove the toggle and keep the content.
@@ -30,7 +30,7 @@ The `Gapcursor` extension ships with `@tiptap/starter-kit` and is required for t
 
 ## Usage
 
-Add `Toggle` to the extensions. The chevron button comes from a built-in node view, so no toolbar component is needed.
+Add `Toggle` to the extensions. The triangle button comes from a built-in node view, so no toolbar component is needed.
 
 ```tsx
 "use client";
@@ -125,7 +125,7 @@ editor.commands.unsetDetails();
 
 ## Settings
 
-All settings live on the official `Details` node. The `Toggle` bundle already turns on `persist` and swaps the default eye button for a chevron. To change an option, use `ToggleDetails` together with `DetailsSummary` and `DetailsContent` in place of `Toggle`:
+All settings live on the official `Details` node. The `Toggle` bundle already turns on `persist` and swaps the default eye button for a triangle. To change an option, use `ToggleDetails` together with `DetailsSummary` and `DetailsContent` in place of `Toggle`:
 
 ```tsx
 import {
@@ -149,15 +149,15 @@ const editor = useEditor({
 
 ### `persist`
 
-Saves the open state as the `open` attribute in HTML and `attrs.open` in JSON, and makes the chevron update the document. `Toggle` forces this to `true`, so a saved document reopens where the reader left off.
+Saves the open state as the `open` attribute in HTML and `attrs.open` in JSON, and makes the triangle update the document. `Toggle` forces this to `true`, so a saved document reopens where the reader left off.
 
 ### `openClassName`
 
-The class added to the editor wrapper while the toggle is open. Defaults to `is-open`, which `toggle/style.css` uses to rotate the chevron.
+The class added to the editor wrapper while the toggle is open. Defaults to `is-open`, which `toggle/style.css` uses to rotate the triangle.
 
 ### `renderToggleButton`
 
-Customizes the toggle button element. `Toggle` replaces the official eye icon with a chevron built from an inline SVG. Pass your own `({ element, isOpen, node }) => void` to draw something else.
+Customizes the toggle button element. `Toggle` replaces the official eye icon with a triangle built from an inline SVG. Pass your own `({ element, isOpen, node }) => void` to draw something else.
 
 ### `HTMLAttributes`
 
@@ -222,7 +222,7 @@ Everything that shipped this week.
 
 ## Static Renderer
 
-The [Static Renderer](/docs/static-renderer) keeps native `<details>/<summary>` HTML, so sections collapse and expand without JavaScript, and draws the chevron with CSS. The `sanitize` option keeps the `open` attribute. For JSON content, pass `Toggle` in `extensions`:
+The [Static Renderer](/docs/static-renderer) keeps native `<details>/<summary>` HTML, so sections collapse and expand without JavaScript, and draws the triangle with CSS. The `sanitize` option keeps the `open` attribute. For JSON content, pass `Toggle` in `extensions`:
 
 ```tsx
 <StaticRenderer content={json} extensions={[StarterKit, Toggle]} />
