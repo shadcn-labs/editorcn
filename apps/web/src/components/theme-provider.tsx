@@ -8,7 +8,7 @@ export const ThemeProvider = ({
 }: React.ComponentProps<typeof NextThemesProvider>) => (
   <NextThemesProvider
     attribute="class"
-    defaultTheme="system"
+    defaultTheme="light"
     enableSystem
     disableTransitionOnChange
     enableColorScheme

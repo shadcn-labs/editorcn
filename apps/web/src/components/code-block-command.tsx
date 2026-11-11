@@ -50,7 +50,7 @@ export const CodeBlockCommand = ({
   return (
     <div
       className={cn(
-        "bg-code text-code-foreground relative overflow-hidden rounded-lg text-sm",
+        "relative rounded-xl border border-border/60 bg-muted/50 p-1 text-sm",
         className
       )}
     >
@@ -59,14 +59,14 @@ export const CodeBlockCommand = ({
         onValueChange={handlePackageManagerChange}
         value={packageManager}
       >
-        <div className="border-border/50 flex items-center gap-2 border-b px-3 py-1">
-          <TabsList className="rounded-none bg-transparent p-0 [&_svg]:me-2 [&_svg]:size-4 [&_svg]:text-muted-foreground">
+        <div className="flex h-9 items-center gap-2 pr-10 pl-2">
+          <TabsList className="gap-0.5 rounded-none bg-transparent p-0 [&_svg]:me-2 [&_svg]:size-4 [&_svg]:text-muted-foreground">
             {getIconForPackageManager(packageManager)}
 
             {Object.entries(commandTabs).map(([key]) => (
               <TabsTrigger
                 key={key}
-                className="data-[state=active]:border-input h-7 border border-transparent pt-0.5 data-[state=active]:shadow-none"
+                className="h-7 rounded-md border border-transparent px-2.5 text-xs data-[state=active]:border-border/60 data-[state=active]:bg-background data-[state=active]:shadow-none dark:data-[state=active]:border-border/60 dark:data-[state=active]:bg-background"
                 sound="tabSwitch"
                 value={key}
               >
@@ -75,7 +75,7 @@ export const CodeBlockCommand = ({
             ))}
           </TabsList>
         </div>
-        <div className="no-scrollbar overflow-x-auto">
+        <div className="no-scrollbar overflow-x-auto rounded-lg border border-border/60 bg-card text-card-foreground">
           {Object.entries(commandTabs).map(([key, value]) => (
             <TabsContent key={key} className="mt-0 px-4 py-3.5" value={key}>
               <pre>
@@ -93,7 +93,7 @@ export const CodeBlockCommand = ({
         </div>
       </Tabs>
       <CopyButton
-        className="absolute top-2 right-2 z-10 size-7 opacity-70 hover:opacity-100 focus-visible:opacity-100"
+        className="absolute top-2 right-2 z-10 size-7 rounded-md opacity-70 hover:opacity-100 focus-visible:opacity-100"
         value={copyValue}
         event={copyEvent}
       />

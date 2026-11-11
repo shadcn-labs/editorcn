@@ -6,6 +6,7 @@ import { ComponentCode } from "@/components/component-code";
 import { EditorPreview } from "@/components/editor-preview";
 import { HomeCtas } from "@/components/home-ctas";
 import { HomeCustomize } from "@/components/home-customize";
+import { HomeTools } from "@/components/home-tools";
 import { PageHero } from "@/components/page-hero";
 import { PageTransition } from "@/components/page-transition";
 import { PromoCard } from "@/components/promo-card";
@@ -266,6 +267,12 @@ export function MyBlockEditor() {
   );
 }`;
 
+const segmentListClassName =
+  "h-8 rounded-lg border border-border/60 bg-background p-0.5";
+
+const segmentTriggerClassName =
+  "h-7 rounded-md px-2.5 text-xs font-medium data-[state=active]:bg-muted data-[state=active]:shadow-none dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-muted";
+
 const PreviewCode = ({
   code,
   filename,
@@ -278,14 +285,20 @@ const PreviewCode = ({
   preview: ReactNode;
 }) => (
   <Tabs className="items-center gap-4" defaultValue="preview">
-    <TabsList>
-      <TabsTrigger value="preview">Preview</TabsTrigger>
-      <TabsTrigger value="code">Code</TabsTrigger>
+    <TabsList className={segmentListClassName}>
+      <TabsTrigger className={segmentTriggerClassName} value="preview">
+        Preview
+      </TabsTrigger>
+      <TabsTrigger className={segmentTriggerClassName} value="code">
+        Code
+      </TabsTrigger>
     </TabsList>
     <TabsContent className="w-full" value="preview">
-      <div className="sm:rounded-xl sm:border sm:bg-muted/30 sm:p-8">
-        <div className="mx-auto max-w-3xl max-sm:[&_.block-editor-content]:max-h-[32rem] max-sm:[&_.block-editor-content]:overflow-y-auto max-sm:[&_.rte-content]:max-h-[28rem] max-sm:[&_.rte-content]:overflow-y-auto">
-          {preview}
+      <div className="sm:rounded-xl sm:border sm:border-border/60 sm:bg-muted/50 sm:p-1">
+        <div className="sm:rounded-lg sm:border sm:border-border/60 sm:bg-background sm:px-8 sm:py-12">
+          <div className="mx-auto max-w-3xl max-sm:[&_.block-editor-content]:max-h-[32rem] max-sm:[&_.block-editor-content]:overflow-y-auto max-sm:[&_.rte-content]:max-h-[28rem] max-sm:[&_.rte-content]:overflow-y-auto">
+            {preview}
+          </div>
         </div>
       </div>
     </TabsContent>
@@ -321,7 +334,7 @@ export const HomePage = async () => {
                   Built on Tiptap. Distributed via shadcn.
                 </>
               }
-              descriptionClassName="max-w-2xl text-lg sm:text-xl"
+              descriptionClassName="max-w-2xl text-base text-foreground/80 sm:text-lg"
               showAnnouncement
               title={
                 <>
@@ -336,12 +349,12 @@ export const HomePage = async () => {
                   />
                 </>
               }
-              titleClassName="max-w-4xl bg-none text-foreground leading-[1.1] md:text-7xl"
+              titleClassName="max-w-3xl leading-[1.1]"
             />
 
             <HomeCtas />
 
-            <CommandBox className="mt-6 w-full max-w-xl shadow-sm" />
+            <CommandBox className="mt-6 w-full max-w-xl" />
           </div>
         </section>
 
@@ -350,18 +363,21 @@ export const HomePage = async () => {
             className="container items-center gap-4"
             defaultValue="templates"
           >
-            <TabsList className="h-11 rounded-xl border bg-muted/60 p-1">
-              <TabsTrigger className="rounded-lg px-3 sm:px-4" value="editor">
+            <TabsList className="h-9 rounded-lg border border-border/60 bg-background p-0.5">
+              <TabsTrigger
+                className="h-8 rounded-md px-3 text-sm font-medium data-[state=active]:bg-muted data-[state=active]:shadow-none dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-muted"
+                value="editor"
+              >
                 Toolbar editor
               </TabsTrigger>
               <TabsTrigger
-                className="rounded-lg px-3 sm:px-4"
+                className="h-8 rounded-md px-3 text-sm font-medium data-[state=active]:bg-muted data-[state=active]:shadow-none dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-muted"
                 value="block-editor"
               >
                 Block editor
               </TabsTrigger>
               <TabsTrigger
-                className="rounded-lg px-3 sm:px-4"
+                className="h-8 rounded-md px-3 text-sm font-medium data-[state=active]:bg-muted data-[state=active]:shadow-none dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-muted"
                 value="templates"
               >
                 Templates
@@ -389,17 +405,23 @@ export const HomePage = async () => {
                 className="items-center gap-4"
                 defaultValue="simple-document-editor"
               >
-                <TabsList>
+                <TabsList className={segmentListClassName}>
                   {TEMPLATES.map((t) => (
-                    <TabsTrigger key={t.name} value={t.name}>
+                    <TabsTrigger
+                      className={segmentTriggerClassName}
+                      key={t.name}
+                      value={t.name}
+                    >
                       {t.label}
                     </TabsTrigger>
                   ))}
                 </TabsList>
                 {TEMPLATES.map((t) => (
                   <TabsContent key={t.name} className="w-full" value={t.name}>
-                    <div className="sm:rounded-xl sm:border sm:bg-muted/30 sm:p-8">
-                      <TemplateDemo name={t.name} />
+                    <div className="sm:rounded-xl sm:border sm:border-border/60 sm:bg-muted/50 sm:p-1">
+                      <div className="sm:rounded-lg sm:border sm:border-border/60 sm:bg-background sm:p-8">
+                        <TemplateDemo name={t.name} />
+                      </div>
                     </div>
                   </TabsContent>
                 ))}
@@ -414,6 +436,10 @@ export const HomePage = async () => {
 
         <section className="container-wrapper">
           <HomeCustomize className="container py-16 md:py-20 lg:py-24" />
+        </section>
+
+        <section className="container-wrapper">
+          <HomeTools className="container pb-16 md:pb-20 lg:pb-24" />
         </section>
       </PageTransition>
       <PromoCard variant="floating" />

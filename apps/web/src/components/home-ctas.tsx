@@ -19,7 +19,7 @@ const GetStartedButton = () => {
     <Button
       asChild
       sound="click"
-      className="px-4"
+      className="h-8 rounded-lg px-3"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
@@ -44,7 +44,7 @@ const BrowseComponentsButton = () => {
       asChild
       variant="outline"
       sound="click"
-      className="px-4"
+      className="h-8 rounded-lg px-3"
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >

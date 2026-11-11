@@ -20,7 +20,7 @@ import { getTreeGroups } from "@/lib/page-tree";
 import type { source } from "@/lib/source";
 
 const MENU_BUTTON_CLS =
-  "relative h-[30px] w-fit overflow-visible border border-transparent text-[0.8rem] font-medium after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md data-[active=true]:border-accent data-[active=true]:bg-accent 3xl:fixed:w-full 3xl:fixed:max-w-48";
+  "relative h-8 w-full overflow-visible rounded-md px-2.5 text-[0.8125rem] text-muted-foreground transition-colors duration-150 ease-out hover:bg-muted/60 hover:text-foreground data-[active=true]:bg-muted data-[active=true]:font-medium data-[active=true]:text-foreground motion-reduce:transition-none 3xl:fixed:max-w-48";
 
 const SidebarMenuItemLink = ({
   href,
@@ -37,7 +37,10 @@ const SidebarMenuItemLink = ({
         <span className="absolute inset-0 flex w-(--sidebar-menu-width) bg-transparent" />
         {children}
         {PAGES_NEW.includes(href) && (
-          <span className="flex size-2 rounded-full bg-blue-500" title="New" />
+          <span
+            className="ml-auto flex size-1.5 rounded-full bg-emerald-500"
+            title="New"
+          />
         )}
       </Link>
     </SidebarMenuButton>
@@ -59,7 +62,7 @@ const SidebarPageGroup = ({
 
   return (
     <SidebarGroup className="py-0">
-      <SidebarGroupLabel className="text-muted-foreground font-medium">
+      <SidebarGroupLabel className="px-2.5 text-xs font-medium text-muted-foreground">
         {label}
       </SidebarGroupLabel>
       <SidebarGroupContent>
@@ -103,7 +106,7 @@ export const DocsSidebar = ({
       <div className="absolute top-12 right-2 bottom-0 hidden h-full w-px bg-linear-to-b from-transparent via-border to-transparent lg:flex" />
       <SidebarContent className="mx-auto no-scrollbar w-(--sidebar-menu-width) overflow-x-hidden px-2">
         <SidebarGroup className="pt-6">
-          <SidebarGroupLabel className="text-muted-foreground font-medium">
+          <SidebarGroupLabel className="px-2.5 text-xs font-medium text-muted-foreground">
             Sections
           </SidebarGroupLabel>
           <SidebarGroupContent>
