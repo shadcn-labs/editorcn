@@ -1059,6 +1059,79 @@
     },
     {
       "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "zod@^4.1.13",
+        "@remixicon/react@^4.9.0",
+        "@base-ui/react@^1.0.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "description": "Notion-style URL placeholder blocks for embedding media: pick an audio, image, YouTube, or video block, paste a URL, and the placeholder swaps itself for the matching concrete media node.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/embed/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/embed/node.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/embed/node-view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/embed/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/input.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "embed",
+      "title": "Embed",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/static-renderer@>=3.21.0 <4",
         "@tiptap/react@>=3.0.0 <4",

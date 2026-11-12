@@ -11,8 +11,8 @@ import {
 import { useCallback, useMemo, useState } from 'react';
 import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from '@editorcn/ui/components/button';
+import { Input } from '@editorcn/ui/components/input';
 import {
     Popover,
     PopoverContent,
@@ -20,8 +20,8 @@ import {
     PopoverHeader,
     PopoverTitle,
     PopoverTrigger
-} from '@/components/ui/popover';
-import { cn } from '@/lib/utils';
+} from '@editorcn/ui/components/popover';
+import { cn } from '@editorcn/ui/lib/utils';
 
 import { type EmbedAttributes } from './types';
 
