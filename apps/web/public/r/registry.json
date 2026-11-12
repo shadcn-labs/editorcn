@@ -1059,6 +1059,87 @@
     },
     {
       "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "@tiptap/extension-file-handler@>=3.0.0 <4",
+        "@tanstack/react-query@^5.0.0",
+        "react-dropzone@^20.0.0",
+        "filesize@^11.0.0",
+        "uuid@^14.0.3",
+        "zod@^4.1.13",
+        "@base-ui/react@^1.0.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "description": "File attachments as atom blocks: insert with a button, drag-and-drop, or paste, with a zod-validated upload queue, progress and retry, and MIME-aware static rendering (image, audio, video, or an attachment card).",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/file/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/file/node.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/file/node-view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/file/node-mapping.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/file/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/progress.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/attachment.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "file",
+      "title": "File",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/static-renderer@>=3.21.0 <4",
         "@tiptap/react@>=3.0.0 <4",
