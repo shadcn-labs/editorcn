@@ -348,7 +348,7 @@ export const NodeView = ({
             );
         }
 
-        return <NodeMapping uri={options.uri(attrs)} {...attrs} />;
+        return <NodeMapping uri={options.getUrl(attrs)} {...attrs} />;
     }, [
         attrs,
         file,

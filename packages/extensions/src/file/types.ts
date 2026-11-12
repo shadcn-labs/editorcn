@@ -11,7 +11,7 @@ export type FileAttributes = {
 
 export interface FileOptions {
     HTMLAttributes: Record<string, any>;
-    uri: (file: FileAttributes) => string | undefined;
+    getUrl: (file: FileAttributes) => string | undefined;
     onSubmit: (
         file: File,
         signal: AbortSignal,

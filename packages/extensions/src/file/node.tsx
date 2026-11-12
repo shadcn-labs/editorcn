@@ -27,7 +27,7 @@ export const Node = _Node.create<FileOptions>({
         return {
             HTMLAttributes: {},
             //
-            uri: () => undefined,
+            getUrl: () => undefined,
             onSubmit: () => Promise.reject('Lorem'),
             onError: (value, ipsum) => console.error(value, ipsum),
             //
