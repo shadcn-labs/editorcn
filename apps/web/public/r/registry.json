@@ -1059,6 +1059,85 @@
     },
     {
       "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "mermaid@^11.0.0",
+        "@remixicon/react@^4.9.0",
+        "@tanstack/react-query@^5.0.0",
+        "next-themes@^0.4.6",
+        "@base-ui/react@^1.0.0",
+        "class-variance-authority@^0.7.1"
+      ],
+      "description": "Mermaid diagram block: live preview plus a code editor, rendered via mermaid.render with theme-aware output (dark/neutral), useQuery caching, loading and error states, and a static-renderer-safe NodeMapping.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/node.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/node-view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/node-mapping.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/tabs.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/spinner.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "mermaid",
+      "title": "Mermaid",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/static-renderer@>=3.21.0 <4",
         "@tiptap/react@>=3.0.0 <4",
