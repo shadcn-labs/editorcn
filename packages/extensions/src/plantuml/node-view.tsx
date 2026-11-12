@@ -16,7 +16,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@editorcn/ui/component
 import { NodeMapping } from './node-mapping';
 import { type PlantUMLAttributes } from './types';
 
-const _ = `@startuml
+// Shown as the empty-state placeholder of the code textarea. Never inserted
+// into the document: a fresh node starts with `value: null`.
+const EXAMPLE_SOURCE = `@startuml
 Alice->Bob : Hello
 return ok
 @enduml
@@ -30,14 +32,14 @@ export const NodeView = ({
     const attrs = node!.attrs as PlantUMLAttributes;
     const [copied, setCopied] = useState(false);
 
-    const currentValue = attrs.value ?? _;
-
     const handleCopy = useCallback(() => {
-        if (!currentValue) {
+        const value = attrs.value;
+
+        if (!value) {
             return;
         }
 
-        void navigator.clipboard.writeText(currentValue);
+        void navigator.clipboard.writeText(value);
         setCopied(true);
 
         const timeout = setTimeout(() => {
@@ -45,7 +47,7 @@ export const NodeView = ({
         }, 2000);
 
         return () => clearTimeout(timeout);
-    }, [currentValue]);
+    }, [attrs.value]);
 
     return (
         <NodeViewWrapper data-slot="plantuml" data-value={attrs.value}>
@@ -128,8 +130,8 @@ export const NodeView = ({
                     <TabsContent value="code" className="m-0 p-0">
                         <textarea
                             className="min-h-[260px] w-full resize-y border-0 bg-muted/20 p-4 font-mono text-xs leading-relaxed outline-none placeholder:text-muted-foreground focus-visible:ring-0"
-                            value={currentValue}
-                            placeholder="Escreva o diagrama PlantUML aqui..."
+                            value={attrs.value ?? ''}
+                            placeholder={EXAMPLE_SOURCE}
                             spellCheck={false}
                             onChange={e => {
                                 if (updateAttributes) {
