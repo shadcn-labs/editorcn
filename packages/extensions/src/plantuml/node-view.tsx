@@ -10,8 +10,8 @@ import {
 } from 'lucide-react';
 import { useCallback, useState } from 'react';
 
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@editorcn/ui/components/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@editorcn/ui/components/tabs';
 
 import { NodeMapping } from './node-mapping';
 import { type PlantUMLAttributes } from './types';

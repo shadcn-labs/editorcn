@@ -5,7 +5,7 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { AlertCircleIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 
-import { Spinner } from '@/components/ui/spinner';
+import { Spinner } from '@editorcn/ui/components/spinner';
 
 import { type PlantUMLAttributes } from './types';
 
