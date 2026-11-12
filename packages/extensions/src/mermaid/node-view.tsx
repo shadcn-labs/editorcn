@@ -16,7 +16,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@editorcn/ui/component
 import { NodeMapping } from './node-mapping';
 import { type MermaidAttributes } from './types';
 
-const _ = `classDiagram
+// Shown as the empty-state placeholder of the code textarea. Never inserted
+// into the document: a fresh node starts with `value: null`.
+const EXAMPLE_SOURCE = `classDiagram
 Class01 <|-- AveryLongClass : Cool
 Class03 _-- Class04
 Class05 o-- Class06
@@ -40,14 +42,14 @@ export const NodeView = ({
     const attrs = node!.attrs as MermaidAttributes;
     const [copied, setCopied] = useState(false);
 
-    const currentValue = attrs.value ?? _;
-
     const handleCopy = useCallback(() => {
-        if (!currentValue) {
+        const value = attrs.value;
+
+        if (!value) {
             return;
         }
 
-        void navigator.clipboard.writeText(currentValue);
+        void navigator.clipboard.writeText(value);
         setCopied(true);
 
         const timeout = setTimeout(() => {
@@ -55,7 +57,7 @@ export const NodeView = ({
         }, 2000);
 
         return () => clearTimeout(timeout);
-    }, [currentValue]);
+    }, [attrs.value]);
 
     return (
         <NodeViewWrapper data-slot="mermaid" data-value={attrs.value}>
@@ -138,8 +140,8 @@ export const NodeView = ({
                     <TabsContent value="code" className="m-0 p-0">
                         <textarea
                             className="min-h-[260px] w-full resize-y border-0 bg-muted/20 p-4 font-mono text-xs leading-relaxed outline-none placeholder:text-muted-foreground focus-visible:ring-0"
-                            value={currentValue}
-                            placeholder="Escreva o diagrama Mermaid aqui..."
+                            value={attrs.value ?? ''}
+                            placeholder={EXAMPLE_SOURCE}
                             spellCheck={false}
                             onChange={e => {
                                 if (updateAttributes) {
