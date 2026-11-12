@@ -13,9 +13,9 @@ import { useDropzone } from 'react-dropzone';
 import { v7 } from 'uuid';
 import { z } from 'zod';
 
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { cn } from '@/lib/utils';
+import { Button } from '@editorcn/ui/components/button';
+import { Progress } from '@editorcn/ui/components/progress';
+import { cn } from '@editorcn/ui/lib/utils';
 
 import { NodeMapping } from './node-mapping';
 import {

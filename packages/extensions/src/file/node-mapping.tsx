@@ -6,7 +6,7 @@ import {
     AttachmentDescription,
     AttachmentMedia,
     AttachmentTitle
-} from '@/components/ui/attachment';
+} from '@editorcn/ui/components/attachment';
 
 import { type FileAttributes } from './types';
 
