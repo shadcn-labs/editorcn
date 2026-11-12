@@ -11,12 +11,12 @@ import {
 import { type FileAttributes } from './types';
 
 export const NodeMapping = (
-    attrs: FileAttributes & { uri: string | undefined }
+    attrs: FileAttributes & { getUrl: string | undefined }
 ) => {
     //
 
     if (attrs.type?.startsWith('audio/')) {
-        return <audio src={attrs.uri} about={attrs.name || undefined} />;
+        return <audio src={attrs.getUrl} about={attrs.name || undefined} />;
     }
 
     if (attrs.type?.startsWith('image/')) {
@@ -24,7 +24,7 @@ export const NodeMapping = (
             <img
                 className="rounded-0 border-0 object-contain outline-custom!"
                 alt={attrs.name || undefined}
-                src={attrs.uri}
+                src={attrs.getUrl}
             />
         );
     }
@@ -35,7 +35,7 @@ export const NodeMapping = (
                 className="aspect-video border border-[rgba(0,0,0,0.1)] dark:border-[rgba(255,255,255,0.1)]"
                 about={attrs.name || undefined}
                 controls
-                src={attrs.uri}
+                src={attrs.getUrl}
             />
         );
     }
