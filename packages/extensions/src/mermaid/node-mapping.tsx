@@ -4,7 +4,7 @@ import { AlertCircleIcon } from 'lucide-react';
 import mermaid, { type RenderResult } from 'mermaid';
 import { useTheme } from 'next-themes';
 
-import { Spinner } from '@/components/ui/spinner';
+import { Spinner } from '@editorcn/ui/components/spinner';
 
 import { type MermaidAttributes } from './types';
 
