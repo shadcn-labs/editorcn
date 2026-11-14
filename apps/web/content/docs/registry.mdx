@@ -16,7 +16,7 @@ Add the editorcn registry to your `components.json`:
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "registries": {
-    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+    "@editorcn": "https://www.rtecn.space/r/{name}.json"
   }
 }
 ```
@@ -134,7 +134,7 @@ For the full API reference, props, and customization options, see the [Editor](.
 
 ## How it works
 
-The registry is served as static JSON files from `https://editorcn.vercel.app/r/`:
+The registry is served as static JSON files from `https://www.rtecn.space/r/`:
 
 - **`registry.json`** — catalog listing all available packages with metadata
 - **`editor.json`** — item schema for the toolbar editor (42 files, 21 dependencies)
@@ -142,7 +142,7 @@ The registry is served as static JSON files from `https://editorcn.vercel.app/r/
 
 When you run `shadcn add @editorcn/editor`, the CLI:
 
-1. Fetches `https://editorcn.vercel.app/r/editor.json`
+1. Fetches `https://www.rtecn.space/r/editor.json`
 2. Reads the `files` array to know which source files to install
 3. Copies each file's `content` into your project at the configured paths
 4. Installs all `dependencies` into your project

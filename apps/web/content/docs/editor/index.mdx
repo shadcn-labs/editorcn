@@ -796,19 +796,19 @@ import { RichTextEditor, DEFAULT_ICONS } from "@/components/editor";
 
 The default icons ship with **lucide-react**. If your `components.json` uses a different `iconLibrary`, install the matching icon set after the editor — it overwrites `components/editor/icons.tsx` and installs only that library's package:
 
-| `iconLibrary`      | Install                                                                             |
-| ------------------ | ----------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                          |
-| `phosphor`         | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-remixicon.json"` |
+| `iconLibrary`      | Install                                                                         |
+| ------------------ | ------------------------------------------------------------------------------- |
+| `lucide` (default) | nothing — already included                                                      |
+| `phosphor`         | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-phosphor.json"`  |
+| `tabler`           | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-tabler.json"`    |
+| `hugeicons`        | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-hugeicons.json"` |
+| `remixicon`        | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-remixicon.json"` |
 
 Order matters — add the editor first, then the icon set:
 
 ```bash
-npx shadcn@latest add "https://editorcn.vercel.app/r/editor.json"
-npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-phosphor.json"
+npx shadcn@latest add "https://www.rtecn.space/r/editor.json"
+npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-phosphor.json"
 ```
 
 Each set covers all 28 toolbar icons and reuses the shared language icons, so switching libraries swaps the whole toolbar consistently. Because `icons.tsx` is yours after install, you can still hand-edit or override individual keys with the `icons` prop on top.

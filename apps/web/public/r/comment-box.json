@@ -46,13 +46,13 @@
   "title": "Comment Box",
   "type": "registry:block",
   "registryDependencies": [
-    "https://editorcn.vercel.app/r/editor.json",
+    "https://www.rtecn.space/r/editor.json",
     "avatar",
     "button",
     "dropdown-menu",
     "kbd",
     "popover",
-    "https://editorcn.vercel.app/r/static-renderer.json",
-    "https://editorcn.vercel.app/r/mention.json"
+    "https://www.rtecn.space/r/static-renderer.json",
+    "https://www.rtecn.space/r/mention.json"
   ]
 }
