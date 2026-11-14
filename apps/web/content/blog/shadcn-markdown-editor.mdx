@@ -38,7 +38,7 @@ This guide builds the second kind. It suits non-technical users better, and you 
 ```json title="components.json"
 {
   "registries": {
-    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+    "@editorcn": "https://www.rtecn.space/r/{name}.json"
   }
 }
 ```
@@ -47,7 +47,7 @@ This guide builds the second kind. It suits non-technical users better, and you 
 
 ```bash
 npx shadcn@latest add @editorcn/editor
-npx shadcn@latest add "https://editorcn.vercel.app/r/markdown.json"
+npx shadcn@latest add "https://www.rtecn.space/r/markdown.json"
 ```
 
 The first command copies the toolbar editor into `components/editor/`. The second adds `components/extensions/markdown`, which wraps the official [`@tiptap/markdown`](https://tiptap.dev/docs/editor/markdown) package. The source lives in your project, so you can change any of it.

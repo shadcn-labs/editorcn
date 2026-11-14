@@ -918,8 +918,8 @@ const templateItems = [
       "dropdown-menu",
       "kbd",
       "popover",
-      "https://editorcn.vercel.app/r/static-renderer.json",
-      "https://editorcn.vercel.app/r/mention.json",
+      "https://www.rtecn.space/r/static-renderer.json",
+      "https://www.rtecn.space/r/mention.json",
     ],
   },
   {
@@ -935,11 +935,11 @@ const templateItems = [
       "kbd",
       "popover",
       "tooltip",
-      "https://editorcn.vercel.app/r/table.json",
-      "https://editorcn.vercel.app/r/image-placeholder.json",
-      "https://editorcn.vercel.app/r/markdown.json",
-      "https://editorcn.vercel.app/r/paste-cleanup.json",
-      "https://editorcn.vercel.app/r/code-block.json",
+      "https://www.rtecn.space/r/table.json",
+      "https://www.rtecn.space/r/image-placeholder.json",
+      "https://www.rtecn.space/r/markdown.json",
+      "https://www.rtecn.space/r/paste-cleanup.json",
+      "https://www.rtecn.space/r/code-block.json",
     ],
   },
 ];
@@ -1013,7 +1013,7 @@ for (const item of templateItems) {
         item.desc,
         item.files,
         item.deps,
-        ["https://editorcn.vercel.app/r/editor.json", ...item.ui],
+        ["https://www.rtecn.space/r/editor.json", ...item.ui],
         "registry:block"
       ),
       null,
@@ -1062,7 +1062,7 @@ for (const [name, item] of writtenIconsets) {
 
 const catalog = {
   $schema: "https://ui.shadcn.com/schema/registry.json",
-  homepage: "https://editorcn.vercel.app",
+  homepage: "https://www.rtecn.space",
   items: [
     catalogItem(
       "editor",

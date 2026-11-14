@@ -1,6 +1,6 @@
 # @editorcn/editor
 
-A **toolbar-style** rich text editor built on [Tiptap](https://tiptap.dev/) with shadcn/ui design tokens. Part of the [editorcn](https://editorcn.vercel.app) editor suite.
+A **toolbar-style** rich text editor built on [Tiptap](https://tiptap.dev/) with shadcn/ui design tokens. Part of the [editorcn](https://www.rtecn.space) editor suite.
 
 ## Features
 
@@ -32,7 +32,7 @@ Make sure your `components.json` includes the editorcn registry:
 ```json
 {
   "registries": {
-    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+    "@editorcn": "https://www.rtecn.space/r/{name}.json"
   }
 }
 ```
@@ -80,7 +80,7 @@ export function MyEditor() {
 
 ## Documentation
 
-Full API reference at [editorcn.vercel.app/docs/editor](https://editorcn.vercel.app/docs/editor).
+Full API reference at [www.rtecn.space/docs/editor](https://www.rtecn.space/docs/editor).
 
 ## License
 

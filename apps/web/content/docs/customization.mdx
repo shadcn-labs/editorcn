@@ -261,13 +261,13 @@ See the [Styling docs](/docs/styling#change-icon-size) for more on sizing.
 
 The toolbar icons ship with **lucide-react**. If your `components.json` uses a different `iconLibrary`, install the matching set after the editor — it overwrites `editor/icons.tsx` and installs only that set's package:
 
-| `iconLibrary`      | Install                                                                             |
-| ------------------ | ----------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                          |
-| `phosphor`         | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-remixicon.json"` |
+| `iconLibrary`      | Install                                                                         |
+| ------------------ | ------------------------------------------------------------------------------- |
+| `lucide` (default) | nothing — already included                                                      |
+| `phosphor`         | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-phosphor.json"`  |
+| `tabler`           | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-tabler.json"`    |
+| `hugeicons`        | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-hugeicons.json"` |
+| `remixicon`        | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-remixicon.json"` |
 
 To migrate an existing install instead: `npx shadcn@latest migrate icons --from lucide --to phosphor "src/components/editor/**"`.
 
@@ -365,13 +365,13 @@ Replace any built-in icon via the `icons` prop. All 28 icons accept a React node
 
 If your `components.json` uses a different `iconLibrary`, install the matching set after the block editor — it overwrites `block-editor/icons.tsx` and installs only that set's package:
 
-| `iconLibrary`      | Install                                                                                   |
-| ------------------ | ----------------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                                |
-| `phosphor`         | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-remixicon.json"` |
+| `iconLibrary`      | Install                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| `lucide` (default) | nothing — already included                                                            |
+| `phosphor`         | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-phosphor.json"`  |
+| `tabler`           | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-tabler.json"`    |
+| `hugeicons`        | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-hugeicons.json"` |
+| `remixicon`        | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-remixicon.json"` |
 
 ```tsx
 import { BlockEditor, DEFAULT_ICONS } from "@/components/block-editor";

@@ -36,7 +36,7 @@ const CONTENT = `
   <li>Headings and paragraphs</li>
   <li>Lists, nesting, and inline <code>code</code></li>
   <li>
-    Links like the <a href="https://editorcn.vercel.app">project site</a>
+    Links like the <a href="https://www.rtecn.space">project site</a>
   </li>
 </ul>
 <ol>
