@@ -1,74 +1,9 @@
 "use client";
 
-import {
-  RichTextEditor,
-  Link,
-  useRichTextEditorContext,
-  TwitterEmbed,
-  YouTubeEmbed,
-} from "@editorcn/editor";
 import type { RichTextEditorVariant } from "@editorcn/editor";
-import { Callout } from "@editorcn/extensions/callout";
-import { CalloutToolbar } from "@editorcn/extensions/callout-toolbar";
-import { CodeBlock } from "@editorcn/extensions/code-block";
-import {
-  ResizableImage,
-  ImagePlaceholder,
-} from "@editorcn/extensions/image-placeholder";
-import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-toolbar";
-import { Markdown } from "@editorcn/extensions/markdown";
-import { MarkdownToolbar } from "@editorcn/extensions/markdown-toolbar";
-import { Mention } from "@editorcn/extensions/mention";
-import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
-import { Table } from "@editorcn/extensions/table";
-import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
-import { TableToolbar } from "@editorcn/extensions/table-toolbar";
-import { CharacterCount } from "@tiptap/extension-character-count";
-import { Color } from "@tiptap/extension-color";
-import { Highlight } from "@tiptap/extension-highlight";
-import { Placeholder } from "@tiptap/extension-placeholder";
-import { Subscript } from "@tiptap/extension-subscript";
-import { Superscript } from "@tiptap/extension-superscript";
-import { TextAlign } from "@tiptap/extension-text-align";
-import { TextStyle } from "@tiptap/extension-text-style";
-import { Underline } from "@tiptap/extension-underline";
-import { useEditor } from "@tiptap/react";
-import { StarterKit } from "@tiptap/starter-kit";
 
+import { FullEditor } from "@/components/templates/full-editor";
 import { searchPeople } from "@/lib/mention-people";
-
-import "@editorcn/editor/style.css";
-import "@editorcn/extensions/callout/style.css";
-import "@editorcn/extensions/code-block/style.css";
-import "@editorcn/extensions/image-placeholder/style.css";
-import "@editorcn/extensions/mention/style.css";
-import "@editorcn/extensions/table/style.css";
-import "@editorcn/extensions/ui/style.css";
-
-const InsertStarControl = () => {
-  const { editor } = useRichTextEditorContext();
-
-  return (
-    <RichTextEditor.Control
-      onClick={() => editor?.chain().focus().insertContent("⭐").run()}
-      aria-label="Insert star emoji"
-      title="Insert star"
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        className="h-4 w-4"
-      >
-        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-      </svg>
-    </RichTextEditor.Control>
-  );
-};
 
 const DEMO_CONTENT = `
 <h1 style="text-align: center;">Welcome to editorcn</h1>
@@ -158,108 +93,12 @@ export const EditorPreview = ({
   variant = "default",
 }: {
   variant?: RichTextEditorVariant;
-}) => {
-  const editor = useEditor({
-    content: DEMO_CONTENT,
-    extensions: [
-      StarterKit.configure({
-        codeBlock: false,
-        heading: { levels: [1, 2, 3, 4, 5, 6] },
-      }),
-      Link,
-      Underline,
-      TextStyle,
-      Color.configure({ types: ["textStyle"] }),
-      Highlight.configure({ multicolor: true }),
-      Subscript,
-      Superscript,
-      TwitterEmbed,
-      YouTubeEmbed,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Placeholder.configure({ placeholder: "Start typing..." }),
-      CharacterCount,
-      CodeBlock,
-      Callout,
-      Table.configure({ resizable: true }),
-      ResizableImage,
-      ImagePlaceholder,
-      Markdown.configure({ pasteMarkdown: true }),
-      PasteCleanup,
-      Mention.configure({
-        debounce: 0,
-        heading: "People",
-        items: searchPeople,
-      }),
-    ],
-    immediatelyRender: false,
-    shouldRerenderOnTransaction: false,
-  });
-
-  return (
-    <div className="relative font-inter [&_.ProseMirror]:text-[15px]">
-      <RichTextEditor editor={editor} variant={variant}>
-        <RichTextEditor.Toolbar>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Bold />
-            <RichTextEditor.Italic />
-            <RichTextEditor.Underline />
-            <RichTextEditor.Strikethrough />
-            <RichTextEditor.Code />
-            <RichTextEditor.ClearFormatting />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.H1 />
-            <RichTextEditor.H2 />
-            <RichTextEditor.H3 />
-            <RichTextEditor.H4 />
-            <RichTextEditor.H5 />
-            <RichTextEditor.H6 />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.BulletList />
-            <RichTextEditor.OrderedList />
-            <RichTextEditor.Blockquote />
-            <RichTextEditor.Hr />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.AlignLeft />
-            <RichTextEditor.AlignCenter />
-            <RichTextEditor.AlignRight />
-            <RichTextEditor.AlignJustify />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Link />
-            <RichTextEditor.Unlink />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Highlight />
-            <RichTextEditor.Subscript />
-            <RichTextEditor.Superscript />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.CodeBlock />
-            <InsertStarControl />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.YouTubeEmbed />
-            <RichTextEditor.TwitterEmbed />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <CalloutToolbar editor={editor} />
-            <ImagePlaceholderToolbar editor={editor} />
-            <TableToolbar editor={editor} />
-            <MarkdownToolbar editor={editor} filename="editorcn.md" />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Undo />
-            <RichTextEditor.Redo />
-          </RichTextEditor.ControlsGroup>
-        </RichTextEditor.Toolbar>
-        <RichTextEditor.BubbleMenu editor={editor} />
-        <RichTextEditor.Content className="px-2" />
-        <RichTextEditor.Footer showWordCount />
-      </RichTextEditor>
-      <TableHoverOverlay editor={editor} />
-    </div>
-  );
-};
+}) => (
+  <FullEditor
+    className="font-inter [&_.ProseMirror]:text-[15px]"
+    content={DEMO_CONTENT}
+    markdownFilename="editorcn.md"
+    searchUsers={searchPeople}
+    variant={variant}
+  />
+);

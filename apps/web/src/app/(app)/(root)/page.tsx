@@ -1,449 +1,111 @@
-import type { ReactNode } from "react";
-
-import { BlockEditorPreview } from "@/components/block-editor-preview";
+import { BlockViewer } from "@/components/block-viewer";
+import type { BlockViewerItem } from "@/components/block-viewer";
 import { CommandBox } from "@/components/command-box";
-import { ComponentCode } from "@/components/component-code";
-import { EditorPreview } from "@/components/editor-preview";
 import { HomeCtas } from "@/components/home-ctas";
 import { HomeCustomize } from "@/components/home-customize";
 import { HomeTools } from "@/components/home-tools";
 import { PageHero } from "@/components/page-hero";
 import { PageTransition } from "@/components/page-transition";
 import { PromoCard } from "@/components/promo-card";
-import { TemplateDemo } from "@/components/template-demo";
-import type { TemplateName } from "@/components/template-demo";
+import { RegistryCode } from "@/components/template-showcase";
 import { Testimonials } from "@/components/testimonials";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ROUTES } from "@/constants/routes";
-import { highlightCode } from "@/lib/highlight-code";
 import { BreadcrumbJsonLd } from "@/seo/json-ld";
 
-const TEMPLATES: { label: string; name: TemplateName }[] = [
-  { label: "Document Editor", name: "simple-document-editor" },
-  { label: "Comment Box", name: "comment-box" },
-];
+import commentBoxItem from "../../../../public/r/comment-box.json";
+import fullBlockEditorItem from "../../../../public/r/full-block-editor.json";
+import fullEditorItem from "../../../../public/r/full-editor.json";
+import simpleDocumentEditorItem from "../../../../public/r/simple-document-editor.json";
 
-const editorCode = `import { useEditor } from "@tiptap/react";
-import { StarterKit } from "@tiptap/starter-kit";
-import { Underline } from "@tiptap/extension-underline";
-import { TextAlign } from "@tiptap/extension-text-align";
-import { Placeholder } from "@tiptap/extension-placeholder";
-import { Highlight } from "@tiptap/extension-highlight";
-import { TextStyle } from "@tiptap/extension-text-style";
-import { Color } from "@tiptap/extension-color";
-import { Subscript } from "@tiptap/extension-subscript";
-import { Superscript } from "@tiptap/extension-superscript";
-import { RichTextEditor, Link, YouTubeEmbed, TwitterEmbed } from "@/components/editor";
-import { CodeBlock } from "@/components/extensions/code-block";
-import { Table } from "@/components/extensions/table";
-import { TableToolbar } from "@/components/extensions/table-toolbar";
-import { TableHoverOverlay } from "@/components/extensions/table-hover-overlay";
-import { ResizableImage, ImagePlaceholder } from "@/components/extensions/image-placeholder";
-import { ImagePlaceholderToolbar } from "@/components/extensions/image-placeholder-toolbar";
-import { Mention } from "@/components/extensions/mention";
-import "@/components/editor/style.css";
-import "@/components/extensions/code-block/style.css";
-import "@/components/extensions/table/style.css";
-import "@/components/extensions/image-placeholder/style.css";
-import "@/components/extensions/mention/style.css";
-import "@/components/extensions/ui/style.css";
-
-const PEOPLE = [{ id: "1", label: "Ada Lovelace" }, { id: "2", label: "Grace Hopper" }];
-const searchPeople = (query: string) =>
-  PEOPLE.filter((p) => p.label.toLowerCase().includes(query.toLowerCase()));
-
-export function MyEditor() {
-  const editor = useEditor({
-    immediatelyRender: false,
-    extensions: [
-      StarterKit.configure({
-        heading: { levels: [1, 2, 3, 4, 5, 6] },
-        codeBlock: false,
-      }),
-      Link,
-      YouTubeEmbed,
-      TwitterEmbed,
-      Underline,
-      TextStyle,
-      Color.configure({ types: ["textStyle"] }),
-      Highlight.configure({ multicolor: true }),
-      Subscript,
-      Superscript,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-      Placeholder.configure({ placeholder: "Start typing..." }),
-      CodeBlock,
-      Table.configure({ resizable: true }),
-      ResizableImage,
-      ImagePlaceholder,
-      Mention.configure({ heading: "People", items: searchPeople }),
-    ],
-  });
-
-  return (
-    <RichTextEditor editor={editor}>
-      <RichTextEditor.Toolbar sticky>
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.Bold />
-          <RichTextEditor.Italic />
-          <RichTextEditor.Underline />
-          <RichTextEditor.Strikethrough />
-          <RichTextEditor.Code />
-          <RichTextEditor.ClearFormatting />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.H1 />
-          <RichTextEditor.H2 />
-          <RichTextEditor.H3 />
-          <RichTextEditor.H4 />
-          <RichTextEditor.H5 />
-          <RichTextEditor.H6 />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.BulletList />
-          <RichTextEditor.OrderedList />
-          <RichTextEditor.Blockquote />
-          <RichTextEditor.Hr />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.AlignLeft />
-          <RichTextEditor.AlignCenter />
-          <RichTextEditor.AlignRight />
-          <RichTextEditor.AlignJustify />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.Link />
-          <RichTextEditor.Unlink />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.Highlight />
-          <RichTextEditor.Subscript />
-          <RichTextEditor.Superscript />
-          <RichTextEditor.CodeBlock />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.YouTubeEmbed />
-          <RichTextEditor.TwitterEmbed />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <ImagePlaceholderToolbar editor={editor} />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <TableToolbar editor={editor} />
-        </RichTextEditor.ControlsGroup>
-
-        <RichTextEditor.ControlsGroup>
-          <RichTextEditor.Undo />
-          <RichTextEditor.Redo />
-        </RichTextEditor.ControlsGroup>
-      </RichTextEditor.Toolbar>
-
-      <RichTextEditor.Content>
-        <TableHoverOverlay editor={editor} />
-      </RichTextEditor.Content>
-    </RichTextEditor>
-  );
-}`;
-
-const blockEditorCode = `import { useEditor } from "@tiptap/react";
-import { StarterKit } from "@tiptap/starter-kit";
-import { Placeholder } from "@tiptap/extension-placeholder";
-import { Underline } from "@tiptap/extension-underline";
-import { Highlight } from "@tiptap/extension-highlight";
-import { TextStyle } from "@tiptap/extension-text-style";
-import { Color } from "@tiptap/extension-color";
-import { TaskList } from "@tiptap/extension-task-list";
-import { TaskItem } from "@tiptap/extension-task-item";
-import { Link } from "@tiptap/extension-link";
-import { GripVerticalIcon } from "lucide-react";
-import { Table } from "@/components/extensions/table";
-import { TableHoverOverlay } from "@/components/extensions/table-hover-overlay";
-import { ResizableImage, ImagePlaceholder } from "@/components/extensions/image-placeholder";
-import { Mention } from "@/components/extensions/mention";
-import {
-  BlockEditor,
-  SlashCommand,
-  defaultSlashCommandItems,
-  getSlashCommandSuggestion,
-} from "@/components/block-editor";
-import type { SlashCommandSuggestionItem } from "@/components/block-editor";
-import { CodeBlock } from "@/components/extensions/code-block";
-import "@/components/block-editor/style.css";
-import "@/components/extensions/code-block/style.css";
-import "@/components/extensions/table/style.css";
-import "@/components/extensions/image-placeholder/style.css";
-import "@/components/extensions/mention/style.css";
-import "@/components/extensions/ui/style.css";
-
-const PEOPLE = [{ id: "1", label: "Ada Lovelace" }, { id: "2", label: "Grace Hopper" }];
-const searchPeople = (query: string) =>
-  PEOPLE.filter((p) => p.label.toLowerCase().includes(query.toLowerCase()));
-
-const DEMO_CONTENT = "<h2>Getting Started</h2><p>The BlockEditor is a block-style editor.</p>";
-
-const myItems: SlashCommandSuggestionItem[] = [
-  ...defaultSlashCommandItems,
+const SHOWCASE: BlockViewerItem[] = [
   {
-    id: "image",
-    title: "Image",
-    description: "Insert an image placeholder you can fill in.",
-    keywords: ["image", "img", "picture", "photo"],
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-        <circle cx="8.5" cy="8.5" r="1.5" />
-        <polyline points="21 15 16 10 5 21" />
-      </svg>
-    ),
-    command: ({ editor, range }) => {
-      editor.chain().focus().deleteRange(range).insertImagePlaceholder().run();
-    },
+    category: "Editors",
+    code: <RegistryCode files={fullEditorItem.files} />,
+    docs: `${ROUTES.DOCS_EDITOR}#full-setup`,
+    name: "full-editor",
+    title: "Full Toolbar Editor",
   },
   {
-    id: "table",
-    title: "Table",
-    description: "Insert a table.",
-    keywords: ["table", "grid"],
-    icon: (
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-        <line x1="3" y1="9" x2="21" y2="9" />
-        <line x1="3" y1="15" x2="21" y2="15" />
-        <line x1="9" y1="3" x2="9" y2="21" />
-        <line x1="15" y1="3" x2="15" y2="21" />
-      </svg>
-    ),
-    command: ({ editor, range }) => {
-      editor
-        .chain().focus()
-        .deleteRange(range)
-        .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-        .run();
-    },
+    category: "Editors",
+    code: <RegistryCode files={fullBlockEditorItem.files} />,
+    docs: `${ROUTES.DOCS_BLOCK_EDITOR}#full-setup`,
+    name: "full-block-editor",
+    title: "Full Block Editor",
+  },
+  {
+    category: "Templates",
+    code: <RegistryCode files={simpleDocumentEditorItem.files} />,
+    docs: `${ROUTES.DOCS_TEMPLATES}/simple-document-editor`,
+    name: "simple-document-editor",
+    title: "Simple Document Editor",
+    wide: true,
+  },
+  {
+    category: "Templates",
+    code: <RegistryCode files={commentBoxItem.files} />,
+    docs: `${ROUTES.DOCS_TEMPLATES}/comment-box`,
+    name: "comment-box",
+    title: "Comment Box",
   },
 ];
 
-export function MyBlockEditor() {
-  const editor = useEditor({
-    immediatelyRender: false,
-    extensions: [
-      StarterKit.configure({ codeBlock: false, heading: { levels: [1, 2, 3] } }),
-      Placeholder.configure({ placeholder: "Type / for commands..." }),
-      Underline,
-      TextStyle,
-      Color.configure({ types: ["textStyle"] }),
-      Highlight.configure({ multicolor: true }),
-      TaskList,
-      TaskItem.configure({ nested: true }),
-      Table.configure({ resizable: true }),
-      ResizableImage,
-      ImagePlaceholder,
-      Mention.configure({ heading: "People", items: searchPeople }),
-      SlashCommand.configure({ suggestion: getSlashCommandSuggestion(myItems) }),
-      CodeBlock,
-      Link.configure({ openOnClick: true, autolink: true, defaultProtocol: "https", protocols: ["http", "https"] }),
-    ],
-    content: DEMO_CONTENT,
-  });
+export const HomePage = () => (
+  <>
+    <BreadcrumbJsonLd items={[{ name: "Home", path: ROUTES.HOME }]} />
+    <PageTransition>
+      <section className="container-wrapper relative">
+        <div className="container flex flex-col items-center gap-4 py-16 text-center md:py-20 lg:py-24">
+          <PageHero
+            description={
+              <>
+                Ready to use, customizable rich text editor components for
+                React. <br className="hidden sm:block" />
+                Built on Tiptap. Distributed via shadcn.
+              </>
+            }
+            descriptionClassName="max-w-2xl text-base text-foreground/80 sm:text-lg"
+            showAnnouncement
+            title={
+              <>
+                Build{" "}
+                <mark className="rounded-md bg-yellow-200 px-2 text-foreground dark:bg-yellow-500/40">
+                  beautiful
+                </mark>{" "}
+                rich text editors in minutes
+                <span
+                  aria-hidden
+                  className="ml-1 inline-block h-[0.9em] w-[3px] translate-y-[0.1em] animate-[caret-blink_1s_step-end_infinite] rounded-full motion-reduce:animate-none bg-foreground"
+                />
+              </>
+            }
+            titleClassName="max-w-3xl leading-[1.1]"
+          />
 
-  return (
-    <div className="relative overflow-hidden">
-      <BlockEditor
-        editor={editor}
-        icons={{
-          dragHandleIcon: <GripVerticalIcon className="h-4 w-4" />,
-          boldIcon: <strong>B</strong>,
-        }}
-      />
-      <TableHoverOverlay editor={editor} />
-    </div>
-  );
-}`;
+          <HomeCtas />
 
-const segmentListClassName =
-  "h-8 rounded-lg border border-border/60 bg-background p-0.5";
-
-const segmentTriggerClassName =
-  "h-7 rounded-md px-2.5 text-xs font-medium data-[state=active]:bg-muted data-[state=active]:shadow-none dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-muted";
-
-const PreviewCode = ({
-  code,
-  filename,
-  highlighted,
-  preview,
-}: {
-  code: string;
-  filename: string;
-  highlighted: string;
-  preview: ReactNode;
-}) => (
-  <Tabs className="items-center gap-4" defaultValue="preview">
-    <TabsList className={segmentListClassName}>
-      <TabsTrigger className={segmentTriggerClassName} value="preview">
-        Preview
-      </TabsTrigger>
-      <TabsTrigger className={segmentTriggerClassName} value="code">
-        Code
-      </TabsTrigger>
-    </TabsList>
-    <TabsContent className="w-full" value="preview">
-      <div className="sm:rounded-xl sm:border sm:border-border/60 sm:bg-muted/50 sm:p-1">
-        <div className="sm:rounded-lg sm:border sm:border-border/60 sm:bg-background sm:px-8 sm:py-12">
-          <div className="mx-auto max-w-3xl max-sm:[&_.block-editor-content]:max-h-[32rem] max-sm:[&_.block-editor-content]:overflow-y-auto max-sm:[&_.rte-content]:max-h-[28rem] max-sm:[&_.rte-content]:overflow-y-auto">
-            {preview}
-          </div>
+          <CommandBox className="mt-6 w-full max-w-xl" />
         </div>
-      </div>
-    </TabsContent>
-    <TabsContent className="mx-auto w-full max-w-4xl" value="code">
-      <ComponentCode
-        className="[&>pre]:max-h-[32rem]"
-        code={code}
-        highlightedCode={highlighted}
-        language="tsx"
-        title={filename}
-      />
-    </TabsContent>
-  </Tabs>
+      </section>
+
+      <section className="container-wrapper">
+        <div className="container">
+          <BlockViewer items={SHOWCASE} />
+        </div>
+      </section>
+
+      <section className="container-wrapper">
+        <Testimonials className="container pt-16 md:pt-20 lg:pt-24" />
+      </section>
+
+      <section className="container-wrapper">
+        <HomeCustomize className="container py-16 md:py-20 lg:py-24" />
+      </section>
+
+      <section className="container-wrapper">
+        <HomeTools className="container pb-16 md:pb-20 lg:pb-24" />
+      </section>
+    </PageTransition>
+    <PromoCard variant="floating" />
+  </>
 );
-
-export const HomePage = async () => {
-  const [editorHtml, blockEditorHtml] = await Promise.all([
-    highlightCode(editorCode, "tsx"),
-    highlightCode(blockEditorCode, "tsx"),
-  ]);
-
-  return (
-    <>
-      <BreadcrumbJsonLd items={[{ name: "Home", path: ROUTES.HOME }]} />
-      <PageTransition>
-        <section className="container-wrapper relative">
-          <div className="container flex flex-col items-center gap-4 py-16 text-center md:py-20 lg:py-24">
-            <PageHero
-              description={
-                <>
-                  Ready to use, customizable rich text editor components for
-                  React. <br className="hidden sm:block" />
-                  Built on Tiptap. Distributed via shadcn.
-                </>
-              }
-              descriptionClassName="max-w-2xl text-base text-foreground/80 sm:text-lg"
-              showAnnouncement
-              title={
-                <>
-                  Build{" "}
-                  <mark className="rounded-md bg-yellow-200 px-2 text-foreground dark:bg-yellow-500/40">
-                    beautiful
-                  </mark>{" "}
-                  rich text editors in minutes
-                  <span
-                    aria-hidden
-                    className="ml-1 inline-block h-[0.9em] w-[3px] translate-y-[0.1em] animate-[caret-blink_1s_step-end_infinite] rounded-full motion-reduce:animate-none bg-foreground"
-                  />
-                </>
-              }
-              titleClassName="max-w-3xl leading-[1.1]"
-            />
-
-            <HomeCtas />
-
-            <CommandBox className="mt-6 w-full max-w-xl" />
-          </div>
-        </section>
-
-        <section className="container-wrapper">
-          <Tabs
-            className="container items-center gap-4"
-            defaultValue="templates"
-          >
-            <TabsList className="h-9 rounded-lg border border-border/60 bg-background p-0.5">
-              <TabsTrigger
-                className="h-8 rounded-md px-3 text-sm font-medium data-[state=active]:bg-muted data-[state=active]:shadow-none dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-muted"
-                value="editor"
-              >
-                Toolbar editor
-              </TabsTrigger>
-              <TabsTrigger
-                className="h-8 rounded-md px-3 text-sm font-medium data-[state=active]:bg-muted data-[state=active]:shadow-none dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-muted"
-                value="block-editor"
-              >
-                Block editor
-              </TabsTrigger>
-              <TabsTrigger
-                className="h-8 rounded-md px-3 text-sm font-medium data-[state=active]:bg-muted data-[state=active]:shadow-none dark:data-[state=active]:border-transparent dark:data-[state=active]:bg-muted"
-                value="templates"
-              >
-                Templates
-              </TabsTrigger>
-            </TabsList>
-
-            <TabsContent className="w-full" value="editor">
-              <PreviewCode
-                code={editorCode}
-                filename="editor.tsx"
-                highlighted={editorHtml}
-                preview={<EditorPreview variant="default" />}
-              />
-            </TabsContent>
-            <TabsContent className="w-full" value="block-editor">
-              <PreviewCode
-                code={blockEditorCode}
-                filename="block-editor.tsx"
-                highlighted={blockEditorHtml}
-                preview={<BlockEditorPreview />}
-              />
-            </TabsContent>
-            <TabsContent className="w-full" value="templates">
-              <Tabs
-                className="items-center gap-4"
-                defaultValue="simple-document-editor"
-              >
-                <TabsList className={segmentListClassName}>
-                  {TEMPLATES.map((t) => (
-                    <TabsTrigger
-                      className={segmentTriggerClassName}
-                      key={t.name}
-                      value={t.name}
-                    >
-                      {t.label}
-                    </TabsTrigger>
-                  ))}
-                </TabsList>
-                {TEMPLATES.map((t) => (
-                  <TabsContent key={t.name} className="w-full" value={t.name}>
-                    <div className="sm:rounded-xl sm:border sm:border-border/60 sm:bg-muted/50 sm:p-1">
-                      <div className="sm:rounded-lg sm:border sm:border-border/60 sm:bg-background sm:p-8">
-                        <TemplateDemo name={t.name} />
-                      </div>
-                    </div>
-                  </TabsContent>
-                ))}
-              </Tabs>
-            </TabsContent>
-          </Tabs>
-        </section>
-
-        <section className="container-wrapper">
-          <Testimonials className="container pt-16 md:pt-20 lg:pt-24" />
-        </section>
-
-        <section className="container-wrapper">
-          <HomeCustomize className="container py-16 md:py-20 lg:py-24" />
-        </section>
-
-        <section className="container-wrapper">
-          <HomeTools className="container pb-16 md:pb-20 lg:pb-24" />
-        </section>
-      </PageTransition>
-      <PromoCard variant="floating" />
-    </>
-  );
-};
 export default HomePage;

@@ -1,0 +1,46 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "dependencies": [
+    "@tiptap/core@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/extension-character-count@>=3.0.0 <4",
+    "@tiptap/extension-color@>=3.0.0 <4",
+    "@tiptap/extension-highlight@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+    "@tiptap/extension-subscript@>=3.0.0 <4",
+    "@tiptap/extension-superscript@>=3.0.0 <4",
+    "@tiptap/extension-text-align@>=3.0.0 <4",
+    "@tiptap/extension-text-style@>=3.0.0 <4",
+    "@tiptap/extension-underline@>=3.0.0 <4"
+  ],
+  "description": "The full toolbar editor from the editorcn homepage: every toolbar control plus callouts, code blocks, tables, images, embeds, mentions, Markdown and paste cleanup.",
+  "files": [
+    {
+      "content": "\"use client\";\n\nimport {\n  Link,\n  RichTextEditor,\n  TwitterEmbed,\n  YouTubeEmbed,\n} from \"@/components/editor\";\nimport type { RichTextEditorVariant } from \"@/components/editor\";\nimport { Callout } from \"@/components/extensions/callout\";\nimport { CodeBlock } from \"@/components/extensions/code-block\";\nimport {\n  ImagePlaceholder,\n  ResizableImage,\n} from \"@/components/extensions/image-placeholder\";\nimport { Markdown } from \"@/components/extensions/markdown\";\nimport { Mention } from \"@/components/extensions/mention\";\nimport type { MentionItem } from \"@/components/extensions/mention\";\nimport { PasteCleanup } from \"@/components/extensions/paste-cleanup\";\nimport { Table } from \"@/components/extensions/table\";\nimport { TableHoverOverlay } from \"@/components/extensions/table/table-hover-overlay\";\nimport { CharacterCount } from \"@tiptap/extension-character-count\";\nimport { Color } from \"@tiptap/extension-color\";\nimport { Highlight } from \"@tiptap/extension-highlight\";\nimport { Placeholder } from \"@tiptap/extension-placeholder\";\nimport { Subscript } from \"@tiptap/extension-subscript\";\nimport { Superscript } from \"@tiptap/extension-superscript\";\nimport { TextAlign } from \"@tiptap/extension-text-align\";\nimport { TextStyle } from \"@tiptap/extension-text-style\";\nimport { Underline } from \"@tiptap/extension-underline\";\nimport { useEditor } from \"@tiptap/react\";\nimport type { Content, JSONContent } from \"@tiptap/react\";\nimport { StarterKit } from \"@tiptap/starter-kit\";\n\nimport { cn } from \"@/lib/utils\";\n\nimport { FullEditorToolbar } from \"./toolbar\";\n\nimport \"@/components/editor/style.css\";\nimport \"@/components/extensions/callout/style.css\";\nimport \"@/components/extensions/code-block/style.css\";\nimport \"@/components/extensions/image-placeholder/style.css\";\nimport \"@/components/extensions/mention/style.css\";\nimport \"@/components/extensions/table/style.css\";\nimport \"@/components/extensions/ui/style.css\";\n\nexport interface FullEditorProps {\n  className?: string;\n  content?: Content;\n  markdownFilename?: string;\n  onChange?: (content: JSONContent) => void;\n  placeholder?: string;\n  searchUsers?: (query: string) => MentionItem[] | Promise<MentionItem[]>;\n  variant?: RichTextEditorVariant;\n}\n\nexport const FullEditor = ({\n  className,\n  content,\n  markdownFilename = \"document.md\",\n  onChange,\n  placeholder = \"Start typing...\",\n  searchUsers = () => [],\n  variant = \"default\",\n}: FullEditorProps) => {\n  const editor = useEditor({\n    content,\n    extensions: [\n      StarterKit.configure({\n        codeBlock: false,\n        heading: { levels: [1, 2, 3, 4, 5, 6] },\n        link: false,\n        underline: false,\n      }),\n      Link,\n      Underline,\n      TextStyle,\n      Color.configure({ types: [\"textStyle\"] }),\n      Highlight.configure({ multicolor: true }),\n      Subscript,\n      Superscript,\n      TwitterEmbed,\n      YouTubeEmbed,\n      TextAlign.configure({ types: [\"heading\", \"paragraph\"] }),\n      Placeholder.configure({ placeholder }),\n      CharacterCount,\n      CodeBlock,\n      Callout,\n      Table.configure({ resizable: true }),\n      ResizableImage,\n      ImagePlaceholder,\n      Markdown.configure({ pasteMarkdown: true }),\n      PasteCleanup,\n      Mention.configure({\n        debounce: 0,\n        heading: \"People\",\n        items: searchUsers,\n      }),\n    ],\n    immediatelyRender: false,\n    onUpdate: ({ editor: current }) => onChange?.(current.getJSON()),\n    shouldRerenderOnTransaction: false,\n  });\n\n  return (\n    <div className={cn(\"relative\", className)}>\n      <RichTextEditor editor={editor} variant={variant}>\n        <FullEditorToolbar\n          editor={editor}\n          markdownFilename={markdownFilename}\n        />\n        <RichTextEditor.BubbleMenu editor={editor} />\n        <RichTextEditor.Content className=\"px-2\" />\n        <RichTextEditor.Footer showWordCount />\n      </RichTextEditor>\n      <TableHoverOverlay editor={editor} />\n    </div>\n  );\n};\n",
+      "path": "templates/full-editor/index.tsx",
+      "target": "@components/templates/full-editor/index.tsx",
+      "type": "registry:block"
+    },
+    {
+      "content": "\"use client\";\n\nimport { RichTextEditor } from \"@/components/editor\";\nimport { CalloutToolbar } from \"@/components/extensions/callout/toolbar\";\nimport { ImagePlaceholderToolbar } from \"@/components/extensions/image-placeholder/toolbar\";\nimport { MarkdownToolbar } from \"@/components/extensions/markdown/toolbar\";\nimport { TableToolbar } from \"@/components/extensions/table/toolbar\";\nimport type { Editor } from \"@tiptap/react\";\n\nexport const FullEditorToolbar = ({\n  editor,\n  markdownFilename,\n}: {\n  editor: Editor | null;\n  markdownFilename: string;\n}) => (\n  <RichTextEditor.Toolbar>\n    <RichTextEditor.ControlsGroup>\n      <RichTextEditor.Bold />\n      <RichTextEditor.Italic />\n      <RichTextEditor.Underline />\n      <RichTextEditor.Strikethrough />\n      <RichTextEditor.Code />\n      <RichTextEditor.ClearFormatting />\n    </RichTextEditor.ControlsGroup>\n    <RichTextEditor.ControlsGroup>\n      <RichTextEditor.H1 />\n      <RichTextEditor.H2 />\n      <RichTextEditor.H3 />\n      <RichTextEditor.H4 />\n      <RichTextEditor.H5 />\n      <RichTextEditor.H6 />\n    </RichTextEditor.ControlsGroup>\n    <RichTextEditor.ControlsGroup>\n      <RichTextEditor.BulletList />\n      <RichTextEditor.OrderedList />\n      <RichTextEditor.Blockquote />\n      <RichTextEditor.Hr />\n    </RichTextEditor.ControlsGroup>\n    <RichTextEditor.ControlsGroup>\n      <RichTextEditor.AlignLeft />\n      <RichTextEditor.AlignCenter />\n      <RichTextEditor.AlignRight />\n      <RichTextEditor.AlignJustify />\n    </RichTextEditor.ControlsGroup>\n    <RichTextEditor.ControlsGroup>\n      <RichTextEditor.Link />\n      <RichTextEditor.Unlink />\n    </RichTextEditor.ControlsGroup>\n    <RichTextEditor.ControlsGroup>\n      <RichTextEditor.Highlight />\n      <RichTextEditor.Subscript />\n      <RichTextEditor.Superscript />\n      <RichTextEditor.CodeBlock />\n    </RichTextEditor.ControlsGroup>\n    <RichTextEditor.ControlsGroup>\n      <RichTextEditor.YouTubeEmbed />\n      <RichTextEditor.TwitterEmbed />\n    </RichTextEditor.ControlsGroup>\n    <RichTextEditor.ControlsGroup>\n      <CalloutToolbar editor={editor} />\n      <ImagePlaceholderToolbar editor={editor} />\n      <TableToolbar editor={editor} />\n      <MarkdownToolbar editor={editor} filename={markdownFilename} />\n    </RichTextEditor.ControlsGroup>\n    <RichTextEditor.ControlsGroup>\n      <RichTextEditor.Undo />\n      <RichTextEditor.Redo />\n    </RichTextEditor.ControlsGroup>\n  </RichTextEditor.Toolbar>\n);\n",
+      "path": "templates/full-editor/toolbar.tsx",
+      "target": "@components/templates/full-editor/toolbar.tsx",
+      "type": "registry:block"
+    }
+  ],
+  "name": "full-editor",
+  "title": "Full Toolbar Editor",
+  "type": "registry:block",
+  "registryDependencies": [
+    "https://www.rtecn.space/r/editor.json",
+    "https://www.rtecn.space/r/callout.json",
+    "https://www.rtecn.space/r/code-block.json",
+    "https://www.rtecn.space/r/image-placeholder.json",
+    "https://www.rtecn.space/r/markdown.json",
+    "https://www.rtecn.space/r/mention.json",
+    "https://www.rtecn.space/r/paste-cleanup.json",
+    "https://www.rtecn.space/r/table.json"
+  ]
+}
