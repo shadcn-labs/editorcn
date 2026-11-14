@@ -1,0 +1,52 @@
+---
+title: Templates
+seoTitle: "Tiptap Editor Templates for shadcn/ui"
+description: "Free, open source Tiptap editor templates for React, built on shadcn/ui. Install a complete comment box or document editor with one command and own the code."
+---
+
+Templates are complete, ready-made Tiptap editors for React. Each one is a real feature, not a bare editor: a comment thread, a document page, with the toolbar, menus and extensions already wired up. Pick a template, install it with the shadcn CLI, and change anything you like, because the code lands in your project.
+
+<TemplateGallery />
+
+## How templates work
+
+Each template installs as a shadcn block: the CLI adds the template, the [editor](/docs/editor), and every component and extension it depends on. The template lands in its own folder, `components/templates/<name>/`, split into small files (types, constants, toolbar, panels and so on) with `index.tsx` as the entry point.
+
+All templates store content as Tiptap JSON (`editor.getJSON()`) and display it with the [Static Renderer](/docs/static-renderer), which renders React elements instead of HTML. Content renders on the server, and stored content can't inject scripts. Use `generateHTML(json, extensions)` from `@tiptap/core` when you need HTML, for example in emails.
+
+## Requirements
+
+<Callout title="Templates use Tailwind CSS">
+  The editor and static renderer ship plain CSS and work in any React app.
+  Templates are styled with Tailwind CSS v4 and built on shadcn/ui components,
+  so your project needs Tailwind and shadcn/ui. Run `npx shadcn@latest init`
+  first if it isn't set up.
+</Callout>
+
+<Callout title="Already using Tiptap?">
+  Tiptap packages must all be on the same version. The CLI installs the latest
+  3.x, so if your project already has `@tiptap/*` packages on an older 3.x
+  release, npm stops with an `ERESOLVE` peer dependency error. Update the
+  packages you already have first, for example `npm install @tiptap/react@latest
+  @tiptap/pm@latest @tiptap/starter-kit@latest`, then add the template.
+</Callout>
+
+Templates work with shadcn/ui built on either Radix UI or Base UI.
+
+## FAQ
+
+### Are the templates free?
+
+Yes. Every template is MIT licensed and free to use in personal and commercial projects. There is no account, API key or Tiptap Pro subscription involved.
+
+### Which Tiptap version do they use?
+
+Tiptap v3. The templates use the open source Tiptap packages only (`@tiptap/react`, `@tiptap/starter-kit` and the free extensions).
+
+### Do they work with Next.js?
+
+Yes. The templates are client components, so they work in the Next.js App Router, Vite, Remix and any other React setup that runs shadcn/ui.
+
+### How is this different from Tiptap's own templates?
+
+Tiptap's templates install from the Tiptap CLI and use their own UI components. editorcn templates install with the shadcn CLI and are built from your existing shadcn/ui components and theme, so they match the rest of your app with no extra styling.

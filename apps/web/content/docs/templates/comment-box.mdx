@@ -1,0 +1,54 @@
+---
+title: Comment Box
+seoTitle: "Tiptap Comment Box Template for React and shadcn/ui"
+description: "A ready-made comment thread for React built on Tiptap and shadcn/ui, with a rich text composer, replies, @mentions and emoji reactions. Install it with one command."
+---
+
+A comment thread with avatars, relative times, emoji reactions, YouTube-style replies and a composer built on the editor. Replies are one level deep and collapse under each comment; replying to a reply adds to the same thread and starts with an @mention. People can copy any comment and delete their own.
+
+<TemplateShowcase name="comment-box" />
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://www.rtecn.space/r/comment-box.json"
+```
+
+The CLI also installs the [Mention](/docs/extensions/mention) extension and the [Static Renderer](/docs/static-renderer), which displays posted comments. Your project needs Tailwind CSS and shadcn/ui; see the [template requirements](/docs/templates#requirements).
+
+## Usage
+
+Each callback fires after the change shows on screen, so you can save it to your backend. `onPost` receives the parent comment's id when the new comment is a reply.
+
+```tsx
+import { CommentBox } from "@/components/templates/comment-box";
+
+export const Comments = ({ comments, user }) => (
+  <CommentBox
+    currentUser={{ avatar: user.image, id: user.id, name: user.name }}
+    initialComments={comments}
+    onPost={(content, parentId) => saveComment({ content, parentId })}
+    onReact={(id, emoji) => toggleReaction(id, emoji)}
+    onDelete={(id) => deleteComment(id)}
+  />
+);
+```
+
+Comments are stored as Tiptap JSON, so save `content` as it comes and pass it back in `initialComments`.
+
+## Props
+
+| Prop              | Type            | Description                      |
+| ----------------- | --------------- | -------------------------------- |
+| `currentUser`     | `CommentAuthor` | The person writing               |
+| `initialComments` | `CommentItem[]` | Comments with optional `replies` |
+| `onPost`          | `function`      | Gets `(content, parentId?)`      |
+| `onReact`         | `function`      | Gets `(id, emoji)`               |
+| `onDelete`        | `function`      | Gets the deleted comment `id`    |
+| `title`           | `string`        | Header title, default `Comments` |
+| `placeholder`     | `string`        | Composer placeholder             |
+| `className`       | `string`        | Outer container classes          |
+
+## More templates
+
+<TemplateGallery exclude="comment-box" />
