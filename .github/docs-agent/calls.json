@@ -1,0 +1,121 @@
+[
+  {
+    "call": {
+      "tool": "repo_write_file",
+      "args": {
+        "repo": "shadcn-labs/editorcn",
+        "branch": "docs-agent/pr-80",
+        "path": "apps/web/content/docs/changelog/2026-10-27-link-target.mdx",
+        "message": "docs",
+        "content": "x"
+      },
+      "callId": "1"
+    },
+    "user": {
+      "email": "docs-agent@editorcn.dev",
+      "role": "member"
+    },
+    "inPlan": true
+  },
+  {
+    "call": {
+      "tool": "repo_write_file",
+      "args": {
+        "repo": "shadcn-labs/editorcn",
+        "branch": "docs-agent/pr-80",
+        "path": "packages/editor/src/index.ts",
+        "message": "docs",
+        "content": "x"
+      },
+      "callId": "2"
+    },
+    "user": {
+      "email": "docs-agent@editorcn.dev",
+      "role": "member"
+    },
+    "inPlan": true
+  },
+  {
+    "call": {
+      "tool": "repo_write_file",
+      "args": {
+        "repo": "shadcn-labs/editorcn",
+        "branch": "docs-agent/pr-80",
+        "path": "apps/web/content/docs/../../../packages/editor/src/index.ts",
+        "message": "docs",
+        "content": "x"
+      },
+      "callId": "3"
+    },
+    "user": {
+      "email": "docs-agent@editorcn.dev",
+      "role": "member"
+    },
+    "inPlan": true
+  },
+  {
+    "call": {
+      "tool": "repo_write_file",
+      "args": {
+        "repo": "shadcn-labs/editorcn",
+        "branch": "main",
+        "path": "apps/web/content/docs/changelog/2026-10-27-link-target.mdx",
+        "message": "docs",
+        "content": "x"
+      },
+      "callId": "4"
+    },
+    "user": {
+      "email": "docs-agent@editorcn.dev",
+      "role": "member"
+    },
+    "inPlan": true
+  },
+  {
+    "call": {
+      "tool": "git_create_branch",
+      "args": {
+        "repo": "shadcn-labs/editorcn",
+        "branch": "main"
+      },
+      "callId": "5"
+    },
+    "user": {
+      "email": "docs-agent@editorcn.dev",
+      "role": "member"
+    },
+    "inPlan": true
+  },
+  {
+    "call": {
+      "tool": "github_get_pr",
+      "args": {
+        "repo": "shadcn-labs/private",
+        "number": 1
+      },
+      "callId": "6"
+    },
+    "user": {
+      "email": "docs-agent@editorcn.dev",
+      "role": "member"
+    },
+    "inPlan": true
+  },
+  {
+    "call": {
+      "tool": "github_open_pr",
+      "args": {
+        "repo": "shadcn-labs/editorcn",
+        "branch": "docs-agent/pr-80",
+        "title": "docs: Link target",
+        "body": "Changelog entry."
+      },
+      "callId": "7"
+    },
+    "user": {
+      "email": "docs-agent@editorcn.dev",
+      "role": "member"
+    },
+    "inPlan": true
+  }
+]
