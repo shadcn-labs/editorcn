@@ -40,6 +40,38 @@ import { RichTextEditor, Link } from "@editorcn/editor";
 import "@editorcn/editor/style.css";
 ```
 
+## Full setup
+
+To start from the complete editor on the [homepage](/) instead of building the toolbar yourself, install the **Full Toolbar Editor**. It brings the editor, every toolbar control, and the [Callout](/docs/extensions/callout), [Code Block](/docs/extensions/code-block), [Image Placeholder](/docs/extensions/image-placeholder), [Markdown](/docs/extensions/markdown), [Mention](/docs/extensions/mention), [Paste Cleanup](/docs/extensions/paste-cleanup) and [Table](/docs/extensions/table) extensions in one command:
+
+```bash
+npx shadcn@latest add "https://www.rtecn.space/r/full-editor.json"
+```
+
+It lands in `components/templates/full-editor/`:
+
+```tsx
+import { FullEditor } from "@/components/templates/full-editor";
+
+export const Editor = ({ doc }) => (
+  <FullEditor
+    content={doc.content}
+    onChange={(json) => saveDocument(doc.id, json)}
+    searchUsers={(query) => fetchUsers(query)}
+  />
+);
+```
+
+| Prop               | Type       | Description                                            |
+| ------------------ | ---------- | ------------------------------------------------------ |
+| `content`          | `Content`  | Tiptap JSON or HTML to start with                      |
+| `onChange`         | `function` | Gets the document as Tiptap JSON                       |
+| `searchUsers`      | `function` | Gets the `@` query, returns `MentionItem[]` (async ok) |
+| `placeholder`      | `string`   | Placeholder for an empty document                      |
+| `markdownFilename` | `string`   | File name for Markdown export, default `document.md`   |
+| `variant`          | `string`   | Editor variant, default `default`                      |
+| `className`        | `string`   | Outer container classes                                |
+
 ## Tiptap editor
 
 `@editorcn/editor` provides a UI layer for [Tiptap](https://tiptap.dev/). The `RichTextEditor` component works with the [Editor](https://tiptap.dev/api/editor) instance of Tiptap. This means you have full control over the editor [state and configuration](https://tiptap.dev/guide/configuration) via the [useEditor hook](https://tiptap.dev/installation/react).

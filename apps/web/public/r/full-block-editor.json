@@ -1,0 +1,47 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "dependencies": [
+    "@tiptap/core@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/extension-color@>=3.0.0 <4",
+    "@tiptap/extension-highlight@>=3.0.0 <4",
+    "@tiptap/extension-link@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+    "@tiptap/extension-task-item@>=3.0.0 <4",
+    "@tiptap/extension-task-list@>=3.0.0 <4",
+    "@tiptap/extension-text-align@>=3.0.0 <4",
+    "@tiptap/extension-text-style@>=3.0.0 <4",
+    "@tiptap/extension-underline@>=3.0.0 <4",
+    "lucide-react@>=0.400.0 <1.0.0"
+  ],
+  "description": "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
+  "files": [
+    {
+      "content": "\"use client\";\n\nimport { BlockEditor } from \"@/components/block-editor/block-editor\";\nimport { SlashCommand, getSlashCommandSuggestion } from \"@/components/block-editor/extensions\";\nimport { Callout } from \"@/components/extensions/callout\";\nimport { CodeBlock } from \"@/components/extensions/code-block\";\nimport {\n  ImagePlaceholder,\n  ResizableImage,\n} from \"@/components/extensions/image-placeholder\";\nimport { Markdown } from \"@/components/extensions/markdown\";\nimport { Mention } from \"@/components/extensions/mention\";\nimport type { MentionItem } from \"@/components/extensions/mention\";\nimport { PasteCleanup } from \"@/components/extensions/paste-cleanup\";\nimport { Table } from \"@/components/extensions/table\";\nimport { TableHoverOverlay } from \"@/components/extensions/table/table-hover-overlay\";\nimport { Color } from \"@tiptap/extension-color\";\nimport { Highlight } from \"@tiptap/extension-highlight\";\nimport { Link } from \"@tiptap/extension-link\";\nimport { Placeholder } from \"@tiptap/extension-placeholder\";\nimport { TaskItem } from \"@tiptap/extension-task-item\";\nimport { TaskList } from \"@tiptap/extension-task-list\";\nimport { TextAlign } from \"@tiptap/extension-text-align\";\nimport { TextStyle } from \"@tiptap/extension-text-style\";\nimport { Underline } from \"@tiptap/extension-underline\";\nimport { useEditor } from \"@tiptap/react\";\nimport type { Content, JSONContent } from \"@tiptap/react\";\nimport { StarterKit } from \"@tiptap/starter-kit\";\n\nimport { cn } from \"@/lib/utils\";\n\nimport { createSlashItems } from \"./slash-items\";\n\nimport \"@/components/block-editor/style.css\";\nimport \"@/components/extensions/callout/style.css\";\nimport \"@/components/extensions/code-block/style.css\";\nimport \"@/components/extensions/image-placeholder/style.css\";\nimport \"@/components/extensions/mention/style.css\";\nimport \"@/components/extensions/table/style.css\";\nimport \"@/components/extensions/ui/style.css\";\n\nexport interface FullBlockEditorProps {\n  className?: string;\n  content?: Content;\n  markdownFilename?: string;\n  onChange?: (content: JSONContent) => void;\n  placeholder?: string;\n  searchUsers?: (query: string) => MentionItem[] | Promise<MentionItem[]>;\n}\n\nexport const FullBlockEditor = ({\n  className,\n  content,\n  markdownFilename = \"document.md\",\n  onChange,\n  placeholder = \"Type / for commands...\",\n  searchUsers = () => [],\n}: FullBlockEditorProps) => {\n  const editor = useEditor({\n    content,\n    extensions: [\n      StarterKit.configure({\n        codeBlock: false,\n        heading: { levels: [1, 2, 3] },\n        link: false,\n        underline: false,\n      }),\n      Placeholder.configure({ placeholder }),\n      Underline,\n      TextStyle,\n      Color.configure({ types: [\"textStyle\"] }),\n      Highlight.configure({ multicolor: true }),\n      TaskList,\n      TaskItem.configure({ nested: true }),\n      CodeBlock,\n      Callout,\n      SlashCommand.configure({\n        suggestion: getSlashCommandSuggestion(\n          createSlashItems(markdownFilename)\n        ),\n      }),\n      TextAlign.configure({ types: [\"heading\", \"paragraph\"] }),\n      Table.configure({ resizable: true }),\n      ResizableImage,\n      ImagePlaceholder,\n      Markdown.configure({ pasteMarkdown: true }),\n      PasteCleanup,\n      Mention.configure({\n        debounce: 0,\n        heading: \"People\",\n        items: searchUsers,\n      }),\n      Link.configure({\n        autolink: true,\n        defaultProtocol: \"https\",\n        openOnClick: true,\n        protocols: [\"http\", \"https\"],\n      }),\n    ],\n    immediatelyRender: false,\n    onUpdate: ({ editor: current }) => onChange?.(current.getJSON()),\n    shouldRerenderOnTransaction: false,\n  });\n\n  return (\n    <div className={cn(\"relative\", className)}>\n      <BlockEditor editor={editor} className=\"px-2\" />\n      <TableHoverOverlay editor={editor} />\n    </div>\n  );\n};\n",
+      "path": "templates/full-block-editor/index.tsx",
+      "target": "@components/templates/full-block-editor/index.tsx",
+      "type": "registry:block"
+    },
+    {
+      "content": "\"use client\";\n\nimport { defaultSlashCommandItems } from \"@/components/block-editor/extensions\";\nimport type { SlashCommandSuggestionItem } from \"@/components/block-editor/extensions\";\nimport {\n  downloadMarkdown,\n  importMarkdownFile,\n} from \"@/components/extensions/markdown\";\nimport {\n  FileDown,\n  FileUp,\n  ImageIcon,\n  MessageSquareWarning,\n  TableIcon,\n} from \"lucide-react\";\n\nexport const createSlashItems = (\n  markdownFilename: string\n): SlashCommandSuggestionItem[] => [\n  ...defaultSlashCommandItems,\n  {\n    command: ({ editor, range }) => {\n      editor.chain().focus().deleteRange(range).insertImagePlaceholder().run();\n    },\n    description: \"Insert an image placeholder you can fill in.\",\n    icon: <ImageIcon />,\n    id: \"image\",\n    keywords: [\"image\", \"img\", \"picture\", \"photo\"],\n    title: \"Image\",\n  },\n  {\n    command: ({ editor, range }) => {\n      editor\n        .chain()\n        .focus()\n        .deleteRange(range)\n        .insertTable({ cols: 3, rows: 3, withHeaderRow: true })\n        .run();\n    },\n    description: \"Insert a table.\",\n    icon: <TableIcon />,\n    id: \"table\",\n    keywords: [\"table\", \"grid\"],\n    title: \"Table\",\n  },\n  {\n    command: ({ editor, range }) => {\n      editor\n        .chain()\n        .focus()\n        .deleteRange(range)\n        .setCallout({ variant: \"info\" })\n        .run();\n    },\n    description: \"Highlight a note, tip, or warning.\",\n    icon: <MessageSquareWarning />,\n    id: \"callout\",\n    keywords: [\"callout\", \"note\", \"tip\", \"warning\", \"alert\", \"info\"],\n    title: \"Callout\",\n  },\n  {\n    command: ({ editor, range }) => {\n      editor.chain().focus().deleteRange(range).run();\n      importMarkdownFile(editor);\n    },\n    description: \"Replace the document with a .md file.\",\n    icon: <FileUp />,\n    id: \"importMarkdown\",\n    keywords: [\"markdown\", \"md\", \"import\", \"upload\"],\n    title: \"Import Markdown\",\n  },\n  {\n    command: ({ editor, range }) => {\n      editor.chain().focus().deleteRange(range).run();\n      downloadMarkdown(editor, markdownFilename);\n    },\n    description: \"Download the document as a .md file.\",\n    icon: <FileDown />,\n    id: \"exportMarkdown\",\n    keywords: [\"markdown\", \"md\", \"export\", \"download\"],\n    title: \"Export Markdown\",\n  },\n];\n",
+      "path": "templates/full-block-editor/slash-items.tsx",
+      "target": "@components/templates/full-block-editor/slash-items.tsx",
+      "type": "registry:block"
+    }
+  ],
+  "name": "full-block-editor",
+  "title": "Full Block Editor",
+  "type": "registry:block",
+  "registryDependencies": [
+    "https://www.rtecn.space/r/block-editor.json",
+    "https://www.rtecn.space/r/callout.json",
+    "https://www.rtecn.space/r/code-block.json",
+    "https://www.rtecn.space/r/image-placeholder.json",
+    "https://www.rtecn.space/r/markdown.json",
+    "https://www.rtecn.space/r/mention.json",
+    "https://www.rtecn.space/r/paste-cleanup.json",
+    "https://www.rtecn.space/r/table.json"
+  ]
+}
