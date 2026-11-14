@@ -1,0 +1,229 @@
+---
+title: Toggle
+seoTitle: "Tiptap Toggle Extension: Collapsible Sections for shadcn/ui"
+description: "A Notion-style toggle block for shadcn/ui with collapsible sections, a triangle node view, a saved open state, slash commands, a +++ input rule, markdown fences, and native details output."
+---
+
+The Toggle extension adds collapsible sections, like Notion. A toggle holds any block content, such as paragraphs, lists, code blocks, tables, and other toggles.
+
+- Click the triangle to collapse or expand the section. The open state is saved with the document.
+- Type `+++` on an empty line to create one, or pick **Toggle** from the slash menu.
+- Press `Enter` in the title to open the toggle and jump into the content.
+- Press `Backspace` at the start of an empty title to remove the toggle and keep the content.
+- Saves native `<details>/<summary>` HTML, so exported content collapses without JavaScript.
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://editorcn.vercel.app/r/toggle.json"
+```
+
+This installs `extensions/toggle`, `extensions/core/`, and the styles at `extensions/toggle/style.css`.
+
+To install the files manually instead, install these packages and copy the `toggle` and `core` folders from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src) into `extensions/`:
+
+```bash
+npm install @tiptap/core @tiptap/react @tiptap/pm @tiptap/extension-details @tiptap/starter-kit lucide-react
+```
+
+The `Gapcursor` extension ships with `@tiptap/starter-kit` and is required for the arrow-key behavior around collapsed toggles.
+
+## Usage
+
+Add `Toggle` to the extensions. The triangle button comes from a built-in node view, so no toolbar component is needed.
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import { RichTextEditor } from "@/components/editor";
+import { Toggle } from "@/components/extensions/toggle";
+
+import "@/components/editor/style.css";
+import "@/components/extensions/toggle/style.css";
+
+export function MyEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [StarterKit, Toggle],
+  });
+
+  return (
+    <RichTextEditor editor={editor}>
+      <RichTextEditor.Content />
+    </RichTextEditor>
+  );
+}
+```
+
+### With `@editorcn/block-editor`
+
+Add a **Toggle** item to the slash commands:
+
+```tsx
+"use client";
+
+import { useEditor } from "@tiptap/react";
+import { StarterKit } from "@tiptap/starter-kit";
+
+import {
+  BlockEditor,
+  SlashCommand,
+  defaultSlashCommandItems,
+  getSlashCommandSuggestion,
+} from "@/components/block-editor";
+import type { SlashCommandSuggestionItem } from "@/components/block-editor";
+import { Toggle, toggleSlashCommandItem } from "@/components/extensions/toggle";
+
+import "@/components/block-editor/style.css";
+import "@/components/extensions/toggle/style.css";
+
+const items: SlashCommandSuggestionItem[] = [
+  ...defaultSlashCommandItems,
+  toggleSlashCommandItem,
+];
+
+export function MyBlockEditor() {
+  const editor = useEditor({
+    immediatelyRender: false,
+    extensions: [
+      StarterKit,
+      Toggle,
+      SlashCommand.configure({ suggestion: getSlashCommandSuggestion(items) }),
+    ],
+  });
+
+  return <BlockEditor editor={editor} />;
+}
+```
+
+<ExtensionPreview slug="toggle" editor="block" />
+
+## Commands
+
+The node names stay the official ones, so the commands are the official `details` commands:
+
+```tsx
+editor.commands.setDetails();
+editor.commands.unsetDetails();
+```
+
+| Command        | Description                                                             |
+| -------------- | ----------------------------------------------------------------------- |
+| `setDetails`   | Wraps the selected blocks in a toggle and puts the cursor in the title. |
+| `unsetDetails` | Removes the toggle around the cursor and keeps its content.             |
+
+## Keyboard Shortcuts
+
+| Shortcut                               | Description                                             |
+| -------------------------------------- | ------------------------------------------------------- |
+| <kbd>+</kbd><kbd>+</kbd><kbd>+</kbd>   | On an empty line, inserts a toggle.                     |
+| <kbd>Enter</kbd> in the title          | Opens the toggle and moves the cursor into the content. |
+| <kbd>Backspace</kbd> on an empty title | Removes the toggle and keeps its content.               |
+
+## Settings
+
+All settings live on the official `Details` node. The `Toggle` bundle already turns on `persist` and swaps the default eye button for a triangle. To change an option, use `ToggleDetails` together with `DetailsSummary` and `DetailsContent` in place of `Toggle`:
+
+```tsx
+import {
+  DetailsContent,
+  DetailsSummary,
+  ToggleDetails,
+} from "@/components/extensions/toggle";
+
+const editor = useEditor({
+  immediatelyRender: false,
+  extensions: [
+    StarterKit,
+    ToggleDetails.configure({
+      HTMLAttributes: { class: "my-toggle" },
+    }),
+    DetailsSummary,
+    DetailsContent,
+  ],
+});
+```
+
+### `persist`
+
+Saves the open state as the `open` attribute in HTML and `attrs.open` in JSON, and makes the triangle update the document. `Toggle` forces this to `true`, so a saved document reopens where the reader left off.
+
+### `openClassName`
+
+The class added to the editor wrapper while the toggle is open. Defaults to `is-open`, which `toggle/style.css` uses to rotate the triangle.
+
+### `renderToggleButton`
+
+Customizes the toggle button element. `Toggle` replaces the official eye icon with a triangle built from an inline SVG. Pass your own `({ element, isOpen, node }) => void` to draw something else.
+
+### `HTMLAttributes`
+
+HTML attributes added to the toggle wrapper.
+
+```tsx
+ToggleDetails.configure({ HTMLAttributes: { class: "my-toggle" } });
+```
+
+## Output
+
+{/* prettier-ignore */}
+```html
+<details open><summary>Release notes</summary><div data-type="detailsContent"><p>Everything that shipped this week.</p></div></details>
+```
+
+A closed toggle omits the `open` attribute.
+
+```json
+{
+  "type": "details",
+  "attrs": { "open": true },
+  "content": [
+    {
+      "type": "detailsSummary",
+      "content": [{ "type": "text", "text": "Release notes" }]
+    },
+    {
+      "type": "detailsContent",
+      "content": [
+        {
+          "type": "paragraph",
+          "content": [
+            { "type": "text", "text": "Everything that shipped this week." }
+          ]
+        }
+      ]
+    }
+  ]
+}
+```
+
+With the [Markdown extension](/docs/extensions/markdown), toggles round-trip as [Pandoc-style fenced divs](https://pandoc.org/MANUAL.html#divs-and-spans). A closed toggle is `:::details`; an open one adds `{open}`:
+
+```markdown
+:::details {open}
+
+:::detailsSummary
+
+Release notes
+
+:::
+
+:::detailsContent
+
+Everything that shipped this week.
+
+:::
+
+:::
+```
+
+## Static Renderer
+
+The [Static Renderer](/docs/static-renderer) keeps native `<details>/<summary>` HTML, so sections collapse and expand without JavaScript, and draws the triangle with CSS. The `sanitize` option keeps the `open` attribute. For JSON content, pass `Toggle` in `extensions`:
+
+```tsx
+<StaticRenderer content={json} extensions={[StarterKit, Toggle]} />
+```

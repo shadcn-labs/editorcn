@@ -8,6 +8,7 @@
     "markdown",
     "mention",
     "paste-cleanup",
-    "table"
+    "table",
+    "toggle"
   ]
 }

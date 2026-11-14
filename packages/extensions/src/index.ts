@@ -39,3 +39,15 @@ export {
   pasteCleanupPluginKey,
 } from "./paste-cleanup";
 export type { PasteCleanupOptions } from "./paste-cleanup";
+export {
+  DetailsContent,
+  DetailsSummary,
+  Toggle,
+  ToggleDetails,
+  toggleSlashCommandItem,
+} from "./toggle";
+export type {
+  DetailsOptions,
+  DetailsRenderToggleButtonOptions,
+  ToggleSlashCommandItem,
+} from "./toggle";

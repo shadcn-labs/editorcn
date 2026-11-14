@@ -1,0 +1,91 @@
+/* The editor node view renders a `div[data-type="details"]` wrapper with a
+   triangle button. The static renderer outputs native `<details>/<summary>`
+   instead — its mirror styles live in @editorcn/static-renderer. */
+
+div[data-type="details"] {
+  position: relative;
+  margin: 0.375em 0;
+  padding-left: 1.625rem;
+}
+
+/* The button is as tall as the summary's first line, so the triangle stays
+   centered on it whatever the font size. */
+div[data-type="details"] > .ext-toggle-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.375rem;
+  height: 1.75em;
+  height: 1lh;
+  padding: 0;
+  border: none;
+  border-radius: calc(var(--radius) - 4px);
+  background: transparent;
+  color: var(--foreground);
+  cursor: pointer;
+  transition: background-color 0.15s ease-out;
+}
+
+div[data-type="details"] > .ext-toggle-button:hover {
+  background: var(--muted);
+}
+
+div[data-type="details"] > .ext-toggle-button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--ring) 50%, transparent);
+  outline-offset: 0;
+}
+
+div[data-type="details"] > .ext-toggle-button svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  transition: transform 0.15s ease-out;
+}
+
+div[data-type="details"].is-open > .ext-toggle-button svg {
+  transform: rotate(90deg);
+}
+
+div[data-type="details"] summary {
+  display: block;
+  font-weight: inherit;
+  cursor: text;
+  list-style: none;
+}
+
+div[data-type="details"] summary::-webkit-details-marker {
+  display: none;
+}
+
+/* "Toggle" placeholder while the summary is empty. An empty summary only
+   holds ProseMirror's trailing break. */
+div[data-type="details"]
+  summary:has(> .ProseMirror-trailingBreak:only-child)::before {
+  content: "Toggle";
+  float: left;
+  height: 0;
+  color: var(--muted-foreground);
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+div[data-type="details"] div[data-type="detailsContent"] {
+  margin-top: 0.375em;
+}
+
+div[data-type="details"] div[data-type="detailsContent"] > :first-child {
+  margin-top: 0;
+}
+
+div[data-type="details"] div[data-type="detailsContent"] > :last-child {
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  div[data-type="details"] > .ext-toggle-button,
+  div[data-type="details"] > .ext-toggle-button svg {
+    transition: none;
+  }
+}

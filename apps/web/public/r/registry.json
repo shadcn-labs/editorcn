@@ -1059,6 +1059,62 @@
     },
     {
       "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "@tiptap/extension-details@>=3.0.0 <4",
+        "@tiptap/extension-gapcursor@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4"
+      ],
+      "description": "A Notion-style collapsible section that holds any block content, including other toggles. Click the triangle to collapse or expand, insert one from the slash menu or by typing +++ on an empty line, and press Enter in the title to jump into the content. The open state is saved with the document and native details HTML keeps it working in the static renderer without JavaScript.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/toggle/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/toggle/slash-command-item.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/toggle/style.css",
+          "type": "registry:style"
+        }
+      ],
+      "name": "toggle",
+      "title": "Toggle",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/static-renderer@>=3.21.0 <4",
         "@tiptap/react@>=3.0.0 <4",
