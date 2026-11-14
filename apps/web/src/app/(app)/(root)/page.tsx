@@ -35,7 +35,7 @@ const SHOWCASE: BlockViewerItem[] = [
   {
     category: "Templates",
     code: <RegistryCode files={simpleDocumentEditorItem.files} />,
-    docs: ROUTES.DOCS_TEMPLATES,
+    docs: `${ROUTES.DOCS_TEMPLATES}/simple-document-editor`,
     name: "simple-document-editor",
     title: "Simple Document Editor",
     wide: true,
@@ -43,7 +43,7 @@ const SHOWCASE: BlockViewerItem[] = [
   {
     category: "Templates",
     code: <RegistryCode files={commentBoxItem.files} />,
-    docs: ROUTES.DOCS_TEMPLATES,
+    docs: `${ROUTES.DOCS_TEMPLATES}/comment-box`,
     name: "comment-box",
     title: "Comment Box",
   },

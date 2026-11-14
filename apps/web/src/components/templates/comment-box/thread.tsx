@@ -250,10 +250,10 @@ export const CommentThread = ({
         initialContent={to.id === comment.id ? undefined : mention(to.author)}
         mentionable={actions.mentionable}
         onCancel={() => setTarget(null)}
-        onPost={(content) => {
-          actions.post(content, comment.id);
-          setTarget(null);
+        onPost={async (content) => {
           setOpen(true);
+          await actions.post(content, comment.id);
+          setTarget(null);
         }}
         placeholder={`Reply to ${to.author.name}…`}
         submitLabel="Reply"
