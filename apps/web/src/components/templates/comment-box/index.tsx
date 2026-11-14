@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -35,16 +35,19 @@ export const CommentBox = ({
     (user) => user.id !== currentUser.id
   );
 
+  const savedIds = useRef(new Map<string, string>());
+  const toSavedId = (id: string) => savedIds.current.get(id) ?? id;
+
   const actions: ThreadActions = {
     currentUser,
     mentionable,
-    post: (content, parentId) => {
-      onPost?.(content, parentId);
+    post: async (content, parentId) => {
+      const id = createId();
       const comment: CommentItem = {
         author: currentUser,
         content,
         createdAt: new Date().toISOString(),
-        id: createId(),
+        id,
       };
       setComments((prev) =>
         parentId
@@ -55,9 +58,20 @@ export const CommentBox = ({
             )
           : [...prev, comment]
       );
+      const savedId = await onPost?.(
+        content,
+        parentId ? toSavedId(parentId) : undefined
+      );
+      if (typeof savedId !== "string" || savedId === id) {
+        return;
+      }
+      savedIds.current.set(id, savedId);
+      setComments((prev) =>
+        mapThread(prev, (c) => (c.id === id ? { ...c, id: savedId } : c))
+      );
     },
     react: (id, emoji) => {
-      onReact?.(id, emoji);
+      onReact?.(toSavedId(id), emoji);
       setComments((prev) =>
         mapThread(prev, (c) =>
           c.id === id
@@ -67,7 +81,7 @@ export const CommentBox = ({
       );
     },
     remove: (id) => {
-      onDelete?.(id);
+      onDelete?.(toSavedId(id));
       setComments((prev) => mapThread(prev, (c) => (c.id === id ? null : c)));
     },
   };

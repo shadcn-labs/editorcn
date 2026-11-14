@@ -30,7 +30,7 @@ export interface CommentBoxProps {
   currentUser?: CommentAuthor;
   initialComments?: CommentItem[];
   onDelete?: (id: string) => void;
-  onPost?: (content: JSONContent, parentId?: string) => void;
+  onPost?: (content: JSONContent, parentId?: string) => unknown;
   onReact?: (id: string, emoji: string) => void;
   placeholder?: string;
   title?: string;

@@ -12,7 +12,7 @@ Templates are complete, ready-made Tiptap editors for React. Each one is a real 
 
 Each template installs as a shadcn block: the CLI adds the template, the [editor](/docs/editor), and every component and extension it depends on. The template lands in its own folder, `components/templates/<name>/`, split into small files (types, constants, toolbar, panels and so on) with `index.tsx` as the entry point.
 
-All templates store content as Tiptap JSON (`editor.getJSON()`) and display it with the [Static Renderer](/docs/static-renderer), which renders React elements instead of HTML. Content renders on the server, and stored content can't inject scripts. Use `generateHTML(json, extensions)` from `@tiptap/core` when you need HTML, for example in emails.
+All templates store content as Tiptap JSON (`editor.getJSON()`) and display it with the [Static Renderer](/docs/static-renderer), which renders React elements instead of HTML. Content renders on the server, and stored content can't inject scripts. Use `generateHTML(json, extensions)` from `@tiptap/html` when you need HTML, for example in emails. It runs on the server as well as in the browser.
 
 ## Requirements
 
