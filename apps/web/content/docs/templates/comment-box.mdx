@@ -18,7 +18,7 @@ The CLI also installs the [Mention](/docs/extensions/mention) extension and the 
 
 ## Usage
 
-Each callback fires after the change shows on screen, so you can save it to your backend. `onPost` receives the parent comment's id when the new comment is a reply. Return the id your backend saved the comment under (or a promise of it) and the comment switches to that id, so later replies, reactions and deletes on it send the saved id.
+Each callback fires after the change shows on screen, so you can save it to your backend. `onPost` receives the parent comment's id when the new comment is a reply. Return the id your backend saved the comment under (or a promise of it). Replies, reactions and deletes on that comment then receive the saved id, and any made while it is still saving wait for it. If `onPost` throws or rejects, the comment is removed and its text stays in the composer so the person can try again.
 
 ```tsx
 import { CommentBox } from "@/components/templates/comment-box";

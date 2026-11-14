@@ -40,7 +40,7 @@ export interface CommentBoxProps {
 export interface ThreadActions {
   currentUser: CommentAuthor;
   mentionable: CommentAuthor[];
-  post: (content: JSONContent, parentId?: string) => void;
+  post: (content: JSONContent, parentId?: string) => Promise<void>;
   react: (id: string, emoji: string) => void;
   remove: (id: string) => void;
 }

@@ -35,8 +35,22 @@ export const CommentBox = ({
     (user) => user.id !== currentUser.id
   );
 
-  const savedIds = useRef(new Map<string, string>());
-  const toSavedId = (id: string) => savedIds.current.get(id) ?? id;
+  const saves = useRef(new Map<string, Promise<string>>());
+
+  const savedIdFor = (id: string) => saves.current.get(id) ?? id;
+
+  const afterSave = async (id: string, run: (savedId: string) => void) => {
+    let savedId: string;
+    try {
+      savedId = await savedIdFor(id);
+    } catch {
+      return;
+    }
+    run(savedId);
+  };
+
+  const removeLocal = (id: string) =>
+    setComments((prev) => mapThread(prev, (c) => (c.id === id ? null : c)));
 
   const actions: ThreadActions = {
     currentUser,
@@ -58,20 +72,21 @@ export const CommentBox = ({
             )
           : [...prev, comment]
       );
-      const savedId = await onPost?.(
-        content,
-        parentId ? toSavedId(parentId) : undefined
-      );
-      if (typeof savedId !== "string" || savedId === id) {
-        return;
+      const save = (async () => {
+        const savedParentId = parentId ? await savedIdFor(parentId) : undefined;
+        const result = await onPost?.(content, savedParentId);
+        return typeof result === "string" ? result : id;
+      })();
+      saves.current.set(id, save);
+      try {
+        await save;
+      } catch (error) {
+        removeLocal(id);
+        throw error;
       }
-      savedIds.current.set(id, savedId);
-      setComments((prev) =>
-        mapThread(prev, (c) => (c.id === id ? { ...c, id: savedId } : c))
-      );
     },
     react: (id, emoji) => {
-      onReact?.(toSavedId(id), emoji);
+      afterSave(id, (savedId) => onReact?.(savedId, emoji));
       setComments((prev) =>
         mapThread(prev, (c) =>
           c.id === id
@@ -81,8 +96,8 @@ export const CommentBox = ({
       );
     },
     remove: (id) => {
-      onDelete?.(toSavedId(id));
-      setComments((prev) => mapThread(prev, (c) => (c.id === id ? null : c)));
+      afterSave(id, (savedId) => onDelete?.(savedId));
+      removeLocal(id);
     },
   };
 
