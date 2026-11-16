@@ -114,5 +114,25 @@
       "mermaid@^11.0.0",
       "prettier@^3.0.0"
     ]
+  },
+  "plantuml": {
+    "title": "PlantUML",
+    "description": "PlantUML diagram block: live preview plus a code editor, rendered via @plantuml/core with theme-aware output, useQuery caching, loading and error states, and a static-renderer-safe NodeMapping.",
+    "extension": "plantuml/index.ts",
+    "files": [
+      "plantuml/node.tsx",
+      "plantuml/node-view.tsx",
+      "plantuml/node-mapping.tsx",
+      "plantuml/types.ts"
+    ],
+    "ui": ["spinner"],
+    "deps": [
+      "@plantuml/core@^1.2026.9",
+      "@remixicon/react@^4.9.0",
+      "@tanstack/react-query@^5.0.0",
+      "next-themes@^0.4.6",
+      "@base-ui/react@^1.0.0",
+      "class-variance-authority@^0.7.1"
+    ]
   }
 }
