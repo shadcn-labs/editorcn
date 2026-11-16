@@ -1059,6 +1059,63 @@
     },
     {
       "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
+      ],
+      "description": "Atom <video> block configured by attributes (src, controls, autoplay, loop, muted, preload, poster, crossOrigin): useful as the concrete node an Embed placeholder swaps into for setEmbed('video').",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/video/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/video/node.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/video/node-view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/video/node-mapping.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "video",
+      "title": "Video",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/static-renderer@>=3.21.0 <4",
         "@tiptap/react@>=3.0.0 <4",

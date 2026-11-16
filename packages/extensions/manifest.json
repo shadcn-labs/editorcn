@@ -114,5 +114,15 @@
       "mermaid@^11.0.0",
       "prettier@^3.0.0"
     ]
+  },
+  "video": {
+    "title": "Video",
+    "description": "Atom <video> block configured by attributes (src, controls, autoplay, loop, muted, preload, poster, crossOrigin): useful as the concrete node an Embed placeholder swaps into for setEmbed('video').",
+    "extension": "video/index.ts",
+    "files": [
+      "video/node.tsx",
+      "video/node-view.tsx",
+      "video/node-mapping.tsx"
+    ]
   }
 }
