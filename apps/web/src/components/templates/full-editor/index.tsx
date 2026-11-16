@@ -31,6 +31,7 @@ import { Underline } from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import type { Content, JSONContent } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
+import { Suspense } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -54,7 +55,7 @@ export interface FullEditorProps {
   variant?: RichTextEditorVariant;
 }
 
-export const FullEditor = ({
+const FullEditorInner = ({
   className,
   content,
   markdownFilename = "document.md",
@@ -117,3 +118,11 @@ export const FullEditor = ({
     </div>
   );
 };
+
+// Tiptap's useEditor reads Math.random(), which Next.js `cacheComponents`
+// rejects during prerender unless the component sits under a Suspense boundary.
+export const FullEditor = (props: FullEditorProps) => (
+  <Suspense fallback={null}>
+    <FullEditorInner {...props} />
+  </Suspense>
+);
