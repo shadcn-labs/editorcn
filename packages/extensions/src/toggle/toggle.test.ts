@@ -1,5 +1,6 @@
-import { Editor } from "@tiptap/core";
-import type { JSONContent } from "@tiptap/core";
+import { Editor, Extension } from "@tiptap/core";
+import type { AnyExtension, JSONContent } from "@tiptap/core";
+import { Plugin } from "@tiptap/pm/state";
 import { StarterKit } from "@tiptap/starter-kit";
 import { afterEach, describe, expect, it } from "vitest";
 
@@ -7,10 +8,14 @@ import { Toggle } from ".";
 
 let editor: Editor | null = null;
 
-const create = (content: string) => {
+const create = (content: string, ...extra: AnyExtension[]) => {
   editor = new Editor({
     content,
-    extensions: [StarterKit.configure({ trailingNode: false }), Toggle],
+    extensions: [
+      StarterKit.configure({ trailingNode: false }),
+      Toggle,
+      ...extra,
+    ],
   });
   return editor;
 };
@@ -29,14 +34,21 @@ const type = (target: Editor, text: string) => {
   }
 };
 
-// `commands.keyboardShortcut` captures transactions and drops selection
-// changes, so key presses that move the selection go through the real DOM
-// handler instead.
+// `commands.keyboardShortcut` drops selection changes; use a real keydown.
 const pressKey = (target: Editor, key: string) => {
   target.view.dom.dispatchEvent(
     new KeyboardEvent("keydown", { bubbles: true, cancelable: true, key })
   );
 };
+
+const Blocker = Extension.create({
+  // Rejects the Enter transaction (which carries a `setNodeMarkup` step) while
+  // letting selection-only setup commands through.
+  addProseMirrorPlugins() {
+    return [new Plugin({ filterTransaction: (tr) => tr.steps.length === 0 })];
+  },
+  name: "blocker",
+});
 
 describe("toggle", () => {
   afterEach(() => {
@@ -123,6 +135,49 @@ describe("toggle", () => {
     expect(target.getHTML()).toBe(
       '<details open=""><summary>Title</summary><div data-type="detailsContent"><p>Body</p></div></details>'
     );
+  });
+
+  it("keeps +++ when typing inside an empty summary", () => {
+    const target = create(
+      '<details><summary></summary><div data-type="detailsContent"><p>Body</p></div></details>'
+    );
+    target.commands.setTextSelection(2);
+    type(target, "+++");
+    expect(target.getHTML()).toContain("<summary>+++</summary>");
+    expect(target.getHTML().split("<details").length - 1).toBe(1);
+  });
+
+  it("updates the button label when Enter opens the toggle", () => {
+    const target = create(
+      '<details><summary>Title</summary><div data-type="detailsContent"><p>Body</p></div></details>'
+    );
+    target.commands.setTextSelection(3);
+    pressKey(target, "Enter");
+    const button = (target.view.nodeDOM(0) as HTMLElement).querySelector(
+      ".ext-toggle-button"
+    );
+    expect(button?.getAttribute("aria-label")).toBe("Collapse section");
+  });
+
+  it("restores the DOM when the Enter transaction is rejected", () => {
+    const target = create(
+      '<details><summary>Title</summary><div data-type="detailsContent"><p>Body</p></div></details>',
+      Blocker
+    );
+    target.commands.setTextSelection(3);
+    pressKey(target, "Enter");
+    expect(target.state.selection.from).toBe(3);
+    expect(target.getJSON().content?.[0]?.attrs?.open ?? false).toBeFalsy();
+    const detailsDom = target.view.nodeDOM(0) as HTMLElement;
+    expect(detailsDom.classList.contains("is-open")).toBeFalsy();
+    expect(
+      detailsDom
+        .querySelector('div[data-type="detailsContent"]')
+        ?.hasAttribute("hidden")
+    ).toBeTruthy();
+    expect(
+      detailsDom.querySelector(".ext-toggle-button")?.getAttribute("aria-label")
+    ).toBe("Expand section");
   });
 
   it("unwraps on Backspace at the start of the summary", () => {

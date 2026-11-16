@@ -1,6 +1,5 @@
-/* The editor node view renders a `div[data-type="details"]` wrapper with a
-   triangle button. The static renderer outputs native `<details>/<summary>`
-   instead — its mirror styles live in @editorcn/static-renderer. */
+/* The static renderer outputs native `<details>/<summary>`; its styles mirror
+   the editor node view styles in toggle/style.css. */
 
 div[data-type="details"] {
   position: relative;

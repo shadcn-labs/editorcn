@@ -12,10 +12,7 @@ export interface ToggleSlashCommandItem {
   command: (props: { editor: Editor; range: Range }) => void;
 }
 
-/**
- * Ready-made item for the `@editorcn/block-editor` slash command menu. Spread
- * it into the app's items next to `defaultSlashCommandItems`.
- */
+/** Slash command item for the `@editorcn/block-editor` menu. */
 export const toggleSlashCommandItem: ToggleSlashCommandItem = {
   command: ({ editor, range }) => {
     editor.chain().focus().deleteRange(range).setDetails().run();

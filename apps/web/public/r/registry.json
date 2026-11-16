@@ -1062,7 +1062,7 @@
         "@tiptap/core@>=3.30.5 <4",
         "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <1.0.0",
-        "@tiptap/extension-details@>=3.0.0 <4",
+        "@tiptap/extension-details@>=3.22.0 <4",
         "@tiptap/extension-gapcursor@>=3.0.0 <4",
         "@tiptap/pm@>=3.0.0 <4"
       ],

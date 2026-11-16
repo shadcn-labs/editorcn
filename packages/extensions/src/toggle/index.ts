@@ -16,9 +16,8 @@ export type {
 export { toggleSlashCommandItem } from "./slash-command-item";
 export type { ToggleSlashCommandItem } from "./slash-command-item";
 
-// A small filled triangle pointing right; CSS rotates it down when open. The
-// toggle button is rendered by the official vanilla node view, so it needs a
-// plain SVG, not a React node.
+// The button comes from the official vanilla node view, so the icon is an
+// inline SVG; CSS rotates it down when open.
 const TRIANGLE_SVG =
   '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M3.5 1.75v8.5L10.25 6z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
 
@@ -37,20 +36,21 @@ const renderToggleButton = ({
 };
 
 /**
- * The official `details` node, configured for editorcn:
- *
- * - `persist: true` keeps the open state in the document (`open` attribute in
- *   HTML, `attrs.open` in JSON), and makes the triangle button update the doc.
- * - `+++` on an empty line inserts a toggle.
- * - Enter in the summary opens the toggle and moves the selection into the
- *   content. Backspace at the start of an empty summary unwraps the toggle.
+ * The official `details` node with the open state persisted, a `+++` input
+ * rule, and Enter in the summary opening the toggle and moving the selection
+ * into the content.
  */
 export const ToggleDetails = Details.extend({
   addInputRules() {
     return [
       new InputRule({
         find: /^\+\+\+$/,
-        handler: ({ chain, range }) => {
+        handler: ({ can, chain, range }) => {
+          // `setDetails` cannot wrap the selection inside a summary; keep the
+          // typed text instead of deleting it.
+          if (!can().setDetails()) {
+            return null;
+          }
           chain().deleteRange(range).setDetails().run();
         },
       }),
@@ -97,23 +97,44 @@ export const ToggleDetails = Details.extend({
         const contentChildCount = content.childCount;
         const wasOpen = Boolean(details.attrs.open);
 
-        return editor
+        const detailsDom = view.nodeDOM(detailsPos);
+        const buttonDom =
+          detailsDom instanceof HTMLElement
+            ? detailsDom.querySelector(".ext-toggle-button")
+            : null;
+        const contentDom =
+          detailsDom instanceof HTMLElement
+            ? detailsDom.querySelector('div[data-type="detailsContent"]')
+            : null;
+
+        // The selection guard in the official extension keeps the content
+        // hidden while `attrs.open` is false, so the DOM must be revealed
+        // before the selection moves into it.
+        const syncDom = (open: boolean) => {
+          if (detailsDom instanceof HTMLElement) {
+            detailsDom.classList.toggle(this.options.openClassName, open);
+          }
+          if (buttonDom instanceof HTMLButtonElement) {
+            this.options.renderToggleButton({
+              element: buttonDom,
+              isOpen: open,
+              node: details,
+            });
+          }
+          if (open) {
+            contentDom?.removeAttribute("hidden");
+          } else {
+            contentDom?.setAttribute("hidden", "");
+          }
+        };
+
+        const applied = editor
           .chain()
           .command(({ dispatch, tr }) => {
             if (!dispatch) {
               return true;
             }
-            // Reveal the content in the DOM before the selection moves into
-            // it, so the `details` selection guard doesn't bounce the cursor
-            // back into the summary. This mirrors what the toggle button node
-            // view does on click and is idempotent with its update handler.
-            const detailsDom = view.nodeDOM(detailsPos);
-            if (detailsDom instanceof HTMLElement) {
-              detailsDom.classList.add(this.options.openClassName);
-              detailsDom
-                .querySelector('div[data-type="detailsContent"]')
-                ?.removeAttribute("hidden");
-            }
+            syncDom(true);
             if (!wasOpen) {
               tr.setNodeMarkup(detailsPos, undefined, {
                 ...details.attrs,
@@ -131,6 +152,13 @@ export const ToggleDetails = Details.extend({
             return true;
           })
           .run();
+
+        // A plugin can reject the dispatched transaction; roll the DOM back
+        // so it matches the unchanged document.
+        if (!applied || !editor.state.doc.nodeAt(detailsPos)?.attrs.open) {
+          syncDom(false);
+        }
+        return applied;
       },
     };
   },
@@ -139,12 +167,7 @@ export const ToggleDetails = Details.extend({
   renderToggleButton,
 });
 
-/**
- * Registers the three nodes a toggle needs: `details`, `detailsSummary`, and
- * `detailsContent`. The node names stay the official ones, so commands are
- * `setDetails` / `unsetDetails` and the HTML output is native
- * `<details>/<summary>`.
- */
+/** Registers the `details`, `detailsSummary`, and `detailsContent` nodes. */
 export const Toggle = Extension.create({
   addExtensions() {
     return [ToggleDetails, DetailsSummary, DetailsContent];

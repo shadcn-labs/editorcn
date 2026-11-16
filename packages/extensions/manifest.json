@@ -122,7 +122,7 @@
     "files": ["toggle/slash-command-item.ts"],
     "css": ["toggle/style.css"],
     "deps": [
-      "@tiptap/extension-details@>=3.0.0 <4",
+      "@tiptap/extension-details@>=3.22.0 <4",
       "@tiptap/extension-gapcursor@>=3.0.0 <4",
       "@tiptap/pm@>=3.0.0 <4"
     ]

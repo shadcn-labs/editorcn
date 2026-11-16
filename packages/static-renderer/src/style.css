@@ -411,8 +411,7 @@
 }
 
 /* ── Toggle ── */
-/* The static renderer outputs native <details>/<summary>, so collapsing works
-   without JavaScript. The triangle is drawn with CSS, matching the editor. */
+/* Native <details>/<summary> output, so collapsing works without JavaScript. */
 .rte-static-renderer details {
   --ext-toggle-triangle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3.5 1.75v8.5L10.25 6z' fill='black' stroke='black' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E");
   position: relative;
@@ -429,6 +428,11 @@
 
 .rte-static-renderer details > summary::-webkit-details-marker {
   display: none;
+}
+
+.rte-static-renderer details > summary:empty::after {
+  content: "Toggle";
+  color: var(--muted-foreground);
 }
 
 .rte-static-renderer details > summary::before {
