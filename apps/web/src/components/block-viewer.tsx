@@ -51,7 +51,7 @@ const GROUP_CLS =
   "flex shrink-0 items-center gap-0.5 rounded-lg border border-border/60 bg-background p-0.5";
 
 const PICKER_CLS =
-  "inline-flex h-7 min-w-0 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-foreground transition-colors duration-150 ease-out outline-none hover:bg-muted sm:hover:bg-background focus-visible:ring-2 focus-visible:ring-ring/50 data-[state=open]:bg-muted sm:data-[state=open]:bg-background motion-reduce:transition-none";
+  "inline-flex h-7 min-w-0 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-foreground transition-colors duration-150 ease-out outline-none hover:bg-background focus-visible:ring-2 focus-visible:ring-ring/50 data-[state=open]:bg-background motion-reduce:transition-none";
 
 const Action = ({
   children,
@@ -131,7 +131,7 @@ const Picker = ({
     <DropdownMenuTrigger className={cn(PICKER_CLS, className)}>
       <span className="truncate">{label}</span>
       {meta ? (
-        <span className="shrink-0 text-muted-foreground tabular-nums max-sm:hidden">
+        <span className="shrink-0 text-muted-foreground/70 tabular-nums">
           {meta}
         </span>
       ) : null}
@@ -217,11 +217,11 @@ export const BlockViewer = ({
   return (
     <div
       className={cn(
-        "flex flex-col sm:rounded-xl sm:border sm:border-border/60 sm:bg-muted/50 sm:p-1",
+        "flex flex-col rounded-xl border border-border/60 bg-muted/50 p-1",
         className
       )}
     >
-      <div className="flex items-center gap-2 pb-3 sm:px-1 sm:pb-1">
+      <div className="flex items-center gap-2 pb-1 sm:px-1">
         <div className="flex min-w-0 flex-1 items-center gap-0.5">
           <Picker
             className="w-28 max-sm:hidden"
@@ -248,7 +248,7 @@ export const BlockViewer = ({
             /
           </span>
           <Picker
-            className="max-sm:-ml-2 sm:w-56"
+            className="sm:w-56"
             groups={itemGroups}
             label={item.title}
             meta={`${position + 1}/${inCategory.length}`}
@@ -312,7 +312,7 @@ export const BlockViewer = ({
         </div>
       </div>
 
-      <div className="bg-background sm:min-h-[36rem] sm:overflow-hidden sm:rounded-lg sm:border sm:border-border/60">
+      <div className="overflow-hidden rounded-lg border border-border/60 bg-card sm:min-h-[36rem]">
         <div
           key={`${item.name}-${view}-${reloadKey}`}
           className="animate-in duration-200 fade-in-0 motion-reduce:animate-none"
@@ -321,7 +321,7 @@ export const BlockViewer = ({
             <div className="sm:px-8 sm:py-12">
               <div
                 className={cn(
-                  "mx-auto",
+                  "mx-auto max-sm:[&_.rte-root]:rounded-none! max-sm:[&_.rte-root]:border-0! max-sm:[&>*]:rounded-none max-sm:[&>*]:border-0",
                   !item.wide &&
                     "max-w-3xl [&_.block-editor-content]:max-h-[32rem] [&_.block-editor-content]:overflow-y-auto [&_.rte-content]:max-h-[28rem] [&_.rte-content]:overflow-y-auto sm:[&_.block-editor-content]:max-h-[36rem] sm:[&_.rte-content]:max-h-[32rem]"
                 )}
@@ -330,9 +330,27 @@ export const BlockViewer = ({
               </div>
             </div>
           ) : (
-            <div className="sm:p-4">{item.code}</div>
+            <div className="p-2 sm:p-4">{item.code}</div>
           )}
         </div>
+      </div>
+
+      <div className="flex items-center gap-2 pt-1 pl-2.5 sm:hidden">
+        <span className="min-w-0 flex-1 truncate font-mono text-xs text-muted-foreground">
+          {registryName}
+        </span>
+        <CopyButton
+          className="static size-7 shrink-0 rounded-md bg-transparent text-muted-foreground hover:bg-background hover:text-foreground [&_svg]:size-3.5"
+          value={`npx shadcn@latest add ${registryName}`}
+        />
+        <span aria-hidden className="h-4 w-px bg-border" />
+        <Link
+          className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2 text-xs font-medium text-muted-foreground transition-colors duration-150 ease-out outline-none hover:bg-background hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/50 motion-reduce:transition-none"
+          href={item.docs}
+        >
+          <BookOpenIcon aria-hidden className="size-3.5" />
+          Docs
+        </Link>
       </div>
     </div>
   );

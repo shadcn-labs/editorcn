@@ -48,7 +48,7 @@ export const RegistryCode = async ({
       {highlighted.map((file) => (
         <TabsContent key={file.path} className="pt-2" value={file.path}>
           <ComponentCode
-            className="[&>pre]:max-h-[32rem]"
+            className="mx-0 mt-0 md:mx-0 [&>figcaption]:pr-12 [&>pre]:max-h-[32rem]"
             code={file.content}
             highlightedCode={file.highlighted}
             language={file.language}
