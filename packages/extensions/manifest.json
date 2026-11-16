@@ -114,5 +114,18 @@
       "mermaid@^11.0.0",
       "prettier@^3.0.0"
     ]
+  },
+  "embed": {
+    "title": "Embed",
+    "description": "Notion-style URL placeholder blocks for embedding media: pick an audio, image, YouTube, or video block, paste a URL, and the placeholder swaps itself for the matching concrete media node.",
+    "extension": "embed/index.ts",
+    "files": ["embed/node.tsx", "embed/node-view.tsx", "embed/types.ts"],
+    "ui": ["button", "input", "popover"],
+    "deps": [
+      "zod@^4.1.13",
+      "@remixicon/react@^4.9.0",
+      "@base-ui/react@^1.0.0",
+      "class-variance-authority@^0.7.1"
+    ]
   }
 }
