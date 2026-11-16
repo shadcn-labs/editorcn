@@ -5,6 +5,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { toast } from "sonner";
 
+import { BlockEditorPreview } from "@/components/block-editor-preview";
+import { EditorPreview } from "@/components/editor-preview";
 import { CommentBox } from "@/components/templates/comment-box";
 import { SimpleDocumentEditor } from "@/components/templates/simple-document-editor";
 import { Button } from "@/components/ui/button";
@@ -120,6 +122,8 @@ const DEMOS = {
       initialComments={DEMO_COMMENTS}
     />
   ),
+  "full-block-editor": () => <BlockEditorPreview />,
+  "full-editor": () => <EditorPreview />,
   "simple-document-editor": (className?: string) => (
     <SimpleDocumentEditor
       className={className}
