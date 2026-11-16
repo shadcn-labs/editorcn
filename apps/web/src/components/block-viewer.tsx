@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { Fragment, useState } from "react";
+import { Fragment, useLayoutEffect, useState } from "react";
 import type { ReactNode } from "react";
 
 import { CopyButton } from "@/components/copy-button";
@@ -170,16 +170,40 @@ const Picker = ({
   </DropdownMenu>
 );
 
+const MOBILE_QUERY = "(max-width: 639px)";
+
 export const BlockViewer = ({
   className,
+  defaultItem,
   items,
+  mobileDefaultItem,
 }: {
   className?: string;
+  defaultItem?: string;
   items: BlockViewerItem[];
+  mobileDefaultItem?: string;
 }) => {
-  const [index, setIndex] = useState(0);
+  const [index, setIndex] = useState(() =>
+    Math.max(
+      0,
+      items.findIndex((entry) => entry.name === defaultItem)
+    )
+  );
   const [view, setView] = useState<"preview" | "code">("preview");
   const [reloadKey, setReloadKey] = useState(0);
+
+  // Runs once before the first paint, so phones open on their own default
+  // without flashing the desktop one.
+  useLayoutEffect(() => {
+    if (!mobileDefaultItem || !window.matchMedia(MOBILE_QUERY).matches) {
+      return;
+    }
+    const next = items.findIndex((entry) => entry.name === mobileDefaultItem);
+    if (next !== -1) {
+      setIndex(next);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const item = items[index];
   const categories = [...new Set(items.map((entry) => entry.category))];
@@ -312,7 +336,7 @@ export const BlockViewer = ({
         </div>
       </div>
 
-      <div className="overflow-hidden rounded-lg border border-border/60 bg-card sm:min-h-[36rem]">
+      <div className="overflow-hidden rounded-lg border border-border/60 bg-background sm:min-h-[36rem]">
         <div
           key={`${item.name}-${view}-${reloadKey}`}
           className="animate-in duration-200 fade-in-0 motion-reduce:animate-none"

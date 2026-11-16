@@ -73,7 +73,7 @@ function MyEditor() {
 
 export const BlockEditorPreview = () => (
   <FullBlockEditor
-    className="rounded-2xl border border-border/60 bg-card font-inter text-card-foreground [&_.ProseMirror]:text-[15px]"
+    className="rounded-2xl border border-border/60 bg-background font-inter text-foreground [&_.ProseMirror]:text-[15px]"
     content={DEMO_CONTENT}
     markdownFilename="editorcn.md"
     searchUsers={searchPeople}

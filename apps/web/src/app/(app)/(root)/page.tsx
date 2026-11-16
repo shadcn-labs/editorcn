@@ -89,7 +89,11 @@ export const HomePage = () => (
 
       <section className="container-wrapper">
         <div className="container">
-          <BlockViewer items={SHOWCASE} />
+          <BlockViewer
+            defaultItem="simple-document-editor"
+            items={SHOWCASE}
+            mobileDefaultItem="full-block-editor"
+          />
         </div>
       </section>
 
