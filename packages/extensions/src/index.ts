@@ -39,3 +39,26 @@ export {
   pasteCleanupPluginKey,
 } from "./paste-cleanup";
 export type { PasteCleanupOptions } from "./paste-cleanup";
+export {
+  AI_SYSTEM_PROMPT,
+  Ai,
+  DEFAULT_AI_PRESETS,
+  aiPluginKey,
+  buildAiPrompt,
+  createFetchTransport,
+  getAiState,
+  parseAiResult,
+  readAiStream,
+} from "./ai";
+export type {
+  AiMode,
+  AiOptions,
+  AiPreset,
+  AiRequest,
+  AiState,
+  AiStatus,
+  AiStreamSource,
+  AiSubmitOptions,
+  AiTransport,
+  FetchTransportOptions,
+} from "./ai";

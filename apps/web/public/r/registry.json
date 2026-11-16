@@ -1059,6 +1059,68 @@
     },
     {
       "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "@tiptap/pm@>=3.0.0 <4"
+      ],
+      "description": "The engine for AI writing features. Streams a model reply into a preview next to the selection or below the cursor, then accept it as one undo step, discard it, stop it, or retry. Bring any provider through a transport function, with a fetch helper for Vercel AI SDK routes, markdown-aware context and parsing, and default presets.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ai/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ai/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ai/transport.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ai/prompt.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ai/style.css",
+          "type": "registry:style"
+        }
+      ],
+      "name": "ai",
+      "title": "AI",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
         "@tiptap/core@>=3.0.0 <4",
         "@tiptap/static-renderer@>=3.21.0 <4",
         "@tiptap/react@>=3.0.0 <4",

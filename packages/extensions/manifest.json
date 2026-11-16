@@ -114,5 +114,13 @@
       "mermaid@^11.0.0",
       "prettier@^3.0.0"
     ]
+  },
+  "ai": {
+    "title": "AI",
+    "description": "The engine for AI writing features. Streams a model reply into a preview next to the selection or below the cursor, then accept it as one undo step, discard it, stop it, or retry. Bring any provider through a transport function, with a fetch helper for Vercel AI SDK routes, markdown-aware context and parsing, and default presets.",
+    "extension": "ai/index.ts",
+    "files": ["ai/types.ts", "ai/transport.ts", "ai/prompt.ts"],
+    "css": ["ai/style.css"],
+    "deps": ["@tiptap/pm@>=3.0.0 <4"]
   }
 }

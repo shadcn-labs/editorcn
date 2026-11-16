@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "exports": {
+    "./ai": "./src/ai/index.ts",
+    "./ai/prompt": "./src/ai/prompt.ts",
+    "./ai/style.css": "./src/ai/style.css",
     "./callout": "./src/callout/index.ts",
     "./callout-toolbar": "./src/callout/toolbar.tsx",
     "./callout/style.css": "./src/callout/style.css",
