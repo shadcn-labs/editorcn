@@ -5,6 +5,7 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { Toggle } from ".";
+import { toggleSlashCommandItem } from "./slash-command-item";
 
 let editor: Editor | null = null;
 
@@ -145,6 +146,29 @@ describe("toggle", () => {
     type(target, "+++");
     expect(target.getHTML()).toContain("<summary>+++</summary>");
     expect(target.getHTML().split("<details").length - 1).toBe(1);
+  });
+
+  it("slash command inserts a toggle and removes the query", () => {
+    const target = create("<p>/toggle</p>");
+    toggleSlashCommandItem.command({
+      editor: target,
+      range: { from: 1, to: 8 },
+    });
+    expect(target.getHTML()).toBe(
+      '<details><summary></summary><div data-type="detailsContent"><p></p></div></details>'
+    );
+  });
+
+  it("slash command leaves the document alone when a toggle cannot be inserted", () => {
+    const html =
+      '<details><summary>/toggle</summary><div data-type="detailsContent"><p>Body</p></div></details>';
+    const target = create(html);
+    target.commands.setTextSelection(9);
+    toggleSlashCommandItem.command({
+      editor: target,
+      range: { from: 2, to: 9 },
+    });
+    expect(target.getHTML()).toBe(html);
   });
 
   it("updates the button label when Enter opens the toggle", () => {

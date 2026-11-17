@@ -4,7 +4,7 @@
     "@tiptap/core@>=3.30.5 <4",
     "@tiptap/react@>=3.0.0 <4",
     "lucide-react@>=0.400.0 <1.0.0",
-    "@tiptap/extension-details@>=3.22.0 <4",
+    "@tiptap/extension-details@>=3.24.0 <4",
     "@tiptap/extension-gapcursor@>=3.0.0 <4",
     "@tiptap/pm@>=3.0.0 <4"
   ],
@@ -59,7 +59,7 @@
       "type": "registry:component"
     },
     {
-      "content": "import type { Editor, Range } from \"@tiptap/core\";\nimport { ChevronRight } from \"lucide-react\";\nimport { createElement } from \"react\";\nimport type { ReactNode } from \"react\";\n\nexport interface ToggleSlashCommandItem {\n  id: string;\n  title: string;\n  description: string;\n  keywords: string[];\n  icon?: ReactNode;\n  command: (props: { editor: Editor; range: Range }) => void;\n}\n\n/** Slash command item for the `@editorcn/block-editor` menu. */\nexport const toggleSlashCommandItem: ToggleSlashCommandItem = {\n  command: ({ editor, range }) => {\n    editor.chain().focus().deleteRange(range).setDetails().run();\n  },\n  description: \"Hide content inside a collapsible section.\",\n  icon: createElement(ChevronRight),\n  id: \"toggle\",\n  keywords: [\n    \"toggle\",\n    \"collapsible\",\n    \"collapse\",\n    \"details\",\n    \"accordion\",\n    \"fold\",\n  ],\n  title: \"Toggle\",\n};\n",
+      "content": "import type { Editor, Range } from \"@tiptap/core\";\nimport { ChevronRight } from \"lucide-react\";\nimport { createElement } from \"react\";\nimport type { ReactNode } from \"react\";\n\nexport interface ToggleSlashCommandItem {\n  id: string;\n  title: string;\n  description: string;\n  keywords: string[];\n  icon?: ReactNode;\n  command: (props: { editor: Editor; range: Range }) => void;\n}\n\n/** Slash command item for the `@editorcn/block-editor` menu. */\nexport const toggleSlashCommandItem: ToggleSlashCommandItem = {\n  command: ({ editor, range }) => {\n    if (!editor.can().setDetails()) {\n      return;\n    }\n    editor.chain().focus().deleteRange(range).setDetails().run();\n  },\n  description: \"Hide content inside a collapsible section.\",\n  icon: createElement(ChevronRight),\n  id: \"toggle\",\n  keywords: [\n    \"toggle\",\n    \"collapsible\",\n    \"collapse\",\n    \"details\",\n    \"accordion\",\n    \"fold\",\n  ],\n  title: \"Toggle\",\n};\n",
       "path": "extensions/toggle/slash-command-item.ts",
       "target": "@components/extensions/toggle/slash-command-item.ts",
       "type": "registry:component"
