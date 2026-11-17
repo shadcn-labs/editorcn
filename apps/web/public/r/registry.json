@@ -1158,6 +1158,39 @@
         "@tiptap/starter-kit@>=3.0.0 <4",
         "@tiptap/extension-placeholder@>=3.0.0 <4",
         "@tiptap/extension-link@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
+      ],
+      "description": "An email card with To and Subject fields, a message body with bold, italic, underline, link and list controls, and Send and Discard buttons. onSend receives the body as Tiptap JSON.",
+      "files": [
+        {
+          "path": "templates/email-composer/index.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/email-composer/toolbar.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/email-composer/types.ts",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/email-composer/utils.ts",
+          "type": "registry:block"
+        }
+      ],
+      "name": "email-composer",
+      "title": "Email Composer",
+      "type": "registry:block"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4",
+        "@tiptap/starter-kit@>=3.0.0 <4",
+        "@tiptap/extension-placeholder@>=3.0.0 <4",
+        "@tiptap/extension-link@>=3.0.0 <4",
         "@tiptap/extension-highlight@>=3.0.0 <4",
         "@tiptap/extension-task-list@>=3.0.0 <4",
         "@tiptap/extension-task-item@>=3.0.0 <4",

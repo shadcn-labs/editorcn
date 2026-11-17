@@ -918,6 +918,15 @@ const templateDeps = {
     "@tiptap/extension-placeholder@>=3.0.0 <4",
     "@tiptap/extension-mention@>=3.0.0 <4",
   ],
+  "email-composer": [
+    "@tiptap/core@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+    "@tiptap/extension-link@>=3.0.0 <4",
+    "lucide-react@>=0.400.0 <1.0.0",
+  ],
   "simple-document-editor": [
     "@tiptap/core@>=3.0.0 <4",
     "@tiptap/react@>=3.0.0 <4",
@@ -998,6 +1007,14 @@ const templateItems = [
       "https://www.rtecn.space/r/static-renderer.json",
       "https://www.rtecn.space/r/mention.json",
     ],
+  },
+  {
+    deps: templateDeps["email-composer"],
+    desc: "An email card with To and Subject fields, a message body with bold, italic, underline, link and list controls, and Send and Discard buttons. onSend receives the body as Tiptap JSON.",
+    files: templateEntry("email-composer"),
+    name: "email-composer",
+    title: "Email Composer",
+    ui: ["button", "kbd"],
   },
   {
     deps: templateDeps["simple-document-editor"],

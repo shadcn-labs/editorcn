@@ -1,0 +1,57 @@
+---
+title: Email Composer
+seoTitle: "Tiptap Email Composer Template for React and shadcn/ui"
+description: "A ready-made email compose box for React built on Tiptap and shadcn/ui, with To and Subject fields, a formatted message body and Send and Discard buttons. Install it with one command."
+---
+
+A compose card for CRMs, support tools and newsletter apps: **To** and **Subject** fields, a message body with bold, italic, underline, link and list controls, and Send and Discard buttons. Send stays disabled until there's a recipient and a message. Press `Mod+Enter` in the body to send.
+
+<TemplateShowcase name="email-composer" />
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://www.rtecn.space/r/email-composer.json"
+```
+
+Your project needs Tailwind CSS and shadcn/ui; see the [template requirements](/docs/templates#requirements).
+
+## Usage
+
+`onSend` receives `{ to, subject, content }`, with the body as Tiptap JSON. Turn it into HTML with `generateHTML()` from `@tiptap/html`, passing the template's `EMAIL_EXTENSIONS` so the schema matches. `utils.ts` has no React code, so you can import it on the server and build the HTML where you send the email.
+
+```tsx
+import { generateHTML } from "@tiptap/html";
+
+import { EmailComposer } from "@/components/templates/email-composer";
+import { EMAIL_EXTENSIONS } from "@/components/templates/email-composer/utils";
+
+export const Compose = () => (
+  <EmailComposer
+    onSend={({ to, subject, content }) =>
+      sendEmail({ to, subject, html: generateHTML(content, EMAIL_EXTENSIONS) })
+    }
+  />
+);
+```
+
+If `onSend` returns a promise, the composer shows "Sending…" until it settles. When it resolves, the fields go back to their initial values. When it throws or rejects, everything stays in place and an error shows so the person can try again. Discard resets the fields the same way and calls `onDiscard`, for example to close a dialog.
+
+The To field accepts one address or several separated by commas, and the browser checks the format when the person sends.
+
+## Props
+
+| Prop             | Type          | Description                                           |
+| ---------------- | ------------- | ----------------------------------------------------- |
+| `onSend`         | `function`    | Gets `{ to, subject, content }`, can return a promise |
+| `onDiscard`      | `function`    | Called after the fields are cleared                   |
+| `initialTo`      | `string`      | Prefilled recipient, for example when replying        |
+| `initialSubject` | `string`      | Prefilled subject                                     |
+| `initialContent` | `JSONContent` | Prefilled message body                                |
+| `title`          | `string`      | Header title, default `New message`                   |
+| `placeholder`    | `string`      | Body placeholder                                      |
+| `className`      | `string`      | Outer container classes                               |
+
+## More templates
+
+<TemplateGallery exclude="email-composer" />
