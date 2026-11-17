@@ -47,6 +47,37 @@ import type { BlockEditorIcons } from "@editorcn/block-editor";
 import "@editorcn/block-editor/style.css";
 ```
 
+## Full setup
+
+To start from the complete block editor on the [homepage](/), install the **Full Block Editor**. It brings the block editor, a slash menu with images, tables, callouts and Markdown import and export, and the [Callout](/docs/extensions/callout), [Code Block](/docs/extensions/code-block), [Image Placeholder](/docs/extensions/image-placeholder), [Markdown](/docs/extensions/markdown), [Mention](/docs/extensions/mention), [Paste Cleanup](/docs/extensions/paste-cleanup) and [Table](/docs/extensions/table) extensions in one command:
+
+```bash
+npx shadcn@latest add "https://www.rtecn.space/r/full-block-editor.json"
+```
+
+It lands in `components/templates/full-block-editor/`:
+
+```tsx
+import { FullBlockEditor } from "@/components/templates/full-block-editor";
+
+export const Page = ({ doc }) => (
+  <FullBlockEditor
+    content={doc.content}
+    onChange={(json) => saveDocument(doc.id, json)}
+    searchUsers={(query) => fetchUsers(query)}
+  />
+);
+```
+
+| Prop               | Type       | Description                                            |
+| ------------------ | ---------- | ------------------------------------------------------ |
+| `content`          | `Content`  | Tiptap JSON or HTML to start with                      |
+| `onChange`         | `function` | Gets the document as Tiptap JSON                       |
+| `searchUsers`      | `function` | Gets the `@` query, returns `MentionItem[]` (async ok) |
+| `placeholder`      | `string`   | Placeholder for an empty document                      |
+| `markdownFilename` | `string`   | File name for Markdown export, default `document.md`   |
+| `className`        | `string`   | Outer container classes                                |
+
 ## Install Extensions
 
 For demo, we will use these extensions:
@@ -307,19 +338,19 @@ const myItems: SlashCommandSuggestionItem[] = [
 
 The default icons ship with **lucide-react**. If your `components.json` uses a different `iconLibrary`, install the matching icon set after the block editor — it overwrites `components/block-editor/icons.tsx` and installs only that library's package:
 
-| `iconLibrary`      | Install                                                                                   |
-| ------------------ | ----------------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                                |
-| `phosphor`         | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-remixicon.json"` |
+| `iconLibrary`      | Install                                                                               |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| `lucide` (default) | nothing — already included                                                            |
+| `phosphor`         | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-phosphor.json"`  |
+| `tabler`           | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-tabler.json"`    |
+| `hugeicons`        | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-hugeicons.json"` |
+| `remixicon`        | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-remixicon.json"` |
 
 Order matters — add the block editor first, then the icon set:
 
 ```bash
-npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor.json"
-npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-phosphor.json"
+npx shadcn@latest add "https://www.rtecn.space/r/block-editor.json"
+npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-phosphor.json"
 ```
 
 Each set covers every slash menu, bubble menu, and drag handle icon, and reuses the shared language icons. Once installed you own `icons.tsx`, so you can still hand-edit it or override individual keys with the `icons` prop.

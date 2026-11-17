@@ -1,0 +1,21 @@
+---
+title: "November 14, 2026 - Full editor setups"
+description: "The toolbar editor and block editor from the homepage now install with one shadcn CLI command, with every extension and dependency included."
+date: "2026-11-14"
+---
+
+The two editors on the [homepage](/) are now registry items. Before, getting them meant copying a long snippet and installing the editor and each extension by hand.
+
+```bash
+npx shadcn@latest add "https://www.rtecn.space/r/full-editor.json"
+npx shadcn@latest add "https://www.rtecn.space/r/full-block-editor.json"
+```
+
+## Highlights
+
+- **One command each**: the CLI installs the editor or block editor, the Callout, Code Block, Image Placeholder, Markdown, Mention, Paste Cleanup and Table extensions, and every Tiptap package they use.
+- **Ready-made components**: `FullEditor` and `FullBlockEditor` take `content`, `onChange` (Tiptap JSON), `searchUsers` for `@` mentions, and `placeholder`.
+- **Same code as the homepage**: the homepage previews render these components, and the **Code** tab shows the exact files the CLI installs, so they always match.
+- **New homepage showcase**: one viewer for every editor and template, with category and item pickers, prev/next, Preview and Code views, desktop, tablet and mobile widths, and a copyable registry name.
+
+See [Full setup](/docs/editor#full-setup) for the toolbar editor and [Full setup](/docs/block-editor#full-setup) for the block editor.

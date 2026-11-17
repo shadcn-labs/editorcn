@@ -1,0 +1,50 @@
+---
+title: Simple Document Editor
+seoTitle: "Tiptap Document Editor Template for React and shadcn/ui"
+description: "A Google Docs-style document editor for React built on Tiptap and shadcn/ui, with a floating toolbar, tables, images, Markdown import and export, and word count."
+---
+
+A document page: a breadcrumb header with collaborators, a floating toolbar, and a paper-style page with a large editable title. The toolbar covers text styles, fonts, text and highlight colors, superscript and subscript, lists with indent and outdent, alignment, and an Insert menu for images, tables, quotes, code blocks and dividers. The header menu imports, exports and copies the document as Markdown. A status bar shows word count, reading time and keyboard shortcuts.
+
+<TemplateShowcase name="simple-document-editor" />
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://www.rtecn.space/r/simple-document-editor.json"
+```
+
+The CLI also installs the [Image Placeholder](/docs/extensions/image-placeholder), [Table](/docs/extensions/table), [Markdown](/docs/extensions/markdown), [Paste Cleanup](/docs/extensions/paste-cleanup) and [Code Block](/docs/extensions/code-block) extensions. Your project needs Tailwind CSS and shadcn/ui; see the [template requirements](/docs/templates#requirements).
+
+## Usage
+
+```tsx
+import { SimpleDocumentEditor } from "@/components/templates/simple-document-editor";
+
+export const Doc = ({ doc }) => (
+  <SimpleDocumentEditor
+    initialTitle={doc.title}
+    initialContent={doc.content}
+    onChange={(content) => saveDocument(doc.id, content)}
+    onTitleChange={(title) => renameDocument(doc.id, title)}
+    onShare={() => openShareDialog(doc.id)}
+  />
+);
+```
+
+## Props
+
+| Prop             | Type                     | Description                          |
+| ---------------- | ------------------------ | ------------------------------------ |
+| `initialContent` | `Content`                | Tiptap JSON or HTML to start with    |
+| `initialTitle`   | `string`                 | Title for the breadcrumb and page    |
+| `onChange`       | `function`               | Gets the document as Tiptap JSON     |
+| `onTitleChange`  | `function`               | Gets the new title                   |
+| `onShare`        | `function`               | Shows a Share button when set        |
+| `collaborators`  | `DocumentCollaborator[]` | Avatars in the header                |
+| `path`           | `string[]`               | Breadcrumb segments before the title |
+| `className`      | `string`                 | Outer container classes              |
+
+## More templates
+
+<TemplateGallery exclude="simple-document-editor" />

@@ -35,6 +35,7 @@ import {
   FontFamilySelectCard,
   FontSizeCard,
 } from "@/components/customization/templates-demos";
+import { TemplateGallery } from "@/components/template-gallery";
 import { TemplateShowcase } from "@/components/template-showcase";
 import {
   Accordion,
@@ -161,6 +162,7 @@ export const mdxComponents = {
       {...props}
     />
   ),
+  TemplateGallery,
   TemplateShowcase,
   a: ({ className, children, ...props }: React.ComponentProps<"a">) => (
     <a

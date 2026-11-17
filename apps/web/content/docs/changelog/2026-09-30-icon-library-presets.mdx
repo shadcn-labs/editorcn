@@ -11,17 +11,17 @@ Both editors previously hardcoded **lucide-react** icons. If your `components.js
 - **Per-library registry items** — eight new items (`editor-icons-{phosphor,tabler,hugeicons,remixicon}` and the `block-editor-icons-*` equivalents) each install only that library's package and overwrite the editor's `icons.tsx`. Installing the editor first, then its icon set, switches the whole toolbar over:
 
   ```bash
-  npx shadcn@latest add "https://editorcn.vercel.app/r/editor.json"
-  npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-phosphor.json"
+  npx shadcn@latest add "https://www.rtecn.space/r/editor.json"
+  npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-phosphor.json"
   ```
 
-  | `iconLibrary`      | Install                                                                             |
-  | ------------------ | ----------------------------------------------------------------------------------- |
-  | `lucide` (default) | nothing — already included                                                          |
-  | `phosphor`         | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-phosphor.json"`  |
-  | `tabler`           | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-tabler.json"`    |
-  | `hugeicons`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-hugeicons.json"` |
-  | `remixicon`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-remixicon.json"` |
+  | `iconLibrary`      | Install                                                                         |
+  | ------------------ | ------------------------------------------------------------------------------- |
+  | `lucide` (default) | nothing — already included                                                      |
+  | `phosphor`         | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-phosphor.json"`  |
+  | `tabler`           | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-tabler.json"`    |
+  | `hugeicons`        | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-hugeicons.json"` |
+  | `remixicon`        | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-remixicon.json"` |
 
 - **One library per install** — each item declares only its own dependencies (`@phosphor-icons/react`, `@tabler/icons-react`, `@hugeicons/react` + `@hugeicons/core-free-icons`, `@remixicon/react`), so no project ends up with all five libraries installed.
 - **Language icons split out** — `DEFAULT_LANGUAGE_ICONS` moved to its own `language-icons.tsx` in both packages, so each icon set reuses the same code block language icons instead of redefining them. Still exported from each package's index.

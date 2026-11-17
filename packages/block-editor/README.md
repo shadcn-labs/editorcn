@@ -1,6 +1,6 @@
 # @editorcn/block-editor
 
-A **Notion-style** block-type rich text editor built on [Tiptap](https://tiptap.dev/) with shadcn/ui design tokens. Part of the [editorcn](https://editorcn.vercel.app) editor suite.
+A **Notion-style** block-type rich text editor built on [Tiptap](https://tiptap.dev/) with shadcn/ui design tokens. Part of the [editorcn](https://www.rtecn.space) editor suite.
 
 ## Features
 
@@ -35,7 +35,7 @@ Make sure your `components.json` includes the editorcn registry:
 ```json
 {
   "registries": {
-    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+    "@editorcn": "https://www.rtecn.space/r/{name}.json"
   }
 }
 ```
@@ -67,7 +67,7 @@ export function MyEditor() {
 
 ## Documentation
 
-Full API reference at [editorcn.vercel.app/docs/block-editor](https://editorcn.vercel.app/docs/block-editor).
+Full API reference at [www.rtecn.space/docs/block-editor](https://www.rtecn.space/docs/block-editor).
 
 ## License
 

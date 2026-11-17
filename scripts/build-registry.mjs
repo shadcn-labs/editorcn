@@ -20,12 +20,46 @@ const entry = (path, type, pkg, src) => {
   return { content: read(pkg, src), path, target, type };
 };
 
+const splitBlockEditorImport = (names) => {
+  const list = names
+    .split(",")
+    .map((name) => name.trim())
+    .filter(Boolean);
+  const rest = list.filter((name) => name !== "BlockEditor");
+  return [
+    list.includes("BlockEditor")
+      ? 'import { BlockEditor } from "@/components/block-editor/block-editor";'
+      : "",
+    rest.length > 0
+      ? `import { ${rest.join(", ")} } from "@/components/block-editor/extensions";`
+      : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
+};
+
 const readTemplate = (file) =>
   readText(
     resolve(root, "apps", "web", "src", "components", "templates", file),
     "utf-8"
   )
     .replaceAll("@editorcn/editor", "@/components/editor")
+    .replaceAll(
+      '"@editorcn/block-editor/style.css"',
+      '"@/components/block-editor/style.css"'
+    )
+    .replaceAll(
+      /import \{([^}]*)\} from "@editorcn\/block-editor";/g,
+      (_, names) => splitBlockEditorImport(names)
+    )
+    .replaceAll(
+      '"@editorcn/block-editor"',
+      '"@/components/block-editor/extensions"'
+    )
+    .replaceAll(
+      /@editorcn\/extensions\/([a-z-]+)-toolbar/g,
+      "@/components/extensions/$1/toolbar"
+    )
     .replaceAll("@editorcn/static-renderer", "@/components/static-renderer")
     .replaceAll(
       "@editorcn/extensions/table-hover-overlay",
@@ -905,6 +939,49 @@ const templateDeps = {
   ],
 };
 
+const fullEditorDeps = [
+  "@tiptap/core@>=3.0.0 <4",
+  "@tiptap/react@>=3.0.0 <4",
+  "@tiptap/pm@>=3.0.0 <4",
+  "@tiptap/starter-kit@>=3.0.0 <4",
+  "@tiptap/extension-character-count@>=3.0.0 <4",
+  "@tiptap/extension-color@>=3.0.0 <4",
+  "@tiptap/extension-highlight@>=3.0.0 <4",
+  "@tiptap/extension-placeholder@>=3.0.0 <4",
+  "@tiptap/extension-subscript@>=3.0.0 <4",
+  "@tiptap/extension-superscript@>=3.0.0 <4",
+  "@tiptap/extension-text-align@>=3.0.0 <4",
+  "@tiptap/extension-text-style@>=3.0.0 <4",
+  "@tiptap/extension-underline@>=3.0.0 <4",
+];
+
+const fullBlockEditorDeps = [
+  "@tiptap/core@>=3.0.0 <4",
+  "@tiptap/react@>=3.0.0 <4",
+  "@tiptap/pm@>=3.0.0 <4",
+  "@tiptap/starter-kit@>=3.0.0 <4",
+  "@tiptap/extension-color@>=3.0.0 <4",
+  "@tiptap/extension-highlight@>=3.0.0 <4",
+  "@tiptap/extension-link@>=3.0.0 <4",
+  "@tiptap/extension-placeholder@>=3.0.0 <4",
+  "@tiptap/extension-task-item@>=3.0.0 <4",
+  "@tiptap/extension-task-list@>=3.0.0 <4",
+  "@tiptap/extension-text-align@>=3.0.0 <4",
+  "@tiptap/extension-text-style@>=3.0.0 <4",
+  "@tiptap/extension-underline@>=3.0.0 <4",
+  "lucide-react@>=0.400.0 <1.0.0",
+];
+
+const fullSetupExtensions = [
+  "https://www.rtecn.space/r/callout.json",
+  "https://www.rtecn.space/r/code-block.json",
+  "https://www.rtecn.space/r/image-placeholder.json",
+  "https://www.rtecn.space/r/markdown.json",
+  "https://www.rtecn.space/r/mention.json",
+  "https://www.rtecn.space/r/paste-cleanup.json",
+  "https://www.rtecn.space/r/table.json",
+];
+
 const templateItems = [
   {
     deps: templateDeps["comment-box"],
@@ -918,8 +995,8 @@ const templateItems = [
       "dropdown-menu",
       "kbd",
       "popover",
-      "https://editorcn.vercel.app/r/static-renderer.json",
-      "https://editorcn.vercel.app/r/mention.json",
+      "https://www.rtecn.space/r/static-renderer.json",
+      "https://www.rtecn.space/r/mention.json",
     ],
   },
   {
@@ -935,12 +1012,29 @@ const templateItems = [
       "kbd",
       "popover",
       "tooltip",
-      "https://editorcn.vercel.app/r/table.json",
-      "https://editorcn.vercel.app/r/image-placeholder.json",
-      "https://editorcn.vercel.app/r/markdown.json",
-      "https://editorcn.vercel.app/r/paste-cleanup.json",
-      "https://editorcn.vercel.app/r/code-block.json",
+      "https://www.rtecn.space/r/table.json",
+      "https://www.rtecn.space/r/image-placeholder.json",
+      "https://www.rtecn.space/r/markdown.json",
+      "https://www.rtecn.space/r/paste-cleanup.json",
+      "https://www.rtecn.space/r/code-block.json",
     ],
+  },
+  {
+    deps: fullEditorDeps,
+    desc: "The full toolbar editor from the editorcn homepage: every toolbar control plus callouts, code blocks, tables, images, embeds, mentions, Markdown and paste cleanup.",
+    files: templateEntry("full-editor"),
+    name: "full-editor",
+    title: "Full Toolbar Editor",
+    ui: fullSetupExtensions,
+  },
+  {
+    base: "https://www.rtecn.space/r/block-editor.json",
+    deps: fullBlockEditorDeps,
+    desc: "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
+    files: templateEntry("full-block-editor"),
+    name: "full-block-editor",
+    title: "Full Block Editor",
+    ui: [...fullSetupExtensions, "https://www.rtecn.space/r/toggle.json"],
   },
 ];
 
@@ -1013,7 +1107,7 @@ for (const item of templateItems) {
         item.desc,
         item.files,
         item.deps,
-        ["https://editorcn.vercel.app/r/editor.json", ...item.ui],
+        [item.base ?? "https://www.rtecn.space/r/editor.json", ...item.ui],
         "registry:block"
       ),
       null,
@@ -1062,7 +1156,7 @@ for (const [name, item] of writtenIconsets) {
 
 const catalog = {
   $schema: "https://ui.shadcn.com/schema/registry.json",
-  homepage: "https://editorcn.vercel.app",
+  homepage: "https://www.rtecn.space",
   items: [
     catalogItem(
       "editor",

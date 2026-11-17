@@ -121,7 +121,7 @@ export const Composer = ({
   initialContent?: JSONContent;
   mentionable?: CommentAuthor[];
   onCancel?: () => void;
-  onPost: (content: JSONContent) => void;
+  onPost: (content: JSONContent) => Promise<void>;
   placeholder: string;
   submitLabel?: string;
 }) => {
@@ -177,12 +177,23 @@ export const Composer = ({
       selector: ({ editor: e }) => !e || e.isEmpty,
     }) ?? true;
 
-  const post = useCallback(() => {
-    if (!editor || editor.isDestroyed || editor.isEmpty) {
+  const posting = useRef(false);
+
+  const post = useCallback(async () => {
+    if (!editor || editor.isDestroyed || editor.isEmpty || posting.current) {
       return;
     }
-    onPost(editor.getJSON());
-    editor.commands.clearContent();
+    posting.current = true;
+    try {
+      await onPost(editor.getJSON());
+    } catch {
+      return;
+    } finally {
+      posting.current = false;
+    }
+    if (!editor.isDestroyed) {
+      editor.commands.clearContent();
+    }
   }, [editor, onPost]);
 
   useEffect(() => {
