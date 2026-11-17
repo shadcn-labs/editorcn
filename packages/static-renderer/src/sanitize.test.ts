@@ -298,6 +298,17 @@ describe(sanitizeHtml, () => {
       sanitizeHtml('<div data-type="callout" onclick="alert(1)"><p>x</p></div>')
     ).toBe('<div data-type="callout"><p>x</p></div>');
   });
+
+  it("keeps toggle details and summary", () => {
+    const html =
+      '<details open><summary>Title</summary><div data-type="detailsContent"><p>Body</p></div></details>';
+    expect(sanitizeHtml(html)).toBe(html);
+    expect(
+      sanitizeHtml(
+        '<details open onclick="alert(1)"><summary onmouseover="alert(1)">x</summary></details>'
+      )
+    ).toBe("<details open><summary>x</summary></details>");
+  });
 });
 
 describe("StaticRenderer sanitize prop", () => {

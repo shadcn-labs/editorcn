@@ -6,6 +6,7 @@ import {
   downloadMarkdown,
   importMarkdownFile,
 } from "@editorcn/extensions/markdown";
+import { toggleSlashCommandItem } from "@editorcn/extensions/toggle";
 import {
   FileDown,
   FileUp,
@@ -58,6 +59,7 @@ export const createSlashItems = (
     keywords: ["callout", "note", "tip", "warning", "alert", "info"],
     title: "Callout",
   },
+  toggleSlashCommandItem,
   {
     command: ({ editor, range }) => {
       editor.chain().focus().deleteRange(range).run();

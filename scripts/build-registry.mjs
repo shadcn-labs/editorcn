@@ -1030,11 +1030,11 @@ const templateItems = [
   {
     base: "https://www.rtecn.space/r/block-editor.json",
     deps: fullBlockEditorDeps,
-    desc: "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
+    desc: "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
     files: templateEntry("full-block-editor"),
     name: "full-block-editor",
     title: "Full Block Editor",
-    ui: fullSetupExtensions,
+    ui: [...fullSetupExtensions, "https://www.rtecn.space/r/toggle.json"],
   },
 ];
 

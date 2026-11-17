@@ -17,6 +17,7 @@ import type { MentionItem } from "@editorcn/extensions/mention";
 import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
+import { Toggle } from "@editorcn/extensions/toggle";
 import { Color } from "@tiptap/extension-color";
 import { Highlight } from "@tiptap/extension-highlight";
 import { Link } from "@tiptap/extension-link";
@@ -41,6 +42,7 @@ import "@editorcn/extensions/code-block/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/mention/style.css";
 import "@editorcn/extensions/table/style.css";
+import "@editorcn/extensions/toggle/style.css";
 import "@editorcn/extensions/ui/style.css";
 
 export interface FullBlockEditorProps {
@@ -78,6 +80,7 @@ const FullBlockEditorInner = ({
       TaskItem.configure({ nested: true }),
       CodeBlock,
       Callout,
+      Toggle,
       SlashCommand.configure({
         suggestion: getSlashCommandSuggestion(
           createSlashItems(markdownFilename)
