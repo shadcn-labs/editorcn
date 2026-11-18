@@ -1,4 +1,3 @@
-import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 import { useEffect, useMemo, useState } from "react";
 
 import { BubbleMenu } from "./bubble-menu/index";
@@ -18,7 +17,11 @@ import { ControlsGroup } from "./rte-controls-group";
 import { Footer } from "./rte-footer";
 import { Toolbar } from "./rte-toolbar";
 import type { RichTextEditorProps } from "./types";
-import { Tooltip, TooltipContent, TooltipProvider } from "./ui/tooltip";
+import {
+  createTooltipHandle,
+  TooltipHandleContent,
+  TooltipProvider,
+} from "./ui/tooltip";
 import { cn } from "./ui/utils";
 
 const RichTextEditorRoot = ({
@@ -36,7 +39,7 @@ const RichTextEditorRoot = ({
   );
 
   const mergedIcons = useMemo(() => ({ ...DEFAULT_ICONS, ...icons }), [icons]);
-  const [tooltip] = useState(() => TooltipPrimitive.createHandle<string>());
+  const [tooltip] = useState(createTooltipHandle);
 
   useEffect(() => {
     if (editor && editor.isEditable !== editable) {
@@ -65,11 +68,7 @@ const RichTextEditorRoot = ({
       >
         <TooltipProvider>
           {children}
-          <Tooltip handle={tooltip}>
-            {({ payload }) => (
-              <TooltipContent side="bottom">{payload as string}</TooltipContent>
-            )}
-          </Tooltip>
+          <TooltipHandleContent handle={tooltip} side="bottom" />
         </TooltipProvider>
       </div>
     </RichTextEditorContext.Provider>

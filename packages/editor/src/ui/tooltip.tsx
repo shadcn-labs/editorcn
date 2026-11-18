@@ -1,6 +1,7 @@
 "use client";
 
 import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
+import type { ComponentProps } from "react";
 
 import { cn } from "./utils";
 
@@ -59,4 +60,31 @@ const TooltipContent = ({
   </TooltipPrimitive.Portal>
 );
 
-export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider };
+type TooltipHandle = TooltipPrimitive.Handle<string>;
+
+const createTooltipHandle = (): TooltipHandle =>
+  TooltipPrimitive.createHandle<string>();
+
+const TooltipHandleContent = ({
+  handle,
+  ...props
+}: { handle: TooltipHandle } & Omit<
+  ComponentProps<typeof TooltipContent>,
+  "children"
+>) => (
+  <Tooltip handle={handle}>
+    {({ payload }) => (
+      <TooltipContent {...props}>{payload as string}</TooltipContent>
+    )}
+  </Tooltip>
+);
+
+export {
+  createTooltipHandle,
+  Tooltip,
+  TooltipContent,
+  TooltipHandleContent,
+  TooltipProvider,
+  TooltipTrigger,
+};
+export type { TooltipHandle };
