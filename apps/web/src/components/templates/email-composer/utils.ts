@@ -18,8 +18,10 @@ export const EMAIL_EXTENSIONS = [
   Link.configure({ openOnClick: false }),
 ];
 
-export const FIELD =
-  "placeholder:text-muted-foreground/70 h-10 min-w-0 flex-1 bg-transparent text-base outline-none sm:text-sm";
+export const ROW =
+  "border-border/60 flex shrink-0 items-center gap-3 border-b px-4";
 
-export const modKey = () =>
-  /Mac|iPhone|iPad/.test(globalThis.navigator?.userAgent ?? "") ? "⌘" : "Ctrl";
+export const LABEL = "text-muted-foreground w-14 shrink-0 text-sm";
+
+export const FIELD =
+  "placeholder:text-muted-foreground/70 h-10 min-w-0 flex-1 bg-transparent text-base outline-none disabled:opacity-50 sm:text-sm";

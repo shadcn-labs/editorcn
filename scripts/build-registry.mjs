@@ -1014,7 +1014,7 @@ const templateItems = [
     files: templateEntry("email-composer"),
     name: "email-composer",
     title: "Email Composer",
-    ui: ["button", "kbd"],
+    ui: ["button"],
   },
   {
     deps: templateDeps["simple-document-editor"],

@@ -3,16 +3,15 @@
 import { Link, RichTextEditor } from "@editorcn/editor";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { useEditor } from "@tiptap/react";
-import { SendIcon } from "lucide-react";
+import { SendIcon, Trash2Icon } from "lucide-react";
 import { Suspense, useId, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { cn } from "@/lib/utils";
 
 import { Toolbar } from "./toolbar";
 import type { EmailComposerProps } from "./types";
-import { FIELD, STARTER_KIT, modKey } from "./utils";
+import { FIELD, LABEL, ROW, STARTER_KIT } from "./utils";
 
 import "@editorcn/editor/style.css";
 
@@ -98,106 +97,107 @@ const EmailComposerInner = ({
       ref={form}
       aria-labelledby={`${id}-title`}
       className={cn(
-        "bg-background flex flex-col overflow-hidden rounded-xl border",
+        "border-border/60 bg-muted/50 flex flex-col overflow-hidden rounded-xl border p-1",
         className
       )}
       onSubmit={send}
     >
-      <header className="flex shrink-0 items-center border-b px-4 py-3">
+      <header className="flex min-h-9 shrink-0 items-center justify-between gap-2 px-2.5 pb-1">
         <h3 className="text-sm font-semibold" id={`${id}-title`}>
           {title}
         </h3>
+        {error && (
+          <p
+            className="rounded-full bg-rose-500/10 px-2 py-0.5 text-xs font-medium text-rose-700 dark:text-rose-400"
+            role="alert"
+          >
+            Couldn't send. Try again.
+          </p>
+        )}
       </header>
-      <div className="flex shrink-0 items-center gap-3 border-b px-4">
-        <label
-          className="text-muted-foreground w-14 shrink-0 text-sm"
-          htmlFor={`${id}-to`}
-        >
-          To
-        </label>
-        <input
-          autoComplete="email"
-          className={FIELD}
-          disabled={sending}
-          id={`${id}-to`}
-          inputMode="email"
-          multiple
-          name="to"
-          onChange={(event) => setTo(event.target.value)}
-          placeholder="name@example.com"
-          type="email"
-          value={to}
-        />
-      </div>
-      <div className="flex shrink-0 items-center gap-3 border-b px-4">
-        <label
-          className="text-muted-foreground w-14 shrink-0 text-sm"
-          htmlFor={`${id}-subject`}
-        >
-          Subject
-        </label>
-        <input
-          className={FIELD}
-          disabled={sending}
-          id={`${id}-subject`}
-          name="subject"
-          onChange={(event) => setSubject(event.target.value)}
-          type="text"
-          value={subject}
-        />
-      </div>
       <RichTextEditor
         className="flex min-h-0 flex-1 flex-col rounded-none! border-0! bg-transparent!"
         editable={!sending}
         editor={editor}
         variant="compact"
       >
-        <Toolbar />
-        <div
-          className="min-h-0 flex-1 cursor-text overflow-y-auto"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              event.preventDefault();
-              editor?.commands.focus("end");
-            }
-          }}
-        >
-          <RichTextEditor.Content className="[&_.ProseMirror]:min-h-48! [&_.ProseMirror]:px-4! [&_.ProseMirror]:py-3! [&_.ProseMirror]:text-base sm:[&_.ProseMirror]:text-sm" />
+        <div className="border-border/60 bg-card flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border">
+          <div className={ROW}>
+            <label className={LABEL} htmlFor={`${id}-to`}>
+              To
+            </label>
+            <input
+              autoComplete="email"
+              className={FIELD}
+              disabled={sending}
+              id={`${id}-to`}
+              inputMode="email"
+              multiple
+              name="to"
+              onChange={(event) => setTo(event.target.value)}
+              placeholder="name@example.com"
+              type="email"
+              value={to}
+            />
+          </div>
+          <div className={ROW}>
+            <label className={LABEL} htmlFor={`${id}-subject`}>
+              Subject
+            </label>
+            <input
+              className={FIELD}
+              disabled={sending}
+              id={`${id}-subject`}
+              name="subject"
+              onChange={(event) => setSubject(event.target.value)}
+              type="text"
+              value={subject}
+            />
+          </div>
+          <div
+            className="min-h-0 flex-1 cursor-text overflow-y-auto"
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) {
+                event.preventDefault();
+                editor?.commands.focus("end");
+              }
+            }}
+          >
+            <RichTextEditor.Content className="[&_.ProseMirror]:min-h-48! [&_.ProseMirror]:px-4! [&_.ProseMirror]:py-3! [&_.ProseMirror]:text-base [&_.ProseMirror]:leading-relaxed sm:[&_.ProseMirror]:text-sm" />
+          </div>
         </div>
+        {/* The footer is the container (not the form) so the composer keeps its
+            own width inside shrink-to-fit parents like dialogs and popovers. */}
+        <footer className="@container flex shrink-0 items-center gap-2 px-0.5 pt-1">
+          <Toolbar />
+          <div className="ml-auto flex items-center gap-1.5">
+            <Button
+              aria-label="Discard"
+              className="text-muted-foreground hover:text-foreground rounded-md"
+              disabled={sending}
+              onClick={discard}
+              size="icon-sm"
+              title="Discard"
+              type="button"
+              variant="ghost"
+            >
+              <Trash2Icon />
+            </Button>
+            <Button
+              aria-keyshortcuts="Control+Enter Meta+Enter"
+              className="rounded-lg"
+              disabled={!canSend}
+              size="sm"
+              type="submit"
+            >
+              <SendIcon />
+              <span className="sr-only @[22rem]:not-sr-only">
+                {sending ? "Sending…" : "Send"}
+              </span>
+            </Button>
+          </div>
+        </footer>
       </RichTextEditor>
-      <footer className="flex shrink-0 flex-wrap items-center gap-2 border-t px-4 py-3">
-        {error ? (
-          <p className="text-destructive text-xs" role="alert">
-            Couldn't send. Try again.
-          </p>
-        ) : (
-          <KbdGroup className="text-muted-foreground hidden sm:inline-flex">
-            <Kbd suppressHydrationWarning>{modKey()}</Kbd>
-            <Kbd>Enter</Kbd>
-          </KbdGroup>
-        )}
-        <div className="ml-auto flex items-center gap-2">
-          <Button
-            className="rounded-lg"
-            disabled={sending}
-            onClick={discard}
-            size="sm"
-            type="button"
-            variant="ghost"
-          >
-            Discard
-          </Button>
-          <Button
-            className="rounded-lg"
-            disabled={!canSend}
-            size="sm"
-            type="submit"
-          >
-            <SendIcon />
-            {sending ? "Sending…" : "Send"}
-          </Button>
-        </div>
-      </footer>
     </form>
   );
 };
