@@ -4,7 +4,7 @@ import { Link, RichTextEditor } from "@editorcn/editor";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { useEditor } from "@tiptap/react";
 import { SendIcon } from "lucide-react";
-import { useId, useRef, useState } from "react";
+import { Suspense, useId, useRef, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
@@ -16,7 +16,7 @@ import { FIELD, STARTER_KIT, modKey } from "./utils";
 
 import "@editorcn/editor/style.css";
 
-export const EmailComposer = ({
+const EmailComposerInner = ({
   className,
   initialContent,
   initialSubject = "",
@@ -73,7 +73,9 @@ export const EmailComposer = ({
     setError(false);
     try {
       await onSend?.({
-        content: editor.getJSON(),
+        // ProseMirror keeps attrs in null-prototype objects, which React
+        // can't send to a server action. structuredClone makes them plain.
+        content: structuredClone(editor.getJSON()),
         subject: subject.trim(),
         to: to.trim(),
       });
@@ -199,5 +201,13 @@ export const EmailComposer = ({
     </form>
   );
 };
+
+// Tiptap's useEditor reads Math.random(), which Next.js `cacheComponents`
+// rejects during prerender unless the component sits under a Suspense boundary.
+export const EmailComposer = (props: EmailComposerProps) => (
+  <Suspense fallback={null}>
+    <EmailComposerInner {...props} />
+  </Suspense>
+);
 
 export type { EmailComposerProps, EmailMessage } from "./types";

@@ -9,6 +9,7 @@ export const STARTER_KIT = StarterKit.configure({
   horizontalRule: false,
   link: false,
   strike: false,
+  trailingNode: false,
 });
 
 // Server-safe: pass these to generateHTML() to turn the body into email HTML.
