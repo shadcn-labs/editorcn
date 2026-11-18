@@ -13,6 +13,7 @@ import { ROUTES } from "@/constants/routes";
 import { BreadcrumbJsonLd } from "@/seo/json-ld";
 
 import commentBoxItem from "../../../../public/r/comment-box.json";
+import emailComposerItem from "../../../../public/r/email-composer.json";
 import fullBlockEditorItem from "../../../../public/r/full-block-editor.json";
 import fullEditorItem from "../../../../public/r/full-editor.json";
 import simpleDocumentEditorItem from "../../../../public/r/simple-document-editor.json";
@@ -46,6 +47,13 @@ const SHOWCASE: BlockViewerItem[] = [
     docs: `${ROUTES.DOCS_TEMPLATES}/comment-box`,
     name: "comment-box",
     title: "Comment Box",
+  },
+  {
+    category: "Templates",
+    code: <RegistryCode files={emailComposerItem.files} />,
+    docs: `${ROUTES.DOCS_TEMPLATES}/email-composer`,
+    name: "email-composer",
+    title: "Email Composer",
   },
 ];
 

@@ -13,6 +13,13 @@ const TEMPLATES = [
   },
   {
     description:
+      "A compose card with To, Subject, a formatted message body, and Send and Discard buttons.",
+    name: "email-composer",
+    tags: ["Email", "Links", "Lists"],
+    title: "Email Composer",
+  },
+  {
+    description:
       "A Google Docs-style page with a floating toolbar, tables, images, Markdown import and export, and word count.",
     name: "simple-document-editor",
     tags: ["Toolbar", "Tables", "Markdown"],

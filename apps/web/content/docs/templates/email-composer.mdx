@@ -1,0 +1,90 @@
+---
+title: Email Composer
+seoTitle: "Tiptap Email Composer Template for React and shadcn/ui"
+description: "A free Tiptap email composer for React and shadcn/ui, with To and Subject fields, a formatted message body, Send and Discard, and HTML output for email."
+---
+
+A ready-made email compose box for CRMs, support tools and newsletter apps, built on Tiptap and shadcn/ui. It has **To** and **Subject** fields, a message body with bold, italic, underline, link and list controls, and Send and Discard buttons. Send stays disabled until there's a recipient and a message, and `Mod+Enter` in the body sends.
+
+<TemplateShowcase name="email-composer" />
+
+## Installation
+
+```bash
+npx shadcn@latest add "https://www.rtecn.space/r/email-composer.json"
+```
+
+The CLI installs the template, the [editor](/docs/editor) and the Tiptap packages it needs. Your project needs Tailwind CSS and shadcn/ui; see the [template requirements](/docs/templates#requirements).
+
+## Usage
+
+`onSend` receives `{ to, subject, content }`, with the message body as Tiptap JSON.
+
+```tsx
+import { EmailComposer } from "@/components/templates/email-composer";
+
+export const Compose = () => (
+  <EmailComposer
+    onSend={({ to, subject, content }) => sendEmail({ content, subject, to })}
+  />
+);
+```
+
+If `onSend` returns a promise, the Send button shows "Sending…" until it settles. When it resolves, the fields go back to their initial values. When it throws or rejects, everything stays in place and an error shows so the person can try again. Discard resets the fields the same way and calls `onDiscard`, for example to close a dialog.
+
+The To field accepts one address or several separated by commas, and the browser checks the format when the person sends.
+
+## Send the message as HTML
+
+Email clients need HTML, so turn the Tiptap JSON into HTML with `generateHTML()` from `@tiptap/html`. Pass the template's `EMAIL_EXTENSIONS` so the schema matches the composer. They live in `utils.ts`, which has no React code, so you can build the HTML on the server right before you send. Here it is in a Next.js server action:
+
+```tsx
+"use server";
+
+import { generateHTML } from "@tiptap/html";
+
+import type { EmailMessage } from "@/components/templates/email-composer";
+import { EMAIL_EXTENSIONS } from "@/components/templates/email-composer/utils";
+
+export const sendEmail = async ({ content, subject, to }: EmailMessage) => {
+  const html = generateHTML(content, EMAIL_EXTENSIONS);
+  await mailer.send({ html, subject, to: to.split(",").map((a) => a.trim()) });
+};
+```
+
+`mailer` stands for your email provider's SDK. Install `@tiptap/html` with `npm install @tiptap/html`. Save `content` as it comes if you also want to keep a copy of the message: it renders back with the [Static Renderer](/docs/static-renderer).
+
+## Props
+
+| Prop             | Type          | Description                                           |
+| ---------------- | ------------- | ----------------------------------------------------- |
+| `onSend`         | `function`    | Gets `{ to, subject, content }`, can return a promise |
+| `onDiscard`      | `function`    | Called after the fields are cleared                   |
+| `initialTo`      | `string`      | Prefilled recipient, for example when replying        |
+| `initialSubject` | `string`      | Prefilled subject                                     |
+| `initialContent` | `JSONContent` | Prefilled message body                                |
+| `title`          | `string`      | Header title, default `New message`                   |
+| `placeholder`    | `string`      | Body placeholder                                      |
+| `className`      | `string`      | Outer container classes                               |
+
+## FAQ
+
+### How do I reply to an email with it?
+
+Pass `initialTo` and `initialSubject` (for example `Re: ` plus the original subject). You can also pass `initialContent` to start the body with a quote of the original message. Discard and a successful send reset the composer to those values.
+
+### Does it work with Resend, Postmark, SES or Nodemailer?
+
+Yes. The composer only gives you `to`, `subject` and the body as JSON. Turn the body into HTML with `generateHTML()` as shown above and pass it to whichever provider you use.
+
+### Does it support CC, BCC or attachments?
+
+Not in this template. It keeps to one recipient field, a subject and a message. The code lands in your project, so you can add fields to the form in `index.tsx`.
+
+### Can I add more formatting, like headings or text color?
+
+Yes. Add the extension to the editor's `extensions` in `index.tsx` and to `EMAIL_EXTENSIONS` in `utils.ts`, then add its control to `toolbar.tsx`. Keep both lists in sync so `generateHTML()` understands everything the composer can produce.
+
+## More templates
+
+<TemplateGallery exclude="email-composer" />

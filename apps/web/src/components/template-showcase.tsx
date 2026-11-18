@@ -5,12 +5,14 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { highlightCode } from "@/lib/highlight-code";
 
 import commentBoxItem from "../../public/r/comment-box.json";
+import emailComposerItem from "../../public/r/email-composer.json";
 import fullBlockEditorItem from "../../public/r/full-block-editor.json";
 import fullEditorItem from "../../public/r/full-editor.json";
 import simpleDocumentEditorItem from "../../public/r/simple-document-editor.json";
 
 const ITEMS = {
   "comment-box": commentBoxItem,
+  "email-composer": emailComposerItem,
   "full-block-editor": fullBlockEditorItem,
   "full-editor": fullEditorItem,
   "simple-document-editor": simpleDocumentEditorItem,
