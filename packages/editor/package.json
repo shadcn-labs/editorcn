@@ -37,6 +37,7 @@
     "@remixicon/react": "^4.9.0",
     "@tabler/icons-react": "^3.48.0",
     "@types/react": "^19",
+    "radix-ui": "^1.4.3",
     "tsup": "^8.4.0",
     "typescript": "^5"
   },

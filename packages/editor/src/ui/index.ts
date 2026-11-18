@@ -27,7 +27,7 @@ export {
   createTooltipHandle,
   Tooltip,
   TooltipContent,
-  TooltipHandleContent,
+  TooltipHost,
   TooltipProvider,
   TooltipTrigger,
 } from "./tooltip";

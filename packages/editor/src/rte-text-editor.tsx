@@ -19,7 +19,7 @@ import { Toolbar } from "./rte-toolbar";
 import type { RichTextEditorProps } from "./types";
 import {
   createTooltipHandle,
-  TooltipHandleContent,
+  TooltipHost,
   TooltipProvider,
 } from "./ui/tooltip";
 import { cn } from "./ui/utils";
@@ -67,8 +67,9 @@ const RichTextEditorRoot = ({
         data-variant={variant}
       >
         <TooltipProvider>
-          {children}
-          <TooltipHandleContent handle={tooltip} side="bottom" />
+          <TooltipHost handle={tooltip} side="bottom">
+            {children}
+          </TooltipHost>
         </TooltipProvider>
       </div>
     </RichTextEditorContext.Provider>
