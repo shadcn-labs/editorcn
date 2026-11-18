@@ -1,0 +1,63 @@
+name: Docs agent
+
+on:
+  pull_request_target:
+    types: [closed]
+    branches: [main]
+    paths:
+      - "packages/**"
+      - "!packages/**/package.json"
+      - "!packages/**/*.test.*"
+  workflow_dispatch:
+    inputs:
+      pr:
+        description: Merged PR number to document
+        required: true
+        type: number
+
+permissions:
+  contents: write
+  pull-requests: write
+  models: read
+
+concurrency:
+  group: docs-agent-${{ inputs.pr || github.event.pull_request.number }}
+
+jobs:
+  docs:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: .github/docs-agent
+    steps:
+      - name: Checkout agent
+        uses: actions/checkout@v5
+        with:
+          ref: main
+          sparse-checkout: .github/docs-agent
+          persist-credentials: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: .github/docs-agent/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Update docs
+        run: npm start
+        env:
+          PR_NUMBER: ${{ inputs.pr || github.event.pull_request.number }}
+          GITHUB_TOKEN: ${{ github.token }}
+          DOCS_AGENT_USER: ${{ vars.DOCS_AGENT_USER }}
+          INTENTLOCK_URL: ${{ secrets.INTENTLOCK_URL }}
+          INTENTLOCK_API_KEY: ${{ secrets.INTENTLOCK_API_KEY }}
+          LLM_PROVIDER: openai-compatible
+          LLM_BASE_URL: https://models.github.ai/inference
+          LLM_MODEL: openai/gpt-4.1-mini
+          LLM_API_KEY: ${{ github.token }}
