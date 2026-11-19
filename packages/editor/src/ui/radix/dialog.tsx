@@ -63,7 +63,7 @@ const DialogContent = ({
   children,
   showCloseButton = true,
   ...props
-}: ComponentProps<typeof DialogPrimitive.Content> & {
+}: Omit<ComponentProps<typeof DialogPrimitive.Content>, "asChild"> & {
   showCloseButton?: boolean;
 }) => (
   <DialogPortal>

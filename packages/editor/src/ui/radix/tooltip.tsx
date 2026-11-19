@@ -69,7 +69,7 @@ const TooltipContent = ({
   alignOffset = 0,
   children,
   ...props
-}: ComponentProps<typeof TooltipPrimitive.Content>) => (
+}: Omit<ComponentProps<typeof TooltipPrimitive.Content>, "asChild">) => (
   <TooltipPrimitive.Portal>
     <TooltipPrimitive.Content
       data-slot="tooltip-content"
@@ -103,9 +103,13 @@ interface TooltipHandle {
 }
 
 interface TooltipHostApi {
+  handle: TooltipHandle;
   show: (anchor: HTMLElement, payload: string) => void;
-  hide: () => void;
+  hide: (anchor: HTMLElement | null) => void;
   close: () => void;
+  keepOpen: () => void;
+  update: (anchor: HTMLElement, payload: string) => void;
+  release: (anchor: HTMLElement) => void;
 }
 
 interface TooltipHostState {
@@ -130,11 +134,15 @@ const SharedTooltip = ({
   options,
   onExited,
   onEscape,
+  onPointerEnter,
+  onPointerLeave,
 }: {
   state: TooltipHostState;
   options: TooltipHostOptions;
   onExited: () => void;
   onEscape: () => void;
+  onPointerEnter: () => void;
+  onPointerLeave: () => void;
 }) => {
   const id = useId();
   const floatingRef = useRef<HTMLDivElement>(null);
@@ -196,8 +204,12 @@ const SharedTooltip = ({
       previous ? `${previous} ${id}` : id
     );
     return () => {
-      if (previous) {
-        anchor.setAttribute("aria-describedby", previous);
+      const remaining = (anchor.getAttribute("aria-describedby") ?? "")
+        .split(" ")
+        .filter((token) => token && token !== id)
+        .join(" ");
+      if (remaining) {
+        anchor.setAttribute("aria-describedby", remaining);
       } else {
         anchor.removeAttribute("aria-describedby");
       }
@@ -250,6 +262,8 @@ const SharedTooltip = ({
       data-side={side}
       style={{ left: 0, position: "fixed", top: 0 }}
       className={cn(TOOLTIP_CLASS, className)}
+      onPointerEnter={onPointerEnter}
+      onPointerLeave={onPointerLeave}
     >
       {payload}
       <div
@@ -264,16 +278,22 @@ const SharedTooltip = ({
   );
 };
 
+const EMPTY_STATE: TooltipHostState = {
+  anchor: null,
+  open: false,
+  payload: "",
+};
+
 const TooltipHost = ({
-  handle: _handle,
+  handle,
   children,
   ...options
 }: { handle: TooltipHandle; children?: ReactNode } & TooltipHostOptions) => {
-  const [state, setState] = useState<TooltipHostState>({
-    anchor: null,
-    open: false,
-    payload: "",
-  });
+  const [state, setState] = useState<TooltipHostState>(EMPTY_STATE);
+  const stateRef = useRef(state);
+  useLayoutEffect(() => {
+    stateRef.current = state;
+  }, [state]);
   const hideTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const api = useMemo<TooltipHostApi>(() => {
     const cancelHide = () => {
@@ -282,24 +302,53 @@ const TooltipHost = ({
         hideTimerRef.current = null;
       }
     };
-    const close = () => {
-      cancelHide();
+    const closeIfOwner = (anchor: HTMLElement | null) => {
       setState((current) =>
-        current.open ? { ...current, open: false } : current
+        current.open && (anchor === null || current.anchor === anchor)
+          ? { ...current, open: false }
+          : current
       );
     };
     return {
-      close,
-      hide: () => {
+      close: () => {
         cancelHide();
-        hideTimerRef.current = setTimeout(close, SWITCH_GRACE_MS);
+        closeIfOwner(null);
+      },
+      handle,
+      hide: (anchor) => {
+        if (anchor && stateRef.current.anchor !== anchor) {
+          return;
+        }
+        cancelHide();
+        hideTimerRef.current = setTimeout(() => {
+          hideTimerRef.current = null;
+          closeIfOwner(anchor);
+        }, SWITCH_GRACE_MS);
+      },
+      keepOpen: cancelHide,
+      release: (anchor) => {
+        if (stateRef.current.anchor !== anchor) {
+          return;
+        }
+        cancelHide();
+        setState((current) =>
+          current.anchor === anchor ? EMPTY_STATE : current
+        );
       },
       show: (anchor, payload) => {
         cancelHide();
         setState({ anchor, open: true, payload });
       },
+      update: (anchor, payload) =>
+        setState((current) =>
+          current.open &&
+          current.anchor === anchor &&
+          current.payload !== payload
+            ? { ...current, payload }
+            : current
+        ),
     };
-  }, []);
+  }, [handle]);
   useEffect(
     () => () => {
       if (hideTimerRef.current) {
@@ -309,11 +358,12 @@ const TooltipHost = ({
     []
   );
   const onExited = useMemo(
-    () => () =>
-      setState((current) =>
-        current.open ? current : { anchor: null, open: false, payload: "" }
-      ),
+    () => () => setState((current) => (current.open ? current : EMPTY_STATE)),
     []
+  );
+  const onTooltipLeave = useMemo(
+    () => () => api.hide(stateRef.current.anchor),
+    [api]
   );
   return (
     <TooltipHostContext.Provider value={api}>
@@ -324,6 +374,8 @@ const TooltipHost = ({
           options={options}
           onExited={onExited}
           onEscape={api.close}
+          onPointerEnter={api.keepOpen}
+          onPointerLeave={onTooltipLeave}
         />
       )}
     </TooltipHostContext.Provider>
@@ -343,46 +395,77 @@ const HostTrigger = ({
   ...props
 }: ComponentProps<"button"> &
   RenderProps & { host: TooltipHostApi; payload: string }) => {
+  const anchorRef = useRef<HTMLElement | null>(null);
   const pointerDownRef = useRef(false);
+  const releasePressRef = useRef<(() => void) | null>(null);
   const element: ReactElement = render ?? (
     <button type="button" aria-label={payload} />
   );
 
+  useEffect(() => {
+    if (anchorRef.current) {
+      host.update(anchorRef.current, payload);
+    }
+  }, [host, payload]);
+
+  useEffect(
+    () => () => {
+      releasePressRef.current?.();
+      if (anchorRef.current) {
+        host.release(anchorRef.current);
+      }
+    },
+    [host]
+  );
+
+  const show = (anchor: HTMLElement) => {
+    anchorRef.current = anchor;
+    host.show(anchor, payload);
+  };
+
   const handlePointerEnter = (event: PointerEvent<HTMLButtonElement>) => {
     onPointerEnter?.(event);
     if (event.pointerType !== "touch") {
-      host.show(event.currentTarget, payload);
+      show(event.currentTarget);
     }
   };
 
   const handlePointerLeave = (event: PointerEvent<HTMLButtonElement>) => {
     onPointerLeave?.(event);
-    host.hide();
+    host.hide(event.currentTarget);
   };
 
   const handlePointerDown = (event: PointerEvent<HTMLButtonElement>) => {
     onPointerDown?.(event);
+    releasePressRef.current?.();
     pointerDownRef.current = true;
-    document.addEventListener(
-      "pointerup",
-      () => {
-        pointerDownRef.current = false;
-      },
-      { once: true }
-    );
+    const { pointerId } = event;
+    const onPointerEnd = (endEvent: globalThis.PointerEvent) => {
+      if (endEvent.pointerId === pointerId) {
+        releasePressRef.current?.();
+      }
+    };
+    document.addEventListener("pointerup", onPointerEnd);
+    document.addEventListener("pointercancel", onPointerEnd);
+    releasePressRef.current = () => {
+      pointerDownRef.current = false;
+      document.removeEventListener("pointerup", onPointerEnd);
+      document.removeEventListener("pointercancel", onPointerEnd);
+      releasePressRef.current = null;
+    };
     host.close();
   };
 
   const handleFocus = (event: FocusEvent<HTMLButtonElement>) => {
     onFocus?.(event);
     if (!pointerDownRef.current) {
-      host.show(event.currentTarget, payload);
+      show(event.currentTarget);
     }
   };
 
   const handleBlur = (event: FocusEvent<HTMLButtonElement>) => {
     onBlur?.(event);
-    host.hide();
+    host.hide(event.currentTarget);
   };
 
   return (
@@ -414,7 +497,7 @@ const TooltipTrigger = ({
     payload?: string;
   }) => {
   const host = useContext(TooltipHostContext);
-  if (handle && host) {
+  if (handle && host?.handle === handle) {
     return (
       <HostTrigger
         host={host}
@@ -426,12 +509,21 @@ const TooltipTrigger = ({
       </HostTrigger>
     );
   }
-  return (
+  const trigger = (
     <TooltipPrimitive.Trigger
       data-slot="tooltip-trigger"
       {...props}
       {...withRender({ children, render })}
     />
+  );
+  if (!handle) {
+    return trigger;
+  }
+  return (
+    <Tooltip>
+      {trigger}
+      <TooltipContent>{payload}</TooltipContent>
+    </Tooltip>
   );
 };
 

@@ -1,6 +1,6 @@
 import { setTimeout as sleep } from "node:timers/promises";
 
-import { act } from "react";
+import { act, createRef, useState } from "react";
 import type { ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
@@ -14,7 +14,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./dialog";
-import { Popover, PopoverContent, PopoverTrigger } from "./popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverTitle,
+  PopoverTrigger,
+} from "./popover";
 import { Toggle } from "./toggle";
 import {
   createTooltipHandle,
@@ -42,6 +48,52 @@ const click = async (element: HTMLElement | null) => {
 };
 
 const tooltips = () => document.querySelectorAll<HTMLElement>("[role=tooltip]");
+
+const pointer = async (
+  element: HTMLElement | null,
+  type: string,
+  init: PointerEventInit = {}
+) => {
+  await act(() => {
+    element?.dispatchEvent(
+      new PointerEvent(type, { bubbles: true, pointerType: "mouse", ...init })
+    );
+  });
+};
+
+const waitPastGrace = async () => {
+  await act(async () => {
+    await sleep(150);
+  });
+};
+
+const Toolbar = ({
+  boldLabel = "Bold",
+  showItalic = true,
+}: {
+  boldLabel?: string;
+  showItalic?: boolean;
+}) => {
+  const [handle] = useState(createTooltipHandle);
+  return (
+    <TooltipProvider>
+      <TooltipHost handle={handle} side="bottom">
+        <TooltipTrigger
+          handle={handle}
+          payload={boldLabel}
+          render={<Toggle aria-label="Bold" />}
+        />
+        {showItalic && (
+          <TooltipTrigger
+            handle={handle}
+            payload="Italic"
+            render={<Toggle aria-label="Italic" />}
+          />
+        )}
+      </TooltipHost>
+    </TooltipProvider>
+  );
+};
 
 const hover = async (element: HTMLElement | null) => {
   if (!element) {
@@ -207,5 +259,123 @@ describe("radix ui primitives", () => {
       );
     });
     expect(tooltips()).toHaveLength(0);
+  });
+  it("defaults native Button to type button and keeps explicit types", async () => {
+    const view = await render(
+      <form>
+        <Button>Cancel</Button>
+        <Button type="submit">Save</Button>
+      </form>
+    );
+    const [cancel, save] = view.querySelectorAll("button");
+    expect(cancel?.getAttribute("type")).toBe("button");
+    expect(save?.getAttribute("type")).toBe("submit");
+  });
+
+  it("forwards refs from Button and Toggle", async () => {
+    const buttonRef = createRef<HTMLButtonElement>();
+    const toggleRef = createRef<HTMLButtonElement>();
+    await render(
+      <>
+        <Button ref={buttonRef}>Save</Button>
+        <Toggle ref={toggleRef} aria-label="Bold" />
+      </>
+    );
+    expect(buttonRef.current?.tagName).toBe("BUTTON");
+    expect(toggleRef.current?.dataset.slot).toBe("toggle");
+  });
+
+  it("names the popover from its title and description", async () => {
+    await render(
+      <Popover open>
+        <PopoverContent>
+          <PopoverTitle>Edit link</PopoverTitle>
+          <PopoverDescription>Paste a URL.</PopoverDescription>
+        </PopoverContent>
+      </Popover>
+    );
+    const content = document.querySelector<HTMLElement>(
+      "[data-slot=popover-content]"
+    );
+    const title = document.querySelector("[data-slot=popover-title]");
+    const description = document.querySelector(
+      "[data-slot=popover-description]"
+    );
+    expect(title?.id).toBeTruthy();
+    expect(content?.getAttribute("aria-labelledby")).toBe(title?.id);
+    expect(content?.getAttribute("aria-describedby")).toBe(description?.id);
+  });
+
+  it("keeps the tooltip open while the pointer is over it", async () => {
+    const view = await render(<Toolbar />);
+    const bold = view.querySelector<HTMLElement>("button[aria-label=Bold]");
+    await hover(bold);
+    await pointer(bold, "pointerout");
+    await pointer(tooltips()[0] ?? null, "pointerover");
+    await waitPastGrace();
+    expect(tooltips()).toHaveLength(1);
+    await pointer(tooltips()[0] ?? null, "pointerout");
+    await waitPastGrace();
+    expect(tooltips()).toHaveLength(0);
+  });
+
+  it("updates the open tooltip when the payload changes", async () => {
+    const view = await render(<Toolbar />);
+    await hover(view.querySelector<HTMLElement>("button[aria-label=Bold]"));
+    await act(() => {
+      root?.render(<Toolbar boldLabel="Bold (Ctrl+B)" />);
+    });
+    expect(tooltips()[0]?.textContent).toBe("Bold (Ctrl+B)");
+  });
+
+  it("releases the tooltip when its trigger unmounts", async () => {
+    const view = await render(<Toolbar />);
+    await hover(view.querySelector<HTMLElement>("button[aria-label=Italic]"));
+    expect(tooltips()).toHaveLength(1);
+    await act(() => {
+      root?.render(<Toolbar showItalic={false} />);
+    });
+    expect(tooltips()).toHaveLength(0);
+  });
+
+  it("ignores blur from a trigger that does not own the tooltip", async () => {
+    const view = await render(<Toolbar />);
+    const bold = view.querySelector<HTMLElement>("button[aria-label=Bold]");
+    const italic = view.querySelector<HTMLElement>("button[aria-label=Italic]");
+    await act(() => {
+      bold?.focus();
+    });
+    await hover(italic);
+    await act(() => {
+      bold?.blur();
+    });
+    await waitPastGrace();
+    expect(tooltips()[0]?.textContent).toBe("Italic");
+  });
+
+  it("clears the press state on pointercancel", async () => {
+    const view = await render(<Toolbar />);
+    const bold = view.querySelector<HTMLElement>("button[aria-label=Bold]");
+    await pointer(bold, "pointerdown", { pointerId: 7 });
+    await pointer(document.body, "pointercancel", { pointerId: 7 });
+    await act(() => {
+      bold?.focus();
+    });
+    expect(tooltips()[0]?.textContent).toBe("Bold");
+  });
+
+  it("falls back to its own tooltip when no host owns the handle", async () => {
+    const view = await render(
+      <TooltipProvider>
+        <TooltipTrigger
+          handle={createTooltipHandle()}
+          payload="Bold"
+          render={<Toggle aria-label="Bold" />}
+        />
+      </TooltipProvider>
+    );
+    expect(
+      view.querySelector<HTMLElement>("button[aria-label=Bold]")?.dataset.slot
+    ).toBe("tooltip-trigger");
   });
 });

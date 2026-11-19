@@ -1,6 +1,7 @@
 import { cva } from "class-variance-authority";
 import type { VariantProps } from "class-variance-authority";
 import { Slot } from "radix-ui";
+import { forwardRef } from "react";
 import type { ComponentProps } from "react";
 
 import { cn } from "../utils";
@@ -44,27 +45,44 @@ const buttonVariants = cva(
   }
 );
 
-const Button = ({
-  className,
-  variant = "default",
-  size = "default",
-  render,
-  children,
-  ...props
-}: ComponentProps<"button"> &
+type ButtonProps = ComponentProps<"button"> &
   RenderProps &
-  VariantProps<typeof buttonVariants>) => {
-  const slot = withRender({ children, render });
-  const Comp = slot.asChild ? Slot.Root : "button";
-  return (
-    <Comp
-      data-slot="button"
-      className={cn(buttonVariants({ className, size, variant }))}
-      {...props}
-    >
-      {slot.children}
-    </Comp>
-  );
-};
+  VariantProps<typeof buttonVariants>;
+
+const Button = forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      className,
+      variant = "default",
+      size = "default",
+      render,
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const slot = withRender({ children, render });
+    const classes = cn(buttonVariants({ className, size, variant }));
+    if (slot.asChild) {
+      return (
+        <Slot.Root ref={ref} data-slot="button" className={classes} {...props}>
+          {slot.children}
+        </Slot.Root>
+      );
+    }
+    return (
+      <button
+        ref={ref}
+        data-slot="button"
+        className={classes}
+        {...props}
+        type={props.type ?? "button"}
+      >
+        {slot.children}
+      </button>
+    );
+  }
+);
+Button.displayName = "Button";
 
 export { Button, buttonVariants };
