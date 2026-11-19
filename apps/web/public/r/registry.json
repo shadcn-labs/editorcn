@@ -440,10 +440,6 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/dropdown-separator.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "extensions/ui/input.tsx",
           "type": "registry:component"
         },

@@ -115,12 +115,6 @@
       "type": "registry:component"
     },
     {
-      "content": "import * as React from \"react\";\n\nexport type DropdownMenuSeparatorProps = React.HTMLAttributes<HTMLDivElement>;\n\nconst DropdownMenuSeparator = React.forwardRef<\n  HTMLDivElement,\n  DropdownMenuSeparatorProps\n>(({ className = \"\", ...props }, ref) => (\n  <div\n    ref={ref}\n    className={`ext-dropdown-separator ${className}`.trim()}\n    {...props}\n  />\n));\nDropdownMenuSeparator.displayName = \"DropdownMenuSeparator\";\n\nexport { DropdownMenuSeparator };\n",
-      "path": "extensions/ui/dropdown-separator.tsx",
-      "target": "@components/extensions/ui/dropdown-separator.tsx",
-      "type": "registry:component"
-    },
-    {
       "content": "import * as React from \"react\";\n\nexport type InputProps = React.InputHTMLAttributes<HTMLInputElement>;\n\nconst Input = React.forwardRef<HTMLInputElement, InputProps>(\n  ({ className = \"\", ...props }, ref) => (\n    <input ref={ref} className={`ext-input ${className}`.trim()} {...props} />\n  )\n);\nInput.displayName = \"Input\";\n\nexport { Input };\n",
       "path": "extensions/ui/input.tsx",
       "target": "@components/extensions/ui/input.tsx",
