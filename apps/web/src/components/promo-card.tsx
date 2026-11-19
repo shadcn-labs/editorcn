@@ -1,14 +1,12 @@
 "use client";
 
-import { ArrowUpRightIcon, LayoutTemplateIcon, XIcon } from "lucide-react";
+import { ArrowUpRightIcon, LayoutTemplateIcon } from "lucide-react";
 import Image from "next/image";
-import { useState, useSyncExternalStore } from "react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { LINK } from "@/constants/links";
 import { trackEvent } from "@/lib/events";
-import { cn } from "@/lib/utils";
 
 const PROMO = {
   cta: { href: LINK.PRO_PRICING, label: "Get lifetime access" },
@@ -21,42 +19,14 @@ const PROMO = {
   title: "editorcn pro",
 } as const;
 
-const DISMISS_KEY = `promo-dismissed:${PROMO.id}`;
-
-type Variant = "floating" | "sidebar";
-
-const track = (placement: Variant, target: string) =>
+const track = (target: string) =>
   trackEvent({
     name: "click_promo",
-    properties: { placement, promo: PROMO.id, target },
+    properties: { placement: "sidebar", promo: PROMO.id, target },
   });
 
-const PromoBody = ({
-  variant,
-  onDismiss,
-}: {
-  variant: Variant;
-  onDismiss?: () => void;
-}) => (
-  <Card
-    className={cn(
-      "relative gap-3 rounded-xl border-border/60 p-4",
-      variant === "floating"
-        ? "shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)]"
-        : "shadow-none"
-    )}
-  >
-    {onDismiss && (
-      <Button
-        aria-label="Dismiss promotion"
-        className="absolute top-2 right-2 size-7 rounded-md text-muted-foreground"
-        onClick={onDismiss}
-        size="icon"
-        variant="ghost"
-      >
-        <XIcon />
-      </Button>
-    )}
+export const PromoCard = () => (
+  <Card className="relative gap-3 rounded-xl border-border/60 p-4 shadow-none">
     <div className="flex items-center gap-3">
       <Image
         alt=""
@@ -73,16 +43,11 @@ const PromoBody = ({
       </div>
     </div>
     <p className="text-[0.8rem] text-muted-foreground">{PROMO.description}</p>
-    <div
-      className={cn(
-        "grid gap-2",
-        variant === "floating" && "grid-cols-[1fr_auto]"
-      )}
-    >
+    <div className="grid gap-2">
       <Button asChild className="rounded-lg" size="sm">
         <a
           href={PROMO.cta.href}
-          onClick={() => track(variant, "cta")}
+          onClick={() => track("cta")}
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -93,7 +58,7 @@ const PromoBody = ({
       <Button asChild className="rounded-lg" size="sm" variant="outline">
         <a
           href={PROMO.secondary.href}
-          onClick={() => track(variant, "templates")}
+          onClick={() => track("templates")}
           rel="noopener noreferrer"
           target="_blank"
         >
@@ -104,52 +69,3 @@ const PromoBody = ({
     </div>
   </Card>
 );
-
-const noopSubscribe = () => () => null;
-
-const isStoredDismissed = () => {
-  try {
-    return localStorage.getItem(DISMISS_KEY) === "1";
-  } catch {
-    return false;
-  }
-};
-
-const storeDismissed = () => {
-  try {
-    localStorage.setItem(DISMISS_KEY, "1");
-  } catch {
-    return false;
-  }
-  return true;
-};
-
-const FloatingPromo = () => {
-  const storedDismissed = useSyncExternalStore(
-    noopSubscribe,
-    isStoredDismissed,
-    () => true
-  );
-  const [dismissed, setDismissed] = useState(false);
-
-  if (storedDismissed || dismissed) {
-    return null;
-  }
-
-  const dismiss = () => {
-    storeDismissed();
-    setDismissed(true);
-  };
-
-  return (
-    <aside
-      aria-label={`${PROMO.title} promotion`}
-      className="fixed right-4 bottom-4 z-40 hidden w-80 sm:block"
-    >
-      <PromoBody onDismiss={dismiss} variant="floating" />
-    </aside>
-  );
-};
-
-export const PromoCard = ({ variant }: { variant: Variant }) =>
-  variant === "floating" ? <FloatingPromo /> : <PromoBody variant="sidebar" />;
