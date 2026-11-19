@@ -1056,6 +1056,65 @@ const templateItems = [
   },
 ];
 
+const compareStrings = (a, b) => {
+  if (a === b) {
+    return 0;
+  }
+  return a < b ? -1 : 1;
+};
+
+const comparePaths = (a, b) => {
+  const left = a.split("/");
+  const right = b.split("/");
+  const depth = Math.min(left.length, right.length);
+  for (let i = 0; i < depth; i += 1) {
+    if (left[i] !== right[i]) {
+      const leftIsFile = i === left.length - 1;
+      const rightIsFile = i === right.length - 1;
+      if (leftIsFile !== rightIsFile) {
+        return leftIsFile ? -1 : 1;
+      }
+      if (leftIsFile) {
+        const leftIsIndex = left[i].startsWith("index.");
+        const rightIsIndex = right[i].startsWith("index.");
+        if (leftIsIndex !== rightIsIndex) {
+          return leftIsIndex ? -1 : 1;
+        }
+      }
+      return compareStrings(left[i], right[i]);
+    }
+  }
+  return left.length - right.length;
+};
+
+const isUrl = (value) => value.startsWith("https://");
+
+const compareRegistryDependencies = (a, b) =>
+  Number(isUrl(b)) - Number(isUrl(a)) || compareStrings(a, b);
+
+const sortItem = (item) => {
+  const sorted = { ...item };
+  if (item.dependencies) {
+    sorted.dependencies = item.dependencies.toSorted(compareStrings);
+  }
+  if (item.files) {
+    sorted.files = item.files.toSorted((a, b) => comparePaths(a.path, b.path));
+  }
+  if (item.registryDependencies) {
+    sorted.registryDependencies = item.registryDependencies.toSorted(
+      compareRegistryDependencies
+    );
+  }
+  if (item.items) {
+    sorted.items = item.items
+      .map(sortItem)
+      .toSorted((a, b) => compareStrings(a.name, b.name));
+  }
+  return sorted;
+};
+
+const serialize = (item) => JSON.stringify(sortItem(item), null, 2);
+
 const outDir = resolve(root, "apps", "web", "public", "r");
 if (!existsSync(outDir)) {
   mkdirSync(outDir, { recursive: true });
@@ -1063,54 +1122,46 @@ if (!existsSync(outDir)) {
 
 writeFileSync(
   resolve(outDir, "editor.json"),
-  JSON.stringify(
+  serialize(
     buildItem(
       "editor",
       "Rich Text Editor",
       "A toolbar-style rich text editor built on Tiptap with shadcn/ui tokens.",
       editorFiles,
       deps.editor
-    ),
-    null,
-    2
+    )
   )
 );
 writeFileSync(
   resolve(outDir, "block-editor.json"),
-  JSON.stringify(
+  serialize(
     buildItem(
       "block-editor",
       "Block Editor",
       "A Notion-style block editor built on Tiptap with shadcn/ui tokens.",
       blockEditorFiles,
       deps["block-editor"]
-    ),
-    null,
-    2
+    )
   )
 );
 writeFileSync(
   resolve(outDir, "static-renderer.json"),
-  JSON.stringify(
+  serialize(
     buildItem(
       "static-renderer",
       "Static Renderer",
       "Read-only rendering and styling for HTML produced by editor and block-editor.",
       staticRendererFiles,
       deps["static-renderer"]
-    ),
-    null,
-    2
+    )
   )
 );
 
 for (const item of extensionsItems) {
   writeFileSync(
     resolve(outDir, `${item.name}.json`),
-    JSON.stringify(
-      buildItem(item.name, item.title, item.description, item.files, item.deps),
-      null,
-      2
+    serialize(
+      buildItem(item.name, item.title, item.description, item.files, item.deps)
     )
   );
 }
@@ -1118,7 +1169,7 @@ for (const item of extensionsItems) {
 for (const item of templateItems) {
   writeFileSync(
     resolve(outDir, `${item.name}.json`),
-    JSON.stringify(
+    serialize(
       buildItemWithType(
         item.name,
         item.title,
@@ -1127,9 +1178,7 @@ for (const item of templateItems) {
         item.deps,
         [item.base ?? "https://www.rtecn.space/r/editor.json", ...item.ui],
         "registry:block"
-      ),
-      null,
-      2
+      )
     )
   );
 }
@@ -1139,10 +1188,8 @@ const writtenIconsets = new Map();
 for (const item of iconSetItems) {
   writeFileSync(
     resolve(outDir, `${item.name}.json`),
-    JSON.stringify(
-      buildItem(item.name, item.title, item.description, item.files, item.deps),
-      null,
-      2
+    serialize(
+      buildItem(item.name, item.title, item.description, item.files, item.deps)
     )
   );
   writtenIconsets.set(item.name, item);
@@ -1226,10 +1273,7 @@ const catalog = {
   ],
   name: "editorcn",
 };
-writeFileSync(
-  resolve(outDir, "registry.json"),
-  JSON.stringify(catalog, null, 2)
-);
+writeFileSync(resolve(outDir, "registry.json"), serialize(catalog));
 
 console.log("Built registry:");
 console.log("  apps/web/public/r/registry.json");

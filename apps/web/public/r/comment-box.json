@@ -2,12 +2,12 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "dependencies": [
     "@tiptap/core@>=3.0.0 <4",
-    "@tiptap/static-renderer@>=3.21.0 <4",
-    "@tiptap/react@>=3.0.0 <4",
-    "@tiptap/pm@>=3.0.0 <4",
-    "@tiptap/starter-kit@>=3.0.0 <4",
-    "@tiptap/extension-placeholder@>=3.0.0 <4",
     "@tiptap/extension-mention@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
+    "@tiptap/static-renderer@>=3.21.0 <4",
     "lucide-react@>=0.400.0 <1.0.0"
   ],
   "description": "A comment thread with avatars, relative times, emoji reactions, a delete menu, and an editor composer with onPost, onReact, and onDelete hooks.",
@@ -48,12 +48,12 @@
   "type": "registry:block",
   "registryDependencies": [
     "https://www.rtecn.space/r/editor.json",
+    "https://www.rtecn.space/r/mention.json",
+    "https://www.rtecn.space/r/static-renderer.json",
     "avatar",
     "button",
     "dropdown-menu",
     "kbd",
-    "popover",
-    "https://www.rtecn.space/r/static-renderer.json",
-    "https://www.rtecn.space/r/mention.json"
+    "popover"
   ]
 }

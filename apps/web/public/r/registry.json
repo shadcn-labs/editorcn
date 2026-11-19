@@ -4,230 +4,29 @@
   "items": [
     {
       "dependencies": [
-        "@tiptap/core@>=3.30.5 <4",
-        "@tiptap/react@>=2.11.5 <4",
-        "@tiptap/pm@>=2.11.5 <4",
-        "@tiptap/starter-kit@>=2.11.5 <4",
-        "@tiptap/extension-link@>=2.11.5 <4",
-        "@tiptap/extension-underline@>=2.11.5 <4",
-        "@tiptap/extension-highlight@>=2.11.5 <4",
-        "@tiptap/extension-text-align@>=2.11.5 <4",
-        "@tiptap/extension-subscript@>=2.11.5 <4",
-        "@tiptap/extension-superscript@>=2.11.5 <4",
-        "@tiptap/extension-placeholder@>=2.11.5 <4",
-        "@tiptap/extension-character-count@>=2.11.5 <4",
-        "@tiptap/extension-text-style@>=2.11.5 <4",
-        "@tiptap/extension-color@>=2.11.5 <4",
-        "@base-ui/react@^1.0.0",
-        "class-variance-authority@^0.7.1",
-        "clsx@^2.1.1",
-        "lucide-react@>=0.400.0 <1.0.0",
-        "tailwind-merge@^3.0.0"
-      ],
-      "description": "A toolbar-style rich text editor built on Tiptap with shadcn/ui tokens.",
-      "files": [
-        {
-          "path": "editor/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-text-editor.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-context.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-toolbar.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-footer.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-content.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-controls-group.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/labels.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/icon-types.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/icons.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/language-icons.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/types.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/style.css",
-          "type": "registry:style"
-        },
-        {
-          "path": "editor/bubble-menu/index.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/bubble-menu/utils.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/bubble-menu/color-selector.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/bubble-menu/text-buttons.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/controls/rte-control.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/controls/rte-controls.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/controls/rte-link-control.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/extensions/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/extensions/link.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/extensions/resizable-node-view.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/controls/rte-twitter-control.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/controls/rte-youtube-control.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/utils.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "editor/ui/button.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/toggle.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/popover.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/input.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/tooltip.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/dialog.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-button.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-button-group.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-icon.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-separator.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-overlay.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-dropdown.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-dropdown-item.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-dropdown-divider.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-dropdown-icon.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-color-swatch.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "editor",
-      "title": "Rich Text Editor",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@tiptap/react@>=2.11.5 <4",
-        "@tiptap/pm@>=2.11.5 <4",
-        "@tiptap/starter-kit@>=2.11.5 <4",
-        "@tiptap/core@>=2.11.5 <4",
-        "@tiptap/extension-link@>=2.11.5 <4",
-        "@tiptap/extension-underline@>=2.11.5 <4",
-        "@tiptap/extension-placeholder@>=2.11.5 <4",
-        "@tiptap/extension-text-align@>=2.11.5 <4",
-        "@tiptap/extension-task-list@>=2.11.5 <4",
-        "@tiptap/extension-task-item@>=2.11.5 <4",
-        "@tiptap/extension-image@>=2.11.5 <4",
-        "@tiptap/extension-table@>=2.11.5 <4",
-        "@tiptap/extension-table-row@>=2.11.5 <4",
-        "@tiptap/extension-table-cell@>=2.11.5 <4",
-        "@tiptap/extension-table-header@>=2.11.5 <4",
-        "@tiptap/extension-drag-handle@>=2.11.5 <4",
-        "@tiptap/extension-drag-handle-react@>=2.11.5 <4",
-        "@tiptap/suggestion@>=2.11.5 <4",
-        "@tiptap/extension-text-style@>=2.11.5 <4",
-        "@tiptap/extension-color@>=2.11.5 <4",
-        "@tiptap/extension-highlight@>=2.11.5 <4",
         "@base-ui/react@^1.0.0",
         "@floating-ui/dom@^1.6.0",
+        "@tiptap/core@>=2.11.5 <4",
+        "@tiptap/extension-color@>=2.11.5 <4",
+        "@tiptap/extension-drag-handle-react@>=2.11.5 <4",
+        "@tiptap/extension-drag-handle@>=2.11.5 <4",
+        "@tiptap/extension-highlight@>=2.11.5 <4",
+        "@tiptap/extension-image@>=2.11.5 <4",
+        "@tiptap/extension-link@>=2.11.5 <4",
+        "@tiptap/extension-placeholder@>=2.11.5 <4",
+        "@tiptap/extension-table-cell@>=2.11.5 <4",
+        "@tiptap/extension-table-header@>=2.11.5 <4",
+        "@tiptap/extension-table-row@>=2.11.5 <4",
+        "@tiptap/extension-table@>=2.11.5 <4",
+        "@tiptap/extension-task-item@>=2.11.5 <4",
+        "@tiptap/extension-task-list@>=2.11.5 <4",
+        "@tiptap/extension-text-align@>=2.11.5 <4",
+        "@tiptap/extension-text-style@>=2.11.5 <4",
+        "@tiptap/extension-underline@>=2.11.5 <4",
+        "@tiptap/pm@>=2.11.5 <4",
+        "@tiptap/react@>=2.11.5 <4",
+        "@tiptap/starter-kit@>=2.11.5 <4",
+        "@tiptap/suggestion@>=2.11.5 <4",
         "class-variance-authority@^0.7.1",
         "clsx@^2.1.1",
         "lucide-react@>=0.400.0 <1.0.0",
@@ -248,34 +47,6 @@
           "type": "registry:component"
         },
         {
-          "path": "block-editor/bubble-menu/index.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/bubble-menu/utils.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/bubble-menu/node-selector.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/bubble-menu/text-buttons.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/bubble-menu/align-selector.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/bubble-menu/link-selector.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/bubble-menu/color-selector.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "block-editor/context.tsx",
           "type": "registry:component"
         },
@@ -288,20 +59,48 @@
           "type": "registry:component"
         },
         {
+          "path": "block-editor/labels.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "block-editor/language-icons.tsx",
           "type": "registry:component"
         },
         {
-          "path": "block-editor/labels.ts",
-          "type": "registry:component"
+          "path": "block-editor/style.css",
+          "type": "registry:style"
         },
         {
           "path": "block-editor/types.ts",
           "type": "registry:component"
         },
         {
-          "path": "block-editor/style.css",
-          "type": "registry:style"
+          "path": "block-editor/bubble-menu/index.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/bubble-menu/align-selector.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/bubble-menu/color-selector.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/bubble-menu/link-selector.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/bubble-menu/node-selector.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/bubble-menu/text-buttons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/bubble-menu/utils.ts",
+          "type": "registry:component"
         },
         {
           "path": "block-editor/extensions/index.ts",
@@ -316,19 +115,23 @@
           "type": "registry:component"
         },
         {
-          "path": "block-editor/extensions/slash-command/suggestion.ts",
-          "type": "registry:component"
-        },
-        {
           "path": "block-editor/extensions/slash-command/suggestion-list.tsx",
           "type": "registry:component"
         },
         {
-          "path": "block-editor/ui/index.ts",
+          "path": "block-editor/extensions/slash-command/suggestion.ts",
           "type": "registry:component"
         },
         {
-          "path": "block-editor/ui/bubble-button.tsx",
+          "path": "block-editor/lib/commands.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "block-editor/lib/utils.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "block-editor/ui/index.ts",
           "type": "registry:component"
         },
         {
@@ -336,15 +139,7 @@
           "type": "registry:component"
         },
         {
-          "path": "block-editor/ui/bubble-separator.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-dropdown.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-dropdown-item.tsx",
+          "path": "block-editor/ui/bubble-button.tsx",
           "type": "registry:component"
         },
         {
@@ -356,7 +151,15 @@
           "type": "registry:component"
         },
         {
-          "path": "block-editor/ui/dropdown-overlay.tsx",
+          "path": "block-editor/ui/bubble-dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/ui/bubble-dropdown.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/ui/bubble-separator.tsx",
           "type": "registry:component"
         },
         {
@@ -364,19 +167,7 @@
           "type": "registry:component"
         },
         {
-          "path": "block-editor/ui/slash-menu.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/slash-menu-search.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/slash-menu-search-input.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/slash-menu-list.tsx",
+          "path": "block-editor/ui/dropdown-overlay.tsx",
           "type": "registry:component"
         },
         {
@@ -384,12 +175,20 @@
           "type": "registry:component"
         },
         {
-          "path": "block-editor/lib/utils.ts",
-          "type": "registry:lib"
+          "path": "block-editor/ui/slash-menu-list.tsx",
+          "type": "registry:component"
         },
         {
-          "path": "block-editor/lib/commands.ts",
-          "type": "registry:lib"
+          "path": "block-editor/ui/slash-menu-search-input.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/ui/slash-menu-search.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/ui/slash-menu.tsx",
+          "type": "registry:component"
         }
       ],
       "name": "block-editor",
@@ -398,46 +197,675 @@
     },
     {
       "dependencies": [
-        "@tiptap/core@>=3.21.0 <4",
-        "@tiptap/pm@>=3.21.0 <4",
-        "@tiptap/static-renderer@>=3.21.0 <4",
-        "clsx@^2.1.1",
-        "tailwind-merge@^3.0.0",
-        "xss@^1.0.17"
+        "@hugeicons/core-free-icons@^4.3.5",
+        "@hugeicons/react@^1.1.10"
       ],
-      "description": "Read-only rendering and styling for HTML produced by editor and block-editor.",
+      "description": "HugeIcons variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
       "files": [
         {
-          "path": "static-renderer/index.ts",
+          "path": "block-editor/icons.tsx",
           "type": "registry:component"
-        },
-        {
-          "path": "static-renderer/static-renderer.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "static-renderer/sanitize.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "static-renderer/lib/utils.ts",
-          "type": "registry:lib"
-        },
-        {
-          "path": "static-renderer/style.css",
-          "type": "registry:style"
         }
       ],
-      "name": "static-renderer",
-      "title": "Static Renderer",
+      "name": "block-editor-icons-hugeicons",
+      "title": "Block Editor (HugeIcons)",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ],
+      "description": "Phosphor Icons variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
+      "files": [
+        {
+          "path": "block-editor/icons.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "block-editor-icons-phosphor",
+      "title": "Block Editor (Phosphor Icons)",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@remixicon/react@^4.9.0"
+      ],
+      "description": "Remix Icon variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
+      "files": [
+        {
+          "path": "block-editor/icons.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "block-editor-icons-remixicon",
+      "title": "Block Editor (Remix Icon)",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tabler/icons-react@^3.48.0"
+      ],
+      "description": "Tabler Icons variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
+      "files": [
+        {
+          "path": "block-editor/icons.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "block-editor-icons-tabler",
+      "title": "Block Editor (Tabler Icons)",
       "type": "registry:component"
     },
     {
       "dependencies": [
         "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/pm@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
+      ],
+      "description": "Info, tip, warning, danger, and note boxes that hold rich content. Switch the type or remove the callout from its icon menu, insert one from a toolbar button, or type > [!NOTE] to create one. Round-trips as GitHub alert syntax in markdown.",
+      "files": [
+        {
+          "path": "extensions/callout/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/callout/menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/callout/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/callout/toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/callout/utils.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/callout/view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "callout",
+      "title": "Callout",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/extension-code-block@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <1.0.0",
-        "@tiptap/extension-image@>=3.0.0 <4"
+        "mermaid@^11.0.0",
+        "prettier@^3.0.0",
+        "shiki@^4.0.0"
+      ],
+      "description": "A Notion-style code block with Shiki syntax highlighting, a searchable language menu, copy, wrap toggle, captions, Prettier formatting, and a live Mermaid diagram preview. Code stays editable in the editor, so undo and collaboration keep working.",
+      "files": [
+        {
+          "path": "extensions/code-block/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/code-block/highlight.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/code-block/languages.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/code-block/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/code-block/view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/input.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "code-block",
+      "title": "Code Block",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/extension-mention@>=3.0.0 <4",
+        "@tiptap/extension-placeholder@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "@tiptap/starter-kit@>=3.0.0 <4",
+        "@tiptap/static-renderer@>=3.21.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
+      ],
+      "description": "A comment thread with avatars, relative times, emoji reactions, a delete menu, and an editor composer with onPost, onReact, and onDelete hooks.",
+      "files": [
+        {
+          "path": "templates/comment-box/index.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/comment-box/composer.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/comment-box/thread.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/comment-box/types.ts",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/comment-box/utils.ts",
+          "type": "registry:block"
+        }
+      ],
+      "name": "comment-box",
+      "title": "Comment Box",
+      "type": "registry:block"
+    },
+    {
+      "dependencies": [
+        "@base-ui/react@^1.0.0",
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/extension-character-count@>=2.11.5 <4",
+        "@tiptap/extension-color@>=2.11.5 <4",
+        "@tiptap/extension-highlight@>=2.11.5 <4",
+        "@tiptap/extension-link@>=2.11.5 <4",
+        "@tiptap/extension-placeholder@>=2.11.5 <4",
+        "@tiptap/extension-subscript@>=2.11.5 <4",
+        "@tiptap/extension-superscript@>=2.11.5 <4",
+        "@tiptap/extension-text-align@>=2.11.5 <4",
+        "@tiptap/extension-text-style@>=2.11.5 <4",
+        "@tiptap/extension-underline@>=2.11.5 <4",
+        "@tiptap/pm@>=2.11.5 <4",
+        "@tiptap/react@>=2.11.5 <4",
+        "@tiptap/starter-kit@>=2.11.5 <4",
+        "class-variance-authority@^0.7.1",
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "tailwind-merge@^3.0.0"
+      ],
+      "description": "A toolbar-style rich text editor built on Tiptap with shadcn/ui tokens.",
+      "files": [
+        {
+          "path": "editor/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/icon-types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/icons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/language-icons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/rte-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/rte-context.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/rte-controls-group.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/rte-footer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/rte-text-editor.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/rte-toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "editor/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/bubble-menu/index.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/bubble-menu/color-selector.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/bubble-menu/text-buttons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/bubble-menu/utils.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/controls/rte-control.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/controls/rte-controls.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/controls/rte-link-control.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/controls/rte-twitter-control.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/controls/rte-youtube-control.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/extensions/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/extensions/link.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/extensions/resizable-node-view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/dialog.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/input.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-button-group.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-color-swatch.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-dropdown-divider.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-dropdown-icon.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-dropdown.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-icon.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-overlay.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/rte-separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/toggle.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/tooltip.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/utils.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "name": "editor",
+      "title": "Rich Text Editor",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@hugeicons/core-free-icons@^4.3.5",
+        "@hugeicons/react@^1.1.10"
+      ],
+      "description": "HugeIcons variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
+      "files": [
+        {
+          "path": "editor/icons.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "editor-icons-hugeicons",
+      "title": "Rich Text Editor (HugeIcons)",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@phosphor-icons/react@^2.1.10"
+      ],
+      "description": "Phosphor Icons variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
+      "files": [
+        {
+          "path": "editor/icons.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "editor-icons-phosphor",
+      "title": "Rich Text Editor (Phosphor Icons)",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@remixicon/react@^4.9.0"
+      ],
+      "description": "Remix Icon variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
+      "files": [
+        {
+          "path": "editor/icons.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "editor-icons-remixicon",
+      "title": "Rich Text Editor (Remix Icon)",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tabler/icons-react@^3.48.0"
+      ],
+      "description": "Tabler Icons variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
+      "files": [
+        {
+          "path": "editor/icons.tsx",
+          "type": "registry:component"
+        }
+      ],
+      "name": "editor-icons-tabler",
+      "title": "Rich Text Editor (Tabler Icons)",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/extension-link@>=3.0.0 <4",
+        "@tiptap/extension-placeholder@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "@tiptap/starter-kit@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
+      ],
+      "description": "An email card with To and Subject fields, a message body with bold, italic, underline, link and list controls, and Send and Discard buttons. onSend receives the body as Tiptap JSON.",
+      "files": [
+        {
+          "path": "templates/email-composer/index.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/email-composer/toolbar.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/email-composer/types.ts",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/email-composer/utils.ts",
+          "type": "registry:block"
+        }
+      ],
+      "name": "email-composer",
+      "title": "Email Composer",
+      "type": "registry:block"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/extension-color@>=3.0.0 <4",
+        "@tiptap/extension-highlight@>=3.0.0 <4",
+        "@tiptap/extension-link@>=3.0.0 <4",
+        "@tiptap/extension-placeholder@>=3.0.0 <4",
+        "@tiptap/extension-task-item@>=3.0.0 <4",
+        "@tiptap/extension-task-list@>=3.0.0 <4",
+        "@tiptap/extension-text-align@>=3.0.0 <4",
+        "@tiptap/extension-text-style@>=3.0.0 <4",
+        "@tiptap/extension-underline@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "@tiptap/starter-kit@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
+      ],
+      "description": "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
+      "files": [
+        {
+          "path": "templates/full-block-editor/index.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/full-block-editor/slash-items.tsx",
+          "type": "registry:block"
+        }
+      ],
+      "name": "full-block-editor",
+      "title": "Full Block Editor",
+      "type": "registry:block"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/extension-character-count@>=3.0.0 <4",
+        "@tiptap/extension-color@>=3.0.0 <4",
+        "@tiptap/extension-highlight@>=3.0.0 <4",
+        "@tiptap/extension-placeholder@>=3.0.0 <4",
+        "@tiptap/extension-subscript@>=3.0.0 <4",
+        "@tiptap/extension-superscript@>=3.0.0 <4",
+        "@tiptap/extension-text-align@>=3.0.0 <4",
+        "@tiptap/extension-text-style@>=3.0.0 <4",
+        "@tiptap/extension-underline@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "@tiptap/starter-kit@>=3.0.0 <4"
+      ],
+      "description": "The full toolbar editor from the editorcn homepage: every toolbar control plus callouts, code blocks, tables, images, embeds, mentions, Markdown and paste cleanup.",
+      "files": [
+        {
+          "path": "templates/full-editor/index.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/full-editor/toolbar.tsx",
+          "type": "registry:block"
+        }
+      ],
+      "name": "full-editor",
+      "title": "Full Toolbar Editor",
+      "type": "registry:block"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/extension-image@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
       ],
       "description": "A Notion-style image placeholder node that lets you upload or embed an image by URL, with a resizable image node view and its own toolbar button.",
       "files": [
@@ -482,23 +910,15 @@
           "type": "registry:component"
         },
         {
+          "path": "extensions/image-placeholder/style.css",
+          "type": "registry:style"
+        },
+        {
           "path": "extensions/image-placeholder/toolbar.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/use-floating.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "extensions/ui/button.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-menu.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-pill.tsx",
           "type": "registry:component"
         },
         {
@@ -507,6 +927,14 @@
         },
         {
           "path": "extensions/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
           "type": "registry:component"
         },
         {
@@ -518,11 +946,11 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/popover.tsx",
+          "path": "extensions/ui/popover-content.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/popover-content.tsx",
+          "path": "extensions/ui/popover.tsx",
           "type": "registry:component"
         },
         {
@@ -530,16 +958,16 @@
           "type": "registry:component"
         },
         {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
+        },
+        {
           "path": "extensions/ui/tabs.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/image-placeholder/style.css",
-          "type": "registry:style"
-        },
-        {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
         }
       ],
       "name": "image-placeholder",
@@ -549,188 +977,10 @@
     {
       "dependencies": [
         "@tiptap/core@>=3.30.5 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0",
-        "@tiptap/extension-table@>=3.0.0 <4",
-        "@tiptap/extension-table-row@>=3.0.0 <4",
-        "@tiptap/extension-table-cell@>=3.0.0 <4",
-        "@tiptap/extension-table-header@>=3.0.0 <4",
-        "@tiptap/extension-gapcursor@>=3.0.0 <4"
-      ],
-      "description": "A table node with a toolbar that inserts tables from a grid-size picker, lets you add or delete rows and columns, merge and split cells, toggle the header row, and manage rows and columns from hover context handles. Columns are resizable and a gap cursor is included by default.",
-      "files": [
-        {
-          "path": "extensions/core/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/commands.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/context.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/detection.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/editor-state.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/labels.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/types.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/table/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/table/toolbar.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/table/table-hover-overlay.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/use-floating.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/button.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-menu.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-pill.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-content.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-item.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-separator.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/popover.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/popover-content.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/separator.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/table/style.css",
-          "type": "registry:style"
-        },
-        {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
-        }
-      ],
-      "name": "table",
-      "title": "Table",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@tiptap/core@>=3.30.5 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0",
-        "@tiptap/extension-mention@>=3.0.0 <4",
-        "@tiptap/suggestion@>=3.27.0 <4",
-        "@tiptap/pm@>=3.0.0 <4"
-      ],
-      "description": "An @ picker that inserts inline mention nodes with a stable id and label. Items load from a sync or async source with debounce, loading and empty states, and keyboard navigation. Backspace removes the whole mention.",
-      "files": [
-        {
-          "path": "extensions/core/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/commands.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/context.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/detection.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/editor-state.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/labels.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/types.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/mention/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/mention/mention-list.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-pill.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-content.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-item.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/mention/style.css",
-          "type": "registry:style"
-        },
-        {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
-        }
-      ],
-      "name": "mention",
-      "title": "Mention",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@tiptap/core@>=3.30.5 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0",
         "@tiptap/markdown@>=3.30.5 <4",
-        "@tiptap/pm@>=3.0.0 <4"
+        "@tiptap/pm@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
       ],
       "description": "Load, store, and paste markdown. Wraps the official Tiptap markdown extension so editor.getMarkdown() and contentType: \"markdown\" work, adds an opt-in pasteMarkdown option, and ships a toolbar button to import, export, or copy markdown.",
       "files": [
@@ -771,19 +1021,11 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/use-floating.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "extensions/ui/button.tsx",
           "type": "registry:component"
         },
         {
           "path": "extensions/ui/dropdown-item.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/popover.tsx",
           "type": "registry:component"
         },
         {
@@ -795,8 +1037,16 @@
           "type": "registry:component"
         },
         {
+          "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "extensions/ui/style.css",
           "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
         }
       ],
       "name": "markdown",
@@ -806,9 +1056,81 @@
     {
       "dependencies": [
         "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/extension-mention@>=3.0.0 <4",
+        "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0",
-        "@tiptap/pm@>=3.0.0 <4"
+        "@tiptap/suggestion@>=3.27.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
+      ],
+      "description": "An @ picker that inserts inline mention nodes with a stable id and label. Items load from a sync or async source with debounce, loading and empty states, and keyboard navigation. Backspace removes the whole mention.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mention/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mention/mention-list.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mention/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/dropdown-content.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/style.css",
+          "type": "registry:style"
+        }
+      ],
+      "name": "mention",
+      "title": "Mention",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/pm@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
       ],
       "description": "Cleans HTML pasted from Google Docs, Notion, Word, and web pages. Strips classes, ids, fonts, and colors, keeps bold, italic, underline, and links, turns Word list paragraphs into real nested lists, and drops empty paragraphs.",
       "files": [
@@ -851,118 +1173,107 @@
     },
     {
       "dependencies": [
-        "@tiptap/core@>=3.30.5 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0",
-        "@tiptap/pm@>=3.0.0 <4"
-      ],
-      "description": "Info, tip, warning, danger, and note boxes that hold rich content. Switch the type or remove the callout from its icon menu, insert one from a toolbar button, or type > [!NOTE] to create one. Round-trips as GitHub alert syntax in markdown.",
-      "files": [
-        {
-          "path": "extensions/core/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/commands.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/context.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/detection.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/editor-state.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/labels.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/core/types.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/callout/index.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/callout/view.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/callout/toolbar.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/callout/menu.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/callout/utils.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/use-floating.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/button.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-menu.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-pill.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-content.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-item.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-separator.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/popover.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/callout/style.css",
-          "type": "registry:style"
-        },
-        {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
-        }
-      ],
-      "name": "callout",
-      "title": "Callout",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@tiptap/core@>=3.30.5 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0",
-        "@tiptap/extension-code-block@>=3.0.0 <4",
+        "@tiptap/core@>=3.0.0 <4",
+        "@tiptap/extension-color@>=3.0.0 <4",
+        "@tiptap/extension-font-family@>=3.0.0 <4",
+        "@tiptap/extension-highlight@>=3.0.0 <4",
+        "@tiptap/extension-link@>=3.0.0 <4",
+        "@tiptap/extension-placeholder@>=3.0.0 <4",
+        "@tiptap/extension-subscript@>=3.0.0 <4",
+        "@tiptap/extension-superscript@>=3.0.0 <4",
+        "@tiptap/extension-task-item@>=3.0.0 <4",
+        "@tiptap/extension-task-list@>=3.0.0 <4",
+        "@tiptap/extension-text-align@>=3.0.0 <4",
+        "@tiptap/extension-text-style@>=3.0.0 <4",
+        "@tiptap/markdown@>=3.30.5 <4",
         "@tiptap/pm@>=3.0.0 <4",
-        "shiki@^4.0.0",
-        "mermaid@^11.0.0",
-        "prettier@^3.0.0"
+        "@tiptap/react@>=3.0.0 <4",
+        "@tiptap/starter-kit@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
       ],
-      "description": "A Notion-style code block with Shiki syntax highlighting, a searchable language menu, copy, wrap toggle, captions, Prettier formatting, and a live Mermaid diagram preview. Code stays editable in the editor, so undo and collaboration keep working.",
+      "description": "A document page with a breadcrumb header, collaborators, a floating toolbar, task lists, and a status bar with word count and shortcuts.",
+      "files": [
+        {
+          "path": "templates/simple-document-editor/index.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/constants.ts",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/header.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/shortcuts.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/toolbar.tsx",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/types.ts",
+          "type": "registry:block"
+        },
+        {
+          "path": "templates/simple-document-editor/utils.ts",
+          "type": "registry:block"
+        }
+      ],
+      "name": "simple-document-editor",
+      "title": "Simple Document Editor",
+      "type": "registry:block"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.21.0 <4",
+        "@tiptap/pm@>=3.21.0 <4",
+        "@tiptap/static-renderer@>=3.21.0 <4",
+        "clsx@^2.1.1",
+        "tailwind-merge@^3.0.0",
+        "xss@^1.0.17"
+      ],
+      "description": "Read-only rendering and styling for HTML produced by editor and block-editor.",
+      "files": [
+        {
+          "path": "static-renderer/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "static-renderer/sanitize.ts",
+          "type": "registry:lib"
+        },
+        {
+          "path": "static-renderer/static-renderer.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "static-renderer/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "static-renderer/lib/utils.ts",
+          "type": "registry:lib"
+        }
+      ],
+      "name": "static-renderer",
+      "title": "Static Renderer",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/extension-gapcursor@>=3.0.0 <4",
+        "@tiptap/extension-table-cell@>=3.0.0 <4",
+        "@tiptap/extension-table-header@>=3.0.0 <4",
+        "@tiptap/extension-table-row@>=3.0.0 <4",
+        "@tiptap/extension-table@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
+      ],
+      "description": "A table node with a toolbar that inserts tables from a grid-size picker, lets you add or delete rows and columns, merge and split cells, toggle the header row, and manage rows and columns from hover context handles. Columns are resizable and a gap cursor is included by default.",
       "files": [
         {
           "path": "extensions/core/index.ts",
@@ -993,35 +1304,23 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/code-block/index.ts",
+          "path": "extensions/table/index.ts",
           "type": "registry:component"
         },
         {
-          "path": "extensions/code-block/view.tsx",
+          "path": "extensions/table/style.css",
+          "type": "registry:style"
+        },
+        {
+          "path": "extensions/table/table-hover-overlay.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/code-block/highlight.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/code-block/languages.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/use-floating.tsx",
+          "path": "extensions/table/toolbar.tsx",
           "type": "registry:component"
         },
         {
           "path": "extensions/ui/button.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-menu.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/dropdown-pill.tsx",
           "type": "registry:component"
         },
         {
@@ -1033,11 +1332,19 @@
           "type": "registry:component"
         },
         {
+          "path": "extensions/ui/dropdown-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/dropdown-pill.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "extensions/ui/dropdown-separator.tsx",
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/input.tsx",
+          "path": "extensions/ui/popover-content.tsx",
           "type": "registry:component"
         },
         {
@@ -1045,26 +1352,30 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/code-block/style.css",
-          "type": "registry:style"
+          "path": "extensions/ui/separator.tsx",
+          "type": "registry:component"
         },
         {
           "path": "extensions/ui/style.css",
           "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
         }
       ],
-      "name": "code-block",
-      "title": "Code Block",
+      "name": "table",
+      "title": "Table",
       "type": "registry:component"
     },
     {
       "dependencies": [
         "@tiptap/core@>=3.30.5 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0",
         "@tiptap/extension-details@>=3.24.0 <4",
         "@tiptap/extension-gapcursor@>=3.0.0 <4",
-        "@tiptap/pm@>=3.0.0 <4"
+        "@tiptap/pm@>=3.0.0 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "lucide-react@>=0.400.0 <1.0.0"
       ],
       "description": "A Notion-style collapsible section that holds any block content, including other toggles. Click the triangle to collapse or expand, insert one from the slash menu or by typing +++ on an empty line, and press Enter in the title to jump into the content. The open state is saved with the document and native details HTML keeps it working in the static renderer without JavaScript.",
       "files": [
@@ -1111,317 +1422,6 @@
       ],
       "name": "toggle",
       "title": "Toggle",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@tiptap/core@>=3.0.0 <4",
-        "@tiptap/static-renderer@>=3.21.0 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "@tiptap/pm@>=3.0.0 <4",
-        "@tiptap/starter-kit@>=3.0.0 <4",
-        "@tiptap/extension-placeholder@>=3.0.0 <4",
-        "@tiptap/extension-mention@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
-      ],
-      "description": "A comment thread with avatars, relative times, emoji reactions, a delete menu, and an editor composer with onPost, onReact, and onDelete hooks.",
-      "files": [
-        {
-          "path": "templates/comment-box/index.tsx",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/comment-box/composer.tsx",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/comment-box/thread.tsx",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/comment-box/types.ts",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/comment-box/utils.ts",
-          "type": "registry:block"
-        }
-      ],
-      "name": "comment-box",
-      "title": "Comment Box",
-      "type": "registry:block"
-    },
-    {
-      "dependencies": [
-        "@tiptap/core@>=3.0.0 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "@tiptap/pm@>=3.0.0 <4",
-        "@tiptap/starter-kit@>=3.0.0 <4",
-        "@tiptap/extension-placeholder@>=3.0.0 <4",
-        "@tiptap/extension-link@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
-      ],
-      "description": "An email card with To and Subject fields, a message body with bold, italic, underline, link and list controls, and Send and Discard buttons. onSend receives the body as Tiptap JSON.",
-      "files": [
-        {
-          "path": "templates/email-composer/index.tsx",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/email-composer/toolbar.tsx",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/email-composer/types.ts",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/email-composer/utils.ts",
-          "type": "registry:block"
-        }
-      ],
-      "name": "email-composer",
-      "title": "Email Composer",
-      "type": "registry:block"
-    },
-    {
-      "dependencies": [
-        "@tiptap/core@>=3.0.0 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "@tiptap/pm@>=3.0.0 <4",
-        "@tiptap/starter-kit@>=3.0.0 <4",
-        "@tiptap/extension-placeholder@>=3.0.0 <4",
-        "@tiptap/extension-link@>=3.0.0 <4",
-        "@tiptap/extension-highlight@>=3.0.0 <4",
-        "@tiptap/extension-task-list@>=3.0.0 <4",
-        "@tiptap/extension-task-item@>=3.0.0 <4",
-        "@tiptap/extension-text-align@>=3.0.0 <4",
-        "@tiptap/extension-text-style@>=3.0.0 <4",
-        "@tiptap/extension-color@>=3.0.0 <4",
-        "@tiptap/extension-font-family@>=3.0.0 <4",
-        "@tiptap/extension-subscript@>=3.0.0 <4",
-        "@tiptap/extension-superscript@>=3.0.0 <4",
-        "@tiptap/markdown@>=3.30.5 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
-      ],
-      "description": "A document page with a breadcrumb header, collaborators, a floating toolbar, task lists, and a status bar with word count and shortcuts.",
-      "files": [
-        {
-          "path": "templates/simple-document-editor/index.tsx",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/simple-document-editor/constants.ts",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/simple-document-editor/header.tsx",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/simple-document-editor/shortcuts.tsx",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/simple-document-editor/toolbar.tsx",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/simple-document-editor/types.ts",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/simple-document-editor/utils.ts",
-          "type": "registry:block"
-        }
-      ],
-      "name": "simple-document-editor",
-      "title": "Simple Document Editor",
-      "type": "registry:block"
-    },
-    {
-      "dependencies": [
-        "@tiptap/core@>=3.0.0 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "@tiptap/pm@>=3.0.0 <4",
-        "@tiptap/starter-kit@>=3.0.0 <4",
-        "@tiptap/extension-character-count@>=3.0.0 <4",
-        "@tiptap/extension-color@>=3.0.0 <4",
-        "@tiptap/extension-highlight@>=3.0.0 <4",
-        "@tiptap/extension-placeholder@>=3.0.0 <4",
-        "@tiptap/extension-subscript@>=3.0.0 <4",
-        "@tiptap/extension-superscript@>=3.0.0 <4",
-        "@tiptap/extension-text-align@>=3.0.0 <4",
-        "@tiptap/extension-text-style@>=3.0.0 <4",
-        "@tiptap/extension-underline@>=3.0.0 <4"
-      ],
-      "description": "The full toolbar editor from the editorcn homepage: every toolbar control plus callouts, code blocks, tables, images, embeds, mentions, Markdown and paste cleanup.",
-      "files": [
-        {
-          "path": "templates/full-editor/index.tsx",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/full-editor/toolbar.tsx",
-          "type": "registry:block"
-        }
-      ],
-      "name": "full-editor",
-      "title": "Full Toolbar Editor",
-      "type": "registry:block"
-    },
-    {
-      "dependencies": [
-        "@tiptap/core@>=3.0.0 <4",
-        "@tiptap/react@>=3.0.0 <4",
-        "@tiptap/pm@>=3.0.0 <4",
-        "@tiptap/starter-kit@>=3.0.0 <4",
-        "@tiptap/extension-color@>=3.0.0 <4",
-        "@tiptap/extension-highlight@>=3.0.0 <4",
-        "@tiptap/extension-link@>=3.0.0 <4",
-        "@tiptap/extension-placeholder@>=3.0.0 <4",
-        "@tiptap/extension-task-item@>=3.0.0 <4",
-        "@tiptap/extension-task-list@>=3.0.0 <4",
-        "@tiptap/extension-text-align@>=3.0.0 <4",
-        "@tiptap/extension-text-style@>=3.0.0 <4",
-        "@tiptap/extension-underline@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
-      ],
-      "description": "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
-      "files": [
-        {
-          "path": "templates/full-block-editor/index.tsx",
-          "type": "registry:block"
-        },
-        {
-          "path": "templates/full-block-editor/slash-items.tsx",
-          "type": "registry:block"
-        }
-      ],
-      "name": "full-block-editor",
-      "title": "Full Block Editor",
-      "type": "registry:block"
-    },
-    {
-      "dependencies": [
-        "@phosphor-icons/react@^2.1.10"
-      ],
-      "description": "Phosphor Icons variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
-      "files": [
-        {
-          "path": "editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "editor-icons-phosphor",
-      "title": "Rich Text Editor (Phosphor Icons)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@phosphor-icons/react@^2.1.10"
-      ],
-      "description": "Phosphor Icons variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
-      "files": [
-        {
-          "path": "block-editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "block-editor-icons-phosphor",
-      "title": "Block Editor (Phosphor Icons)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@tabler/icons-react@^3.48.0"
-      ],
-      "description": "Tabler Icons variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
-      "files": [
-        {
-          "path": "editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "editor-icons-tabler",
-      "title": "Rich Text Editor (Tabler Icons)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@tabler/icons-react@^3.48.0"
-      ],
-      "description": "Tabler Icons variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
-      "files": [
-        {
-          "path": "block-editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "block-editor-icons-tabler",
-      "title": "Block Editor (Tabler Icons)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@hugeicons/react@^1.1.10",
-        "@hugeicons/core-free-icons@^4.3.5"
-      ],
-      "description": "HugeIcons variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
-      "files": [
-        {
-          "path": "editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "editor-icons-hugeicons",
-      "title": "Rich Text Editor (HugeIcons)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@hugeicons/react@^1.1.10",
-        "@hugeicons/core-free-icons@^4.3.5"
-      ],
-      "description": "HugeIcons variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
-      "files": [
-        {
-          "path": "block-editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "block-editor-icons-hugeicons",
-      "title": "Block Editor (HugeIcons)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@remixicon/react@^4.9.0"
-      ],
-      "description": "Remix Icon variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
-      "files": [
-        {
-          "path": "editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "editor-icons-remixicon",
-      "title": "Rich Text Editor (Remix Icon)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@remixicon/react@^4.9.0"
-      ],
-      "description": "Remix Icon variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
-      "files": [
-        {
-          "path": "block-editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "block-editor-icons-remixicon",
-      "title": "Block Editor (Remix Icon)",
       "type": "registry:component"
     }
   ],
