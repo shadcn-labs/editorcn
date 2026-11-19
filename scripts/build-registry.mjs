@@ -917,6 +917,7 @@ const templateDeps = {
     "@tiptap/starter-kit@>=3.0.0 <4",
     "@tiptap/extension-placeholder@>=3.0.0 <4",
     "@tiptap/extension-mention@>=3.0.0 <4",
+    "lucide-react@>=0.400.0 <1.0.0",
   ],
   "email-composer": [
     "@tiptap/core@>=3.0.0 <4",
