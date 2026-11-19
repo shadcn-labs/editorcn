@@ -161,7 +161,7 @@ const ToolbarEditorPreview = ({ config }: { config: PreviewConfig }) => {
   });
 
   return (
-    <div className="overflow-hidden rounded-md border border-border">
+    <div>
       <RichTextEditor editor={editor}>
         <RichTextEditor.Toolbar>
           <RichTextEditor.ControlsGroup>

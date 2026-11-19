@@ -109,38 +109,32 @@ export const EditorVariantsDemo = () => {
         <p className="text-sm font-medium text-muted-foreground mb-2">
           default
         </p>
-        <div className="overflow-hidden rounded-md border border-border">
-          <RichTextEditor editor={a} variant="default">
-            <RichTextEditor.Toolbar>
-              <EditorToolbar />
-            </RichTextEditor.Toolbar>
-            <RichTextEditor.Content />
-          </RichTextEditor>
-        </div>
+        <RichTextEditor editor={a} variant="default">
+          <RichTextEditor.Toolbar>
+            <EditorToolbar />
+          </RichTextEditor.Toolbar>
+          <RichTextEditor.Content />
+        </RichTextEditor>
       </div>
       <div>
         <p className="text-sm font-medium text-muted-foreground mb-2">subtle</p>
-        <div className="overflow-hidden rounded-md border border-border">
-          <RichTextEditor editor={b} variant="subtle">
-            <RichTextEditor.Toolbar>
-              <EditorToolbar />
-            </RichTextEditor.Toolbar>
-            <RichTextEditor.Content />
-          </RichTextEditor>
-        </div>
+        <RichTextEditor editor={b} variant="subtle">
+          <RichTextEditor.Toolbar>
+            <EditorToolbar />
+          </RichTextEditor.Toolbar>
+          <RichTextEditor.Content />
+        </RichTextEditor>
       </div>
       <div>
         <p className="text-sm font-medium text-muted-foreground mb-2">
           compact
         </p>
-        <div className="overflow-hidden rounded-md border border-border">
-          <RichTextEditor editor={c} variant="compact">
-            <RichTextEditor.Toolbar>
-              <EditorToolbar />
-            </RichTextEditor.Toolbar>
-            <RichTextEditor.Content />
-          </RichTextEditor>
-        </div>
+        <RichTextEditor editor={c} variant="compact">
+          <RichTextEditor.Toolbar>
+            <EditorToolbar />
+          </RichTextEditor.Toolbar>
+          <RichTextEditor.Content />
+        </RichTextEditor>
       </div>
     </div>
   );
@@ -156,7 +150,7 @@ export const EditorClassNameDemo = () => {
   return (
     <RichTextEditor
       editor={editor}
-      className="rounded-xl shadow-lg ring-1 ring-black/5"
+      className="rounded-2xl border-dashed border-border"
     >
       <RichTextEditor.Toolbar>
         <EditorToolbar />
@@ -302,7 +296,7 @@ export const EditorReadOnlyDemo = () => {
     <div className="space-y-4">
       <button
         type="button"
-        className="inline-flex items-center gap-2 rounded-md border border-border bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
+        className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-background px-3 text-sm font-medium transition-colors hover:bg-muted focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
         onClick={toggle}
       >
         {isEditable ? (
@@ -314,9 +308,7 @@ export const EditorReadOnlyDemo = () => {
       </button>
       <RichTextEditor editor={editor} editable={isEditable}>
         <RichTextEditor.Toolbar>
-          <div className="flex items-center gap-2" data-editable={isEditable}>
-            <EditorToolbar />
-          </div>
+          <EditorToolbar />
         </RichTextEditor.Toolbar>
         <RichTextEditor.Content />
       </RichTextEditor>
@@ -358,32 +350,30 @@ export const EditorCustomIconsDemo = () => {
     shouldRerenderOnTransaction: false,
   });
   return (
-    <div className="overflow-hidden rounded-md border border-border">
-      <RichTextEditor
-        editor={editor}
-        icons={{
-          boldControlIcon: <StarIcon />,
-          italicControlIcon: <HeartIcon />,
-        }}
-      >
-        <RichTextEditor.Toolbar>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Bold />
-            <RichTextEditor.Italic />
-            <RichTextEditor.Underline />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.BulletList />
-            <RichTextEditor.OrderedList />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Undo />
-            <RichTextEditor.Redo />
-          </RichTextEditor.ControlsGroup>
-        </RichTextEditor.Toolbar>
-        <RichTextEditor.Content />
-      </RichTextEditor>
-    </div>
+    <RichTextEditor
+      editor={editor}
+      icons={{
+        boldControlIcon: <StarIcon />,
+        italicControlIcon: <HeartIcon />,
+      }}
+    >
+      <RichTextEditor.Toolbar>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Underline />
+        </RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.BulletList />
+          <RichTextEditor.OrderedList />
+        </RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Undo />
+          <RichTextEditor.Redo />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+      <RichTextEditor.Content />
+    </RichTextEditor>
   );
 };
 
@@ -405,33 +395,31 @@ export const EditorCustomLabelsDemo = () => {
     shouldRerenderOnTransaction: false,
   });
   return (
-    <div className="overflow-hidden rounded-md border border-border">
-      <RichTextEditor editor={editor} labels={customLabels}>
-        <RichTextEditor.Toolbar>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Bold />
-            <RichTextEditor.Italic />
-            <RichTextEditor.Underline />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.H1 />
-            <RichTextEditor.H2 />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.BulletList />
-            <RichTextEditor.OrderedList />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Link />
-            <RichTextEditor.Unlink />
-          </RichTextEditor.ControlsGroup>
-          <RichTextEditor.ControlsGroup>
-            <RichTextEditor.Undo />
-            <RichTextEditor.Redo />
-          </RichTextEditor.ControlsGroup>
-        </RichTextEditor.Toolbar>
-        <RichTextEditor.Content />
-      </RichTextEditor>
-    </div>
+    <RichTextEditor editor={editor} labels={customLabels}>
+      <RichTextEditor.Toolbar>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <RichTextEditor.Underline />
+        </RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.H1 />
+          <RichTextEditor.H2 />
+        </RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.BulletList />
+          <RichTextEditor.OrderedList />
+        </RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Link />
+          <RichTextEditor.Unlink />
+        </RichTextEditor.ControlsGroup>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Undo />
+          <RichTextEditor.Redo />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
+      <RichTextEditor.Content />
+    </RichTextEditor>
   );
 };

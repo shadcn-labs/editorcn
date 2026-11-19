@@ -96,7 +96,7 @@ export const TemplateCard = ({
         <TabsTrigger value="code">Code</TabsTrigger>
       </TabsList>
       <TabsContent value="preview" className="pt-4">
-        <div className="overflow-hidden rounded-md border border-border">
+        <div>
           <RichTextEditor editor={editor}>
             <style>{`
               .rte-content table {
