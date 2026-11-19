@@ -41,7 +41,6 @@ const ROWS = [
 ];
 
 const PLAN = "w-20 px-2 sm:w-40 sm:px-5";
-const PRO = "bg-muted/50";
 
 const Included = ({ value }: { value: boolean }) =>
   value ? (
@@ -86,7 +85,7 @@ export const HomeFreeVsPro = ({ className }: { className?: string }) => (
                   Free
                 </span>
               </th>
-              <th className={cn(PLAN, PRO, "py-3 text-left")} scope="col">
+              <th className={cn(PLAN, "py-3 text-left")} scope="col">
                 <span className="block font-semibold">editorcn pro</span>
                 <span className="block text-xs font-normal text-muted-foreground">
                   Lifetime
@@ -106,7 +105,7 @@ export const HomeFreeVsPro = ({ className }: { className?: string }) => (
                 <td className={cn(PLAN, "py-3")}>
                   <Included value={free} />
                 </td>
-                <td className={cn(PLAN, PRO, "py-3")}>
+                <td className={cn(PLAN, "py-3")}>
                   <Included value />
                 </td>
               </tr>
@@ -128,7 +127,7 @@ export const HomeFreeVsPro = ({ className }: { className?: string }) => (
                   </Link>
                 </Button>
               </td>
-              <td className={cn(PLAN, PRO, "py-3")}>
+              <td className={cn(PLAN, "py-3")}>
                 <Button asChild className="rounded-lg" size="sm">
                   <a href={LINK.PRO_PRICING} rel="noopener" target="_blank">
                     Get Pro

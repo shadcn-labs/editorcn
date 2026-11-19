@@ -1,4 +1,4 @@
-import { ArrowRightIcon, SparklesIcon } from "lucide-react";
+import { ArrowRightIcon, SparkleIcon } from "lucide-react";
 import type { CSSProperties } from "react";
 
 import { LINK } from "@/constants/links";
@@ -25,9 +25,9 @@ const Track = () => (
         <span className={bold ? "font-semibold" : "text-primary-foreground/70"}>
           {message}
         </span>
-        <SparklesIcon
+        <SparkleIcon
           aria-hidden
-          className="size-3.5 text-primary-foreground/50"
+          className="size-3 fill-current text-primary-foreground/40"
         />
       </span>
     ))}
