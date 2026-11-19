@@ -1,0 +1,7 @@
+{
+  "name": "full-block-editor",
+  "type": "registry:block",
+  "title": "Full Block Editor",
+  "description": "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
+  "dependencies": ["@tiptap/core", "@tiptap/pm"]
+}

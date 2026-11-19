@@ -1,0 +1,14 @@
+{
+  "name": "static-renderer",
+  "type": "registry:component",
+  "title": "Static Renderer",
+  "description": "Read-only rendering and styling for HTML produced by editor and block-editor.",
+  "dependencies": [
+    "@tiptap/core@>=3.21.0 <4",
+    "@tiptap/pm@>=3.21.0 <4",
+    "@tiptap/static-renderer@>=3.21.0 <4"
+  ],
+  "fileTypes": {
+    "sanitize.ts": "registry:lib"
+  }
+}

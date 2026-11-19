@@ -1,0 +1,7 @@
+{
+  "name": "markdown",
+  "type": "registry:component",
+  "title": "Markdown",
+  "description": "Load, store, and paste markdown. Wraps the official Tiptap markdown extension so editor.getMarkdown() and contentType: \"markdown\" work, adds an opt-in pasteMarkdown option, and ships a toolbar button to import, export, or copy markdown.",
+  "dependencies": ["@tiptap/markdown@>=3.30.5 <4"]
+}

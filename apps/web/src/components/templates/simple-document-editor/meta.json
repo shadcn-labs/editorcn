@@ -1,0 +1,11 @@
+{
+  "name": "simple-document-editor",
+  "type": "registry:block",
+  "title": "Simple Document Editor",
+  "description": "A document page with a breadcrumb header, collaborators, a floating toolbar, task lists, and a status bar with word count and shortcuts.",
+  "dependencies": [
+    "@tiptap/extension-link",
+    "@tiptap/markdown@>=3.30.5 <4",
+    "@tiptap/pm"
+  ]
+}
