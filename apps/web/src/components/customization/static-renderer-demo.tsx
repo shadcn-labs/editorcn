@@ -119,7 +119,7 @@ export const StaticRendererDemo = () => {
 
   return (
     <div className="space-y-4 mt-4">
-      <div className="overflow-hidden rounded-md border border-border">
+      <div>
         <RichTextEditor editor={editor}>
           <RichTextEditor.Toolbar>
             <RichTextEditor.ControlsGroup>
