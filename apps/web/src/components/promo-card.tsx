@@ -1,11 +1,9 @@
 "use client";
 
-import { ArrowUpRightIcon, XIcon } from "lucide-react";
+import { ArrowUpRightIcon, LayoutTemplateIcon, XIcon } from "lucide-react";
 import Image from "next/image";
 import { useState, useSyncExternalStore } from "react";
 
-import { CopyButton } from "@/components/copy-button";
-import { GithubIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { LINK } from "@/constants/links";
@@ -13,15 +11,14 @@ import { trackEvent } from "@/lib/events";
 import { cn } from "@/lib/utils";
 
 const PROMO = {
-  command: "uvx tristack my-api",
-  cta: { href: LINK.TRISTACK_NEW, label: "Build your stack" },
+  cta: { href: LINK.PRO_PRICING, label: "Get lifetime access" },
   description:
-    "Scaffold production-ready Python, Go, and Rust projects from one CLI. Open source, zero lock-in.",
+    "Ready-made editor apps built on editorcn: a chat composer, a document editor, a blog post editor, and a Notion-style notes workspace. Install them with the shadcn CLI.",
   eyebrow: "From the editorcn author",
-  id: "tristack",
-  logo: "/tristack.png",
-  secondary: { href: LINK.TRISTACK_GITHUB, label: "GitHub" },
-  title: "TriStack",
+  id: "editorcn-pro",
+  logo: "/apple-touch-icon.png",
+  secondary: { href: LINK.PRO_TEMPLATES, label: "Templates" },
+  title: "editorcn pro",
 } as const;
 
 const DISMISS_KEY = `promo-dismissed:${PROMO.id}`;
@@ -76,17 +73,6 @@ const PromoBody = ({
       </div>
     </div>
     <p className="text-[0.8rem] text-muted-foreground">{PROMO.description}</p>
-    {variant === "floating" && (
-      <div className="flex items-center justify-between gap-2 rounded-lg border border-border/60 bg-muted/50 py-0.5 pr-0.5 pl-3">
-        <code className="truncate font-mono text-xs">{PROMO.command}</code>
-        <CopyButton
-          aria-label="Copy command"
-          className="static size-7 shrink-0 bg-transparent"
-          event="copy_promo_command"
-          value={PROMO.command}
-        />
-      </div>
-    )}
     <div
       className={cn(
         "grid gap-2",
@@ -107,11 +93,11 @@ const PromoBody = ({
       <Button asChild className="rounded-lg" size="sm" variant="outline">
         <a
           href={PROMO.secondary.href}
-          onClick={() => track(variant, "github")}
+          onClick={() => track(variant, "templates")}
           rel="noopener noreferrer"
           target="_blank"
         >
-          <GithubIcon />
+          <LayoutTemplateIcon />
           {PROMO.secondary.label}
         </a>
       </Button>

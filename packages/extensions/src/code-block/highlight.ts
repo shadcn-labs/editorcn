@@ -4,7 +4,7 @@ import { Decoration, DecorationSet } from "@tiptap/pm/view";
 import type { BundledLanguage, BundledTheme, HighlighterGeneric } from "shiki";
 
 type Highlighter = HighlighterGeneric<BundledLanguage, BundledTheme>;
-interface Token {
+export interface Token {
   from: number;
   to: number;
   style: string;
@@ -53,6 +53,74 @@ const requestLanguage = async (language: string) => {
   }
 };
 
+const toTokens = (
+  instance: Highlighter,
+  code: string,
+  language: string
+): Token[] => {
+  const { tokens } = instance.codeToTokens(code, {
+    defaultColor: false,
+    lang: language as BundledLanguage,
+    themes: THEMES,
+  });
+  return tokens.flat().flatMap((token) =>
+    token.htmlStyle
+      ? [
+          {
+            from: token.offset,
+            style: Object.entries(token.htmlStyle)
+              .map(([key, value]) => `${key}:${value}`)
+              .join(";"),
+            to: token.offset + token.content.length,
+          },
+        ]
+      : []
+  );
+};
+
+const loading = new Map<string, Promise<boolean>>();
+
+const loadLanguage = async (language: string) => {
+  try {
+    highlighterPromise ??= createShikiHighlighter();
+    const instance = await highlighterPromise;
+    const { bundledLanguages } = await import("shiki");
+    if (!(language in bundledLanguages)) {
+      return false;
+    }
+    await instance.loadLanguage(language as BundledLanguage);
+    return true;
+  } catch {
+    loading.delete(language);
+    return false;
+  }
+};
+
+const ensureLanguage = (language: string) => {
+  let pending = loading.get(language);
+  if (!pending) {
+    pending = loadLanguage(language);
+    loading.set(language, pending);
+  }
+  return pending;
+};
+
+// Highlights code outside a live editor, for example in the static renderer.
+// Shares the highlighter with the editor plugin, so Shiki loads only once.
+export const highlightCode = async (
+  code: string,
+  language: string
+): Promise<Token[]> => {
+  if (
+    PLAIN.has(language) ||
+    !(await ensureLanguage(language)) ||
+    !highlighter
+  ) {
+    return [];
+  }
+  return toTokens(highlighter, code, language);
+};
+
 const tokenize = (node: PMNode): Token[] => {
   const cached = cache.get(node);
   if (cached) {
@@ -66,24 +134,7 @@ const tokenize = (node: PMNode): Token[] => {
     void requestLanguage(language);
     return [];
   }
-  const { tokens } = highlighter.codeToTokens(node.textContent, {
-    defaultColor: false,
-    lang: language as BundledLanguage,
-    themes: THEMES,
-  });
-  const result = tokens.flat().flatMap((token) =>
-    token.htmlStyle
-      ? [
-          {
-            from: token.offset,
-            style: Object.entries(token.htmlStyle)
-              .map(([key, value]) => `${key}:${value}`)
-              .join(";"),
-            to: token.offset + token.content.length,
-          },
-        ]
-      : []
-  );
+  const result = toTokens(highlighter, node.textContent, language);
   cache.set(node, result);
   return result;
 };
