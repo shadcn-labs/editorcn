@@ -1,3 +1,5 @@
+import { setTimeout as sleep } from "node:timers/promises";
+
 import { act } from "react";
 import type { ReactNode } from "react";
 import { createRoot } from "react-dom/client";
@@ -36,6 +38,19 @@ const click = async (element: HTMLElement | null) => {
       new PointerEvent("pointerup", { bubbles: true, button: 0 })
     );
     element.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+};
+
+const tooltips = () => document.querySelectorAll<HTMLElement>("[role=tooltip]");
+
+const hover = async (element: HTMLElement | null) => {
+  if (!element) {
+    throw new Error("element not found");
+  }
+  await act(() => {
+    element.dispatchEvent(
+      new PointerEvent("pointerover", { bubbles: true, pointerType: "mouse" })
+    );
   });
 };
 
@@ -136,7 +151,7 @@ describe("radix ui primitives", () => {
     ).not.toBeNull();
   });
 
-  it("shows the TooltipHost content for a handle trigger", async () => {
+  it("shares one TooltipHost tooltip between handle triggers", async () => {
     const handle = createTooltipHandle();
     const view = await render(
       <TooltipProvider>
@@ -146,19 +161,51 @@ describe("radix ui primitives", () => {
             payload="Bold"
             render={<Toggle aria-label="Bold" />}
           />
+          <TooltipTrigger
+            handle={handle}
+            payload="Italic"
+            render={<Toggle aria-label="Italic" />}
+          />
         </TooltipHost>
       </TooltipProvider>
     );
-    const trigger = view.querySelector<HTMLElement>("button[aria-label=Bold]");
-    expect(trigger?.dataset.slot).toBe("tooltip-trigger");
+    const bold = view.querySelector<HTMLElement>("button[aria-label=Bold]");
+    const italic = view.querySelector<HTMLElement>("button[aria-label=Italic]");
+    expect(bold?.dataset.slot).toBe("tooltip-trigger");
+    expect(document.querySelector("[role=tooltip]")).toBeNull();
+
+    await hover(bold);
+    expect(tooltips()).toHaveLength(1);
+    expect(tooltips()[0]?.textContent).toBe("Bold");
+    expect(tooltips()[0]?.dataset.side).toBe("bottom");
+    expect(bold?.getAttribute("aria-describedby")).toBe(tooltips()[0]?.id);
+
     await act(() => {
-      trigger?.dispatchEvent(new FocusEvent("focus", { bubbles: false }));
-      trigger?.dispatchEvent(new FocusEvent("focusin", { bubbles: true }));
+      bold?.dispatchEvent(
+        new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" })
+      );
     });
-    const content = document.querySelector<HTMLElement>(
-      "[data-slot=tooltip-content]"
-    );
-    expect(content?.textContent).toContain("Bold");
-    expect(content?.dataset.side).toBe("bottom");
+    await hover(italic);
+    expect(tooltips()).toHaveLength(1);
+    expect(tooltips()[0]?.dataset.state).toBe("delayed-open");
+    expect(tooltips()[0]?.textContent).toBe("Italic");
+    expect(bold?.hasAttribute("aria-describedby")).toBeFalsy();
+
+    await act(async () => {
+      italic?.dispatchEvent(
+        new PointerEvent("pointerout", { bubbles: true, pointerType: "mouse" })
+      );
+      await sleep(150);
+    });
+    expect(tooltips()).toHaveLength(0);
+
+    await hover(bold);
+    expect(tooltips()).toHaveLength(1);
+    await act(() => {
+      document.dispatchEvent(
+        new KeyboardEvent("keydown", { bubbles: true, key: "Escape" })
+      );
+    });
+    expect(tooltips()).toHaveLength(0);
   });
 });
