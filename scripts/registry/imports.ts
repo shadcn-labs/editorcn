@@ -3,11 +3,13 @@ import { dirname, resolve } from "node:path";
 
 import ts from "typescript";
 
+import type { ImportRef } from "./types.ts";
+
 const scriptPattern = /\.[cm]?[jt]sx?$/;
 
-export const isScript = (path) => scriptPattern.test(path);
+export const isScript = (path: string) => scriptPattern.test(path);
 
-export const scanImports = (content, path) =>
+export const scanImports = (content: string, path: string): ImportRef[] =>
   ts.preProcessFile(content, true, true).importedFiles.map((file) => {
     const start = file.pos + 1;
     const end = start + file.fileName.length;
@@ -19,15 +21,15 @@ export const scanImports = (content, path) =>
     return { end, specifier: file.fileName, start };
   });
 
-const resolveCandidates = (base) => [
+export const resolveCandidates = (base: string, join = resolve) => [
   base,
   `${base}.ts`,
   `${base}.tsx`,
-  resolve(base, "index.ts"),
-  resolve(base, "index.tsx"),
+  join(base, "index.ts"),
+  join(base, "index.tsx"),
 ];
 
-export const resolveRelative = (from, specifier) => {
+export const resolveRelative = (from: string, specifier: string) => {
   const base = resolve(dirname(from), specifier);
   const match = resolveCandidates(base).find(
     (candidate) => existsSync(candidate) && statSync(candidate).isFile()

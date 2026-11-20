@@ -1,46 +1,49 @@
-import { homepage } from "./config.mjs";
+import { homepage } from "./config.ts";
+import type { BuiltItem, Catalog, RegistryItem } from "./types.ts";
 
-const compareStrings = (a, b) => {
+const compareStrings = (a: string, b: string) => {
   if (a === b) {
     return 0;
   }
   return a < b ? -1 : 1;
 };
 
-const comparePaths = (a, b) => {
+const comparePaths = (a: string, b: string) => {
   const left = a.split("/");
   const right = b.split("/");
   const depth = Math.min(left.length, right.length);
   for (let i = 0; i < depth; i += 1) {
-    if (left[i] !== right[i]) {
+    const leftPart = left[i] ?? "";
+    const rightPart = right[i] ?? "";
+    if (leftPart !== rightPart) {
       const leftIsFile = i === left.length - 1;
       const rightIsFile = i === right.length - 1;
       if (leftIsFile !== rightIsFile) {
         return leftIsFile ? -1 : 1;
       }
       if (leftIsFile) {
-        const leftIsIndex = left[i].startsWith("index.");
-        const rightIsIndex = right[i].startsWith("index.");
+        const leftIsIndex = leftPart.startsWith("index.");
+        const rightIsIndex = rightPart.startsWith("index.");
         if (leftIsIndex !== rightIsIndex) {
           return leftIsIndex ? -1 : 1;
         }
       }
-      return compareStrings(left[i], right[i]);
+      return compareStrings(leftPart, rightPart);
     }
   }
   return left.length - right.length;
 };
 
-const isUrl = (value) => value.startsWith("https://");
+const isUrl = (value: string) => value.startsWith("https://");
 
-const compareRegistryDependencies = (a, b) =>
+const compareRegistryDependencies = (a: string, b: string) =>
   Number(isUrl(b)) - Number(isUrl(a)) || compareStrings(a, b);
 
-const sortFiles = (files) =>
+const sortFiles = <T extends { path: string }>(files: T[]) =>
   files.toSorted((a, b) => comparePaths(a.path, b.path));
 
-export const registryItem = (item) => {
-  const output = {
+export const registryItem = (item: BuiltItem): RegistryItem => {
+  const output: RegistryItem = {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
     dependencies: item.dependencies.toSorted(compareStrings),
     description: item.meta.description,
@@ -62,7 +65,7 @@ export const registryItem = (item) => {
   return output;
 };
 
-export const registryCatalog = (items) => ({
+export const registryCatalog = (items: BuiltItem[]): Catalog => ({
   $schema: "https://ui.shadcn.com/schema/registry.json",
   homepage,
   items: items
@@ -78,4 +81,4 @@ export const registryCatalog = (items) => ({
   name: "editorcn",
 });
 
-export const serialize = (value) => JSON.stringify(value, null, 2);
+export const serialize = (value: unknown) => JSON.stringify(value, null, 2);

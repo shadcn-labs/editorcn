@@ -1,8 +1,12 @@
+import type { AliasTarget, IconSet, Source } from "./types.ts";
+
 export const homepage = "https://www.rtecn.space";
 
-export const registryUrl = (name) => `${homepage}/r/${name}.json`;
+export const registryUrl = (name: string) => `${homepage}/r/${name}.json`;
 
-export const sources = [
+export const outDir = "apps/web/public/r";
+
+export const sources: Source[] = [
   {
     dir: "packages",
     filesDir: "src",
@@ -25,7 +29,7 @@ export const sources = [
 
 export const ignoredFiles = [/^meta\.json$/, /\.test\.[jt]sx?$/, /^fixtures$/];
 
-export const aliases = {
+export const aliases: Record<string, AliasTarget> = {
   "@editorcn/block-editor": {
     "*": "@/components/block-editor/extensions",
     BlockEditor: "@/components/block-editor/block-editor",
@@ -49,7 +53,7 @@ export const scaffoldImports = [
   /^@\/lib\/utils$/,
 ];
 
-export const ranges = {
+export const ranges: Record<string, string> = {
   "@base-ui/react": "^1.0.0",
   "@floating-ui/dom": "^1.6.0",
   "@hugeicons/core-free-icons": "^4.3.5",
@@ -68,9 +72,21 @@ export const ranges = {
   xss: "^1.0.17",
 };
 
-export const iconSets = [
+export const iconSets: IconSet[] = [
   { file: "icons-phosphor.tsx", name: "phosphor", title: "Phosphor Icons" },
   { file: "icons-tabler.tsx", name: "tabler", title: "Tabler Icons" },
   { file: "icons-hugeicons.tsx", name: "hugeicons", title: "HugeIcons" },
   { file: "icons-remix.tsx", name: "remixicon", title: "Remix Icon" },
+];
+
+export const primitivePairs = {
+  base: "packages/editor/src/ui",
+  baseImport: /^@base-ui\//,
+  variants: { radix: "packages/editor/src/ui/radix" },
+};
+
+export const stateSelectors: [RegExp, string][] = [
+  [/data-\[state=open\]:/g, "data-open:"],
+  [/data-\[state=closed\]:/g, "data-closed:"],
+  [/--radix-[a-z-]+-transform-origin/g, "--transform-origin"],
 ];
