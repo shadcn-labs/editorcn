@@ -2,9 +2,9 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "dependencies": [
     "@tiptap/core@>=3.30.5 <4",
+    "@tiptap/pm@>=3.0.0 <4",
     "@tiptap/react@>=3.0.0 <4",
-    "lucide-react@>=0.400.0 <1.0.0",
-    "@tiptap/pm@>=3.0.0 <4"
+    "lucide-react@>=0.400.0 <1.0.0"
   ],
   "description": "Cleans HTML pasted from Google Docs, Notion, Word, and web pages. Strips classes, ids, fonts, and colors, keeps bold, italic, underline, and links, turns Word list paragraphs into real nested lists, and drops empty paragraphs.",
   "files": [

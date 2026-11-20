@@ -1,0 +1,7 @@
+{
+  "name": "email-composer",
+  "type": "registry:block",
+  "title": "Email Composer",
+  "description": "An email card with To and Subject fields, a message body with bold, italic, underline, link and list controls, and Send and Discard buttons. onSend receives the body as Tiptap JSON.",
+  "dependencies": ["@tiptap/pm"]
+}

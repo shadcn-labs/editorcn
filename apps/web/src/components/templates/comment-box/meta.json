@@ -1,0 +1,11 @@
+{
+  "name": "comment-box",
+  "type": "registry:block",
+  "title": "Comment Box",
+  "description": "A comment thread with avatars, relative times, emoji reactions, a delete menu, and an editor composer with onPost, onReact, and onDelete hooks.",
+  "dependencies": [
+    "@tiptap/extension-mention",
+    "@tiptap/pm",
+    "@tiptap/static-renderer@>=3.21.0 <4"
+  ]
+}

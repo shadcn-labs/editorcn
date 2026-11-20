@@ -2,9 +2,6 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "dependencies": [
     "@tiptap/core@>=3.0.0 <4",
-    "@tiptap/react@>=3.0.0 <4",
-    "@tiptap/pm@>=3.0.0 <4",
-    "@tiptap/starter-kit@>=3.0.0 <4",
     "@tiptap/extension-character-count@>=3.0.0 <4",
     "@tiptap/extension-color@>=3.0.0 <4",
     "@tiptap/extension-highlight@>=3.0.0 <4",
@@ -13,7 +10,10 @@
     "@tiptap/extension-superscript@>=3.0.0 <4",
     "@tiptap/extension-text-align@>=3.0.0 <4",
     "@tiptap/extension-text-style@>=3.0.0 <4",
-    "@tiptap/extension-underline@>=3.0.0 <4"
+    "@tiptap/extension-underline@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4"
   ],
   "description": "The full toolbar editor from the editorcn homepage: every toolbar control plus callouts, code blocks, tables, images, embeds, mentions, Markdown and paste cleanup.",
   "files": [
@@ -34,9 +34,9 @@
   "title": "Full Toolbar Editor",
   "type": "registry:block",
   "registryDependencies": [
-    "https://www.rtecn.space/r/editor.json",
     "https://www.rtecn.space/r/callout.json",
     "https://www.rtecn.space/r/code-block.json",
+    "https://www.rtecn.space/r/editor.json",
     "https://www.rtecn.space/r/image-placeholder.json",
     "https://www.rtecn.space/r/markdown.json",
     "https://www.rtecn.space/r/mention.json",

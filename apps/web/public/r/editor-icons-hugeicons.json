@@ -1,8 +1,8 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "dependencies": [
-    "@hugeicons/react@^1.1.10",
-    "@hugeicons/core-free-icons@^4.3.5"
+    "@hugeicons/core-free-icons@^4.3.5",
+    "@hugeicons/react@^1.1.10"
   ],
   "description": "HugeIcons variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
   "files": [

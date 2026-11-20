@@ -1,0 +1,7 @@
+{
+  "name": "mention",
+  "type": "registry:component",
+  "title": "Mention",
+  "description": "An @ picker that inserts inline mention nodes with a stable id and label. Items load from a sync or async source with debounce, loading and empty states, and keyboard navigation. Backspace removes the whole mention.",
+  "dependencies": ["@tiptap/suggestion@>=3.27.0 <4"]
+}
