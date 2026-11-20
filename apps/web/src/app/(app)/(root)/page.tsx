@@ -3,10 +3,10 @@ import type { BlockViewerItem } from "@/components/block-viewer";
 import { CommandBox } from "@/components/command-box";
 import { HomeCtas } from "@/components/home-ctas";
 import { HomeCustomize } from "@/components/home-customize";
+import { HomeFreeVsPro } from "@/components/home-free-vs-pro";
 import { HomeTools } from "@/components/home-tools";
 import { PageHero } from "@/components/page-hero";
 import { PageTransition } from "@/components/page-transition";
-import { PromoCard } from "@/components/promo-card";
 import { RegistryCode } from "@/components/template-showcase";
 import { Testimonials } from "@/components/testimonials";
 import { ROUTES } from "@/constants/routes";
@@ -106,6 +106,10 @@ export const HomePage = () => (
       </section>
 
       <section className="container-wrapper">
+        <HomeFreeVsPro className="container pt-16 md:pt-20 lg:pt-24" />
+      </section>
+
+      <section className="container-wrapper">
         <Testimonials className="container pt-16 md:pt-20 lg:pt-24" />
       </section>
 
@@ -117,7 +121,6 @@ export const HomePage = () => (
         <HomeTools className="container pb-16 md:pb-20 lg:pb-24" />
       </section>
     </PageTransition>
-    <PromoCard variant="floating" />
   </>
 );
 export default HomePage;

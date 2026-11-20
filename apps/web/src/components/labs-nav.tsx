@@ -271,6 +271,14 @@ const LabsNavMobile = () => {
 
 const LabsNavDesktop = () => {
   const [value, setValue] = useState("");
+  const [top, setTop] = useState<number>();
+
+  const onValueChange = (next: string) => {
+    if (next) {
+      setTop(document.querySelector("header")?.getBoundingClientRect().bottom);
+    }
+    setValue(next);
+  };
 
   return (
     <>
@@ -280,11 +288,12 @@ const LabsNavDesktop = () => {
           aria-label="Close menu"
           className="fixed inset-x-0 top-(--header-height) bottom-0 z-20 cursor-default bg-background/60"
           onClick={() => setValue("")}
+          style={{ top }}
         />
       ) : null}
       <NavigationMenu
         value={value}
-        onValueChange={setValue}
+        onValueChange={onValueChange}
         viewport={false}
         delayDuration={0}
         className="z-50 max-w-none justify-start"
@@ -309,6 +318,7 @@ const LabsNavDesktop = () => {
                 "data-[motion^=from-]:animate-none data-[motion^=to-]:animate-none",
                 "data-[state=closed]:hidden md:fixed md:w-screen dark:bg-black"
               )}
+              style={{ top }}
             >
               <div className="container-wrapper px-6">
                 <div className="flex gap-8 py-4 pl-3">

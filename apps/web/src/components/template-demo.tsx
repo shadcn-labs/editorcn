@@ -217,7 +217,7 @@ export const TemplateTabs = ({
       </Button>
     </div>
     <TabsContent value="preview" className="pt-4">
-      <div className="bg-muted/30 rounded-xl border p-4 sm:p-8">
+      <div className="rounded-xl border border-border/60 bg-card p-4 sm:p-8">
         {DEMOS[name]()}
       </div>
     </TabsContent>
