@@ -9,8 +9,8 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
-    "build:registry": "node scripts/build-registry.mjs",
-    "typecheck": "turbo typecheck",
+    "build:registry": "node scripts/registry/build.ts",
+    "typecheck": "turbo typecheck && tsc -p scripts",
     "test": "turbo test",
     "check": "ultracite check",
     "fix": "ultracite fix",

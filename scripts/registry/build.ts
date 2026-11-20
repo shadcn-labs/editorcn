@@ -1,16 +1,23 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { relative, resolve } from "node:path";
 
+import { outDir } from "./config.ts";
 import {
   resolveDependencies,
   resolveRegistryDependencies,
-} from "./registry/dependencies.mjs";
-import { discover, readText, root, sharedHomes } from "./registry/discover.mjs";
-import { registryCatalog, registryItem, serialize } from "./registry/emit.mjs";
-import { isScript, scanImports } from "./registry/imports.mjs";
-import { transform } from "./registry/transform.mjs";
+} from "./dependencies.ts";
+import { discover, readText, root, sharedHomes } from "./discover.ts";
+import { registryCatalog, registryItem, serialize } from "./emit.ts";
+import { isScript, scanImports } from "./imports.ts";
+import { transform } from "./transform.ts";
+import type { BuiltItem, Item } from "./types.ts";
+import { verify } from "./verify.ts";
 
-const checkIconVariant = (item, content, specifiers) => {
+const checkIconVariant = (
+  item: Item,
+  content: string,
+  specifiers: string[]
+) => {
   const { name } = item.meta;
   if (specifiers.includes("./icons")) {
     throw new Error(
@@ -22,16 +29,14 @@ const checkIconVariant = (item, content, specifiers) => {
       `${name}: icons.tsx should take its types from "./icon-types".`
     );
   }
-  for (const exported of item.iconVariant.requiredExports) {
+  for (const exported of item.iconVariant?.requiredExports ?? []) {
     if (!new RegExp(`export (const|function) ${exported}\\b`).test(content)) {
       throw new Error(`${name}: icons.tsx must export ${exported}.`);
     }
   }
 };
 
-const discovered = discover();
-
-const items = discovered.map((item) => {
+const build = (item: Item, discovered: Item[]): BuiltItem => {
   const files = item.files.map((file) => {
     const label = relative(root, file.source);
     const content = transform(readText(file.source), label);
@@ -55,20 +60,36 @@ const items = discovered.map((item) => {
       sharedHomes
     ),
   };
-});
+};
 
-const outDir = resolve(root, "apps", "web", "public", "r");
-mkdirSync(outDir, { recursive: true });
+const discovered = discover();
+const items = discovered.map((item) => build(item, discovered));
 
+const target = resolve(root, outDir);
+mkdirSync(target, { recursive: true });
 for (const item of items) {
   writeFileSync(
-    resolve(outDir, `${item.meta.name}.json`),
+    resolve(target, `${item.meta.name}.json`),
     serialize(registryItem(item))
   );
 }
 writeFileSync(
-  resolve(outDir, "registry.json"),
+  resolve(target, "registry.json"),
   serialize(registryCatalog(items))
 );
 
-console.log(`Built ${items.length} registry items into apps/web/public/r`);
+const overlays = new Map(
+  items.flatMap((item) =>
+    item.iconVariant ? [[item.meta.name, item.iconVariant.base] as const] : []
+  )
+);
+const errors = verify(target, overlays);
+if (errors.length > 0) {
+  console.error(`Registry verification failed with ${errors.length} error(s):`);
+  for (const error of errors) {
+    console.error(`  - ${error}`);
+  }
+  process.exit(1);
+}
+
+console.log(`Built and verified ${items.length} registry items in ${outDir}`);

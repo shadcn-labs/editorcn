@@ -53,3 +53,17 @@ jobs:
 
       - name: Typecheck
         run: pnpm typecheck
+
+  registry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Build and verify the registry
+        run: pnpm build:registry
+
+      - name: Check the committed registry is up to date
+        run: git diff --exit-code -- apps/web/public/r

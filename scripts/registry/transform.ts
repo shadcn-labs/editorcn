@@ -1,25 +1,26 @@
-import { aliases } from "./config.mjs";
-import { isScript, scanImports } from "./imports.mjs";
+import { aliases } from "./config.ts";
+import { isScript, scanImports } from "./imports.ts";
 
-const workspacePrefix = "@editorcn/";
+export const workspacePrefix = "@editorcn/";
 
-const escapeRegExp = (value) => value.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&");
+const escapeRegExp = (value: string) =>
+  value.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const wildcardAliases = Object.entries(aliases)
   .filter(([key]) => key.includes("*"))
-  .map(([key, target]) => {
-    const [prefix, suffix] = key.split("*");
-    return { prefix, suffix, target };
+  .flatMap(([key, target]) => {
+    const [prefix = "", suffix = ""] = key.split("*");
+    return typeof target === "string" ? [{ prefix, suffix, target }] : [];
   })
   .toSorted(
     (a, b) =>
       b.prefix.length - a.prefix.length || b.suffix.length - a.suffix.length
   );
 
-const resolveAlias = (specifier) => {
+const resolveAlias = (specifier: string) => {
   if (Object.hasOwn(aliases, specifier)) {
     const target = aliases[specifier];
-    return typeof target === "string" ? target : target["*"];
+    return typeof target === "string" ? target : target?.["*"];
   }
   const match = wildcardAliases.find(
     ({ prefix, suffix }) =>
@@ -33,13 +34,17 @@ const resolveAlias = (specifier) => {
   );
 };
 
-const importedName = (name) =>
+const importedName = (name: string) =>
   name
     .replace(/^type\s+/, "")
     .split(/\s+as\s+/)[0]
-    .trim();
+    ?.trim();
 
-const splitNamedImports = (content, specifier, targets) => {
+const splitNamedImports = (
+  content: string,
+  specifier: string,
+  targets: Record<string, string>
+) => {
   const order = [
     ...Object.keys(targets).filter((name) => name !== "*"),
     "*",
@@ -48,30 +53,33 @@ const splitNamedImports = (content, specifier, targets) => {
     `import(\\s+type)?\\s*\\{([^}]*)\\}\\s*from\\s*"${escapeRegExp(specifier)}";`,
     "g"
   );
-  return content.replaceAll(pattern, (statement, type, names) => {
-    const groups = new Map();
-    for (const name of names
-      .split(",")
-      .map((part) => part.trim())
-      .filter(Boolean)) {
-      const target = targets[importedName(name)] ?? targets["*"];
-      groups.set(target, [...(groups.get(target) ?? []), name]);
+  return content.replaceAll(
+    pattern,
+    (statement, type: string | undefined, names: string) => {
+      const groups = new Map<string | undefined, string[]>();
+      for (const name of names
+        .split(",")
+        .map((part) => part.trim())
+        .filter(Boolean)) {
+        const target = targets[importedName(name) ?? ""] ?? targets["*"];
+        groups.set(target, [...(groups.get(target) ?? []), name]);
+      }
+      if (groups.size === 1) {
+        const [target] = groups.keys();
+        return statement.replace(`"${specifier}"`, `"${target}"`);
+      }
+      return [...groups]
+        .toSorted(([a], [b]) => order.indexOf(a) - order.indexOf(b))
+        .map(
+          ([target, list]) =>
+            `import${type ?? ""} { ${list.join(", ")} } from "${target}";`
+        )
+        .join("\n");
     }
-    if (groups.size === 1) {
-      const [target] = groups.keys();
-      return statement.replace(`"${specifier}"`, `"${target}"`);
-    }
-    return [...groups]
-      .toSorted(([a], [b]) => order.indexOf(a) - order.indexOf(b))
-      .map(
-        ([target, list]) =>
-          `import${type ?? ""} { ${list.join(", ")} } from "${target}";`
-      )
-      .join("\n");
-  });
+  );
 };
 
-const rewriteSpecifiers = (content, path) => {
+const rewriteSpecifiers = (content: string, path: string) => {
   let output = content;
   const workspaceImports = scanImports(content, path)
     .filter(({ specifier }) => specifier.startsWith(workspacePrefix))
@@ -80,7 +88,7 @@ const rewriteSpecifiers = (content, path) => {
     const target = resolveAlias(specifier);
     if (!target) {
       throw new Error(
-        `${path}: no alias for "${specifier}". Add one to scripts/registry/config.mjs.`
+        `${path}: no alias for "${specifier}". Add one to scripts/registry/config.ts.`
       );
     }
     output = `${output.slice(0, start)}${target}${output.slice(end)}`;
@@ -88,7 +96,7 @@ const rewriteSpecifiers = (content, path) => {
   return output;
 };
 
-export const transform = (content, path) => {
+export const transform = (content: string, path: string) => {
   if (!isScript(path)) {
     return content;
   }
