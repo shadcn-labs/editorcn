@@ -9,11 +9,11 @@ description: See how to customize both editors through variants, CSS variables, 
 
 Switch between `default`, `subtle`, and `compact` variants using the `variant` prop.
 
-| Variant   | Look                                                                                        | Best for                                                                        |
-| --------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `default` | Bordered container with classic joined segmented toolbar buttons                            | Standard editor experiences where the toolbar should feel distinct from content |
-| `subtle`  | No visible border — uses a soft shadow. Muted, rounded toolbar buttons. Elevated card feel. | Forms, settings pages, or anywhere a less prominent editor fits                 |
-| `compact` | Muted toolbar fused with content area. Minimal spacing, smaller icons.                      | Sidebars, modals, inline editing — constrained spaces                           |
+| Variant   | Look                                                                       | Best for                                                                        |
+| --------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `default` | Gray frame: toolbar and footer on the gray, content in a white inset panel | Standard editor experiences where the toolbar should feel distinct from content |
+| `subtle`  | Hairline card with a gray toolbar strip and muted, rounded toolbar buttons | Forms, settings pages, or anywhere a less prominent editor fits                 |
+| `compact` | Muted toolbar fused with content area. Minimal spacing, smaller icons.     | Sidebars, modals, inline editing — constrained spaces                           |
 
 <EditorVariantsDemo />
 
@@ -49,7 +49,7 @@ Pass Tailwind classes to the root component via `className`. They are merged usi
 ```tsx
 <RichTextEditor
   editor={editor}
-  className="rounded-xl shadow-lg ring-1 ring-black/5"
+  className="rounded-2xl border-dashed border-border"
 >
   <RichTextEditor.Toolbar>{/* toolbar controls */}</RichTextEditor.Toolbar>
   <RichTextEditor.Content />

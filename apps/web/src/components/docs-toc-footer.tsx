@@ -17,7 +17,7 @@ export const DocsTocFooter = ({
   className?: string;
 }) => (
   <div className={cn("flex flex-col gap-2", className)}>
-    <PromoCard variant="sidebar" />
+    <PromoCard />
     {docId && (
       <a
         href={`${LINK.GITHUB}/edit/${GITHUB.branch}/apps/web/${DOCS_DIR}/${docId}`}
