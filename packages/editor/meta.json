@@ -19,7 +19,7 @@
     "@tiptap/react@>=2.11.5 <4",
     "@tiptap/starter-kit@>=2.11.5 <4"
   ],
-  "exclude": ["icon-library.ts"],
+  "exclude": ["icon-library.ts", "ui/radix"],
   "fileTypes": {
     "ui/utils.ts": "registry:lib"
   },
