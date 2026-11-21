@@ -1063,7 +1063,6 @@
         "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <1.0.0",
         "mermaid@^11.0.0",
-        "@remixicon/react@^4.9.0",
         "@tanstack/react-query@^5.0.0",
         "next-themes@^0.4.6",
         "@base-ui/react@^1.0.0",
