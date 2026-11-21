@@ -1,7 +1,7 @@
 export type MermaidAttributes = {
-    value: string | null;
+  value: string | null;
 };
 
 export interface MermaidOptions {
-    HTMLAttributes: Record<string, any>;
+  HTMLAttributes: Record<string, any>;
 }
