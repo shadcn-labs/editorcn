@@ -123,7 +123,6 @@
     "ui": ["button", "input", "popover"],
     "deps": [
       "zod@^4.1.13",
-      "@remixicon/react@^4.9.0",
       "@base-ui/react@^1.0.0",
       "class-variance-authority@^0.7.1"
     ]

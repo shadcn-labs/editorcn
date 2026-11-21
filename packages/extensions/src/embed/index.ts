@@ -1,5 +1,5 @@
-import { Node } from './node';
+import { Node } from "./node";
 
 export const Embed = {
-    Node
+  Node,
 };
