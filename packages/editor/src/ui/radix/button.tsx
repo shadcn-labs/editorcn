@@ -64,8 +64,17 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const slot = withRender({ children, render });
     const classes = cn(buttonVariants({ className, size, variant }));
     if (slot.asChild) {
+      const slotProps = {
+        ...props,
+        type: props.type ?? (render?.type === "button" ? "button" : undefined),
+      };
       return (
-        <Slot.Root ref={ref} data-slot="button" className={classes} {...props}>
+        <Slot.Root
+          ref={ref}
+          data-slot="button"
+          className={classes}
+          {...slotProps}
+        >
           {slot.children}
         </Slot.Root>
       );

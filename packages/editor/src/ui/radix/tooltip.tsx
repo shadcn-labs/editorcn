@@ -42,17 +42,21 @@ const TOOLTIP_CLASS =
 const ARROW_CLASS =
   "z-50 size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground data-[side=bottom]:top-1 data-[side=inline-end]:top-1/2! data-[side=inline-end]:-left-1 data-[side=inline-end]:-translate-y-1/2 data-[side=inline-start]:top-1/2! data-[side=inline-start]:-right-1 data-[side=inline-start]:-translate-y-1/2 data-[side=left]:top-1/2! data-[side=left]:-right-1 data-[side=left]:-translate-y-1/2 data-[side=right]:top-1/2! data-[side=right]:-left-1 data-[side=right]:-translate-y-1/2 data-[side=top]:-bottom-2.5";
 
+const TooltipDelayContext = createContext(0);
+
 const TooltipProvider = ({
   delay = 0,
   ...props
 }: Omit<ComponentProps<typeof TooltipPrimitive.Provider>, "delayDuration"> & {
   delay?: number;
 }) => (
-  <TooltipPrimitive.Provider
-    data-slot="tooltip-provider"
-    delayDuration={delay}
-    {...props}
-  />
+  <TooltipDelayContext.Provider value={delay}>
+    <TooltipPrimitive.Provider
+      data-slot="tooltip-provider"
+      delayDuration={delay}
+      {...props}
+    />
+  </TooltipDelayContext.Provider>
 );
 
 const Tooltip = ({
@@ -107,6 +111,7 @@ interface TooltipHostApi {
   show: (anchor: HTMLElement, payload: string) => void;
   hide: (anchor: HTMLElement | null) => void;
   close: () => void;
+  isOpen: () => boolean;
   keepOpen: () => void;
   update: (anchor: HTMLElement, payload: string) => void;
   release: (anchor: HTMLElement) => void;
@@ -325,6 +330,7 @@ const TooltipHost = ({
           closeIfOwner(anchor);
         }, SWITCH_GRACE_MS);
       },
+      isOpen: () => stateRef.current.open,
       keepOpen: cancelHide,
       release: (anchor) => {
         if (stateRef.current.anchor !== anchor) {
@@ -395,7 +401,9 @@ const HostTrigger = ({
   ...props
 }: ComponentProps<"button"> &
   RenderProps & { host: TooltipHostApi; payload: string }) => {
+  const delay = useContext(TooltipDelayContext);
   const anchorRef = useRef<HTMLElement | null>(null);
+  const openTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pointerDownRef = useRef(false);
   const releasePressRef = useRef<(() => void) | null>(null);
   const element: ReactElement = render ?? (
@@ -408,8 +416,18 @@ const HostTrigger = ({
     }
   }, [host, payload]);
 
+  const cancelOpen = () => {
+    if (openTimerRef.current) {
+      clearTimeout(openTimerRef.current);
+      openTimerRef.current = null;
+    }
+  };
+
   useEffect(
     () => () => {
+      if (openTimerRef.current) {
+        clearTimeout(openTimerRef.current);
+      }
       releasePressRef.current?.();
       if (anchorRef.current) {
         host.release(anchorRef.current);
@@ -425,18 +443,30 @@ const HostTrigger = ({
 
   const handlePointerEnter = (event: PointerEvent<HTMLButtonElement>) => {
     onPointerEnter?.(event);
-    if (event.pointerType !== "touch") {
-      show(event.currentTarget);
+    if (event.pointerType === "touch") {
+      return;
     }
+    const anchor = event.currentTarget;
+    cancelOpen();
+    if (delay <= 0 || host.isOpen()) {
+      show(anchor);
+      return;
+    }
+    openTimerRef.current = setTimeout(() => {
+      openTimerRef.current = null;
+      show(anchor);
+    }, delay);
   };
 
   const handlePointerLeave = (event: PointerEvent<HTMLButtonElement>) => {
     onPointerLeave?.(event);
+    cancelOpen();
     host.hide(event.currentTarget);
   };
 
   const handlePointerDown = (event: PointerEvent<HTMLButtonElement>) => {
     onPointerDown?.(event);
+    cancelOpen();
     releasePressRef.current?.();
     pointerDownRef.current = true;
     const { pointerId } = event;

@@ -4,7 +4,7 @@ Thanks for your interest in contributing! This guide covers everything you need 
 
 ## Prerequisites
 
-- **Node.js 20+**
+- **Node.js 22.18+** (the registry build in `scripts/registry/` is TypeScript that Node runs directly)
 - **pnpm** — version pinned in [`package.json`](./package.json)
 
 ## Getting started

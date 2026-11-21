@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./dialog";
+import { Input } from "./input";
 import {
   Popover,
   PopoverContent,
@@ -69,14 +70,16 @@ const waitPastGrace = async () => {
 
 const Toolbar = ({
   boldLabel = "Bold",
+  delay,
   showItalic = true,
 }: {
   boldLabel?: string;
+  delay?: number;
   showItalic?: boolean;
 }) => {
   const [handle] = useState(createTooltipHandle);
   return (
-    <TooltipProvider>
+    <TooltipProvider delay={delay}>
       <TooltipHost handle={handle} side="bottom">
         <TooltipTrigger
           handle={handle}
@@ -362,6 +365,52 @@ describe("radix ui primitives", () => {
       bold?.focus();
     });
     expect(tooltips()[0]?.textContent).toBe("Bold");
+  });
+
+  it("waits for the provider delay before opening on hover", async () => {
+    const view = await render(<Toolbar delay={100} />);
+    const bold = view.querySelector<HTMLElement>("button[aria-label=Bold]");
+    await hover(bold);
+    expect(tooltips()).toHaveLength(0);
+    await waitPastGrace();
+    expect(tooltips()[0]?.textContent).toBe("Bold");
+  });
+
+  it("cancels a delayed hover open when the pointer leaves", async () => {
+    const view = await render(<Toolbar delay={100} />);
+    const bold = view.querySelector<HTMLElement>("button[aria-label=Bold]");
+    await hover(bold);
+    await pointer(bold, "pointerout");
+    await waitPastGrace();
+    expect(tooltips()).toHaveLength(0);
+  });
+
+  it("opens on keyboard focus without the provider delay", async () => {
+    const view = await render(<Toolbar delay={100} />);
+    await act(() => {
+      view.querySelector<HTMLElement>("button[aria-label=Bold]")?.focus();
+    });
+    expect(tooltips()[0]?.textContent).toBe("Bold");
+  });
+
+  it("defaults a native button render target to type button", async () => {
+    const view = await render(
+      <form>
+        <Button render={<button />}>Cancel</Button>
+        <Button render={<button type="submit" />}>Save</Button>
+        <Button render={<a href="#top" />}>Top</Button>
+      </form>
+    );
+    const [cancel, save] = view.querySelectorAll("button");
+    expect(cancel?.getAttribute("type")).toBe("button");
+    expect(save?.getAttribute("type")).toBe("submit");
+    expect(view.querySelector("a")?.hasAttribute("type")).toBeFalsy();
+  });
+
+  it("forwards the Input ref to the input element", async () => {
+    const inputRef = createRef<HTMLInputElement>();
+    await render(<Input ref={inputRef} />);
+    expect(inputRef.current?.tagName).toBe("INPUT");
   });
 
   it("falls back to its own tooltip when no host owns the handle", async () => {

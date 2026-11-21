@@ -50,12 +50,18 @@ const splitNamedImports = (
     "*",
   ].map((name) => targets[name]);
   const pattern = new RegExp(
-    `import(\\s+type)?\\s*\\{([^}]*)\\}\\s*from\\s*"${escapeRegExp(specifier)}";`,
+    `import(\\s+type)?\\s*\\{([^}]*)\\}\\s*from\\s*(["'])${escapeRegExp(specifier)}\\3(;?)`,
     "g"
   );
   return content.replaceAll(
     pattern,
-    (statement, type: string | undefined, names: string) => {
+    (
+      statement,
+      type: string | undefined,
+      names: string,
+      quote: string,
+      semicolon: string
+    ) => {
       const groups = new Map<string | undefined, string[]>();
       for (const name of names
         .split(",")
@@ -66,13 +72,16 @@ const splitNamedImports = (
       }
       if (groups.size === 1) {
         const [target] = groups.keys();
-        return statement.replace(`"${specifier}"`, `"${target}"`);
+        return statement.replace(
+          `${quote}${specifier}${quote}`,
+          `${quote}${target}${quote}`
+        );
       }
       return [...groups]
         .toSorted(([a], [b]) => order.indexOf(a) - order.indexOf(b))
         .map(
           ([target, list]) =>
-            `import${type ?? ""} { ${list.join(", ")} } from "${target}";`
+            `import${type ?? ""} { ${list.join(", ")} } from ${quote}${target}${quote}${semicolon}`
         )
         .join("\n");
     }
@@ -85,6 +94,11 @@ const rewriteSpecifiers = (content: string, path: string) => {
     .filter(({ specifier }) => specifier.startsWith(workspacePrefix))
     .toReversed();
   for (const { end, specifier, start } of workspaceImports) {
+    if (typeof aliases[specifier] === "object") {
+      throw new TypeError(
+        `${path}: "${specifier}" maps named imports to different files, but this import could not be split. Use \`import { ... } from "${specifier}"\`.`
+      );
+    }
     const target = resolveAlias(specifier);
     if (!target) {
       throw new Error(
