@@ -27,8 +27,7 @@
     "./ui/style.css": "./src/ui/style.css",
     "./table/style.css": "./src/table/style.css",
     "./toggle": "./src/toggle/index.ts",
-    "./toggle/style.css": "./src/toggle/style.css",
-    "./manifest.json": "./manifest.json"
+    "./toggle/style.css": "./src/toggle/style.css"
   },
   "scripts": {
     "typecheck": "tsc --noEmit",

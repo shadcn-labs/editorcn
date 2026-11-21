@@ -23,7 +23,8 @@
     "build": "tsup && node -e \"require('fs').copyFileSync('src/style.css','dist/style.css')\"",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm build",
+    "test": "vitest run"
   },
   "dependencies": {
     "clsx": "^2.1.1",
@@ -37,8 +38,12 @@
     "@remixicon/react": "^4.9.0",
     "@tabler/icons-react": "^3.48.0",
     "@types/react": "^19",
+    "@types/react-dom": "catalog:",
+    "happy-dom": "^21.0.4",
+    "radix-ui": "^1.4.3",
     "tsup": "^8.4.0",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^3.2.7"
   },
   "peerDependencies": {
     "@base-ui/react": "^1.0.0",

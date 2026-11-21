@@ -1,0 +1,6 @@
+{
+  "name": "image-placeholder",
+  "type": "registry:component",
+  "title": "Image Placeholder",
+  "description": "A Notion-style image placeholder node that lets you upload or embed an image by URL, with a resizable image node view and its own toolbar button."
+}

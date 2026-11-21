@@ -2,11 +2,11 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "dependencies": [
     "@tiptap/core@>=3.0.0 <4",
-    "@tiptap/react@>=3.0.0 <4",
-    "@tiptap/pm@>=3.0.0 <4",
-    "@tiptap/starter-kit@>=3.0.0 <4",
-    "@tiptap/extension-placeholder@>=3.0.0 <4",
     "@tiptap/extension-link@>=3.0.0 <4",
+    "@tiptap/extension-placeholder@>=3.0.0 <4",
+    "@tiptap/pm@>=3.0.0 <4",
+    "@tiptap/react@>=3.0.0 <4",
+    "@tiptap/starter-kit@>=3.0.0 <4",
     "lucide-react@>=0.400.0 <1.0.0"
   ],
   "description": "An email card with To and Subject fields, a message body with bold, italic, underline, link and list controls, and Send and Discard buttons. onSend receives the body as Tiptap JSON.",

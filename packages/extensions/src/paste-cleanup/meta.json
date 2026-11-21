@@ -1,0 +1,6 @@
+{
+  "name": "paste-cleanup",
+  "type": "registry:component",
+  "title": "Paste Cleanup",
+  "description": "Cleans HTML pasted from Google Docs, Notion, Word, and web pages. Strips classes, ids, fonts, and colors, keeps bold, italic, underline, and links, turns Word list paragraphs into real nested lists, and drops empty paragraphs."
+}

@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node ../../scripts/build-registry.mjs && next dev --port 3001",
-    "build": "node ../../scripts/build-registry.mjs && next build",
+    "dev": "node ../../scripts/registry/build.ts && next dev --port 3001",
+    "build": "node ../../scripts/registry/build.ts && next build",
     "start": "next start",
     "typecheck": "tsc --noEmit"
   },
