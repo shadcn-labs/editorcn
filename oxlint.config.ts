@@ -24,6 +24,7 @@ export default defineConfig({
         "packages/block-editor/src/**",
         "packages/extensions/src/**",
         "packages/static-renderer/src/**",
+        "apps/web/src/components/templates/**",
       ],
       rules: {
         "no-restricted-imports": [

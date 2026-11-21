@@ -66,4 +66,11 @@ jobs:
         run: pnpm build:registry
 
       - name: Check the committed registry is up to date
-        run: git diff --exit-code -- apps/web/public/r
+        run: |
+          git diff --exit-code -- apps/web/public/r
+          untracked=$(git ls-files --others --exclude-standard -- apps/web/public/r)
+          if [ -n "$untracked" ]; then
+            echo "Generated registry files are not committed:"
+            echo "$untracked"
+            exit 1
+          fi

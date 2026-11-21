@@ -50,7 +50,13 @@ const classesByComponent = (path: string) => {
   }
   const classes = new Map<string, Set<string>>();
   const collect = (owner: string, node: ts.Node) => {
-    if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
+    if (
+      ts.isStringLiteral(node) ||
+      ts.isNoSubstitutionTemplateLiteral(node) ||
+      ts.isTemplateHead(node) ||
+      ts.isTemplateMiddle(node) ||
+      ts.isTemplateTail(node)
+    ) {
       const set = classes.get(owner) ?? new Set();
       for (const token of node.text.split(/\s+/).filter(Boolean)) {
         set.add(normalize(token));
@@ -140,6 +146,9 @@ export const checkPrimitiveParity = () => {
   for (const [variantName, dir] of Object.entries(primitivePairs.variants)) {
     const variantDir = resolve(root, dir);
     if (!existsSync(variantDir)) {
+      errors.push(
+        `${variantName}: ${dir} is configured in primitivePairs but does not exist.`
+      );
       continue;
     }
     for (const file of primitives) {
