@@ -1063,7 +1063,6 @@
         "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <1.0.0",
         "zod@^4.1.13",
-        "@remixicon/react@^4.9.0",
         "@base-ui/react@^1.0.0",
         "class-variance-authority@^0.7.1"
       ],
