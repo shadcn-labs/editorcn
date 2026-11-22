@@ -36,7 +36,9 @@
   "dependencies": {
     "@tiptap/extension-details": "^3.33.0",
     "@tiptap/extension-gapcursor": "^3.30.0",
-    "lucide-react": "catalog:"
+    "clsx": "^2.1.1",
+    "lucide-react": "catalog:",
+    "tailwind-merge": "^3.0.0"
   },
   "devDependencies": {
     "@editorcn/config": "workspace:*",

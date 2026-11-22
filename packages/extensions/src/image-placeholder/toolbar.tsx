@@ -27,7 +27,8 @@ export const ImagePlaceholderToolbar = ({
   return (
     <Button
       aria-label={labels.image}
-      className={["ext-btn--icon-sm", className].filter(Boolean).join(" ")}
+      className={className}
+      size="icon-sm"
       disabled={disabled}
       tooltip={labels.image}
       onClick={() => {

@@ -546,7 +546,7 @@ export const CodeBlockView = ({
               open={menu === "language"}
               onOpenChange={openMenu("language")}
               trigger={
-                <Button className="ext-code-block-lang">
+                <Button className="ext-code-block-lang h-5 gap-0.5 px-1.5 text-[0.75rem] font-normal text-muted-foreground [&>svg]:size-3">
                   {getLanguageLabel(language)}
                   <ChevronDown />
                 </Button>
@@ -561,7 +561,7 @@ export const CodeBlockView = ({
           )}
           <div className="ext-code-block-toolbar">
             <Button
-              className="ext-btn--icon-sm"
+              size="icon-sm"
               aria-label="Copy"
               tooltip="Copy"
               onClick={copy}
@@ -570,7 +570,7 @@ export const CodeBlockView = ({
             </Button>
             {editable && (
               <Button
-                className="ext-btn--icon-sm"
+                size="icon-sm"
                 aria-label="Caption"
                 tooltip="Caption"
                 onClick={addCaption}
@@ -583,7 +583,7 @@ export const CodeBlockView = ({
               open={menu === "actions"}
               onOpenChange={openMenu("actions")}
               trigger={
-                <Button className="ext-btn--icon-sm" aria-label="More">
+                <Button size="icon-sm" aria-label="More">
                   <Ellipsis />
                 </Button>
               }

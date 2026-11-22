@@ -252,69 +252,6 @@
   }
 }
 
-/* ── Toolbar ── */
-.ext-table-toolbar-popover {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-  padding: 0.5rem;
-}
-
-.ext-table-toolbar-item-spacer {
-  flex: 1;
-}
-
-.ext-table-toolbar-label {
-  padding: 0.25rem 0.5rem 0.375rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--muted-foreground);
-}
-
-.ext-table-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  min-width: 11rem;
-}
-
-.ext-table-grid-popover {
-  display: flex;
-  flex-direction: column;
-  gap: 0.375rem;
-}
-
-.ext-table-grid-row {
-  display: flex;
-  gap: 0.25rem;
-}
-
-.ext-table-grid-cell {
-  width: 1rem;
-  height: 1rem;
-  border: 1px solid var(--border);
-  border-radius: 2px;
-  cursor: pointer;
-  transition:
-    background-color 100ms ease-out,
-    border-color 100ms ease-out;
-}
-
-.ext-table-grid-cell--selected {
-  border-color: var(--primary);
-  background: var(--primary);
-}
-
-.ext-table-grid-result {
-  border-radius: calc(var(--radius) - 4px);
-  background: var(--muted);
-  padding: 0.25rem 0.5rem;
-  text-align: center;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: var(--muted-foreground);
-}
-
 /* ── Column resize (prosemirror-tables) ── */
 .ProseMirror .column-resize-handle {
   position: absolute;
