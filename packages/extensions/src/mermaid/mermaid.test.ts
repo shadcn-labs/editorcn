@@ -59,4 +59,14 @@ describe("mermaid markdown", () => {
     const node = manager.parse(md);
     expect(manager.serialize(node).trim()).toBe(md);
   });
+
+  it("round-trips source containing an embedded fence", () => {
+    const value = "flowchart TD\n```\nA-->B";
+    const node = manager.parse(`\`\`\`\`mermaid\n${value}\n\`\`\`\``);
+    expect(node.content?.[0]).toMatchObject({
+      attrs: { value },
+      type: "mermaid",
+    });
+    expect(manager.serialize(node).trim()).toContain(value);
+  });
 });

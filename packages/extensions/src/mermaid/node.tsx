@@ -58,7 +58,7 @@ export const Node = _Node.create<MermaidOptions>({
     },
     tokenize: (src: string) => {
       const openMatch = src.match(
-        /^ {0,3}(`{3,}|~{3,})[ \t]*mermaid\b[^\n]*\n/
+        /^ {0,3}(`{3,}|~{3,})[ \t]*mermaid(?:[ \t][^\n]*)?(?:\n|$)/
       );
       if (!openMatch) {
         return;
@@ -95,6 +95,7 @@ export const Node = _Node.create<MermaidOptions>({
         rawLength = src.length;
       }
       return {
+        lang: "mermaid",
         raw: src.slice(0, rawLength),
         text: code,
         type: "mermaid",
@@ -130,6 +131,18 @@ export const Node = _Node.create<MermaidOptions>({
   },
   renderMarkdown: (node: { attrs?: { value?: string | null } }) => {
     const value = node.attrs?.value ?? "";
-    return value ? `\`\`\`mermaid\n${value}\n\`\`\`` : "```mermaid\n```";
+    if (!value) {
+      return "```mermaid\n```";
+    }
+    const backtickRuns = value.match(/`+/g) ?? [];
+    let maxRun = 0;
+    for (const run of backtickRuns) {
+      if (run.length > maxRun) {
+        maxRun = run.length;
+      }
+    }
+    const fenceLength = Math.max(3, maxRun + 1);
+    const fence = "`".repeat(fenceLength);
+    return `${fence}mermaid\n${value}\n${fence}`;
   },
 });
