@@ -1,22 +1,20 @@
-import manifest from "@editorcn/extensions/manifest.json";
 import Link from "next/link";
 
-interface ManifestExtension {
-  title: string;
-  description: string;
-}
+import registry from "../../../../public/r/registry.json";
 
-const EXTENSIONS = manifest as unknown as Record<string, ManifestExtension>;
+const EXTENSIONS = registry.items.filter((item) =>
+  item.files.some((file) => file.path.startsWith(`extensions/${item.name}/`))
+);
 
 export const ExtensionList = () => (
   <div className="grid gap-2 text-sm sm:grid-cols-2">
-    {Object.entries(EXTENSIONS).map(([slug, meta]) => (
+    {EXTENSIONS.map((item) => (
       <Link
-        key={slug}
+        key={item.name}
         className="rounded-md px-3 py-2 font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-        href={`/docs/extensions/${slug}`}
+        href={`/docs/extensions/${item.name}`}
       >
-        {meta.title}
+        {item.title}
       </Link>
     ))}
   </div>

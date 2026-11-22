@@ -1,0 +1,7 @@
+{
+  "name": "full-editor",
+  "type": "registry:block",
+  "title": "Full Toolbar Editor",
+  "description": "The full toolbar editor from the editorcn homepage: every toolbar control plus callouts, code blocks, tables, images, embeds, mentions, Markdown and paste cleanup.",
+  "dependencies": ["@tiptap/core", "@tiptap/pm"]
+}
