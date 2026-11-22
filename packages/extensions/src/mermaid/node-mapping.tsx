@@ -1,23 +1,23 @@
+import { Spinner } from "@editorcn/ui/components/spinner";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { AlertCircleIcon, GhostIcon } from "lucide-react";
-import mermaid, { type RenderResult } from "mermaid";
+import type { RenderResult } from "mermaid";
 import { useTheme } from "next-themes";
 import { useRef } from "react";
 
-import { Spinner } from "@editorcn/ui/components/spinner";
-
-import { type MermaidAttributes } from "./types";
+import type { MermaidAttributes } from "./types";
 
 // Mermaid 11 queues `render` calls, but `initialize` mutates global config
 // immediately. Serialise each init+render pair so a theme switch cannot bleed
 // into a queued render of the other theme.
 let renderQueue: Promise<unknown> = Promise.resolve();
 
+/* eslint-disable promise/prefer-await-to-then, promise/avoid-new */
 const serialize = <T,>(fn: () => Promise<T>): Promise<T> => {
   const next = renderQueue.then(() => fn());
   renderQueue = next.then(
-    () => undefined,
-    () => undefined,
+    () => null,
+    () => null
   );
   return next;
 };
@@ -30,19 +30,24 @@ export const NodeMapping = (attrs: MermaidAttributes) => {
   const lastGoodRef = useRef<RenderResult | null>(null);
 
   const { data, isPending, isFetching, isError, error } = useQuery({
-    queryKey: ["mermaid", trimmedValue, resolvedTheme],
+    enabled: Boolean(trimmedValue),
+    gcTime: 1000 * 60 * 60 * 24,
+    networkMode: "always",
+    placeholderData: keepPreviousData,
     queryFn: async (): Promise<RenderResult> => {
       if (!trimmedValue) {
         throw new Error("Diagram code not provided");
       }
+
+      const { default: mermaid } = await import("mermaid");
 
       return serialize(async () => {
         mermaid.initialize({
           fontFamily: "Geist, sans-serif",
           fontSize: 14,
           startOnLoad: false,
-          theme: resolvedTheme === "dark" ? "dark" : "neutral",
           suppressErrorRendering: true,
+          theme: resolvedTheme === "dark" ? "dark" : "neutral",
         });
 
         const uniqueId = `mermaid-${Date.now().toString(36)}-${Math.random()
@@ -54,11 +59,9 @@ export const NodeMapping = (attrs: MermaidAttributes) => {
         return result;
       });
     },
-    enabled: Boolean(trimmedValue),
-    placeholderData: keepPreviousData,
-    staleTime: Infinity,
-    gcTime: 1000 * 60 * 60 * 24,
+    queryKey: ["mermaid", trimmedValue, resolvedTheme],
     retry: false,
+    staleTime: Infinity,
   });
 
   const lastGood = data ?? lastGoodRef.current;
@@ -68,7 +71,8 @@ export const NodeMapping = (attrs: MermaidAttributes) => {
       <div className="flex min-h-[220px] w-full flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-muted-foreground/20 p-6 text-center text-muted-foreground">
         <GhostIcon className="size-6 shrink-0 opacity-40" />
         <span className="text-xs">
-          No Mermaid diagram defined. Switch to the &quot;Code&quot; tab to write one.
+          No Mermaid diagram defined. Switch to the &quot;Code&quot; tab to
+          write one.
         </span>
       </div>
     );
@@ -90,11 +94,16 @@ export const NodeMapping = (attrs: MermaidAttributes) => {
         </div>
         <div className="flex min-h-[220px] w-full flex-col items-center justify-center gap-2 rounded-lg border border-destructive/20 bg-destructive/5 p-6 text-center text-destructive">
           <AlertCircleIcon className="size-5 shrink-0" />
-          <span className="text-xs font-medium">Failed to compile Mermaid diagram</span>
+          <span className="text-xs font-medium">
+            Failed to compile Mermaid diagram
+          </span>
           <span className="max-w-md text-[11px] opacity-80">
             {error instanceof Error ? error.message : "Syntax error in code"}
           </span>
         </div>
+        <pre className="mt-2 max-h-[220px] overflow-auto rounded-lg border border-border bg-muted/40 p-3 text-[11px]">
+          <code>{trimmedValue}</code>
+        </pre>
       </>
     );
   }
@@ -120,7 +129,9 @@ export const NodeMapping = (attrs: MermaidAttributes) => {
         <div className="text-destructive-foreground absolute inset-x-2 bottom-2 z-10 flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/90 px-3 py-1.5 text-xs shadow-sm backdrop-blur">
           <AlertCircleIcon className="size-4 shrink-0" />
           <span className="truncate">
-            {error instanceof Error ? error.message : "Syntax error in Mermaid code"}
+            {error instanceof Error
+              ? error.message
+              : "Syntax error in Mermaid code"}
           </span>
         </div>
       ) : null}
