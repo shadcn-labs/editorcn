@@ -1,14 +1,25 @@
-import { type ReactNodeViewProps } from "@tiptap/react";
+import { Button } from "@editorcn/ui/components/button";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@editorcn/ui/components/tabs";
+import type { ReactNodeViewProps } from "@tiptap/react";
 import { NodeViewWrapper } from "@tiptap/react";
-import { CheckIcon, Code2Icon, CopyIcon, EyeIcon, NetworkIcon, Trash2Icon } from "lucide-react";
+import {
+  CheckIcon,
+  Code2Icon,
+  CopyIcon,
+  EyeIcon,
+  NetworkIcon,
+  Trash2Icon,
+} from "lucide-react";
 import { useCallback, useState } from "react";
 
 import { useEditable } from "../core/editor-state";
-import { Button } from "@editorcn/ui/components/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@editorcn/ui/components/tabs";
-
 import { NodeMapping } from "./node-mapping";
-import { type PlantUMLAttributes } from "./types";
+import type { PlantUMLAttributes } from "./types";
 
 // Shown as the empty-state placeholder of the code textarea. Never inserted
 // into the document: a fresh node starts with `value: null`.
@@ -24,12 +35,12 @@ export const NodeView = ({
   updateAttributes,
   deleteNode,
 }: Partial<ReactNodeViewProps<PlantUMLAttributes>>) => {
-  const attrs = node!.attrs as PlantUMLAttributes;
+  const attrs = (node?.attrs ?? {}) as PlantUMLAttributes;
   const editable = useEditable(editor ?? null);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = useCallback(async () => {
-    const value = attrs.value;
+    const { value } = attrs;
 
     if (!value) {
       return;
@@ -62,11 +73,17 @@ export const NodeView = ({
               </div>
 
               <TabsList className="h-7 bg-muted/80 p-0.5">
-                <TabsTrigger value="preview" className="h-6 gap-1.5 px-2.5 text-xs">
+                <TabsTrigger
+                  value="preview"
+                  className="h-6 gap-1.5 px-2.5 text-xs"
+                >
                   <EyeIcon className="size-3.5" />
                   <span>Preview</span>
                 </TabsTrigger>
-                <TabsTrigger value="code" className="h-6 gap-1.5 px-2.5 text-xs">
+                <TabsTrigger
+                  value="code"
+                  className="h-6 gap-1.5 px-2.5 text-xs"
+                >
                   <Code2Icon className="size-3.5" />
                   <span>Code</span>
                 </TabsTrigger>
@@ -85,7 +102,9 @@ export const NodeView = ({
                 {copied ? (
                   <>
                     <CheckIcon className="size-3.5 text-emerald-600 dark:text-emerald-400" />
-                    <span className="text-emerald-600 dark:text-emerald-400">Copied</span>
+                    <span className="text-emerald-600 dark:text-emerald-400">
+                      Copied
+                    </span>
                   </>
                 ) : (
                   <>
@@ -110,7 +129,10 @@ export const NodeView = ({
             </div>
           </div>
 
-          <TabsContent value="preview" className="m-0 min-h-[260px] bg-card p-0">
+          <TabsContent
+            value="preview"
+            className="m-0 min-h-[260px] bg-card p-0"
+          >
             <NodeMapping {...attrs} />
           </TabsContent>
 
