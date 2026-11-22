@@ -252,6 +252,9 @@ export const verify = (outDir: string, overlays: Map<string, string>) => {
       items.set(item.name, item);
     }
   }
+  if (items.size === 0) {
+    errors.push(`${outDir} has no valid registry items`);
+  }
   for (const [name, item] of items) {
     checkImports(`${name}.json`, item, items, overlays, errors);
   }
