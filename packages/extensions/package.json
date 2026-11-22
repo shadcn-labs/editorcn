@@ -38,7 +38,10 @@
     "lucide-react": "catalog:"
   },
   "devDependencies": {
+    "@base-ui/react": "^1.0.0",
     "@editorcn/config": "workspace:*",
+    "@editorcn/ui": "workspace:*",
+    "@tanstack/react-query": "^5.0.0",
     "@tiptap/extension-code-block": "^3.30.5",
     "@tiptap/extension-image": "^3.30.0",
     "@tiptap/extension-list": "^3.30.5",
@@ -54,10 +57,14 @@
     "@tiptap/suggestion": "^3.30.5",
     "@types/react": "^19",
     "@types/react-dom": "catalog:",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "happy-dom": "^21.0.4",
     "mermaid": "^11.17.2",
+    "next-themes": "^0.4.6",
     "prettier": "^3.9.10",
     "shiki": "^4.4.3",
+    "tailwind-merge": "^3.0.0",
     "typescript": "^5",
     "vitest": "^3.2.7"
   },
