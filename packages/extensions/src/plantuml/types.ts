@@ -1,7 +1,7 @@
-export type PlantUMLAttributes = {
+export interface PlantUMLAttributes {
   value: string | null;
-};
+}
 
 export interface PlantUMLOptions {
-  HTMLAttributes: Record<string, any>;
+  HTMLAttributes: Record<string, unknown>;
 }

@@ -1,9 +1,8 @@
 import { mergeAttributes } from "@tiptap/core";
-import { Node as _Node } from "@tiptap/react";
-import { ReactNodeViewRenderer } from "@tiptap/react";
+import { Node as _Node, ReactNodeViewRenderer } from "@tiptap/react";
 
 import { NodeView } from "./node-view";
-import { type PlantUMLAttributes, type PlantUMLOptions } from "./types";
+import type { PlantUMLAttributes, PlantUMLOptions } from "./types";
 
 declare module "@tiptap/core" {
   interface Commands<ReturnType> {
@@ -14,32 +13,113 @@ declare module "@tiptap/core" {
 }
 
 export const Node = _Node.create<PlantUMLOptions>({
-  name: "plantuml",
-  group: "block",
-  atom: true,
-  addOptions() {
-    return {
-      HTMLAttributes: {},
-    };
-  },
   addAttributes() {
     return {
       value: {
         default: null,
         isRequired: true,
-        parseHTML: (element) => element.getAttribute("data-value"),
+        parseHTML: (element) => element.dataset.value,
         renderHTML: ({ value }) => ({
           "data-value": value,
         }),
       },
     };
   },
+  addCommands() {
+    return {
+      setPlantUML:
+        (value) =>
+        ({ commands }) =>
+          commands.insertContent({
+            attrs: value,
+            type: this.name,
+          }),
+    };
+  },
+  addNodeView() {
+    return ReactNodeViewRenderer(NodeView);
+  },
+  addOptions() {
+    return {
+      HTMLAttributes: {},
+    };
+  },
+  atom: true,
+  group: "block",
+  markdownTokenName: "plantuml",
+  markdownTokenizer: {
+    level: "block",
+    name: "plantuml",
+    start: (src: string) => {
+      const match = src.match(
+        /^ {0,3}(`{3,}|~{3,})[ \t]*plantuml(?:[ \t][^\n]*)?(?:\n|$)/m
+      );
+      return match ? src.indexOf(match[0]) : -1;
+    },
+    tokenize: (src: string) => {
+      const openMatch = src.match(
+        /^ {0,3}(`{3,}|~{3,})[ \t]*plantuml(?:[ \t][^\n]*)?(?:\n|$)/
+      );
+      if (!openMatch) {
+        return;
+      }
+      const [, fence] = openMatch;
+      if (!fence) {
+        return;
+      }
+      const [fenceChar] = fence;
+      const fenceLen = fence.length;
+      const afterOpen = src.slice(openMatch[0].length);
+      const closePattern = new RegExp(
+        `^ {0,3}${fenceChar === "`" ? "`" : "~"}{${fenceLen},}[ \\t]*$`,
+        "m"
+      );
+      const closeMatch = afterOpen.match(closePattern);
+      let code: string;
+      let rawLength: number;
+      if (closeMatch && closeMatch.index !== undefined) {
+        code = afterOpen.slice(0, closeMatch.index);
+        if (code.endsWith("\n")) {
+          code = code.slice(0, -1);
+        }
+        rawLength =
+          openMatch[0].length + closeMatch.index + closeMatch[0].length;
+        if (src[rawLength] === "\n") {
+          rawLength += 1;
+        }
+      } else {
+        code = afterOpen;
+        if (code.endsWith("\n")) {
+          code = code.slice(0, -1);
+        }
+        rawLength = src.length;
+      }
+      return {
+        lang: "plantuml",
+        raw: src.slice(0, rawLength),
+        text: code,
+        type: "plantuml",
+      };
+    },
+  },
+  name: "plantuml",
   parseHTML() {
     return [
       {
         tag: 'div[data-slot="plantuml"]',
       },
     ];
+  },
+  parseMarkdown: (token, helpers) => {
+    const plantumlToken = token as { lang?: string; text?: string };
+    if (plantumlToken.lang && plantumlToken.lang !== "plantuml") {
+      return [];
+    }
+    const value =
+      typeof plantumlToken.text === "string" ? plantumlToken.text : "";
+    return helpers.createNode("plantuml", {
+      value: value.length ? value : null,
+    });
   },
   renderHTML({ HTMLAttributes }) {
     return [
@@ -49,18 +129,20 @@ export const Node = _Node.create<PlantUMLOptions>({
       }),
     ];
   },
-  addNodeView() {
-    return ReactNodeViewRenderer(NodeView);
-  },
-  addCommands() {
-    return {
-      setPlantUML:
-        (value) =>
-        ({ commands }) =>
-          commands.insertContent({
-            type: this.name,
-            attrs: value,
-          }),
-    };
+  renderMarkdown: (node: { attrs?: { value?: string | null } }) => {
+    const value = node.attrs?.value ?? "";
+    if (!value) {
+      return "```plantuml\n```";
+    }
+    const backtickRuns = value.match(/`+/g) ?? [];
+    let maxRun = 0;
+    for (const run of backtickRuns) {
+      if (run.length > maxRun) {
+        maxRun = run.length;
+      }
+    }
+    const fenceLength = Math.max(3, maxRun + 1);
+    const fence = "`".repeat(fenceLength);
+    return `${fence}plantuml\n${value}\n${fence}`;
   },
 });
