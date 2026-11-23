@@ -77,30 +77,6 @@
   user-select: none;
 }
 
-.ext-callout .ext-callout-trigger {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.75rem;
-  height: 1.75rem;
-  color: var(--ext-callout-accent);
-}
-
-.ext-callout .ext-callout-trigger svg {
-  width: 1.125rem;
-  height: 1.125rem;
-}
-
-.ext-btn.ext-callout-trigger:hover {
-  background: color-mix(in oklab, var(--ext-callout-accent) 15%, transparent);
-  color: var(--ext-callout-accent);
-}
-
-.ext-callout-emoji {
-  font-size: 1.125rem;
-  line-height: 1;
-}
-
 .ext-callout-content {
   flex: 1;
   min-width: 0;
@@ -113,12 +89,4 @@
 
 .ext-callout-content > [data-node-view-content-react] > :last-child {
   margin-bottom: 0;
-}
-
-.ext-callout-menu-item > svg:first-child {
-  color: var(--ext-callout-accent);
-}
-
-.ext-callout-check {
-  margin-left: auto;
 }
