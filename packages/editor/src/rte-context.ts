@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 
 import type { RichTextEditorIcons } from "./icon-types";
 import type { RichTextEditorLabels } from "./labels";
-import type { RichTextEditorVariant } from "./types";
+import type { RichTextEditorPreset, RichTextEditorVariant } from "./types";
 import type { TooltipHandle } from "./ui/tooltip";
 
 interface RichTextEditorContextValue {
@@ -11,6 +11,7 @@ interface RichTextEditorContextValue {
   labels: RichTextEditorLabels;
   icons: RichTextEditorIcons;
   variant: RichTextEditorVariant;
+  preset: RichTextEditorPreset;
   editable: boolean;
   tooltip: TooltipHandle;
 }

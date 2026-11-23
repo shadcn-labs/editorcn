@@ -1,6 +1,9 @@
 @layer theme, base, components, utilities;
 
+@import "@editorcn/content/presets/document.css";
+
 /* ── Editor Content ── */
+
 .rte-content .ProseMirror {
   outline: 0;
   padding: var(--spacing, 0.75rem);
@@ -34,172 +37,6 @@
   transition: opacity 150ms ease-out;
 }
 
-.rte-content .ProseMirror p {
-  margin-top: 0;
-  margin-bottom: 0.75rem;
-  line-height: 1.75;
-}
-
-.rte-content .ProseMirror h1,
-.rte-content .ProseMirror h2,
-.rte-content .ProseMirror h3,
-.rte-content .ProseMirror h4,
-.rte-content .ProseMirror h5,
-.rte-content .ProseMirror h6,
-.rte-content .ProseMirror p {
-  margin-top: 0;
-}
-
-.rte-content .ProseMirror h1 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  margin-bottom: 1rem;
-  margin-top: 1.5rem;
-}
-.rte-content .ProseMirror h1:first-child {
-  margin-top: 0;
-}
-
-.rte-content .ProseMirror h2 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  margin-bottom: 0.75rem;
-  margin-top: 1.25rem;
-}
-.rte-content .ProseMirror h2:first-child {
-  margin-top: 0;
-}
-
-.rte-content .ProseMirror h3 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  margin-top: 1rem;
-}
-.rte-content .ProseMirror h3:first-child {
-  margin-top: 0;
-}
-
-.rte-content .ProseMirror h4 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  margin-top: 0.75rem;
-}
-.rte-content .ProseMirror h4:first-child {
-  margin-top: 0;
-}
-
-.rte-content .ProseMirror h5 {
-  font-size: 0.875rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-  margin-top: 0.75rem;
-}
-.rte-content .ProseMirror h5:first-child {
-  margin-top: 0;
-}
-
-.rte-content .ProseMirror h6 {
-  font-size: 0.875rem;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-  margin-top: 0.75rem;
-}
-.rte-content .ProseMirror h6:first-child {
-  margin-top: 0;
-}
-
-.rte-content .ProseMirror ul {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.rte-content .ProseMirror ol {
-  list-style-type: decimal;
-  padding-left: 1.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.rte-content .ProseMirror li {
-  line-height: 1.75;
-}
-
-.rte-content .ProseMirror li > p {
-  margin-bottom: 0;
-}
-
-.rte-content .ProseMirror ul li,
-.rte-content .ProseMirror ol li {
-  margin-top: 2px;
-}
-
-.rte-content .ProseMirror blockquote {
-  border-left: 2px solid var(--border);
-  padding-left: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  color: var(--muted-foreground);
-  font-style: italic;
-}
-
-.rte-content .ProseMirror :where(pre) {
-  background: color-mix(in srgb, var(--muted) 50%, var(--background));
-  color: var(--foreground);
-  border-radius: var(--radius);
-  border: 1px solid var(--rte-hairline, var(--border));
-  padding: 1rem;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
-  overflow-x: auto;
-  font-family: var(--font-mono);
-  font-size: 0.875rem;
-}
-
-.rte-content .ProseMirror :where(pre) code {
-  background: none;
-  color: inherit;
-  border: none;
-  font-size: 0.875rem;
-  font-weight: 400;
-  padding: 0;
-}
-
-.rte-content .ProseMirror hr {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-}
-
-.rte-content .ProseMirror a {
-  color: var(--primary);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  cursor: pointer;
-  transition:
-    color 150ms ease-out,
-    text-decoration-color 150ms ease-out;
-  text-decoration-color: color-mix(in srgb, var(--primary) 40%, transparent);
-}
-
-.rte-content .ProseMirror a:hover {
-  color: color-mix(in srgb, var(--primary) 80%, transparent);
-  text-decoration-color: color-mix(in srgb, var(--primary) 80%, transparent);
-}
-
-.rte-content .ProseMirror code {
-  font-size: 0.875em;
-  font-weight: 500;
-  background: color-mix(in srgb, var(--muted) 70%, transparent);
-  padding: 0.125rem 0.375rem;
-  border-radius: calc(var(--radius) - 4px);
-  transition: background-color 150ms ease-out;
-}
-
 @property --rte-toolbar-fade-start {
   syntax: "<length>";
   inherits: false;
@@ -228,73 +65,6 @@
   }
 }
 
-/* ── Task Lists ── */
-.rte-task-list {
-  list-style-type: none;
-  padding: 0;
-  padding-inline-start: 0;
-}
-
-.rte-task-list li {
-  margin: 0;
-  padding: 0;
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  transition: opacity 150ms ease-out;
-}
-
-.rte-task-list li[data-checked="true"] {
-  opacity: 0.6;
-}
-
-.rte-task-list li > div {
-  flex: 1;
-  min-width: 0;
-}
-
-.rte-task-list ul {
-  margin-top: 5px;
-}
-
-.rte-task-list p {
-  margin: 0;
-  padding: 0;
-}
-
-.rte-task-list label {
-  display: inline-flex;
-  align-items: center;
-  height: 1.75em;
-  cursor: pointer;
-}
-
-.rte-task-list input[type="checkbox"] {
-  cursor: pointer;
-  appearance: none;
-  width: 16px;
-  height: 16px;
-  border: 1px solid var(--input, var(--border));
-  border-radius: calc(var(--radius) - 6px);
-  background-color: var(--background);
-  vertical-align: middle;
-  position: relative;
-  flex-shrink: 0;
-  transition:
-    background-color 150ms ease-out,
-    border-color 150ms ease-out,
-    transform 100ms ease-out;
-}
-
-.rte-task-list input[type="checkbox"]:active {
-  transform: scale(0.96);
-}
-
-.rte-task-list input[type="checkbox"]:checked {
-  background-color: var(--primary);
-  border-color: var(--primary);
-}
-
 @keyframes checkmark-in {
   0% {
     transform: scale(0.8);
@@ -306,19 +76,8 @@
   }
 }
 
-.rte-task-list input[type="checkbox"]:checked::before {
-  position: absolute;
-  content: "";
-  inset: 0;
-  background-color: var(--primary-foreground);
-  mask-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9Im5vbmUiIHZpZXdCb3g9IjAgMCAxMCA3Ij48cGF0aCBmaWxsPSIjZmZmIiBkPSJNNCA0LjU4NkwxLjcwNyAyLjI5M0ExIDEgMCAxMC4yOTMgMy43MDdsMyAzYS45OTcuOTk3IDAgMDAxLjQxNCAwbDUtNUExIDEgMCAxMDguMjkzLjI5M0w0IDQuNTg2eiIvPjwvc3ZnPg==");
-  mask-repeat: no-repeat;
-  mask-size: 9px;
-  mask-position: center;
-  animation: checkmark-in 150ms ease-out forwards;
-}
-
 /* ── Embed nodes ── */
+
 .rte-embed-wrapper {
   display: flex;
   width: 100%;
@@ -333,10 +92,12 @@
   justify-content: flex-start;
   text-align: left;
 }
+
 .rte-embed-wrapper[data-align="center"] {
   justify-content: center;
   text-align: center;
 }
+
 .rte-embed-wrapper[data-align="right"] {
   justify-content: flex-end;
   text-align: right;
@@ -384,6 +145,7 @@
 }
 
 /* ── Bubble Menu ── */
+
 @keyframes rte-bubble-pop-in {
   0% {
     opacity: 0;
@@ -396,6 +158,7 @@
 }
 
 /* ── Suppress transitions on theme switch ── */
+
 .rte-theme-transitioning *,
 .rte-theme-transitioning *::before,
 .rte-theme-transitioning *::after {

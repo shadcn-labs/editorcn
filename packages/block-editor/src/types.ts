@@ -14,16 +14,23 @@ export interface BlockEditorLabels {
   dividerLabel?: string;
 }
 
+export type BlockEditorPreset =
+  | "document"
+  | "block"
+  | (string & Record<never, never>);
+
 export interface BlockEditorProps {
   editor: Editor | null;
   children?: ReactNode;
   className?: string;
   labels?: Partial<BlockEditorLabels>;
   icons?: Partial<BlockEditorIcons>;
+  preset?: BlockEditorPreset;
 }
 
 export interface BlockEditorContextValue {
   editor: Editor | null;
   labels: BlockEditorLabels;
   icons: BlockEditorIcons;
+  preset: BlockEditorPreset;
 }

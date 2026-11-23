@@ -1,3 +1,4 @@
+import { inlineCssImports } from "../inline-css.ts";
 import { aliases } from "./config.ts";
 import { isScript, scanImports } from "./imports.ts";
 
@@ -111,6 +112,9 @@ const rewriteSpecifiers = (content: string, path: string) => {
 };
 
 export const transform = (content: string, path: string) => {
+  if (path.endsWith(".css")) {
+    return inlineCssImports(content, path);
+  }
   if (!isScript(path)) {
     return content;
   }
