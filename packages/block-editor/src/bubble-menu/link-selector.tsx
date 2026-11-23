@@ -85,16 +85,19 @@ export const LinkSelector = ({ editor }: { editor: Editor }) => {
             }}
           />
           <BubbleDropdown style={{ left: "auto", minWidth: "220px", right: 0 }}>
-            <form className="block-editor-link-form" onSubmit={handleSubmit}>
+            <form
+              className="block-editor-link-form flex flex-col gap-2 p-1"
+              onSubmit={handleSubmit}
+            >
               <input
                 ref={inputRef}
                 type="text"
-                className="block-editor-link-input"
+                className="block-editor-link-input h-8 w-full rounded-sm border border-border bg-transparent px-2 text-[0.8125rem] [font-family:inherit] text-popover-foreground outline-none [transition:border-color_150ms_ease-out,box-shadow_150ms_ease-out] placeholder:text-muted-foreground focus:border-ring focus:shadow-[0_0_0_2px_color-mix(in_srgb,var(--ring)_20%,transparent)]"
                 placeholder="Paste a link..."
                 defaultValue={linkUrl}
                 autoFocus
               />
-              <div className="block-editor-link-actions">
+              <div className="block-editor-link-actions flex gap-1">
                 {isLink && (
                   <BubbleDropdownItem
                     danger

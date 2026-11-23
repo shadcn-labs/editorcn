@@ -150,7 +150,9 @@ export const NodeSelector = ({ editor }: { editor: Editor }) => {
         onClick={() => setOpen(!open)}
       >
         {activeIcon && <BubbleDropdownIcon>{activeIcon}</BubbleDropdownIcon>}
-        <span className="block-editor-bubble-btn-text">{activeName}</span>
+        <span className="block-editor-bubble-btn-text max-w-20 overflow-hidden text-ellipsis">
+          {activeName}
+        </span>
         {DEFAULT_ICONS.dropdownArrowIcon}
       </BubbleButton>
       {open && (
