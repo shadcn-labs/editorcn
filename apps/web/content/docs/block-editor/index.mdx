@@ -47,6 +47,12 @@ import type { BlockEditorIcons } from "@editorcn/block-editor";
 import "@editorcn/block-editor/style.css";
 ```
 
+Then add the package to Tailwind's sources in the CSS file that imports `tailwindcss` (the path is relative to that file). The block editor's chrome is styled with Tailwind classes, and Tailwind doesn't scan `node_modules` by default:
+
+```css
+@source "../node_modules/@editorcn/block-editor/dist";
+```
+
 ## Full setup
 
 To start from the complete block editor on the [homepage](/), install the **Full Block Editor**. It brings the block editor, a slash menu with images, tables, callouts and Markdown import and export, and the [Callout](/docs/extensions/callout), [Code Block](/docs/extensions/code-block), [Image Placeholder](/docs/extensions/image-placeholder), [Markdown](/docs/extensions/markdown), [Mention](/docs/extensions/mention), [Paste Cleanup](/docs/extensions/paste-cleanup) and [Table](/docs/extensions/table) extensions in one command:

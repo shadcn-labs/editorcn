@@ -63,6 +63,14 @@ import "@/components/editor/style.css";
 
 > **Order matters**: Import your shadcn globals first, then the editor styles.
 
+If you installed via npm, import `@editorcn/editor/style.css` instead, and add the package to Tailwind's sources in the CSS file that imports `tailwindcss` (the path is relative to that file):
+
+```css
+@source "../node_modules/@editorcn/editor/dist";
+```
+
+The toolbar, menus and other chrome are styled with Tailwind classes, and Tailwind doesn't scan `node_modules` by default. The shadcn registry doesn't need this, because the source is in your project.
+
 ```tsx
 "use client";
 
@@ -166,6 +174,14 @@ Import the styles:
 ```tsx
 import "@/components/block-editor/style.css";
 ```
+
+If you installed via npm, import `@editorcn/block-editor/style.css` instead, and add the package to Tailwind's sources in the CSS file that imports `tailwindcss` (the path is relative to that file):
+
+```css
+@source "../node_modules/@editorcn/block-editor/dist";
+```
+
+The toolbar, menus and other chrome are styled with Tailwind classes, and Tailwind doesn't scan `node_modules` by default. The shadcn registry doesn't need this, because the source is in your project.
 
 ```tsx
 "use client";
