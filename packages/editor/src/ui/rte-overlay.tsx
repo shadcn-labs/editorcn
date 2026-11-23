@@ -1,13 +1,15 @@
 import * as React from "react";
 
+import { cn } from "./utils";
+
 export type RteOverlayProps = React.HTMLAttributes<HTMLDivElement>;
 
 const RteOverlay = React.forwardRef<HTMLDivElement, RteOverlayProps>(
-  ({ className = "", ...props }, ref) => (
+  ({ className, ...props }, ref) => (
     <div
       ref={ref}
       role="presentation"
-      className={`rte-bubble-overlay ${className}`.trim()}
+      className={cn("rte-bubble-overlay fixed inset-0 z-999", className)}
       {...props}
     />
   )

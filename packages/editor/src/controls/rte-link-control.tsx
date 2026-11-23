@@ -90,7 +90,7 @@ export const LinkControl = () => {
         }
       />
       <PopoverContent className="w-72 p-3">
-        <div className="rte-link-editor">
+        <div className="rte-link-editor flex items-center gap-1">
           <Input
             type="url"
             placeholder={labels.linkEditorInputPlaceholder}
@@ -98,13 +98,13 @@ export const LinkControl = () => {
             value={url}
             onChange={(e) => setUrl(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="rte-link-editor-input h-8 text-sm"
+            className="rte-link-editor-input h-8 min-w-[200px] flex-1 text-sm"
           />
           <Button
             size="sm"
             variant="default"
             onClick={handleSave}
-            className="rte-link-editor-save h-8"
+            className="rte-link-editor-save h-8 rounded-ss-none rounded-es-none"
           >
             {labels.linkEditorSave}
           </Button>

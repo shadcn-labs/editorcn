@@ -81,35 +81,49 @@ export const Footer = ({
   return (
     <div
       className={cn(
-        "rte-footer",
+        "rte-footer z-1 flex min-h-9 flex-wrap items-center justify-between gap-2 rounded-es-[calc(var(--radius)+3px)] rounded-ee-[calc(var(--radius)+3px)] border-t border-(--rte-hairline) bg-(--rte-strip) px-3 py-1.5 text-[0.75rem] text-muted-foreground",
         variant !== "default" && `rte-footer--${variant}`,
-        sticky && "sticky z-10",
+        variant === "default" &&
+          "min-h-8 rounded-none border-t-0 bg-transparent px-2 pt-1 pb-0",
+        variant === "compact" &&
+          "rounded-none last:rounded-es-[calc(var(--radius)-1px)] last:rounded-ee-[calc(var(--radius)-1px)]",
+        sticky &&
+          "sticky bottom-0 bg-[color-mix(in_srgb,var(--rte-strip)_80%,transparent)] backdrop-blur-lg",
         className
       )}
       data-sticky={sticky ? "" : undefined}
       style={sticky ? { bottom: stickyOffset } : undefined}
     >
       {showWordCount && wordCount && (
-        <span className={cn("rte-footer-word-count", wordCountClassName)}>
+        <span
+          className={cn(
+            "rte-footer-word-count inline-flex items-center gap-1.5 text-[0.75rem] whitespace-nowrap",
+            wordCountClassName
+          )}
+        >
           {wordCountFormatter ? (
             wordCountFormatter(wordCount)
           ) : (
             <>
-              <span className="rte-footer-word-count-stat">
-                <span className="rte-footer-word-count-number">
+              <span className="rte-footer-word-count-stat inline-flex items-baseline gap-1">
+                <span className="rte-footer-word-count-number font-medium text-foreground tabular-nums">
                   {wordCount.words}
                 </span>
-                <span className="rte-footer-word-count-unit">words</span>
+                <span className="rte-footer-word-count-unit text-muted-foreground">
+                  words
+                </span>
               </span>
               <span
-                className="rte-footer-word-count-separator"
+                className="rte-footer-word-count-separator size-[3px] shrink-0 rounded-full bg-[color-mix(in_srgb,var(--muted-foreground)_45%,transparent)]"
                 aria-hidden="true"
               />
-              <span className="rte-footer-word-count-stat">
-                <span className="rte-footer-word-count-number">
+              <span className="rte-footer-word-count-stat inline-flex items-baseline gap-1">
+                <span className="rte-footer-word-count-number font-medium text-foreground tabular-nums">
                   {wordCount.characters}
                 </span>
-                <span className="rte-footer-word-count-unit">characters</span>
+                <span className="rte-footer-word-count-unit text-muted-foreground">
+                  characters
+                </span>
               </span>
             </>
           )}
