@@ -70,7 +70,8 @@ export const CalloutView = ({
             onOpenChange={setOpen}
             trigger={
               <Button
-                className="ext-btn--icon-sm ext-callout-trigger"
+                className="ext-callout-trigger"
+                size="icon-sm"
                 aria-label={labels.calloutType}
               >
                 {icon}

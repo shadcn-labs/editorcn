@@ -1,6 +1,8 @@
 import * as React from "react";
 import { useCallback, useLayoutEffect, useState } from "react";
 
+import { cn } from "./utils";
+
 export interface DropdownPillHandlers {
   onFocus: (event: React.FocusEvent<HTMLDivElement>) => void;
   onMouseLeave: (event: React.MouseEvent<HTMLDivElement>) => void;
@@ -59,9 +61,10 @@ const useDropdownPill = (
   const pill = (
     <div
       aria-hidden="true"
-      className={["ext-dropdown-pill", rect ? "ext-dropdown-pill--visible" : ""]
-        .filter(Boolean)
-        .join(" ")}
+      className={cn(
+        "ext-dropdown-pill pointer-events-none absolute top-0 left-0 z-0 rounded-sm bg-primary/6 opacity-0 [transition:top_220ms_cubic-bezier(0.22,1,0.36,1),left_220ms_cubic-bezier(0.22,1,0.36,1),width_220ms_cubic-bezier(0.22,1,0.36,1),height_220ms_cubic-bezier(0.22,1,0.36,1),opacity_150ms_ease-out]",
+        rect && "ext-dropdown-pill--visible opacity-100"
+      )}
       style={
         rect
           ? {

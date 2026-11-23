@@ -261,7 +261,9 @@
         "@tiptap/core@>=3.30.5 <4",
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "tailwind-merge@^3.0.0"
       ],
       "description": "Info, tip, warning, danger, and note boxes that hold rich content. Switch the type or remove the callout from its icon menu, insert one from a toolbar button, or type > [!NOTE] to create one. Round-trips as GitHub alert syntax in markdown.",
       "files": [
@@ -352,6 +354,10 @@
         {
           "path": "extensions/ui/use-floating.tsx",
           "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/utils.ts",
+          "type": "registry:component"
         }
       ],
       "name": "callout",
@@ -364,10 +370,12 @@
         "@tiptap/extension-code-block@>=3.0.0 <4",
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
+        "clsx@^2.1.1",
         "lucide-react@>=0.400.0 <1.0.0",
         "mermaid@^11.0.0",
         "prettier@^3.0.0",
-        "shiki@^4.0.0"
+        "shiki@^4.0.0",
+        "tailwind-merge@^3.0.0"
       ],
       "description": "A Notion-style code block with Shiki syntax highlighting, a searchable language menu, copy, wrap toggle, captions, Prettier formatting, and a live Mermaid diagram preview. Code stays editable in the editor, so undo and collaboration keep working.",
       "files": [
@@ -453,6 +461,10 @@
         },
         {
           "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/utils.ts",
           "type": "registry:component"
         }
       ],
@@ -861,7 +873,9 @@
         "@tiptap/core@>=3.30.5 <4",
         "@tiptap/extension-image@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "tailwind-merge@^3.0.0"
       ],
       "description": "A Notion-style image placeholder node that lets you upload or embed an image by URL, with a resizable image node view and its own toolbar button.",
       "files": [
@@ -964,6 +978,10 @@
         {
           "path": "extensions/ui/use-floating.tsx",
           "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/utils.ts",
+          "type": "registry:component"
         }
       ],
       "name": "image-placeholder",
@@ -976,7 +994,9 @@
         "@tiptap/markdown@>=3.30.5 <4",
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "tailwind-merge@^3.0.0"
       ],
       "description": "Load, store, and paste markdown. Wraps the official Tiptap markdown extension so editor.getMarkdown() and contentType: \"markdown\" work, adds an opt-in pasteMarkdown option, and ships a toolbar button to import, export, or copy markdown.",
       "files": [
@@ -1043,6 +1063,10 @@
         {
           "path": "extensions/ui/use-floating.tsx",
           "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/utils.ts",
+          "type": "registry:component"
         }
       ],
       "name": "markdown",
@@ -1056,7 +1080,9 @@
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/suggestion@>=3.27.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "tailwind-merge@^3.0.0"
       ],
       "description": "An @ picker that inserts inline mention nodes with a stable id and label. Items load from a sync or async source with debounce, loading and empty states, and keyboard navigation. Backspace removes the whole mention.",
       "files": [
@@ -1115,6 +1141,10 @@
         {
           "path": "extensions/ui/style.css",
           "type": "registry:style"
+        },
+        {
+          "path": "extensions/ui/utils.ts",
+          "type": "registry:component"
         }
       ],
       "name": "mention",
@@ -1267,7 +1297,9 @@
         "@tiptap/extension-table-row@>=3.0.0 <4",
         "@tiptap/extension-table@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <1.0.0",
+        "tailwind-merge@^3.0.0"
       ],
       "description": "A table node with a toolbar that inserts tables from a grid-size picker, lets you add or delete rows and columns, merge and split cells, toggle the header row, and manage rows and columns from hover context handles. Columns are resizable and a gap cursor is included by default.",
       "files": [
@@ -1357,6 +1389,10 @@
         },
         {
           "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/utils.ts",
           "type": "registry:component"
         }
       ],

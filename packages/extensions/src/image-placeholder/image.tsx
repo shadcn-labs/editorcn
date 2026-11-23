@@ -236,6 +236,7 @@ const ResizableImageNode = ({
               active={node.attrs.align === "left"}
               aria-label="Align left"
               className="ext-image-action-btn"
+              size="icon-sm"
               onClick={() => updateAttributes({ align: "left" })}
             >
               <AlignLeft />
@@ -244,6 +245,7 @@ const ResizableImageNode = ({
               active={node.attrs.align === "center"}
               aria-label="Align center"
               className="ext-image-action-btn"
+              size="icon-sm"
               onClick={() => updateAttributes({ align: "center" })}
             >
               <AlignCenter />
@@ -252,6 +254,7 @@ const ResizableImageNode = ({
               active={node.attrs.align === "right"}
               aria-label="Align right"
               className="ext-image-action-btn"
+              size="icon-sm"
               onClick={() => updateAttributes({ align: "right" })}
             >
               <AlignRight />
@@ -264,6 +267,7 @@ const ResizableImageNode = ({
                 <Button
                   aria-label="Image options"
                   className="ext-image-action-btn"
+                  size="icon-sm"
                 >
                   <MoreHorizontal />
                 </Button>

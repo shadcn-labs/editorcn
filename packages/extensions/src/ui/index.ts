@@ -1,5 +1,5 @@
 export { Button } from "./button";
-export type { ButtonProps } from "./button";
+export type { ButtonProps, ButtonSize } from "./button";
 export { DropdownMenu } from "./dropdown-menu";
 export type { DropdownMenuProps, DropdownMenuSide } from "./dropdown-menu";
 export { DropdownMenuContent } from "./dropdown-content";

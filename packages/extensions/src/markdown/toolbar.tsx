@@ -47,7 +47,8 @@ export const MarkdownToolbar = ({
       trigger={
         <Button
           aria-label={labels.markdown}
-          className={["ext-btn--icon-sm", className].filter(Boolean).join(" ")}
+          className={className}
+          size="icon-sm"
           disabled={disabled}
           tooltip={labels.markdown}
         >
