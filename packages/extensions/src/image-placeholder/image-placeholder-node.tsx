@@ -13,6 +13,7 @@ import { Input } from "../ui/input";
 import { Popover } from "../ui/popover";
 import { PopoverContent } from "../ui/popover-content";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
+import { cn } from "../ui/utils";
 
 const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
   e.preventDefault();
@@ -138,23 +139,22 @@ export const ImagePlaceholderNode = ({
     }
   ).join(",");
 
-  const triggerClass = [
-    "ext-image-placeholder-trigger",
-    selected ? "ext-image-placeholder-trigger--selected" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const triggerClass = cn(
+    "ext-image-placeholder-trigger flex w-full cursor-pointer items-center gap-3 rounded-md border-none bg-accent p-3 text-left text-[0.875rem] text-accent-foreground [transition:background-color_150ms_ease-out,color_150ms_ease-out,box-shadow_150ms_ease-out] hover:bg-secondary hover:text-secondary-foreground focus-visible:shadow-[0_0_0_2px_var(--ring)] focus-visible:outline-none [&>svg]:size-6 [&>svg]:shrink-0",
+    selected &&
+      "ext-image-placeholder-trigger--selected shadow-[0_0_0_2px_var(--ring)] outline-none"
+  );
 
-  const uploadZoneClass = [
-    "ext-image-upload-zone",
-    isDragActive ? "ext-image-upload-zone--dragging" : "",
-    isDragReject ? "ext-image-upload-zone--reject" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const uploadZoneClass = cn(
+    "ext-image-upload-zone my-2 rounded-md border border-dashed border-border text-[0.875rem] [transition:border-color_150ms_ease-out,background-color_150ms_ease-out] hover:bg-secondary",
+    isDragActive &&
+      "ext-image-upload-zone--dragging border-primary bg-secondary",
+    isDragReject &&
+      "ext-image-upload-zone--reject border-destructive bg-destructive/10"
+  );
 
   return (
-    <NodeViewWrapper className="ext-image-placeholder">
+    <NodeViewWrapper className="ext-image-placeholder w-full">
       <Popover
         open={open}
         onOpenChange={setOpen}
@@ -169,7 +169,7 @@ export const ImagePlaceholderNode = ({
           </button>
         }
       >
-        <PopoverContent className="ext-image-placeholder-popover">
+        <PopoverContent className="ext-image-placeholder-popover w-md max-w-[min(calc(100vw-2rem),28rem)] p-3">
           <Tabs defaultValue="upload">
             <TabsList>
               <TabsTrigger value="upload">
@@ -196,17 +196,23 @@ export const ImagePlaceholderNode = ({
                     (extension.options.maxFiles as number | undefined) !== 1
                   }
                   onChange={handleFileInputChange}
-                  className="ext-sr-only"
+                  className="ext-sr-only sr-only"
                   id={fileInputId}
                 />
-                <label htmlFor={fileInputId} className="ext-image-upload-label">
+                <label
+                  htmlFor={fileInputId}
+                  className="ext-image-upload-label flex h-28 w-full cursor-pointer flex-col items-center justify-center text-center select-none [&>svg]:mx-auto [&>svg]:mb-2 [&>svg]:size-6 [&>svg]:shrink-0"
+                >
                   <Upload />
                   Drag & drop or click to upload
                 </label>
               </div>
             </TabsContent>
             <TabsContent value="url">
-              <form onSubmit={handleInsertEmbed} className="ext-image-embed">
+              <form
+                onSubmit={handleInsertEmbed}
+                className="ext-image-embed grid gap-2"
+              >
                 <Input
                   value={url}
                   onChange={(e) => {
@@ -218,12 +224,17 @@ export const ImagePlaceholderNode = ({
                   placeholder="Paste the image link..."
                 />
                 {urlError ? (
-                  <p className="ext-image-error">Please enter a valid URL</p>
+                  <p className="ext-image-error m-0 text-[0.75rem] text-destructive">
+                    Please enter a valid URL
+                  </p>
                 ) : null}
-                <Button type="submit" className="ext-image-embed-submit">
+                <Button
+                  type="submit"
+                  className="ext-image-embed-submit w-full border-transparent bg-primary text-primary-foreground hover:bg-[color-mix(in_srgb,var(--primary)_85%,black)] hover:text-primary-foreground"
+                >
                   Embed Image
                 </Button>
-                <p className="ext-image-hint">
+                <p className="ext-image-hint m-0 text-center text-[0.75rem] text-muted-foreground">
                   Works with any image from the web
                 </p>
               </form>

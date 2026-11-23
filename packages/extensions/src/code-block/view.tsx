@@ -94,13 +94,23 @@ const useSearchList = <T,>(
   };
 };
 
+const MENU_LABEL_CLASS =
+  "ext-code-block-menu-label px-2 py-1.5 text-[0.75rem] text-muted-foreground";
+
+const TRAILING_CLASS = "ext-code-block-trailing ml-auto";
+
+const TOOLBAR_BUTTON_CLASS = "size-6 rounded-sm [&>svg]:size-3.5";
+
+const SWITCH_CLASS =
+  "ext-code-block-switch relative h-4 w-7 rounded-full bg-input [transition:background-color_150ms_ease-out] after:absolute after:top-0.5 after:left-0.5 after:size-3 after:rounded-full after:bg-background after:content-[''] after:[transition:translate_150ms_ease-out] data-checked:bg-primary data-checked:after:translate-x-3";
+
 const SearchInput = forwardRef<
   HTMLInputElement,
   InputHTMLAttributes<HTMLInputElement>
 >((props, ref) => (
-  <div className="ext-code-block-search">
+  <div className="ext-code-block-search sticky top-0 z-2 -mx-1 flex items-center bg-popover p-1 [&>svg]:pointer-events-none [&>svg]:absolute [&>svg]:left-3 [&>svg]:size-3.5 [&>svg]:text-muted-foreground">
     <Search />
-    <Input ref={ref} {...props} />
+    <Input ref={ref} className="h-8 pl-7" {...props} />
   </div>
 ));
 SearchInput.displayName = "SearchInput";
@@ -159,7 +169,7 @@ const LanguageMenu = ({
   };
 
   return (
-    <div className="ext-code-block-languages">
+    <div className="ext-code-block-languages w-60 animate-[ext-pop-in_0.18s_cubic-bezier(0.22,1,0.36,1)_forwards] rounded-lg border border-border bg-popover px-1 pt-0 pb-1 text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.15)]">
       <SearchInput
         ref={inputRef}
         placeholder="Search for a language..."
@@ -174,16 +184,16 @@ const LanguageMenu = ({
         onChange={(event) => setSearch(event.target.value)}
         onKeyDown={onKeyDown}
       />
-      <div className="ext-code-block-menu-label">Languages</div>
+      <div className={MENU_LABEL_CLASS}>Languages</div>
       <DropdownMenuContent
         ref={listRef}
         id={listId}
         role="listbox"
-        className="ext-code-block-language-list"
+        className="ext-code-block-language-list max-h-60 min-w-0 animate-none overflow-y-auto rounded-none border-none bg-transparent p-0 shadow-none supports-[not_selector(::-webkit-scrollbar)]:[scrollbar-color:var(--border)_transparent] supports-[not_selector(::-webkit-scrollbar)]:[scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-button]:hidden [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground [&::-webkit-scrollbar-track]:hidden"
         activeItem={activeItem}
       >
         {items.length === 0 && (
-          <div className="ext-code-block-menu-label">No results</div>
+          <div className={MENU_LABEL_CLASS}>No results</div>
         )}
         {items.map((lang, index) => (
           <DropdownMenuItem
@@ -195,9 +205,7 @@ const LanguageMenu = ({
             onClick={() => onSelect(lang.value)}
           >
             <span>{lang.label}</span>
-            {lang.value === value && (
-              <Check className="ext-code-block-trailing" />
-            )}
+            {lang.value === value && <Check className={TRAILING_CLASS} />}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
@@ -257,7 +265,7 @@ const ActionsMenu = ({
   return (
     <DropdownMenuContent
       ref={listRef}
-      className="ext-code-block-actions"
+      className="ext-code-block-actions w-64"
       activeItem={activeItem}
     >
       <SearchInput
@@ -271,10 +279,8 @@ const ActionsMenu = ({
         }}
         onKeyDown={onKeyDown}
       />
-      <div className="ext-code-block-menu-label">Code</div>
-      {items.length === 0 && (
-        <div className="ext-code-block-menu-label">No results</div>
-      )}
+      <div className={MENU_LABEL_CLASS}>Code</div>
+      {items.length === 0 && <div className={MENU_LABEL_CLASS}>No results</div>}
       {items.map((action, index) => (
         <DropdownMenuItem
           key={action.id}
@@ -293,7 +299,7 @@ const ActionsMenu = ({
       ))}
       {submenu && (
         <div
-          className="ext-code-block-submenu"
+          className="ext-code-block-submenu absolute top-10 right-[calc(100%+0.5rem)]"
           onMouseOver={(event) => event.stopPropagation()}
           onFocus={(event) => event.stopPropagation()}
         >
@@ -504,7 +510,7 @@ export const CodeBlockView = ({
       onSelect: toggleWrap,
       trailing: (
         <span
-          className="ext-code-block-switch ext-code-block-trailing"
+          className={`${SWITCH_CLASS} ${TRAILING_CLASS}`}
           data-checked={wrap ? "" : undefined}
         />
       ),
@@ -517,7 +523,7 @@ export const CodeBlockView = ({
             label: "Language",
             onSelect: () => setMenu("language"),
             submenu: true,
-            trailing: <ChevronRight className="ext-code-block-trailing" />,
+            trailing: <ChevronRight className={TRAILING_CLASS} />,
           },
         ]
       : []),
@@ -535,9 +541,9 @@ export const CodeBlockView = ({
 
   return (
     <NodeViewWrapper className="ext-code-block" data-language={language}>
-      <div className="ext-code-block-box">
+      <div className="ext-code-block-box group/code-block">
         <div
-          className="ext-code-block-header"
+          className="ext-code-block-header pointer-events-none absolute inset-[0.375rem_0.375rem_auto_0.5rem] z-10 flex items-start justify-between opacity-0 [transition:opacity_150ms_ease-out] group-hover/code-block:opacity-100 focus-within:opacity-100 data-open:opacity-100 *:pointer-events-auto"
           contentEditable={false}
           data-open={menu ? "" : undefined}
         >
@@ -555,13 +561,14 @@ export const CodeBlockView = ({
               <LanguageMenu value={language} onSelect={setLanguage} />
             </DropdownMenu>
           ) : (
-            <span className="ext-code-block-lang">
+            <span className="ext-code-block-lang inline-flex h-5 items-center gap-0.5 px-1.5 text-[0.75rem] font-normal text-muted-foreground">
               {getLanguageLabel(language)}
             </span>
           )}
-          <div className="ext-code-block-toolbar">
+          <div className="ext-code-block-toolbar flex gap-0.5 text-muted-foreground">
             <Button
               size="icon-sm"
+              className={TOOLBAR_BUTTON_CLASS}
               aria-label="Copy"
               tooltip="Copy"
               onClick={copy}
@@ -571,6 +578,7 @@ export const CodeBlockView = ({
             {editable && (
               <Button
                 size="icon-sm"
+                className={TOOLBAR_BUTTON_CLASS}
                 aria-label="Caption"
                 tooltip="Caption"
                 onClick={addCaption}
@@ -583,7 +591,11 @@ export const CodeBlockView = ({
               open={menu === "actions"}
               onOpenChange={openMenu("actions")}
               trigger={
-                <Button size="icon-sm" aria-label="More">
+                <Button
+                  size="icon-sm"
+                  className={TOOLBAR_BUTTON_CLASS}
+                  aria-label="More"
+                >
                   <Ellipsis />
                 </Button>
               }
