@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 import { SoftwareApplicationJsonLd, WebSiteJsonLd } from "@/seo/json-ld";
 import { baseMetadata } from "@/seo/metadata";
 
-import "@editorcn/ui/globals.css";
+import "@/styles/globals.css";
 import "@/styles/themes.css";
 
 export const metadata: Metadata = baseMetadata;
