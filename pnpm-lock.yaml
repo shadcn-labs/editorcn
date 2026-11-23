@@ -383,6 +383,9 @@ importers:
         specifier: ^3.0.0
         version: 3.6.0
     devDependencies:
+      '@editorcn/content':
+        specifier: workspace:*
+        version: link:../content
       '@hugeicons/core-free-icons':
         specifier: ^4.3.5
         version: 4.3.5
@@ -409,6 +412,8 @@ importers:
         version: 5.9.3
 
   packages/config: {}
+
+  packages/content: {}
 
   packages/editor:
     dependencies:
@@ -458,6 +463,9 @@ importers:
         specifier: ^3.0.0
         version: 3.6.0
     devDependencies:
+      '@editorcn/content':
+        specifier: workspace:*
+        version: link:../content
       '@hugeicons/core-free-icons':
         specifier: ^4.3.5
         version: 4.3.5
@@ -641,6 +649,9 @@ importers:
         specifier: ^1.0.17
         version: 1.0.17
     devDependencies:
+      '@editorcn/content':
+        specifier: workspace:*
+        version: link:../content
       '@tiptap/extension-highlight':
         specifier: ^3.30.5
         version: 3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))

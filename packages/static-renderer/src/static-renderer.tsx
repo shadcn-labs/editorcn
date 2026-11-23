@@ -55,6 +55,11 @@ const resolveUniqueExtensions = (extensions: Extensions) => {
   return [...byName.values()];
 };
 
+export type StaticRendererPreset =
+  | "document"
+  | "block"
+  | (string & Record<never, never>);
+
 export type StaticRendererProps = Omit<
   HTMLAttributes<HTMLElement>,
   "content" | "dangerouslySetInnerHTML"
@@ -70,6 +75,8 @@ export type StaticRendererProps = Omit<
   // renderToReactElement options — nodeMapping/markMapping for custom nodes.
   options?: Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>;
   sanitize?: boolean | ((html: string) => string);
+  // Content preset, defaults to "block". Use "document" for RichTextEditor output.
+  preset?: StaticRendererPreset;
 };
 
 export const StaticRenderer = ({
@@ -80,12 +87,18 @@ export const StaticRenderer = ({
   staticEditorOptions,
   options,
   sanitize,
+  preset = "block",
   ...props
 }: StaticRendererProps) => {
+  const rootProps = {
+    ...props,
+    className: cn("rte-static-renderer editorcn-content", className),
+    "data-preset": preset,
+  };
+
   if (typeof content === "string") {
     return createElement(Tag, {
-      ...props,
-      className: cn("rte-static-renderer", className),
+      ...rootProps,
       dangerouslySetInnerHTML: { __html: toSafeHtml(content, sanitize) },
     });
   }
@@ -97,9 +110,5 @@ export const StaticRenderer = ({
     staticEditorOptions,
   });
 
-  return createElement(
-    Tag,
-    { ...props, className: cn("rte-static-renderer", className) },
-    children
-  );
+  return createElement(Tag, rootProps, children);
 };

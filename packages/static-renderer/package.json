@@ -20,7 +20,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup && node -e \"require('fs').copyFileSync('src/style.css','dist/style.css')\"",
+    "build": "tsup && node ../../scripts/inline-css.ts src/style.css dist/style.css",
     "dev": "tsup --watch",
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
@@ -32,6 +32,7 @@
     "xss": "^1.0.17"
   },
   "devDependencies": {
+    "@editorcn/content": "workspace:*",
     "@tiptap/extension-highlight": "^3.30.5",
     "@tiptap/extension-image": "^3.30.5",
     "@tiptap/extension-list": "^3.30.5",

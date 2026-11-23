@@ -70,7 +70,7 @@ const BlockEditorDragHandle = () => {
 };
 
 const BlockEditorContent = () => {
-  const { editor } = useBlockEditorContext();
+  const { editor, preset } = useBlockEditorContext();
 
   return (
     <div className="block-editor relative w-full">
@@ -78,7 +78,8 @@ const BlockEditorContent = () => {
       {editor && editor.isEditable && <BubbleMenu editor={editor} />}
       <EditorContent
         editor={editor}
-        className="block-editor-content w-full"
+        className="block-editor-content editorcn-content w-full"
+        data-preset={preset}
         spellCheck={false}
       />
       {editor && editor.isEditable && <BottomBar editor={editor} />}
@@ -92,8 +93,14 @@ const BlockEditorRoot = ({
   className,
   labels,
   icons,
+  preset,
 }: BlockEditorProps) => (
-  <BlockEditorProvider editor={editor} labels={labels} icons={icons}>
+  <BlockEditorProvider
+    editor={editor}
+    labels={labels}
+    icons={icons}
+    preset={preset}
+  >
     <div className={cn("block-editor relative w-full", className)}>
       {children ?? <BlockEditorContent />}
     </div>

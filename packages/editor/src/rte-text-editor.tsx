@@ -31,6 +31,7 @@ const RichTextEditorRoot = ({
   labels,
   icons,
   variant = "default",
+  preset = "document",
   editable = true,
 }: RichTextEditorProps) => {
   const mergedLabels = useMemo(
@@ -54,6 +55,7 @@ const RichTextEditorRoot = ({
         editor,
         icons: mergedIcons,
         labels: mergedLabels,
+        preset,
         tooltip,
         variant,
       }}
