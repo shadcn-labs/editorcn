@@ -1,19 +1,23 @@
 import * as React from "react";
 import { useCallback, useRef, useState } from "react";
 
+import { cn } from "./utils";
+
 export interface RteDropdownProps extends React.HTMLAttributes<HTMLDivElement> {
   variant?: "default" | "language" | "color";
 }
 
 const variantClass: Record<string, string> = {
-  color: "rte-bubble-dropdown--color",
+  color:
+    "rte-bubble-dropdown--color min-w-auto p-2 [&_.rte-bubble-dropdown-divider]:mx-[-0.5rem] [&_.rte-bubble-dropdown-divider]:mt-2.5 [&_.rte-bubble-dropdown-divider]:mb-2",
   default: "",
-  language: "rte-bubble-dropdown--language",
+  language:
+    "rte-bubble-dropdown--language max-h-80 min-w-40 overflow-y-auto [scrollbar-width:thin]",
 };
 
 const RteDropdown = React.forwardRef<HTMLDivElement, RteDropdownProps>(
   (
-    { className = "", variant = "default", children, onMouseLeave, ...props },
+    { className, variant = "default", children, onMouseLeave, ...props },
     ref
   ) => {
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -61,9 +65,11 @@ const RteDropdown = React.forwardRef<HTMLDivElement, RteDropdownProps>(
       [onMouseLeave]
     );
 
-    const cls = ["rte-bubble-dropdown", variantClass[variant], className]
-      .filter(Boolean)
-      .join(" ");
+    const cls = cn(
+      "rte-bubble-dropdown absolute top-full left-0 z-1000 mt-1.5 min-w-40 origin-top-left animate-[rte-bubble-pop-in_180ms_ease-out_forwards] rounded-lg border border-[color-mix(in_srgb,var(--border)_60%,transparent)] bg-popover p-1 text-popover-foreground shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)]",
+      variantClass[variant],
+      className
+    );
 
     return (
       <div
@@ -83,12 +89,10 @@ const RteDropdown = React.forwardRef<HTMLDivElement, RteDropdownProps>(
       >
         <div
           aria-hidden="true"
-          className={[
-            "rte-bubble-dropdown-pill",
-            pill ? "rte-bubble-dropdown-pill--visible" : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
+          className={cn(
+            "rte-bubble-dropdown-pill pointer-events-none absolute top-0 left-0 z-0 rounded-sm bg-muted opacity-0 [transition:top_180ms_ease-out,left_180ms_ease-out,width_180ms_ease-out,height_180ms_ease-out,opacity_150ms_ease-out]",
+            pill && "rte-bubble-dropdown-pill--visible opacity-100"
+          )}
           style={
             pill
               ? {

@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import { cn } from "./utils";
+
 export interface RteColorSwatchProps {
   color: string;
   label: string;
@@ -28,15 +30,19 @@ const RteColorSwatch = React.forwardRef<HTMLButtonElement, RteColorSwatchProps>(
         aria-pressed={active}
         aria-label={label}
         title={label}
-        className={[
-          "rte-bubble-color-swatch",
+        className={cn(
+          "rte-bubble-color-swatch inline-flex size-6 cursor-pointer items-center justify-center rounded-sm border border-transparent p-0 [transition:transform_150ms_ease-out,opacity_150ms_ease-out] hover:opacity-85 focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-ring/50 focus-visible:outline-offset-1 active:[transform:scale(0.96)]",
           variant === "text"
-            ? "rte-bubble-color-swatch--text"
-            : "rte-bubble-color-swatch--highlight",
-          active ? "rte-bubble-color-swatch--active" : "",
-        ]
-          .filter(Boolean)
-          .join(" ")}
+            ? "rte-bubble-color-swatch--text border-(--swatch-color) bg-transparent text-(--swatch-color)"
+            : "rte-bubble-color-swatch--highlight border-transparent bg-(--swatch-color) text-(--swatch-check)",
+          active && "rte-bubble-color-swatch--active",
+          active &&
+            variant === "text" &&
+            "border-(--swatch-color) bg-(--swatch-color) text-(--swatch-check)",
+          active &&
+            variant === "highlight" &&
+            "shadow-[0_0_0_2px_color-mix(in_srgb,var(--swatch-color)_55%,var(--popover-foreground))]"
+        )}
         style={
           {
             "--swatch-check": checkColor,
@@ -47,12 +53,18 @@ const RteColorSwatch = React.forwardRef<HTMLButtonElement, RteColorSwatchProps>(
         onClick={() => onSelect(color)}
       >
         {variant === "text" && !active ? (
-          <span className="rte-bubble-color-glyph" aria-hidden="true">
+          <span
+            className="rte-bubble-color-glyph text-[0.6875rem] leading-none font-semibold"
+            aria-hidden="true"
+          >
             A
           </span>
         ) : null}
         {active ? (
-          <span className="rte-bubble-color-check" aria-hidden="true">
+          <span
+            className="rte-bubble-color-check flex size-3 items-center justify-center text-(--swatch-check) [&_svg]:size-full"
+            aria-hidden="true"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
