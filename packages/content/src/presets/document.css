@@ -129,15 +129,6 @@
   font-size: 0.875rem;
 }
 
-.editorcn-content[data-preset="document"] :where(pre) code {
-  background: none;
-  color: inherit;
-  border: none;
-  font-size: 0.875rem;
-  font-weight: 400;
-  padding: 0;
-}
-
 .editorcn-content[data-preset="document"] hr {
   border: none;
   border-top: 1px solid var(--border);
@@ -168,6 +159,15 @@
   padding: 0.125rem 0.375rem;
   border-radius: calc(var(--radius) - 4px);
   transition: background-color 150ms ease-out;
+}
+
+.editorcn-content[data-preset="document"] :where(pre) code {
+  background: none;
+  color: inherit;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 400;
+  padding: 0;
 }
 
 :where(.editorcn-content[data-preset="document"]) .rte-task-list {
