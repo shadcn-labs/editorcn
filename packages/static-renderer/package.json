@@ -1,7 +1,8 @@
 {
   "name": "@editorcn/static-renderer",
-  "version": "0.2.6",
+  "version": "0.3.0",
   "files": [
+    "CHANGELOG.md",
     "dist"
   ],
   "type": "module",

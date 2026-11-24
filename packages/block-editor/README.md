@@ -22,6 +22,15 @@ A **Notion-style** block-type rich text editor built on [Tiptap](https://tiptap.
 npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link lucide-react
 ```
 
+Then, in the CSS file that imports `tailwindcss`, import the theme and add the package to Tailwind's sources (the path is relative to that file):
+
+```css
+@import "@editorcn/block-editor/theme.css";
+@source "../node_modules/@editorcn/block-editor/dist";
+```
+
+The chrome is styled with Tailwind classes, which Tailwind doesn't scan in `node_modules` by default, and the theme holds the menu animations.
+
 > **Tiptap v3 required.** `@editorcn/block-editor` is built against Tiptap **v3**. Make sure your `@tiptap/*` packages are on v3, and import `BubbleMenu`/`FloatingMenu` from `@tiptap/react/menus` (not the `@tiptap/react` root) if you use them directly.
 
 ### shadcn registry
