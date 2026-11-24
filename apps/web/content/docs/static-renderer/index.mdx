@@ -309,15 +309,16 @@ that wraps the image in a figure with a caption.
 `StaticRenderer` renders a wrapper with the `rte-static-renderer` class. It
 accepts the usual `HTMLAttributes` plus:
 
-| Prop                  | Type                                                          | Default | Description                                                                                      |
-| --------------------- | ------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------ |
-| `content`             | `string \| JSONContent \| Node`                               | -       | HTML from `editor.getHTML()`, or a ProseMirror JSON document                                     |
-| `as`                  | `ElementType`                                                 | `"div"` | Root element to render                                                                           |
-| `className`           | `string`                                                      | -       | Merged with the wrapper class via `tailwind-merge`                                               |
-| `extensions`          | `Extensions`                                                  | -       | Tiptap extensions used to render JSON content (JSON mode only)                                   |
-| `staticEditorOptions` | `StaticEditorOptions`                                         | -       | Editor-level options applied while rendering JSON                                                |
-| `options`             | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>` | -       | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes                              |
-| `sanitize`            | `boolean \| (html: string) => string`                         | -       | Sanitize HTML strings with the built-in allowlist (`true`) or your own function (HTML mode only) |
+| Prop                  | Type                                                          | Default   | Description                                                                                      |
+| --------------------- | ------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------ |
+| `content`             | `string \| JSONContent \| Node`                               | -         | HTML from `editor.getHTML()`, or a ProseMirror JSON document                                     |
+| `as`                  | `ElementType`                                                 | `"div"`   | Root element to render                                                                           |
+| `className`           | `string`                                                      | -         | Merged with the wrapper class via `tailwind-merge`                                               |
+| `extensions`          | `Extensions`                                                  | -         | Tiptap extensions used to render JSON content (JSON mode only)                                   |
+| `staticEditorOptions` | `StaticEditorOptions`                                         | -         | Editor-level options applied while rendering JSON                                                |
+| `options`             | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>` | -         | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes                              |
+| `sanitize`            | `boolean \| (html: string) => string`                         | -         | Sanitize HTML strings with the built-in allowlist (`true`) or your own function (HTML mode only) |
+| `preset`              | `"block" \| "document"`                                       | `"block"` | [Content preset](/docs/styling#content-presets). Use `"document"` for `RichTextEditor` output    |
 
 ## Styling
 
@@ -327,23 +328,15 @@ automatically.
 
 ### Supported output
 
-The stylesheet covers every block element the editors serialize:
+The renderer's element gets the `rte-static-renderer` and `editorcn-content` classes and a `data-preset` attribute. Document content is styled by the [content preset](/docs/styling#content-presets) (`"block"` by default, `"document"` for `RichTextEditor` output), and the renderer's own stylesheet adds the nodes only it handles:
 
-| Content             | Selector                                                     |
-| ------------------- | ------------------------------------------------------------ |
-| Headings            | `.rte-static-renderer h1` – `h6`                             |
-| Paragraphs          | `.rte-static-renderer p`                                     |
-| Lists               | `.rte-static-renderer ul`, `ol`, `li`                        |
-| Blockquote          | `.rte-static-renderer blockquote`                            |
-| Inline code         | `.rte-static-renderer code`                                  |
-| Code blocks         | `.rte-static-renderer pre`, `pre code`                       |
-| Syntax highlighting | `.rte-static-renderer pre .hljs-*` (lowlight / highlight.js) |
-| Horizontal rule     | `.rte-static-renderer hr`                                    |
-| Links               | `.rte-static-renderer a`                                     |
-| Images              | `.rte-static-renderer img`                                   |
-| Tables              | `.rte-static-renderer table`, `th`, `td`, `.tableWrapper`    |
-| Task lists          | `.rte-static-renderer ul[data-type="taskList"]`              |
-| Embeds (toolbar)    | `.rte-static-renderer div[data-type="youtube" / "twitter"]`  |
+| Content                                                                                  | Selector                                                     |
+| ---------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Headings, paragraphs, lists, blockquotes, code, rules, links, images, tables, task lists | `.editorcn-content[data-preset="block"] h1`, `p`, `ul`, ...  |
+| Syntax highlighting                                                                      | `.rte-static-renderer pre .hljs-*` (lowlight / highlight.js) |
+| Callouts                                                                                 | `.rte-static-renderer div[data-type="callout"]`              |
+| Toggles                                                                                  | `.rte-static-renderer details`                               |
+| Embeds (toolbar)                                                                         | `.rte-static-renderer div[data-type="youtube" / "twitter"]`  |
 
 YouTube and Twitter embeds are serialized as empty `<div>`s carrying
 `data-type`, `data-src` / `data-tweet-id` attributes, which render as 16:9
@@ -352,7 +345,7 @@ placeholder cards. To show the live media in JSON mode, provide a
 
 ### Scoping overrides
 
-Wrap the renderer in a container and scope your overrides:
+Wrap the renderer in a container and scope your overrides. Include `.editorcn-content` in content selectors so they're more specific than the preset:
 
 ```css
 .my-post {
@@ -360,14 +353,14 @@ Wrap the renderer in a container and scope your overrides:
   --primary: oklch(0.7 0.25 150);
 }
 
-.my-post .rte-static-renderer p {
+.my-post .editorcn-content p {
   line-height: 1.8;
 }
 ```
 
 ## Without the component
 
-Prefer plain HTML? Add the `rte-static-renderer` class yourself, and run
+Prefer plain HTML? Add the `rte-static-renderer` and `editorcn-content` classes and a `data-preset` attribute yourself, and run
 user-written HTML through `sanitizeHtml` first:
 
 ```tsx
@@ -376,7 +369,8 @@ import { sanitizeHtml } from "@editorcn/static-renderer";
 function RenderContent({ html }: { html: string }) {
   return (
     <div
-      className="rte-static-renderer"
+      className="rte-static-renderer editorcn-content"
+      data-preset="block"
       dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
     />
   );
