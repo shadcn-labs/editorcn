@@ -54,7 +54,7 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
       options={{ offset: 8, placement: "top" }}
       shouldShow={shouldShow}
     >
-      <div className="rte-bubble-menu flex h-10 animate-[rte-bubble-pop-in_180ms_ease-out_forwards] items-center rounded-lg border border-[color-mix(in_srgb,var(--border)_60%,transparent)] bg-popover px-1 text-popover-foreground shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)]">
+      <div className="rte-bubble-menu flex h-10 animate-rte-bubble-pop-in items-center rounded-lg border border-[color-mix(in_srgb,var(--border)_60%,transparent)] bg-popover px-1 text-popover-foreground shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)]">
         {hasText && <TextButtons editor={editor} />}
         {hasText && hasColor && <RteSeparator />}
         {hasColor && <ColorSelector editor={editor} />}

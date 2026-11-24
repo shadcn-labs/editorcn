@@ -474,9 +474,11 @@ Import the editor CSS **after** your shadcn globals so variables are defined:
 @import "@editorcn/block-editor/style.css";
 ```
 
-With npm installs, also add each editor package to Tailwind's sources, as described in [Getting Started](/docs/getting-started):
+With npm installs, also import each editor package's theme and add the package to Tailwind's sources, in the CSS file that imports `tailwindcss`, as described in [Getting Started](/docs/getting-started):
 
 ```css
+@import "@editorcn/editor/theme.css";
+@import "@editorcn/block-editor/theme.css";
 @source "../node_modules/@editorcn/editor/dist";
 @source "../node_modules/@editorcn/block-editor/dist";
 ```

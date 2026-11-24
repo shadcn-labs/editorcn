@@ -1,0 +1,39 @@
+@theme {
+  --animate-block-editor-bubble-pop-in: block-editor-bubble-pop-in 0.25s
+    cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  --animate-block-editor-slide-in: block-editor-slide-in 0.15s
+    cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-block-editor-fade-in: block-editor-fade-in linear both;
+  --animate-block-editor-fade-out: block-editor-fade-in linear reverse both;
+
+  @keyframes block-editor-bubble-pop-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.98) translateY(6px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes block-editor-slide-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes block-editor-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}

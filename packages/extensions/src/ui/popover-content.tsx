@@ -13,7 +13,7 @@ const PopoverContent = React.forwardRef<HTMLDivElement, PopoverContentProps>(
       <div
         ref={ref}
         className={cn(
-          "ext-popover-content relative animate-[ext-pop-in_0.18s_cubic-bezier(0.22,1,0.36,1)_forwards] rounded-lg border border-border bg-popover text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.15)]",
+          "ext-popover-content relative animate-ext-pop-in rounded-lg border border-border bg-popover text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.15)]",
           className
         )}
         {...handlers}

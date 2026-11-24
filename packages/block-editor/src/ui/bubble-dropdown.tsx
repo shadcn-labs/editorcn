@@ -62,7 +62,7 @@ const BubbleDropdown = React.forwardRef<HTMLDivElement, BubbleDropdownProps>(
     );
 
     const cls = cn(
-      "block-editor-bubble-dropdown absolute top-full left-0 z-1000 mt-1 min-w-[150px] origin-top-left animate-[bubble-pop-in_0.25s_cubic-bezier(0.22,1,0.36,1)_forwards] rounded-lg border border-border bg-popover p-1 shadow-[0_8px_24px_rgba(0,0,0,0.15)]",
+      "block-editor-bubble-dropdown absolute top-full left-0 z-1000 mt-1 min-w-[150px] origin-top-left animate-block-editor-bubble-pop-in rounded-lg border border-border bg-popover p-1 shadow-[0_8px_24px_rgba(0,0,0,0.15)]",
       alignClass[align],
       className
     );

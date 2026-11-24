@@ -111,7 +111,7 @@ const TooltipButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
         />
         {content(
           <div
-            className="ext-tooltip pointer-events-none animate-[ext-pop-in_0.12s_ease-out_forwards] rounded-none bg-foreground px-3 py-1.5 text-xs whitespace-nowrap text-background"
+            className="ext-tooltip pointer-events-none animate-ext-tooltip-in rounded-none bg-foreground px-3 py-1.5 text-xs whitespace-nowrap text-background"
             role="tooltip"
           >
             {tooltip}

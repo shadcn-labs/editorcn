@@ -169,7 +169,7 @@ const LanguageMenu = ({
   };
 
   return (
-    <div className="ext-code-block-languages w-60 animate-[ext-pop-in_0.18s_cubic-bezier(0.22,1,0.36,1)_forwards] rounded-lg border border-border bg-popover px-1 pt-0 pb-1 text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.15)]">
+    <div className="ext-code-block-languages w-60 animate-ext-pop-in rounded-lg border border-border bg-popover px-1 pt-0 pb-1 text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.15)]">
       <SearchInput
         ref={inputRef}
         placeholder="Search for a language..."

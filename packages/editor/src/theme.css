@@ -1,0 +1,43 @@
+@property --rte-toolbar-fade-start {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --rte-toolbar-fade-end {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@theme {
+  --animate-rte-bubble-pop-in: rte-bubble-pop-in 180ms ease-out forwards;
+  --animate-rte-toolbar-fade: rte-toolbar-fade linear both;
+
+  @keyframes rte-bubble-pop-in {
+    0% {
+      opacity: 0;
+      transform: scale(0.98) translateY(4px);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes rte-toolbar-fade {
+    from {
+      --rte-toolbar-fade-start: 0px;
+      --rte-toolbar-fade-end: 1.5rem;
+    }
+    10%,
+    90% {
+      --rte-toolbar-fade-start: 1.5rem;
+      --rte-toolbar-fade-end: 1.5rem;
+    }
+    to {
+      --rte-toolbar-fade-start: 1.5rem;
+      --rte-toolbar-fade-end: 0px;
+    }
+  }
+}

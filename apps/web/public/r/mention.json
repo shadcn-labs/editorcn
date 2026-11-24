@@ -73,7 +73,7 @@
       "type": "registry:style"
     },
     {
-      "content": "import * as React from \"react\";\n\nimport { useDropdownPill } from \"./dropdown-pill\";\nimport { cn } from \"./utils\";\n\nexport interface DropdownMenuContentProps extends React.HTMLAttributes<HTMLDivElement> {\n  activeItem?: HTMLElement | null;\n}\n\nconst DropdownMenuContent = React.forwardRef<\n  HTMLDivElement,\n  DropdownMenuContentProps\n>(({ activeItem, className, onMouseLeave, ...props }, ref) => {\n  const { handlers, pill } = useDropdownPill(onMouseLeave, activeItem);\n\n  return (\n    <div\n      ref={ref}\n      role=\"menu\"\n      className={cn(\n        \"ext-dropdown-content relative min-w-40 animate-[ext-pop-in_0.18s_cubic-bezier(0.22,1,0.36,1)_forwards] rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.15)]\",\n        className\n      )}\n      {...handlers}\n      {...props}\n    >\n      {pill}\n      {props.children}\n    </div>\n  );\n});\nDropdownMenuContent.displayName = \"DropdownMenuContent\";\n\nexport { DropdownMenuContent };\n",
+      "content": "import * as React from \"react\";\n\nimport { useDropdownPill } from \"./dropdown-pill\";\nimport { cn } from \"./utils\";\n\nexport interface DropdownMenuContentProps extends React.HTMLAttributes<HTMLDivElement> {\n  activeItem?: HTMLElement | null;\n}\n\nconst DropdownMenuContent = React.forwardRef<\n  HTMLDivElement,\n  DropdownMenuContentProps\n>(({ activeItem, className, onMouseLeave, ...props }, ref) => {\n  const { handlers, pill } = useDropdownPill(onMouseLeave, activeItem);\n\n  return (\n    <div\n      ref={ref}\n      role=\"menu\"\n      className={cn(\n        \"ext-dropdown-content relative min-w-40 animate-ext-pop-in rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.15)]\",\n        className\n      )}\n      {...handlers}\n      {...props}\n    >\n      {pill}\n      {props.children}\n    </div>\n  );\n});\nDropdownMenuContent.displayName = \"DropdownMenuContent\";\n\nexport { DropdownMenuContent };\n",
       "path": "extensions/ui/dropdown-content.tsx",
       "target": "@components/extensions/ui/dropdown-content.tsx",
       "type": "registry:component"
@@ -91,12 +91,6 @@
       "type": "registry:component"
     },
     {
-      "content": "@keyframes ext-pop-in {\n  from {\n    opacity: 0;\n    translate: 0 0.25rem;\n    scale: 0.95;\n  }\n  to {\n    opacity: 1;\n    translate: 0 0;\n    scale: 1;\n  }\n}\n",
-      "path": "extensions/ui/style.css",
-      "target": "@components/extensions/ui/style.css",
-      "type": "registry:style"
-    },
-    {
       "content": "import { clsx } from \"clsx\";\nimport type { ClassValue } from \"clsx\";\nimport { twMerge } from \"tailwind-merge\";\n\nexport const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));\n",
       "path": "extensions/ui/utils.ts",
       "target": "@components/extensions/ui/utils.ts",
@@ -105,5 +99,25 @@
   ],
   "name": "mention",
   "title": "Mention",
-  "type": "registry:component"
+  "type": "registry:component",
+  "cssVars": {
+    "theme": {
+      "animate-ext-pop-in": "ext-pop-in 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards",
+      "animate-ext-tooltip-in": "ext-pop-in 0.12s ease-out forwards"
+    }
+  },
+  "css": {
+    "@keyframes ext-pop-in": {
+      "from": {
+        "opacity": "0",
+        "translate": "0 0.25rem",
+        "scale": "0.95"
+      },
+      "to": {
+        "opacity": "1",
+        "translate": "0 0",
+        "scale": "1"
+      }
+    }
+  }
 }

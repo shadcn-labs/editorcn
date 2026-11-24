@@ -14,13 +14,14 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     },
-    "./style.css": "./dist/style.css"
+    "./style.css": "./dist/style.css",
+    "./theme.css": "./dist/theme.css"
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsup && node ../../scripts/inline-css.ts src/style.css dist/style.css",
+    "build": "tsup && node ../../scripts/inline-css.ts src/style.css dist/style.css && node ../../scripts/inline-css.ts src/theme.css dist/theme.css",
     "dev": "tsup --watch",
     "typecheck": "tsc --noEmit",
     "prepublishOnly": "pnpm build"

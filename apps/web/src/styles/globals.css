@@ -1,15 +1,9 @@
 @import "@editorcn/ui/globals.css";
+@import "../../../../packages/editor/src/theme.css";
+@import "../../../../packages/block-editor/src/theme.css";
+@import "../../../../packages/extensions/src/ui/theme.css";
+@import "../../../../packages/extensions/src/table/theme.css";
 
-/*
- * Tailwind scans apps/web by default, but the site imports the workspace
- * packages from source, so scan them too. These paths live here, not in
- * the ui package's globals.css, because the app reaches that file through
- * node_modules/@editorcn/ui, and paths relative to it point into
- * node_modules, which Tailwind doesn't scan.
- *
- * The generated registry (public/r) holds copies of the same source.
- * Skip it so the site's CSS doesn't depend on `build:registry` having run.
- */
 @source "../../../../packages/editor/src";
 @source "../../../../packages/block-editor/src";
 @source "../../../../packages/extensions/src";

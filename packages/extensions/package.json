@@ -24,8 +24,9 @@
     "./table-toolbar": "./src/table/toolbar.tsx",
     "./ui": "./src/ui/index.ts",
     "./ui/*": "./src/ui/*",
-    "./ui/style.css": "./src/ui/style.css",
+    "./ui/theme.css": "./src/ui/theme.css",
     "./table/style.css": "./src/table/style.css",
+    "./table/theme.css": "./src/table/theme.css",
     "./toggle": "./src/toggle/index.ts",
     "./toggle/style.css": "./src/toggle/style.css"
   },

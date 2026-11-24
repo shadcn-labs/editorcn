@@ -436,7 +436,7 @@ export const ResizableNodeView = ({
 
         {selected && isEditable && (
           <div
-            className="rte-embed-selector pointer-events-auto absolute top-[-46px] left-1/2 z-50 flex h-10 animate-[rte-bubble-pop-in_180ms_ease-out_forwards] items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--border)_60%,transparent)] bg-popover px-1 whitespace-nowrap shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)] [transform:translateX(-50%)]"
+            className="rte-embed-selector pointer-events-auto absolute top-[-46px] left-1/2 z-50 flex h-10 animate-rte-bubble-pop-in items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--border)_60%,transparent)] bg-popover px-1 whitespace-nowrap shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)] [transform:translateX(-50%)]"
             contentEditable={false}
           >
             <EmbedToolbar

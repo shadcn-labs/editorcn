@@ -43,7 +43,6 @@ import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/mention/style.css";
 import "@editorcn/extensions/table/style.css";
 import "@editorcn/extensions/toggle/style.css";
-import "@editorcn/extensions/ui/style.css";
 
 export interface FullBlockEditorProps {
   className?: string;
