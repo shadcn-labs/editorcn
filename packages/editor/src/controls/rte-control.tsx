@@ -59,7 +59,10 @@ export const RichTextEditorControl = ({
       pressed={active}
       disabled={disabled}
       aria-label={props["aria-label"]}
-      className={cn("rte-control-button", className)}
+      className={cn(
+        "rte-control-button inline-flex h-8 min-w-8 items-center justify-center rounded-md p-0 transition-[background-color,color,scale] duration-[150ms,150ms,100ms] ease-[ease-out] active:scale-96",
+        className
+      )}
       onMouseDown={(e) => {
         e.preventDefault();
         onMouseDown?.(e);

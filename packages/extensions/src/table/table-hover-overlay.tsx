@@ -70,6 +70,21 @@ const ADD_SIZE = 20;
 /** Gap between the table edge and an add handle. */
 const ADD_GAP = 6;
 
+const CONTROL_CLASS =
+  "ext-table-control pointer-events-auto absolute z-2 animate-ext-table-pop-in";
+
+const GRIP_CLASS =
+  "ext-table-grip group/grip relative flex size-[1.1rem] cursor-pointer touch-none items-center justify-center rounded-sm border border-transparent bg-transparent p-0 text-muted-foreground shadow-none [transition:background-color_150ms_ease-out,border-color_150ms_ease-out,box-shadow_150ms_ease-out,color_150ms_ease-out] before:absolute before:-inset-[0.35rem] before:rounded-md before:content-[''] hover:border-border hover:bg-popover hover:text-foreground hover:shadow-[0_1px_2px_rgba(0,0,0,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring focus-visible:outline-solid active:scale-92 data-[state=open]:border-border data-[state=open]:bg-popover data-[state=open]:text-foreground data-[state=open]:shadow-[0_1px_2px_rgba(0,0,0,0.08)]";
+
+const GRIP_ICON_CLASS =
+  "absolute inset-0 m-auto size-3 shrink-0 scale-60 opacity-0 [transition:opacity_150ms_ease-out,scale_150ms_cubic-bezier(0.34,1.56,0.64,1)] group-hover/grip:scale-100 group-hover/grip:opacity-100 group-focus-visible/grip:scale-100 group-focus-visible/grip:opacity-100 group-data-[state=open]/grip:scale-100 group-data-[state=open]/grip:opacity-100";
+
+const GRIP_STROKE_CLASS =
+  "ext-table-grip-stroke pointer-events-none absolute inset-0 m-auto rounded-[1px] bg-muted-foreground opacity-60 [transition:opacity_150ms_ease-out] group-hover/grip:opacity-0 group-data-[state=open]/grip:opacity-0";
+
+const ADD_CLASS =
+  "ext-table-add pointer-events-auto absolute flex animate-ext-table-pop-in items-center justify-center rounded-sm border border-border bg-popover p-0 text-popover-foreground [transition:background-color_100ms_ease-out,color_100ms_ease-out,scale_100ms_ease-out] hover:bg-accent hover:text-accent-foreground active:scale-95 [&>svg]:size-3.5 [&>svg]:shrink-0";
+
 const toBox = (
   left: number,
   top: number,
@@ -262,7 +277,7 @@ const ColumnControl = ({
   top,
 }: ColumnControlProps) => (
   <div
-    className="ext-table-control ext-table-control--column"
+    className={`${CONTROL_CLASS} ext-table-control--column origin-top`}
     style={{
       left: colCenter,
       top,
@@ -277,14 +292,14 @@ const ColumnControl = ({
         <button
           type="button"
           aria-label={labels.columnActions}
-          className="ext-table-grip"
+          className={GRIP_CLASS}
           data-state={menuOpen ? "open" : "closed"}
         >
           <span
-            className="ext-table-grip-stroke ext-table-grip-stroke--column"
+            className={`${GRIP_STROKE_CLASS} ext-table-grip-stroke--column h-[3px] w-[14px]`}
             aria-hidden
           />
-          <MoreHorizontal />
+          <MoreHorizontal className={GRIP_ICON_CLASS} />
         </button>
       }
     >
@@ -332,7 +347,7 @@ const RowControl = ({
   runRowOp,
 }: RowControlProps) => (
   <div
-    className="ext-table-control ext-table-control--row"
+    className={`${CONTROL_CLASS} ext-table-control--row origin-left`}
     style={{
       left,
       top: rowCenter,
@@ -347,14 +362,14 @@ const RowControl = ({
         <button
           type="button"
           aria-label={labels.rowActions}
-          className="ext-table-grip ext-table-grip--row"
+          className={`${GRIP_CLASS} ext-table-grip--row`}
           data-state={menuOpen ? "open" : "closed"}
         >
           <span
-            className="ext-table-grip-stroke ext-table-grip-stroke--row"
+            className={`${GRIP_STROKE_CLASS} ext-table-grip-stroke--row h-[14px] w-[3px]`}
             aria-hidden
           />
-          <MoreVertical />
+          <MoreVertical className={`${GRIP_ICON_CLASS} rotate-90`} />
         </button>
       }
     >
@@ -399,7 +414,7 @@ const AddHandles = ({
       <button
         type="button"
         aria-label={labels.addColumnRight}
-        className="ext-table-add"
+        className={ADD_CLASS}
         style={{
           cursor: "col-resize",
           height: tableRect.height,
@@ -423,7 +438,7 @@ const AddHandles = ({
       <button
         type="button"
         aria-label={labels.addRowBelow}
-        className="ext-table-add"
+        className={ADD_CLASS}
         style={{
           cursor: "row-resize",
           height: ADD_SIZE,
@@ -744,10 +759,13 @@ export const TableHoverOverlay = ({
   }
 
   return (
-    <div ref={anchorRef} className="ext-table-overlay">
+    <div
+      ref={anchorRef}
+      className="ext-table-overlay absolute top-0 left-0 size-0 overflow-visible"
+    >
       {layout ? (
         <div
-          className="ext-table-clip"
+          className="ext-table-clip pointer-events-none absolute overflow-hidden"
           style={{
             height: layout.visible.height,
             left: layout.offset.left,

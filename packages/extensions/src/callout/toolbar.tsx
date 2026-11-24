@@ -78,7 +78,8 @@ export const CalloutToolbar = ({
         <Button
           aria-label={labels.callout}
           active={Boolean(state.variant)}
-          className={["ext-btn--icon-sm", className].filter(Boolean).join(" ")}
+          className={className}
+          size="icon-sm"
           disabled={disabled}
           tooltip={labels.callout}
         >

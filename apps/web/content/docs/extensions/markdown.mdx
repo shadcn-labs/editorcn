@@ -24,9 +24,9 @@ Default nodes and marks, GFM tables, task lists, images, and the editorcn [Menti
 npx shadcn@latest add "https://www.rtecn.space/r/markdown.json"
 ```
 
-This installs `extensions/markdown` with its toolbar, `extensions/core/`, `extensions/ui/`, the style at `extensions/ui/style.css`, and the `@tiptap/markdown` package.
+This installs `extensions/markdown` with its toolbar, `extensions/core/`, `extensions/ui/`, the menu animations (added to the CSS file that imports `tailwindcss`), and the `@tiptap/markdown` package.
 
-To install the files manually instead, install these packages and copy the `markdown`, `core`, and `ui` folders from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src):
+To install the files manually instead, install these packages and copy the `markdown`, `core`, and `ui` folders from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src). Copy the `@theme` block from `ui/theme.css` into the CSS file that imports `tailwindcss`, so the menus animate:
 
 ```bash
 npm install @tiptap/core @tiptap/react @tiptap/pm @tiptap/markdown lucide-react
@@ -104,8 +104,6 @@ The button is disabled when the `Markdown` extension isn't added to the editor.
 
 ```tsx
 import { MarkdownToolbar } from "@/components/extensions/markdown/toolbar";
-
-import "@/components/extensions/ui/style.css";
 
 <RichTextEditor.Toolbar>
   <RichTextEditor.ControlsGroup>

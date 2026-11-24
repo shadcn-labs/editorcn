@@ -185,6 +185,42 @@ const checkImports = (
   }
 };
 
+const ownAnimation = /\banimate-((?:rte|block-editor|ext)-[a-z0-9-]+)/g;
+
+const checkAnimations = (
+  file: string,
+  item: RegistryItem,
+  items: Map<string, RegistryItem>,
+  errors: string[]
+) => {
+  const provided = new Set(
+    [
+      item,
+      ...(item.registryDependencies ?? []).flatMap((dependency) => {
+        const target = items.get(registryItemUrl.exec(dependency)?.[1] ?? "");
+        return target ? [target] : [];
+      }),
+    ].flatMap((entry) => Object.keys(entry.cssVars?.theme ?? {}))
+  );
+  for (const entry of item.files) {
+    const used = new Set(
+      [...entry.content.matchAll(ownAnimation)].map((match) => match[1])
+    );
+    for (const name of used) {
+      if (!provided.has(`animate-${name}`)) {
+        errors.push(
+          `${file}: ${entry.path} uses animate-${name}, but neither this item nor its registry dependencies define --animate-${name}`
+        );
+      }
+    }
+  }
+  for (const key of Object.keys(item.css ?? {})) {
+    if (!/^@(keyframes|property) /.test(key)) {
+      errors.push(`${file}: unexpected css rule "${key}"`);
+    }
+  }
+};
+
 const checkCatalog = (
   outDir: string,
   items: Map<string, RegistryItem>,
@@ -257,6 +293,7 @@ export const verify = (outDir: string, overlays: Map<string, string>) => {
   }
   for (const [name, item] of items) {
     checkImports(`${name}.json`, item, items, overlays, errors);
+    checkAnimations(`${name}.json`, item, items, errors);
   }
   checkCatalog(outDir, items, errors);
   checkBases(outDir, errors);

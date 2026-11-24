@@ -42,6 +42,11 @@ const compareRegistryDependencies = (a: string, b: string) =>
 const sortFiles = <T extends { path: string }>(files: T[]) =>
   files.toSorted((a, b) => comparePaths(a.path, b.path));
 
+const sortKeys = <T>(record: Record<string, T>) =>
+  Object.fromEntries(
+    Object.entries(record).toSorted(([a], [b]) => compareStrings(a, b))
+  );
+
 export const registryItem = (item: BuiltItem): RegistryItem => {
   const output: RegistryItem = {
     $schema: "https://ui.shadcn.com/schema/registry-item.json",
@@ -61,6 +66,12 @@ export const registryItem = (item: BuiltItem): RegistryItem => {
     output.registryDependencies = item.registryDependencies.toSorted(
       compareRegistryDependencies
     );
+  }
+  if (Object.keys(item.theme.theme).length > 0) {
+    output.cssVars = { theme: sortKeys(item.theme.theme) };
+  }
+  if (Object.keys(item.theme.css).length > 0) {
+    output.css = sortKeys(item.theme.css);
   }
   return output;
 };

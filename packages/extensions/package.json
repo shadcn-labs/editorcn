@@ -24,8 +24,9 @@
     "./table-toolbar": "./src/table/toolbar.tsx",
     "./ui": "./src/ui/index.ts",
     "./ui/*": "./src/ui/*",
-    "./ui/style.css": "./src/ui/style.css",
+    "./ui/theme.css": "./src/ui/theme.css",
     "./table/style.css": "./src/table/style.css",
+    "./table/theme.css": "./src/table/theme.css",
     "./toggle": "./src/toggle/index.ts",
     "./toggle/style.css": "./src/toggle/style.css"
   },
@@ -36,7 +37,9 @@
   "dependencies": {
     "@tiptap/extension-details": "^3.33.0",
     "@tiptap/extension-gapcursor": "^3.30.0",
-    "lucide-react": "catalog:"
+    "clsx": "^2.1.1",
+    "lucide-react": "catalog:",
+    "tailwind-merge": "^3.0.0"
   },
   "devDependencies": {
     "@editorcn/config": "workspace:*",

@@ -1,12 +1,17 @@
 import * as React from "react";
 
+import { cn } from "./utils";
+
 export type RteIconProps = React.HTMLAttributes<HTMLSpanElement>;
 
 const RteIcon = React.forwardRef<HTMLSpanElement, RteIconProps>(
-  ({ className = "", ...props }, ref) => (
+  ({ className, ...props }, ref) => (
     <span
       ref={ref}
-      className={`rte-bubble-btn-icon ${className}`.trim()}
+      className={cn(
+        "rte-bubble-btn-icon flex size-4 shrink-0 items-center justify-center [&_svg]:size-full",
+        className
+      )}
       {...props}
     />
   )

@@ -16,7 +16,7 @@ Items come from an `items` function that can be sync or async. Async calls are d
 npx shadcn@latest add "https://www.rtecn.space/r/mention.json"
 ```
 
-This installs `extensions/mention`, `extensions/core/`, `extensions/ui/`, the styles at `extensions/mention/style.css` and `extensions/ui/style.css`, and the `@tiptap/extension-mention` and `@tiptap/suggestion` packages.
+This installs `extensions/mention`, `extensions/core/`, `extensions/ui/`, the styles at `extensions/mention/style.css`, the menu animations (added to the CSS file that imports `tailwindcss`), and the `@tiptap/extension-mention` and `@tiptap/suggestion` packages.
 
 To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/mention):
 
@@ -37,7 +37,6 @@ import { Mention } from "@/components/extensions/mention";
 
 import "@/components/editor/style.css";
 import "@/components/extensions/mention/style.css";
-import "@/components/extensions/ui/style.css";
 
 export function MyEditor() {
   const editor = useEditor({

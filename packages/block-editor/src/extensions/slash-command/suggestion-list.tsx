@@ -153,15 +153,15 @@ const SuggestionList = forwardRef<SuggestionListHandle, SuggestionListProps>(
                 onClick={() => selectItem(i)}
                 onMouseEnter={() => setSelectedIndex(i)}
               >
-                <div className="block-editor-slash-menu-item-icon">
+                <div className="block-editor-slash-menu-item-icon flex size-4 shrink-0 items-center justify-center text-muted-foreground [transition:color_100ms_ease-out] [&_svg]:size-full">
                   {item.icon ?? DEFAULT_ICONS.fallbackIcon}
                 </div>
-                <div className="block-editor-slash-menu-item-content">
-                  <span className="block-editor-slash-menu-item-label">
+                <div className="block-editor-slash-menu-item-content flex min-w-0 flex-col gap-0.5">
+                  <span className="block-editor-slash-menu-item-label text-[0.8125rem] leading-tight font-medium">
                     {item.title}
                   </span>
                   {item.description && (
-                    <span className="block-editor-slash-menu-item-desc">
+                    <span className="block-editor-slash-menu-item-desc text-xs leading-tight text-muted-foreground">
                       {item.description}
                     </span>
                   )}
@@ -169,7 +169,7 @@ const SuggestionList = forwardRef<SuggestionListHandle, SuggestionListProps>(
               </SlashMenuItem>
             ))
           ) : (
-            <div className="block-editor-slash-menu-empty">
+            <div className="block-editor-slash-menu-empty px-2 py-6 text-center text-[0.8125rem] text-muted-foreground">
               No results for "{searchQuery}"
             </div>
           )}

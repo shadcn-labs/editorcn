@@ -6,6 +6,8 @@ import { isScript, resolveRelative, scanImports } from "./imports.ts";
 import { registryTypes } from "./types.ts";
 import type { Item, Meta, RegistryType, Source, SourceFile } from "./types.ts";
 
+export const themeFile = "theme.css";
+
 export const root = resolve(import.meta.dirname, "..", "..");
 
 export const readText = (path: string) =>
@@ -135,6 +137,7 @@ const iconVariants = (item: Item & { home: string; filesDir: string }) =>
         type: "registry:component",
       },
       source: {},
+      themeFiles: [],
     })
   );
 
@@ -186,22 +189,25 @@ const readItem = (source: Source, dir: string): Item[] => {
     excluded.some((pattern) => pattern.test(rel))
   );
   const home = `${source.prefix}${meta.name}`;
+  const files = [
+    ...ownFiles.map((path) => {
+      const rel = toPosix(relative(filesDir, path));
+      return {
+        path: `${home}/${rel}`,
+        source: path,
+        type: fileType(rel, meta),
+      };
+    }),
+    ...sharedFiles(source, ownFiles, meta.name),
+  ];
+  const isTheme = (file: SourceFile) => basename(file.source) === themeFile;
   const item = {
-    files: [
-      ...ownFiles.map((path) => {
-        const rel = toPosix(relative(filesDir, path));
-        return {
-          path: `${home}/${rel}`,
-          source: path,
-          type: fileType(rel, meta),
-        };
-      }),
-      ...sharedFiles(source, ownFiles, meta.name),
-    ],
+    files: files.filter((file) => !isTheme(file)),
     filesDir,
     home,
     meta,
     source,
+    themeFiles: files.filter(isTheme).map((file) => file.source),
   };
   return meta.iconSets ? [item, ...iconVariants(item)] : [item];
 };

@@ -71,7 +71,7 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
       options={{ offset: 8, placement: "top" }}
       shouldShow={shouldShow}
     >
-      <div className="block-editor-bubble-menu">
+      <div className="block-editor-bubble-menu flex h-9 animate-block-editor-bubble-pop-in items-center rounded-lg border border-border bg-popover px-1 shadow-[0_4px_16px_rgba(0,0,0,0.12)] [@media(hover:none)_and_(pointer:coarse)]:hidden">
         {sections.map((section, index) => (
           <Fragment key={section.id}>
             {index > 0 && <BubbleSeparator />}

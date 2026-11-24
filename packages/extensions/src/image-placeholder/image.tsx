@@ -26,6 +26,12 @@ import { DropdownMenu } from "../ui/dropdown-menu";
 import { DropdownMenuSeparator } from "../ui/dropdown-separator";
 import { Separator } from "../ui/separator";
 
+const RESIZE_CLASS =
+  "ext-image-resize absolute inset-y-0 z-20 flex w-4 cursor-col-resize touch-none items-center";
+
+const RESIZE_BAR_CLASS =
+  "ext-image-resize-bar h-16 w-1 rounded-full bg-foreground/30 opacity-0 [transition:opacity_150ms_ease-out] group-hover/image:opacity-100 group-[.ext-image-view--resizing]/image:opacity-100";
+
 const ResizableImageNode = ({
   node,
   editor,
@@ -170,7 +176,7 @@ const ResizableImageNode = ({
   };
 
   const viewClass = [
-    "ext-image-view",
+    "ext-image-view group/image",
     node.attrs.align === "left" ? "ext-image-view--left" : "",
     node.attrs.align === "center" ? "ext-image-view--center" : "",
     node.attrs.align === "right" ? "ext-image-view--right" : "",
@@ -203,18 +209,18 @@ const ResizableImageNode = ({
         {editor?.isEditable && (
           <>
             <div
-              className="ext-image-resize ext-image-resize--left"
+              className={`${RESIZE_CLASS} ext-image-resize--left left-0 justify-start`}
               onMouseDown={handleMouseDown("left")}
               onTouchStart={handleTouchStart("left")}
             >
-              <div className="ext-image-resize-bar" />
+              <div className={RESIZE_BAR_CLASS} />
             </div>
             <div
-              className="ext-image-resize ext-image-resize--right"
+              className={`${RESIZE_CLASS} ext-image-resize--right right-0 justify-end`}
               onMouseDown={handleMouseDown("right")}
               onTouchStart={handleTouchStart("right")}
             >
-              <div className="ext-image-resize-bar" />
+              <div className={RESIZE_BAR_CLASS} />
             </div>
           </>
         )}
@@ -226,7 +232,7 @@ const ResizableImageNode = ({
         !resizing &&
         createPortal(
           <div
-            className="ext-image-actions ext-image-actions--floating"
+            className="ext-image-actions ext-image-actions--floating fixed z-60 mt-0 flex items-center gap-1 rounded-lg border border-border bg-popover p-1 text-popover-foreground opacity-100 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
             style={{
               right: window.innerWidth - actionBarRect.right,
               top: actionBarRect.top,
@@ -236,6 +242,7 @@ const ResizableImageNode = ({
               active={node.attrs.align === "left"}
               aria-label="Align left"
               className="ext-image-action-btn"
+              size="icon-sm"
               onClick={() => updateAttributes({ align: "left" })}
             >
               <AlignLeft />
@@ -244,6 +251,7 @@ const ResizableImageNode = ({
               active={node.attrs.align === "center"}
               aria-label="Align center"
               className="ext-image-action-btn"
+              size="icon-sm"
               onClick={() => updateAttributes({ align: "center" })}
             >
               <AlignCenter />
@@ -252,6 +260,7 @@ const ResizableImageNode = ({
               active={node.attrs.align === "right"}
               aria-label="Align right"
               className="ext-image-action-btn"
+              size="icon-sm"
               onClick={() => updateAttributes({ align: "right" })}
             >
               <AlignRight />
@@ -264,6 +273,7 @@ const ResizableImageNode = ({
                 <Button
                   aria-label="Image options"
                   className="ext-image-action-btn"
+                  size="icon-sm"
                 >
                   <MoreHorizontal />
                 </Button>

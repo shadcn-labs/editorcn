@@ -20,9 +20,9 @@ The Callout extension adds highlighted boxes for notes, tips, and warnings. A ca
 npx shadcn@latest add "https://www.rtecn.space/r/callout.json"
 ```
 
-This installs `extensions/callout`, `extensions/core/`, `extensions/ui/`, and the styles at `extensions/callout/style.css` and `extensions/ui/style.css`.
+This installs `extensions/callout`, `extensions/core/`, `extensions/ui/`, the styles at `extensions/callout/style.css`, and the menu animations (added to the CSS file that imports `tailwindcss`).
 
-To install the files manually instead, install these packages and copy the `callout` and `core` folders from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src) into `extensions/`, plus `button.tsx`, `dropdown-menu.tsx`, `dropdown-content.tsx`, `dropdown-item.tsx`, `dropdown-separator.tsx`, `dropdown-pill.tsx`, `popover.tsx`, `use-floating.tsx`, and `style.css` from [`extensions/ui`](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src/ui):
+To install the files manually instead, install these packages and copy the `callout` and `core` folders from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src) into `extensions/`, plus `button.tsx`, `dropdown-menu.tsx`, `dropdown-content.tsx`, `dropdown-item.tsx`, `dropdown-separator.tsx`, `dropdown-pill.tsx`, `popover.tsx` and `use-floating.tsx` from [`extensions/ui`](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src/ui). Copy the `@theme` block from its `theme.css` into the CSS file that imports `tailwindcss`, so the menus animate:
 
 ```bash
 npm install @tiptap/core @tiptap/react @tiptap/pm @tiptap/starter-kit lucide-react
@@ -44,7 +44,6 @@ import { CalloutToolbar } from "@/components/extensions/callout/toolbar";
 
 import "@/components/editor/style.css";
 import "@/components/extensions/callout/style.css";
-import "@/components/extensions/ui/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
@@ -89,7 +88,6 @@ import { Callout } from "@/components/extensions/callout";
 
 import "@/components/block-editor/style.css";
 import "@/components/extensions/callout/style.css";
-import "@/components/extensions/ui/style.css";
 
 const items: SlashCommandSuggestionItem[] = [
   ...defaultSlashCommandItems,
