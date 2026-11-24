@@ -2,7 +2,7 @@
 
 import { Keyboard } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import {
   Popover,
@@ -19,15 +19,15 @@ export const ShortcutsPopover = () => {
     : "Ctrl";
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          className="text-muted-foreground h-6 gap-1.5 px-2 text-xs"
-          size="sm"
-          variant="ghost"
-        >
-          <Keyboard className="size-3.5" />
-          Shortcuts
-        </Button>
+      <PopoverTrigger
+        className={buttonVariants({
+          className: "text-muted-foreground h-6 gap-1.5 px-2 text-xs",
+          size: "sm",
+          variant: "ghost",
+        })}
+      >
+        <Keyboard className="size-3.5" />
+        Shortcuts
       </PopoverTrigger>
       <PopoverContent
         align="end"

@@ -18,7 +18,7 @@ import {
   Table as TableIcon,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -55,15 +55,15 @@ const TextStyleMenu = ({
 }) => (
   <DropdownMenu>
     <RichTextEditor.Tooltip label="Text style">
-      <DropdownMenuTrigger asChild>
-        <Button
-          className="h-8 w-[6.5rem] justify-between px-2 text-[13px]"
-          size="sm"
-          variant="ghost"
-        >
-          {TEXT_STYLES.find((s) => s.value === value)?.label}
-          <ChevronDown className="text-muted-foreground size-3.5" />
-        </Button>
+      <DropdownMenuTrigger
+        className={buttonVariants({
+          className: "h-8 w-[6.5rem] justify-between px-2 text-[13px]",
+          size: "sm",
+          variant: "ghost",
+        })}
+      >
+        {TEXT_STYLES.find((s) => s.value === value)?.label}
+        <ChevronDown className="text-muted-foreground size-3.5" />
       </DropdownMenuTrigger>
     </RichTextEditor.Tooltip>
     <DropdownMenuContent align="start" className="min-w-32 p-1">
@@ -101,16 +101,16 @@ const AlignMenu = ({
   return (
     <DropdownMenu>
       <RichTextEditor.Tooltip label="Text alignment">
-        <DropdownMenuTrigger asChild>
-          <Button
-            aria-label="Text alignment"
-            className="text-muted-foreground h-8 gap-0.5 px-1.5"
-            size="sm"
-            variant="ghost"
-          >
-            <Icon />
-            <ChevronDown className="size-3!" />
-          </Button>
+        <DropdownMenuTrigger
+          aria-label="Text alignment"
+          className={buttonVariants({
+            className: "text-muted-foreground h-8 gap-0.5 px-1.5",
+            size: "sm",
+            variant: "ghost",
+          })}
+        >
+          <Icon />
+          <ChevronDown className="size-3!" />
         </DropdownMenuTrigger>
       </RichTextEditor.Tooltip>
       <DropdownMenuContent align="end" className="min-w-28 p-1">
@@ -142,18 +142,18 @@ const FontMenu = ({
 }) => (
   <DropdownMenu>
     <RichTextEditor.Tooltip label="Font">
-      <DropdownMenuTrigger asChild>
-        <Button
-          aria-label="Font"
-          className="h-8 w-[4.5rem] justify-between px-2 text-[13px]"
-          size="sm"
-          variant="ghost"
-        >
-          <span style={{ fontFamily: value || undefined }}>
-            {FONTS.find((f) => f.value === value)?.label ?? "Sans"}
-          </span>
-          <ChevronDown className="text-muted-foreground size-3.5" />
-        </Button>
+      <DropdownMenuTrigger
+        aria-label="Font"
+        className={buttonVariants({
+          className: "h-8 w-[4.5rem] justify-between px-2 text-[13px]",
+          size: "sm",
+          variant: "ghost",
+        })}
+      >
+        <span style={{ fontFamily: value || undefined }}>
+          {FONTS.find((f) => f.value === value)?.label ?? "Sans"}
+        </span>
+        <ChevronDown className="text-muted-foreground size-3.5" />
       </DropdownMenuTrigger>
     </RichTextEditor.Tooltip>
     <DropdownMenuContent align="start" className="min-w-28 p-1">
@@ -218,19 +218,19 @@ const ColorMenu = ({
 }) => (
   <Popover>
     <RichTextEditor.Tooltip label="Text color">
-      <PopoverTrigger asChild>
-        <Button
-          aria-label="Text color"
-          className="h-8 flex-col gap-0 px-1.5"
-          size="sm"
-          variant="ghost"
-        >
-          <Baseline className="size-4" />
-          <span
-            className="-mt-0.5 h-1 w-4 rounded-full"
-            style={{ background: highlight ?? text ?? "currentColor" }}
-          />
-        </Button>
+      <PopoverTrigger
+        aria-label="Text color"
+        className={buttonVariants({
+          className: "h-8 flex-col gap-0 px-1.5",
+          size: "sm",
+          variant: "ghost",
+        })}
+      >
+        <Baseline className="size-4" />
+        <span
+          className="-mt-0.5 h-1 w-4 rounded-full"
+          style={{ background: highlight ?? text ?? "currentColor" }}
+        />
       </PopoverTrigger>
     </RichTextEditor.Tooltip>
     <PopoverContent align="start" className="w-auto space-y-3 p-3">
@@ -317,16 +317,16 @@ const InsertMenu = ({ editor }: { editor: Editor | null }) => {
   return (
     <DropdownMenu>
       <RichTextEditor.Tooltip label="Insert">
-        <DropdownMenuTrigger asChild>
-          <Button
-            className="h-8 gap-1 px-2 text-[13px]"
-            size="sm"
-            variant="ghost"
-          >
-            <Plus className="size-4" />
-            Insert
-            <ChevronDown className="text-muted-foreground size-3.5" />
-          </Button>
+        <DropdownMenuTrigger
+          className={buttonVariants({
+            className: "h-8 gap-1 px-2 text-[13px]",
+            size: "sm",
+            variant: "ghost",
+          })}
+        >
+          <Plus className="size-4" />
+          Insert
+          <ChevronDown className="text-muted-foreground size-3.5" />
         </DropdownMenuTrigger>
       </RichTextEditor.Tooltip>
       <DropdownMenuContent align="end" className="min-w-36 p-1">

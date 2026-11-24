@@ -9,7 +9,7 @@ import type { Editor } from "@tiptap/react";
 import { Copy, FileDown, FileUp, MoreHorizontal, Printer } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,7 +34,7 @@ export const Collaborators = ({
   <div className="flex -space-x-1.5">
     {people.map((person) => (
       <Tooltip key={person.name}>
-        <TooltipTrigger asChild>
+        <TooltipTrigger className="rounded-full">
           <Avatar className="ring-background size-6 ring-2">
             {person.src && <AvatarImage alt={person.name} src={person.src} />}
             <AvatarFallback className="text-[0.6rem] font-medium">
@@ -64,15 +64,15 @@ export const MoreMenu = ({
   title: string;
 }) => (
   <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button
-        aria-label="More options"
-        className="text-muted-foreground size-7"
-        size="icon-sm"
-        variant="ghost"
-      >
-        <MoreHorizontal />
-      </Button>
+    <DropdownMenuTrigger
+      aria-label="More options"
+      className={buttonVariants({
+        className: "text-muted-foreground size-7",
+        size: "icon-sm",
+        variant: "ghost",
+      })}
+    >
+      <MoreHorizontal />
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" className="min-w-44 p-1">
       <DropdownMenuItem
