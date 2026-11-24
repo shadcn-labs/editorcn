@@ -66,7 +66,7 @@ const RteDropdown = React.forwardRef<HTMLDivElement, RteDropdownProps>(
     );
 
     const cls = cn(
-      "rte-bubble-dropdown absolute top-full left-0 z-1000 mt-1.5 min-w-40 origin-top-left animate-[rte-bubble-pop-in_180ms_ease-out_forwards] rounded-lg border border-[color-mix(in_srgb,var(--border)_60%,transparent)] bg-popover p-1 text-popover-foreground shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)]",
+      "rte-bubble-dropdown absolute top-full left-0 z-1000 mt-1.5 min-w-40 origin-top-left animate-rte-bubble-pop-in rounded-lg border border-[color-mix(in_srgb,var(--border)_60%,transparent)] bg-popover p-1 text-popover-foreground shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)]",
       variantClass[variant],
       className
     );

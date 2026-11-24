@@ -37,34 +37,6 @@
   transition: opacity 150ms ease-out;
 }
 
-@property --rte-toolbar-fade-start {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0px;
-}
-
-@property --rte-toolbar-fade-end {
-  syntax: "<length>";
-  inherits: false;
-  initial-value: 0px;
-}
-
-@keyframes rte-toolbar-fade {
-  from {
-    --rte-toolbar-fade-start: 0px;
-    --rte-toolbar-fade-end: 1.5rem;
-  }
-  10%,
-  90% {
-    --rte-toolbar-fade-start: 1.5rem;
-    --rte-toolbar-fade-end: 1.5rem;
-  }
-  to {
-    --rte-toolbar-fade-start: 1.5rem;
-    --rte-toolbar-fade-end: 0px;
-  }
-}
-
 @keyframes checkmark-in {
   0% {
     transform: scale(0.8);
@@ -131,30 +103,6 @@
   padding: 2rem;
   text-align: center;
   color: var(--muted-foreground);
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.5;
-  }
-}
-
-/* ── Bubble Menu ── */
-
-@keyframes rte-bubble-pop-in {
-  0% {
-    opacity: 0;
-    transform: scale(0.98) translateY(4px);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-  }
 }
 
 /* ── Suppress transitions on theme switch ── */

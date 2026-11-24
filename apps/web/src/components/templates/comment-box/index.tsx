@@ -11,7 +11,6 @@ import { collectAuthors, createId, mapThread, toggleReaction } from "./utils";
 
 import "@editorcn/editor/style.css";
 import "@editorcn/extensions/mention/style.css";
-import "@editorcn/extensions/ui/style.css";
 import "@editorcn/static-renderer/style.css";
 
 export const CommentBox = ({

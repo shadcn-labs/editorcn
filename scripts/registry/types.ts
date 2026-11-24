@@ -52,8 +52,18 @@ export interface SourceFile {
   type: RegistryType;
 }
 
+export interface CssRules {
+  [key: string]: string | CssRules;
+}
+
+export interface ItemTheme {
+  css: Record<string, CssRules>;
+  theme: Record<string, string>;
+}
+
 export interface Item {
   files: SourceFile[];
+  themeFiles: string[];
   meta: Meta;
   source: Pick<Source, "dependencies">;
   filesDir?: string;
@@ -70,6 +80,7 @@ export interface BuiltItem extends Omit<Item, "files"> {
   files: BuiltFile[];
   dependencies: string[];
   registryDependencies: string[];
+  theme: ItemTheme;
 }
 
 export interface RegistryFile {
@@ -88,6 +99,8 @@ export interface RegistryItem {
   title: string;
   type: RegistryType;
   registryDependencies?: string[];
+  cssVars?: { theme: Record<string, string> };
+  css?: Record<string, CssRules>;
 }
 
 export interface CatalogItem {

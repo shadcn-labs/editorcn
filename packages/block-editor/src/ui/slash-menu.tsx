@@ -9,7 +9,7 @@ const SlashMenu = React.forwardRef<HTMLDivElement, SlashMenuProps>(
     <div
       ref={ref}
       className={cn(
-        "block-editor-slash-menu z-100 flex max-w-[300px] min-w-[260px] origin-[var(--origin,0_0)] animate-[block-editor-slide-in_0.15s_cubic-bezier(0.16,1,0.3,1)] flex-col overflow-hidden rounded-lg border border-border bg-popover shadow-[0_8px_24px_rgba(0,0,0,0.15)]",
+        "block-editor-slash-menu z-100 flex max-w-[300px] min-w-[260px] origin-[var(--origin,0_0)] animate-block-editor-slide-in flex-col overflow-hidden rounded-lg border border-border bg-popover shadow-[0_8px_24px_rgba(0,0,0,0.15)]",
         className
       )}
       {...props}

@@ -44,7 +44,6 @@ import "@editorcn/editor/style.css";
 import "@editorcn/extensions/code-block/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/table/style.css";
-import "@editorcn/extensions/ui/style.css";
 
 const SimpleDocumentEditorInner = ({
   className,

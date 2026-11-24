@@ -348,10 +348,6 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
-        },
-        {
           "path": "extensions/ui/use-floating.tsx",
           "type": "registry:component"
         },
@@ -454,10 +450,6 @@
         {
           "path": "extensions/ui/popover.tsx",
           "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
         },
         {
           "path": "extensions/ui/use-floating.tsx",
@@ -968,10 +960,6 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
-        },
-        {
           "path": "extensions/ui/tabs.tsx",
           "type": "registry:component"
         },
@@ -1057,10 +1045,6 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
-        },
-        {
           "path": "extensions/ui/use-floating.tsx",
           "type": "registry:component"
         },
@@ -1137,10 +1121,6 @@
         {
           "path": "extensions/ui/dropdown-pill.tsx",
           "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
         },
         {
           "path": "extensions/ui/utils.ts",
@@ -1382,10 +1362,6 @@
         {
           "path": "extensions/ui/separator.tsx",
           "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/style.css",
-          "type": "registry:style"
         },
         {
           "path": "extensions/ui/use-floating.tsx",

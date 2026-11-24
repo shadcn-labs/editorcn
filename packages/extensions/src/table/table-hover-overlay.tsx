@@ -71,7 +71,7 @@ const ADD_SIZE = 20;
 const ADD_GAP = 6;
 
 const CONTROL_CLASS =
-  "ext-table-control pointer-events-auto absolute z-2 animate-[ext-table-pop-in_0.18s_cubic-bezier(0.22,1,0.36,1)_forwards]";
+  "ext-table-control pointer-events-auto absolute z-2 animate-ext-table-pop-in";
 
 const GRIP_CLASS =
   "ext-table-grip group/grip relative flex size-[1.1rem] cursor-pointer touch-none items-center justify-center rounded-sm border border-transparent bg-transparent p-0 text-muted-foreground shadow-none [transition:background-color_150ms_ease-out,border-color_150ms_ease-out,box-shadow_150ms_ease-out,color_150ms_ease-out] before:absolute before:-inset-[0.35rem] before:rounded-md before:content-[''] hover:border-border hover:bg-popover hover:text-foreground hover:shadow-[0_1px_2px_rgba(0,0,0,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring focus-visible:outline-solid active:scale-92 data-[state=open]:border-border data-[state=open]:bg-popover data-[state=open]:text-foreground data-[state=open]:shadow-[0_1px_2px_rgba(0,0,0,0.08)]";
@@ -83,7 +83,7 @@ const GRIP_STROKE_CLASS =
   "ext-table-grip-stroke pointer-events-none absolute inset-0 m-auto rounded-[1px] bg-muted-foreground opacity-60 [transition:opacity_150ms_ease-out] group-hover/grip:opacity-0 group-data-[state=open]/grip:opacity-0";
 
 const ADD_CLASS =
-  "ext-table-add pointer-events-auto absolute flex animate-[ext-table-pop-in_0.18s_cubic-bezier(0.22,1,0.36,1)_forwards] items-center justify-center rounded-sm border border-border bg-popover p-0 text-popover-foreground [transition:background-color_100ms_ease-out,color_100ms_ease-out,scale_100ms_ease-out] hover:bg-accent hover:text-accent-foreground active:scale-95 [&>svg]:size-3.5 [&>svg]:shrink-0";
+  "ext-table-add pointer-events-auto absolute flex animate-ext-table-pop-in items-center justify-center rounded-sm border border-border bg-popover p-0 text-popover-foreground [transition:background-color_100ms_ease-out,color_100ms_ease-out,scale_100ms_ease-out] hover:bg-accent hover:text-accent-foreground active:scale-95 [&>svg]:size-3.5 [&>svg]:shrink-0";
 
 const toBox = (
   left: number,
