@@ -1,7 +1,7 @@
 import { existsSync, readdirSync } from "node:fs";
 import { posix, resolve } from "node:path";
 
-import { registryUrl } from "./config.ts";
+import { bases, defaultBase, registryUrl, styleName } from "./config.ts";
 import {
   componentsPrefix,
   isPackageImport,
@@ -15,11 +15,11 @@ import { isScript, resolveCandidates, scanImports } from "./imports.ts";
 import { checkPrimitiveParity } from "./parity.ts";
 import { workspacePrefix } from "./transform.ts";
 import { registryTypes } from "./types.ts";
-import type { Catalog, RegistryItem, RegistryType } from "./types.ts";
+import type { Base, Catalog, RegistryItem, RegistryType } from "./types.ts";
 
 const itemSchema = "https://ui.shadcn.com/schema/registry-item.json";
 const shadcnName = /^[a-z0-9-]+$/;
-const registryItemUrl = /\/r\/([a-z0-9-]+)\.json$/;
+const registryItemUrl = /\/([a-z0-9-]+)\.json$/;
 
 const readJson = <T>(path: string, errors: string[]): T | undefined => {
   try {
@@ -126,11 +126,12 @@ const checkImport = (
 
 const checkRegistryDependency = (
   dependency: string,
-  items: Map<string, RegistryItem>
+  items: Map<string, RegistryItem>,
+  style?: string
 ) => {
   const name = registryItemUrl.exec(dependency)?.[1];
   if (dependency.startsWith("https://")) {
-    return name && items.has(name) && dependency === registryUrl(name)
+    return name && items.has(name) && dependency === registryUrl(name, style)
       ? undefined
       : `registry dependency ${dependency} does not exist`;
   }
@@ -144,7 +145,8 @@ const checkImports = (
   item: RegistryItem,
   items: Map<string, RegistryItem>,
   overlays: Map<string, string>,
-  errors: string[]
+  errors: string[],
+  style?: string
 ) => {
   const registryDependencies = item.registryDependencies ?? [];
   const overlaid = items.get(overlays.get(item.name) ?? "");
@@ -175,7 +177,7 @@ const checkImports = (
         )
       ),
     ...registryDependencies.map((dependency) =>
-      checkRegistryDependency(dependency, items)
+      checkRegistryDependency(dependency, items, style)
     ),
   ];
   for (const problem of new Set(problems)) {
@@ -261,41 +263,94 @@ const itemNames = (dir: string) =>
     .filter((file) => file.endsWith(".json") && file !== "registry.json")
     .toSorted();
 
+const checkBasePackages = (
+  file: string,
+  item: RegistryItem,
+  base: Base,
+  errors: string[]
+) => {
+  const others = bases.filter((other) => other !== base);
+  for (const entry of item.dependencies) {
+    const { name } = parseDependency(entry);
+    const owner = others.find((other) =>
+      other.packages.some((pattern) => pattern.test(name))
+    );
+    if (owner) {
+      errors.push(
+        `${file}: depends on ${name} from ${owner.label}, but this is the ${base.label} build`
+      );
+    }
+  }
+};
+
+const verifyDir = (
+  dir: string,
+  label: string,
+  base: Base,
+  overlays: Map<string, string>,
+  style?: string
+) => {
+  const errors: string[] = [];
+  const items = new Map<string, RegistryItem>();
+  for (const file of itemNames(dir)) {
+    const item = readJson<RegistryItem>(resolve(dir, file), errors);
+    if (item && checkShape(file, item, errors)) {
+      items.set(item.name, item);
+    }
+  }
+  if (items.size === 0) {
+    errors.push(`${dir} has no valid registry items`);
+  }
+  for (const [name, item] of items) {
+    checkImports(`${name}.json`, item, items, overlays, errors, style);
+    checkAnimations(`${name}.json`, item, items, errors);
+    checkBasePackages(`${name}.json`, item, base, errors);
+  }
+  checkCatalog(dir, items, errors);
+  return errors.map((error) => `${label}${error}`);
+};
+
 const checkBases = (outDir: string, errors: string[]) => {
   const stylesDir = resolve(outDir, "styles");
-  if (!existsSync(stylesDir)) {
-    return;
+  const expected = bases.map(styleName).toSorted();
+  const found = existsSync(stylesDir)
+    ? readdirSync(stylesDir, { withFileTypes: true })
+        .filter((entry) => entry.isDirectory())
+        .map(({ name }) => name)
+        .toSorted()
+    : [];
+  if (found.join(",") !== expected.join(",")) {
+    errors.push(
+      `styles/ has ${found.join(", ") || "no styles"}, expected ${expected.join(", ")}`
+    );
   }
-  const styles = readdirSync(stylesDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
-    .map(({ name }) => ({ items: itemNames(resolve(stylesDir, name)), name }));
-  const [first, ...rest] = styles;
-  for (const style of rest) {
-    if (first && style.items.join(",") !== first.items.join(",")) {
-      errors.push(
-        `styles/${style.name} and styles/${first.name} do not ship the same items`
-      );
+  const root = itemNames(outDir).join(",");
+  for (const style of found) {
+    if (itemNames(resolve(stylesDir, style)).join(",") !== root) {
+      errors.push(`styles/${style} does not ship the same items as r/`);
     }
   }
 };
 
 export const verify = (outDir: string, overlays: Map<string, string>) => {
   const errors: string[] = [];
-  const items = new Map<string, RegistryItem>();
-  for (const file of itemNames(outDir)) {
-    const item = readJson<RegistryItem>(resolve(outDir, file), errors);
-    if (item && checkShape(file, item, errors)) {
-      items.set(item.name, item);
-    }
+  const fallback = bases.find(({ name }) => name === defaultBase);
+  if (!fallback) {
+    return [`defaultBase "${defaultBase}" is not in bases`];
   }
-  if (items.size === 0) {
-    errors.push(`${outDir} has no valid registry items`);
+  errors.push(...verifyDir(outDir, "", fallback, overlays));
+  for (const base of bases) {
+    const style = styleName(base);
+    errors.push(
+      ...verifyDir(
+        resolve(outDir, "styles", style),
+        `styles/${style}/`,
+        base,
+        overlays,
+        style
+      )
+    );
   }
-  for (const [name, item] of items) {
-    checkImports(`${name}.json`, item, items, overlays, errors);
-    checkAnimations(`${name}.json`, item, items, errors);
-  }
-  checkCatalog(outDir, items, errors);
   checkBases(outDir, errors);
   errors.push(...checkPrimitiveParity());
   return errors;

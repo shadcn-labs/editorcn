@@ -68,7 +68,8 @@ export const resolveRegistryDependencies = (
   item: Item,
   specifiers: string[],
   items: Item[],
-  sharedHomes: string[]
+  sharedHomes: string[],
+  style?: string
 ) => {
   const dependencies = new Set(item.meta.registryDependencies);
   for (const specifier of specifiers) {
@@ -87,7 +88,7 @@ export const resolveRegistryDependencies = (
     if (path.startsWith(shadcnPrefix)) {
       dependencies.add(path.slice(shadcnPrefix.length));
     } else if (owner && owner !== item) {
-      dependencies.add(registryUrl(owner.meta.name));
+      dependencies.add(registryUrl(owner.meta.name, style));
     } else if (!owner && !sharedHomes.some((home) => isUnder(path, home))) {
       throw new Error(
         `${item.meta.name}: "${specifier}" does not belong to any registry item.`

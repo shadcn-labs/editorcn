@@ -4,7 +4,6 @@
   "items": [
     {
       "dependencies": [
-        "@base-ui/react@^1.0.0",
         "@floating-ui/dom@^1.6.0",
         "@tiptap/core@>=2.11.5 <4",
         "@tiptap/extension-color@>=2.11.5 <4",

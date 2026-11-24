@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "dependencies": [
+    "@hugeicons/core-free-icons@^4.3.5",
+    "@hugeicons/react@^1.1.10"
+  ],
+  "description": "HugeIcons variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
+  "files": [
+    {
+      "content": "import {\n  BoldIcon,\n  BracesIcon,\n  ChevronDownIcon,\n  CopyIcon,\n  Delete02Icon,\n  Drag01Icon,\n  FileTextIcon,\n  Heading01Icon,\n  Heading02Icon,\n  Heading03Icon,\n  Image01Icon,\n  ItalicIcon,\n  LeftToRightBlockQuoteIcon,\n  LeftToRightListBulletIcon,\n  LeftToRightListNumberIcon,\n  Link01Icon,\n  MinusSignIcon,\n  Search01Icon,\n  SourceCodeIcon,\n  SourceCodeSquareIcon,\n  StrikethroughIcon,\n  Table01Icon,\n  Task01Icon,\n  TextAlignCenterIcon,\n  TextAlignLeftIcon,\n  TextAlignRightIcon,\n  TextIcon,\n  Tick01Icon,\n  UnderlineIcon,\n  UnlinkIcon,\n} from \"@hugeicons/core-free-icons\";\nimport { HugeiconsIcon } from \"@hugeicons/react\";\n\nimport type { BlockEditorIcons } from \"./icon-types\";\nimport { DEFAULT_LANGUAGE_ICONS } from \"./language-icons\";\n\nconst H = ({ icon }: { icon: typeof BoldIcon }) => (\n  <HugeiconsIcon icon={icon} strokeWidth={2} />\n);\n\nconst headingIcons: Record<number, typeof BoldIcon> = {\n  1: Heading01Icon,\n  2: Heading02Icon,\n  3: Heading03Icon,\n};\n\nexport const HeadingIcon = ({ level }: { level: number }) => {\n  const icon = headingIcons[level] ?? Heading01Icon;\n  return <H icon={icon} />;\n};\n\n// HugeIcons Icons preset (\"iconLibrary\": \"hugeicons\", @hugeicons/react + @hugeicons/core-free-icons).\nexport const DEFAULT_ICONS: BlockEditorIcons = {\n  alignCenterIcon: <H icon={TextAlignCenterIcon} />,\n  alignLeftIcon: <H icon={TextAlignLeftIcon} />,\n  alignRightIcon: <H icon={TextAlignRightIcon} />,\n  boldIcon: <H icon={BoldIcon} />,\n  checkIcon: <H icon={Tick01Icon} />,\n  codeBlockLanguageIcon: <H icon={BracesIcon} />,\n  codeIcon: <H icon={SourceCodeIcon} />,\n  copyIcon: <H icon={CopyIcon} />,\n  deleteIcon: <H icon={Delete02Icon} />,\n  dragHandleIcon: (\n    <HugeiconsIcon\n      className=\"block-editor-drag-handle-icon\"\n      icon={Drag01Icon}\n      strokeWidth={2}\n    />\n  ),\n  dropdownArrowIcon: <HugeiconsIcon icon={ChevronDownIcon} size={12} />,\n  fallbackIcon: <H icon={FileTextIcon} />,\n  italicIcon: <H icon={ItalicIcon} />,\n  languageIcons: DEFAULT_LANGUAGE_ICONS,\n  linkIcon: <H icon={Link01Icon} />,\n  searchIcon: <HugeiconsIcon icon={Search01Icon} size={14} />,\n  slashBlockquoteIcon: <H icon={LeftToRightBlockQuoteIcon} />,\n  slashBulletListIcon: <H icon={LeftToRightListBulletIcon} />,\n  slashCodeBlockIcon: <H icon={SourceCodeSquareIcon} />,\n  slashDividerIcon: <H icon={MinusSignIcon} />,\n  slashHeadingIcon: <H icon={Heading01Icon} />,\n  slashImageIcon: <H icon={Image01Icon} />,\n  slashOrderedListIcon: <H icon={LeftToRightListNumberIcon} />,\n  slashTableIcon: <H icon={Table01Icon} />,\n  slashTaskListIcon: <H icon={Task01Icon} />,\n  slashTextIcon: <H icon={TextIcon} />,\n  strikethroughIcon: <H icon={StrikethroughIcon} />,\n  underlineIcon: <H icon={UnderlineIcon} />,\n  unlinkIcon: <H icon={UnlinkIcon} />,\n};\n",
+      "path": "block-editor/icons.tsx",
+      "target": "@components/block-editor/icons.tsx",
+      "type": "registry:component"
+    }
+  ],
+  "name": "block-editor-icons-hugeicons",
+  "title": "Block Editor (HugeIcons)",
+  "type": "registry:component"
+}
