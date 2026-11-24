@@ -4,7 +4,6 @@
   "title": "Block Editor",
   "description": "A Notion-style block editor built on Tiptap with shadcn/ui tokens.",
   "dependencies": [
-    "@base-ui/react",
     "@tiptap/core@>=2.11.5 <4",
     "@tiptap/extension-color@>=2.11.5 <4",
     "@tiptap/extension-drag-handle-react@>=2.11.5 <4",

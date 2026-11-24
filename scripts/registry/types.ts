@@ -32,6 +32,12 @@ export interface Source {
   shared?: SharedDir[];
 }
 
+export interface Base {
+  label: string;
+  name: string;
+  packages: RegExp[];
+}
+
 export interface IconSet {
   file: string;
   name: string;
@@ -50,6 +56,7 @@ export interface SourceFile {
   path: string;
   source: string;
   type: RegistryType;
+  location?: string;
 }
 
 export interface CssRules {

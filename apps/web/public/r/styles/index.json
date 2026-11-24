@@ -1,0 +1,10 @@
+[
+  {
+    "label": "Base UI",
+    "name": "base-nova"
+  },
+  {
+    "label": "Radix UI",
+    "name": "radix-nova"
+  }
+]
