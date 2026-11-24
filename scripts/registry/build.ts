@@ -9,6 +9,7 @@ import {
 import { discover, readText, root, sharedHomes } from "./discover.ts";
 import { registryCatalog, registryItem, serialize } from "./emit.ts";
 import { isScript, scanImports } from "./imports.ts";
+import { mergeThemes, readTheme } from "./theme.ts";
 import { transform } from "./transform.ts";
 import type { BuiltItem, Item } from "./types.ts";
 import { verify } from "./verify.ts";
@@ -58,6 +59,10 @@ const build = (item: Item, discovered: Item[]): BuiltItem => {
       specifiers,
       discovered,
       sharedHomes
+    ),
+    theme: mergeThemes(
+      item.themeFiles.map((path) => readTheme(path, relative(root, path))),
+      item.meta.name
     ),
   };
 };
