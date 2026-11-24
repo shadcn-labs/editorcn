@@ -1,6 +1,6 @@
 import type { ChainedCommands, Editor } from "@tiptap/core";
 import { useEditorState } from "@tiptap/react";
-import React, { forwardRef, useContext } from "react";
+import React, { cloneElement, forwardRef, useContext } from "react";
 
 import type { RichTextEditorIcons } from "../icon-types";
 import type { RichTextEditorLabels } from "../labels";
@@ -31,16 +31,25 @@ interface CreateControlProps {
 
 export const RichTextEditorTooltip = ({
   children,
+  id,
   label,
 }: {
-  children: React.ReactElement;
+  children: React.ReactElement<{ id?: string }>;
+  id?: string;
   label: string;
 }) => {
   const tooltip = useContext(RichTextEditorContext)?.tooltip;
   if (!tooltip) {
-    return children;
+    return id ? cloneElement(children, { id }) : children;
   }
-  return <TooltipTrigger handle={tooltip} payload={label} render={children} />;
+  return (
+    <TooltipTrigger
+      handle={tooltip}
+      payload={label}
+      render={children}
+      {...(id && { id })}
+    />
+  );
 };
 
 const triggerKeys = [
@@ -77,6 +86,7 @@ export const RichTextEditorControl = forwardRef<
       <Toggle
         ref={ref}
         {...triggerProps(props)}
+        {...(!props.title && props.id && { id: props.id })}
         size="sm"
         pressed={active}
         disabled={disabled}
@@ -96,7 +106,7 @@ export const RichTextEditorControl = forwardRef<
     );
 
     return props.title ? (
-      <RichTextEditorTooltip label={props.title}>
+      <RichTextEditorTooltip id={props.id} label={props.title}>
         {toggle}
       </RichTextEditorTooltip>
     ) : (

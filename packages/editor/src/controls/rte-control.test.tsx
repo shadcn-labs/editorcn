@@ -1,11 +1,12 @@
 import { setTimeout as sleep } from "node:timers/promises";
 
-import { act, createRef } from "react";
-import type { ReactNode } from "react";
+import { act, createRef, useState } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import type { Root } from "react-dom/client";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
+import { RichTextEditorContext } from "../rte-context";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +14,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog";
+import {
+  createTooltipHandle,
+  TooltipHost,
+  TooltipProvider,
+} from "../ui/tooltip";
 import { RichTextEditorControl } from "./rte-control";
 
 Object.assign(globalThis, { IS_REACT_ACT_ENVIRONMENT: true });
@@ -33,11 +39,30 @@ const click = async (element: HTMLElement | null) => {
   });
 };
 
-const EmbedDialog = () => (
+type ContextValue = ComponentProps<
+  typeof RichTextEditorContext.Provider
+>["value"];
+
+const InToolbar = ({ children }: { children: ReactNode }) => {
+  const [tooltip] = useState(createTooltipHandle);
+  return (
+    <RichTextEditorContext.Provider value={{ tooltip } as ContextValue}>
+      <TooltipProvider>
+        <TooltipHost handle={tooltip} side="bottom">
+          {children}
+        </TooltipHost>
+      </TooltipProvider>
+    </RichTextEditorContext.Provider>
+  );
+};
+
+const EmbedDialog = ({ title }: { title?: string }) => (
   <Dialog>
     <DialogTrigger
       render={
-        <RichTextEditorControl aria-label="Embed">icon</RichTextEditorControl>
+        <RichTextEditorControl aria-label="Embed" title={title}>
+          icon
+        </RichTextEditorControl>
       }
     />
     <DialogContent>
@@ -92,6 +117,21 @@ describe("RichTextEditorControl on Base UI", () => {
     const button = view.querySelector("button");
     expect(button?.hasAttribute("aria-expanded")).toBeFalsy();
     expect(button?.hasAttribute("aria-haspopup")).toBeFalsy();
+  });
+
+  it("announces the dialog it opens inside the toolbar tooltip", async () => {
+    const view = await render(
+      <InToolbar>
+        <EmbedDialog title="Embed YouTube video" />
+      </InToolbar>
+    );
+    const button = view.querySelector<HTMLElement>("button[aria-label=Embed]");
+    expect(button?.getAttribute("aria-haspopup")).toBe("dialog");
+    await click(button);
+    expect(button?.getAttribute("aria-expanded")).toBe("true");
+    expect(button?.getAttribute("aria-controls")).toBe(
+      document.querySelector("[role=dialog]")?.id
+    );
   });
 
   it("announces the dialog it opens", async () => {
