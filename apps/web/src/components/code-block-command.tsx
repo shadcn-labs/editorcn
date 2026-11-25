@@ -152,8 +152,12 @@ export const CodeBlockCommand = ({
                   data-language="bash"
                   className="font-mono text-sm/none"
                 >
-                  <span className="select-none">$ </span>
-                  {value}
+                  {value?.split("\n").map((line, index) => (
+                    <span key={index} className="block">
+                      <span className="select-none">$ </span>
+                      {line}
+                    </span>
+                  ))}
                 </code>
               </pre>
             </TabsContent>

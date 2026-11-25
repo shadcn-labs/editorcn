@@ -40,11 +40,13 @@ const EmojiPicker = ({ onPick }: { onPick: (emoji: string) => void }) => {
     <Popover onOpenChange={setOpen} open={open}>
       <PopoverTrigger
         aria-label="Add reaction"
-        className={buttonVariants({
-          className: "text-muted-foreground size-7 rounded-full border",
-          size: "icon-sm",
-          variant: "ghost",
-        })}
+        className={cn(
+          buttonVariants({
+            className: "text-muted-foreground size-7 rounded-full border",
+            size: "icon-sm",
+            variant: "ghost",
+          })
+        )}
       >
         <SmilePlus className="size-3.5" />
       </PopoverTrigger>
@@ -83,12 +85,14 @@ const CommentMenu = ({
   <DropdownMenu>
     <DropdownMenuTrigger
       aria-label="Comment options"
-      className={buttonVariants({
-        className:
-          "text-muted-foreground size-7 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 aria-expanded:opacity-100 [@media(hover:none)]:opacity-100",
-        size: "icon-sm",
-        variant: "ghost",
-      })}
+      className={cn(
+        buttonVariants({
+          className:
+            "text-muted-foreground size-7 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 aria-expanded:opacity-100 [@media(hover:none)]:opacity-100",
+          size: "icon-sm",
+          variant: "ghost",
+        })
+      )}
     >
       <MoreHorizontal className="size-4" />
     </DropdownMenuTrigger>

@@ -20,11 +20,13 @@ export const ShortcutsPopover = () => {
   return (
     <Popover>
       <PopoverTrigger
-        className={buttonVariants({
-          className: "text-muted-foreground h-6 gap-1.5 px-2 text-xs",
-          size: "sm",
-          variant: "ghost",
-        })}
+        className={cn(
+          buttonVariants({
+            className: "text-muted-foreground h-6 gap-1.5 px-2 text-xs",
+            size: "sm",
+            variant: "ghost",
+          })
+        )}
       >
         <Keyboard className="size-3.5" />
         Shortcuts

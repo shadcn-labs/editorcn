@@ -22,6 +22,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { cn } from "@/lib/utils";
 
 import type { DocumentCollaborator } from "./types";
 import { initials } from "./utils";
@@ -66,11 +67,13 @@ export const MoreMenu = ({
   <DropdownMenu>
     <DropdownMenuTrigger
       aria-label="More options"
-      className={buttonVariants({
-        className: "text-muted-foreground size-7",
-        size: "icon-sm",
-        variant: "ghost",
-      })}
+      className={cn(
+        buttonVariants({
+          className: "text-muted-foreground size-7",
+          size: "icon-sm",
+          variant: "ghost",
+        })
+      )}
     >
       <MoreHorizontal />
     </DropdownMenuTrigger>

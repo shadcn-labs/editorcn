@@ -5,7 +5,6 @@ import type { Editor } from "@tiptap/react";
 import {
   AlignLeft,
   Ban,
-  Baseline,
   ChevronDown,
   Code2,
   Image as ImageIcon,
@@ -56,11 +55,13 @@ const TextStyleMenu = ({
   <DropdownMenu>
     <RichTextEditor.Tooltip label="Text style">
       <DropdownMenuTrigger
-        className={buttonVariants({
-          className: "h-8 w-[6.5rem] justify-between px-2 text-[13px]",
-          size: "sm",
-          variant: "ghost",
-        })}
+        className={cn(
+          buttonVariants({
+            className: "h-8 w-[6.5rem] justify-between px-2 text-[13px]",
+            size: "sm",
+            variant: "ghost",
+          })
+        )}
       >
         {TEXT_STYLES.find((s) => s.value === value)?.label}
         <ChevronDown className="text-muted-foreground size-3.5" />
@@ -103,11 +104,13 @@ const AlignMenu = ({
       <RichTextEditor.Tooltip label="Text alignment">
         <DropdownMenuTrigger
           aria-label="Text alignment"
-          className={buttonVariants({
-            className: "text-muted-foreground h-8 gap-0.5 px-1.5",
-            size: "sm",
-            variant: "ghost",
-          })}
+          className={cn(
+            buttonVariants({
+              className: "text-muted-foreground h-8 gap-0.5 px-1.5",
+              size: "sm",
+              variant: "ghost",
+            })
+          )}
         >
           <Icon />
           <ChevronDown className="size-3!" />
@@ -144,11 +147,13 @@ const FontMenu = ({
     <RichTextEditor.Tooltip label="Font">
       <DropdownMenuTrigger
         aria-label="Font"
-        className={buttonVariants({
-          className: "h-8 w-[4.5rem] justify-between px-2 text-[13px]",
-          size: "sm",
-          variant: "ghost",
-        })}
+        className={cn(
+          buttonVariants({
+            className: "h-8 w-[4.5rem] justify-between px-2 text-[13px]",
+            size: "sm",
+            variant: "ghost",
+          })
+        )}
       >
         <span style={{ fontFamily: value || undefined }}>
           {FONTS.find((f) => f.value === value)?.label ?? "Sans"}
@@ -220,17 +225,33 @@ const ColorMenu = ({
     <RichTextEditor.Tooltip label="Text color">
       <PopoverTrigger
         aria-label="Text color"
-        className={buttonVariants({
-          className: "h-8 flex-col gap-0 px-1.5",
-          size: "sm",
-          variant: "ghost",
-        })}
+        className={cn(
+          buttonVariants({
+            className: "h-8 px-1.5",
+            size: "sm",
+            variant: "ghost",
+          })
+        )}
       >
-        <Baseline className="size-4" />
-        <span
-          className="-mt-0.5 h-1 w-4 rounded-full"
-          style={{ background: highlight ?? text ?? "currentColor" }}
-        />
+        <svg
+          aria-hidden="true"
+          className="size-4"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth={2}
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path d="m6 16 6-12 6 12" />
+          <path d="M8 12h8" />
+          <path
+            d="M4 20h16"
+            stroke={highlight ?? text ?? "currentColor"}
+            strokeWidth={3}
+          />
+        </svg>
       </PopoverTrigger>
     </RichTextEditor.Tooltip>
     <PopoverContent align="start" className="w-auto space-y-3 p-3">
@@ -318,11 +339,13 @@ const InsertMenu = ({ editor }: { editor: Editor | null }) => {
     <DropdownMenu>
       <RichTextEditor.Tooltip label="Insert">
         <DropdownMenuTrigger
-          className={buttonVariants({
-            className: "h-8 gap-1 px-2 text-[13px]",
-            size: "sm",
-            variant: "ghost",
-          })}
+          className={cn(
+            buttonVariants({
+              className: "h-8 gap-1 px-2 text-[13px]",
+              size: "sm",
+              variant: "ghost",
+            })
+          )}
         >
           <Plus className="size-4" />
           Insert
