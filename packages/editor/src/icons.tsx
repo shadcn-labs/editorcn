@@ -105,7 +105,7 @@ const iconProps = { className: "rte-editor-icon" };
 export const DEFAULT_ICONS: RichTextEditorIcons = {
   alignCenterControlIcon: (
     <IconPlaceholder
-      lucide="TextAlignCenter"
+      lucide="AlignCenter"
       tabler="IconAlignCenter"
       hugeicons="TextAlignCenterIcon"
       phosphor="TextAlignCenterIcon"
@@ -115,7 +115,7 @@ export const DEFAULT_ICONS: RichTextEditorIcons = {
   ),
   alignJustifyControlIcon: (
     <IconPlaceholder
-      lucide="TextAlignJustify"
+      lucide="AlignJustify"
       tabler="IconAlignJustified"
       hugeicons="TextAlignJustifyCenterIcon"
       phosphor="TextAlignJustifyIcon"
@@ -125,7 +125,7 @@ export const DEFAULT_ICONS: RichTextEditorIcons = {
   ),
   alignLeftControlIcon: (
     <IconPlaceholder
-      lucide="TextAlignStart"
+      lucide="AlignLeft"
       tabler="IconAlignLeft"
       hugeicons="TextAlignLeftIcon"
       phosphor="TextAlignLeftIcon"
@@ -135,7 +135,7 @@ export const DEFAULT_ICONS: RichTextEditorIcons = {
   ),
   alignRightControlIcon: (
     <IconPlaceholder
-      lucide="TextAlignEnd"
+      lucide="AlignRight"
       tabler="IconAlignRight"
       hugeicons="TextAlignRightIcon"
       phosphor="TextAlignRightIcon"

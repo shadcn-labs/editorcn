@@ -15,6 +15,14 @@ npx shadcn@latest add @editorcn/editor
 
 This copies the component source directly into your project, so you can customize it freely.
 
+<Callout title="Check your iconLibrary">
+  The icons are written for the `iconLibrary` in your `components.json`, which
+  must be `lucide`, `tabler`, `hugeicons`, `phosphor` or `remixicon`. Older
+  projects with `"iconLibrary": "radix"` get a build error about
+  `./icon-placeholder`. Change it to `"lucide"` before installing. See [Icon
+  library](#icon-library).
+</Callout>
+
 **Or install via npm/pnpm:**
 
 ```bash

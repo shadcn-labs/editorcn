@@ -1,5 +1,8 @@
 import type { LucideProps } from "lucide-react";
 import {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
   Bold,
   Braces,
   Check,
@@ -25,9 +28,6 @@ import {
   SquareCode,
   Strikethrough,
   Table,
-  TextAlignCenter,
-  TextAlignEnd,
-  TextAlignStart,
   TextQuote,
   Trash2,
   Type,
@@ -35,6 +35,9 @@ import {
 } from "lucide-react";
 
 const ICONS = {
+  AlignCenter,
+  AlignLeft,
+  AlignRight,
   Bold,
   Braces,
   Check,
@@ -60,9 +63,6 @@ const ICONS = {
   SquareCode,
   Strikethrough,
   Table,
-  TextAlignCenter,
-  TextAlignEnd,
-  TextAlignStart,
   TextQuote,
   Trash2,
   Type,

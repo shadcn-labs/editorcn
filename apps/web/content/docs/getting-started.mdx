@@ -37,6 +37,14 @@ Since the shadcn registry is the recommended install method, add the editorcn re
 }
 ```
 
+<Callout title="Check your iconLibrary">
+  The icons are written for the `iconLibrary` in your `components.json`, which
+  must be `lucide`, `tabler`, `hugeicons`, `phosphor` or `remixicon`. Older
+  projects with `"iconLibrary": "radix"` get a build error about
+  `./icon-placeholder`. Change it to `"lucide"` before installing. See [Icon
+  library](/docs/editor#icon-library).
+</Callout>
+
 ### Option 1: @editorcn/editor (Toolbar-style)
 
 **Install via the shadcn registry (recommended):**

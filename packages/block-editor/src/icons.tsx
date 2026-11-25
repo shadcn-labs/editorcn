@@ -48,7 +48,7 @@ export const HeadingIcon = ({ level }: { level: number }) =>
 export const DEFAULT_ICONS: BlockEditorIcons = {
   alignCenterIcon: (
     <IconPlaceholder
-      lucide="TextAlignCenter"
+      lucide="AlignCenter"
       tabler="IconAlignCenter"
       hugeicons="TextAlignCenterIcon"
       phosphor="TextAlignCenterIcon"
@@ -57,7 +57,7 @@ export const DEFAULT_ICONS: BlockEditorIcons = {
   ),
   alignLeftIcon: (
     <IconPlaceholder
-      lucide="TextAlignStart"
+      lucide="AlignLeft"
       tabler="IconAlignLeft"
       hugeicons="TextAlignLeftIcon"
       phosphor="TextAlignLeftIcon"
@@ -66,7 +66,7 @@ export const DEFAULT_ICONS: BlockEditorIcons = {
   ),
   alignRightIcon: (
     <IconPlaceholder
-      lucide="TextAlignEnd"
+      lucide="AlignRight"
       tabler="IconAlignRight"
       hugeicons="TextAlignRightIcon"
       phosphor="TextAlignRightIcon"

@@ -1,5 +1,9 @@
 import type { LucideProps } from "lucide-react";
 import {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
   Bold,
   Code,
   Heading1,
@@ -21,16 +25,16 @@ import {
   Strikethrough,
   Subscript,
   Superscript,
-  TextAlignCenter,
-  TextAlignEnd,
-  TextAlignJustify,
-  TextAlignStart,
   TextQuote,
   Underline,
   Undo2,
 } from "lucide-react";
 
 const ICONS = {
+  AlignCenter,
+  AlignJustify,
+  AlignLeft,
+  AlignRight,
   Bold,
   Code,
   Heading1,
@@ -52,10 +56,6 @@ const ICONS = {
   Strikethrough,
   Subscript,
   Superscript,
-  TextAlignCenter,
-  TextAlignEnd,
-  TextAlignJustify,
-  TextAlignStart,
   TextQuote,
   Underline,
   Undo2,
