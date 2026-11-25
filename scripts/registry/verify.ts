@@ -1,7 +1,13 @@
 import { existsSync, readdirSync } from "node:fs";
 import { posix, resolve } from "node:path";
 
-import { bases, defaultBase, registryUrl, styleName } from "./config.ts";
+import {
+  bases,
+  defaultBase,
+  iconPlaceholderModule,
+  registryUrl,
+  styleName,
+} from "./config.ts";
 import {
   componentsPrefix,
   isPackageImport,
@@ -101,6 +107,9 @@ const checkImport = (
     return `${path} imports the workspace path "${specifier}"`;
   }
   if (specifier.startsWith(".")) {
+    if (posix.basename(specifier) === iconPlaceholderModule) {
+      return;
+    }
     const base = posix.join(posix.dirname(path), specifier);
     return resolvesTo(context.shipped, base)
       ? undefined
@@ -140,19 +149,59 @@ const checkRegistryDependency = (
     : `registry dependency "${dependency}" is not a shadcn item name`;
 };
 
+const iconLibraries = [
+  "lucide",
+  "tabler",
+  "hugeicons",
+  "phosphor",
+  "remixicon",
+];
+
+const checkIconPlaceholders = (
+  file: string,
+  item: RegistryItem,
+  errors: string[]
+) => {
+  for (const entry of item.files) {
+    if (
+      posix.basename(entry.path, posix.extname(entry.path)) ===
+      iconPlaceholderModule
+    ) {
+      errors.push(
+        `${file}: ${entry.path} must not ship, the shadcn CLI replaces IconPlaceholder`
+      );
+    }
+    for (const [element] of entry.content.matchAll(
+      /<IconPlaceholder\b[^>]*>/g
+    )) {
+      if (!element.endsWith("/>")) {
+        errors.push(
+          `${file}: ${entry.path} has an IconPlaceholder that is not self-closing`
+        );
+        continue;
+      }
+      const missing = iconLibraries.filter(
+        (library) => !new RegExp(`\\s${library}="[^"]+"`).test(element)
+      );
+      if (missing.length > 0) {
+        errors.push(
+          `${file}: ${entry.path} has an IconPlaceholder without ${missing.join(", ")}`
+        );
+      }
+    }
+  }
+};
+
 const checkImports = (
   file: string,
   item: RegistryItem,
   items: Map<string, RegistryItem>,
-  overlays: Map<string, string>,
   errors: string[],
   style?: string
 ) => {
   const registryDependencies = item.registryDependencies ?? [];
-  const overlaid = items.get(overlays.get(item.name) ?? "");
   const reachable = [
     item,
-    ...(overlaid ? [overlaid] : []),
     ...registryDependencies.flatMap((dependency) => {
       const name = registryItemUrl.exec(dependency)?.[1];
       const target = name ? items.get(name) : undefined;
@@ -283,13 +332,7 @@ const checkBasePackages = (
   }
 };
 
-const verifyDir = (
-  dir: string,
-  label: string,
-  base: Base,
-  overlays: Map<string, string>,
-  style?: string
-) => {
+const verifyDir = (dir: string, label: string, base: Base, style?: string) => {
   const errors: string[] = [];
   const items = new Map<string, RegistryItem>();
   for (const file of itemNames(dir)) {
@@ -302,7 +345,8 @@ const verifyDir = (
     errors.push(`${dir} has no valid registry items`);
   }
   for (const [name, item] of items) {
-    checkImports(`${name}.json`, item, items, overlays, errors, style);
+    checkImports(`${name}.json`, item, items, errors, style);
+    checkIconPlaceholders(`${name}.json`, item, errors);
     checkAnimations(`${name}.json`, item, items, errors);
     checkBasePackages(`${name}.json`, item, base, errors);
   }
@@ -332,13 +376,13 @@ const checkBases = (outDir: string, errors: string[]) => {
   }
 };
 
-export const verify = (outDir: string, overlays: Map<string, string>) => {
+export const verify = (outDir: string) => {
   const errors: string[] = [];
   const fallback = bases.find(({ name }) => name === defaultBase);
   if (!fallback) {
     return [`defaultBase "${defaultBase}" is not in bases`];
   }
-  errors.push(...verifyDir(outDir, "", fallback, overlays));
+  errors.push(...verifyDir(outDir, "", fallback));
   for (const base of bases) {
     const style = styleName(base);
     errors.push(
@@ -346,7 +390,6 @@ export const verify = (outDir: string, overlays: Map<string, string>) => {
         resolve(outDir, "styles", style),
         `styles/${style}/`,
         base,
-        overlays,
         style
       )
     );

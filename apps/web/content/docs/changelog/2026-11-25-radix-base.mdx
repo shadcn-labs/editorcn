@@ -1,6 +1,6 @@
 ---
-title: "November 25, 2026 - Radix UI support"
-description: "Every registry item now comes in a Base UI and a Radix UI build, and the shadcn CLI picks the one that matches your project's style."
+title: "November 25, 2026 - Radix UI support and icon libraries"
+description: "Every registry item now comes in a Base UI and a Radix UI build, and the editors' icons follow your iconLibrary. The shadcn CLI picks both from your components.json."
 date: "2026-11-25"
 ---
 
@@ -11,9 +11,12 @@ editorcn was built on Base UI, so a Radix shadcn project got the editor's Base U
 - **One registry URL for both bases**: `https://www.rtecn.space/r/styles/{style}/{name}.json`. The CLI fills in `{style}`, so `radix-nova` projects get Radix components and `base-nova` projects get Base UI components. See [Registry](/docs/registry#setup).
 - **Every style works**: other `base-*` and `radix-*` styles (`base-vega`, `radix-maia` and so on) are served the matching build. Older Radix styles like `new-york` get the Radix build.
 - **Templates on both bases**: the comment box and simple document editor templates no longer use `asChild`, so their menus, tooltips and dialogs work with Base UI and Radix.
+- **Icons follow your `iconLibrary`**: the editor and block editor icons use shadcn's `IconPlaceholder`, so the CLI writes them with Lucide, Tabler, HugeIcons, Phosphor or Remix Icon, whichever your `components.json` names. The editor no longer pulls in `lucide-react` for other libraries. See [Icon library](/docs/editor#icon-library).
 - **Base switch in the docs**: install commands with a registry URL now have a Base UI / Radix UI switch next to the package manager tabs.
 
 React Aria styles (`aria-*`) aren't supported yet. Installing in an `aria-*` project fails with a 404.
+
+The icon libraries need shadcn CLI 3.7.0 or newer. `npx shadcn@latest` always is.
 
 ## Upgrading
 
@@ -37,6 +40,10 @@ npx shadcn@latest add @editorcn/editor
 
 Base UI projects don't have to change anything. The old URLs (`https://www.rtecn.space/r/{name}.json`) still work and keep installing the Base UI build. In a Radix project, re-adding the editor replaces its Base UI primitives in `components/editor/ui/` with Radix ones, and you can remove `@base-ui/react` if nothing else uses it.
 
+### Icon sets
+
+The `editor-icons-*` and `block-editor-icons-*` items are removed. Re-adding the editor or block editor now writes the icons for your `iconLibrary`, so you don't need them. If you installed one before, re-add the editor instead. The CLI doesn't install icon packages, so make sure your library's package is installed (see [Icon library](/docs/editor#icon-library)).
+
 ### npm
 
-Nothing changes. The npm packages still use Base UI.
+Nothing changes. The npm packages still use Base UI and `lucide-react`.

@@ -16,7 +16,6 @@ export interface Meta {
   registryDependencies?: string[];
   exclude?: string[];
   fileTypes?: Record<string, RegistryType>;
-  iconSets?: { requiredExports?: string[] };
 }
 
 export interface SharedDir {
@@ -36,12 +35,6 @@ export interface Base {
   label: string;
   name: string;
   packages: RegExp[];
-}
-
-export interface IconSet {
-  file: string;
-  name: string;
-  title: string;
 }
 
 export type AliasTarget = string | Record<string, string>;
@@ -75,7 +68,6 @@ export interface Item {
   source: Pick<Source, "dependencies">;
   filesDir?: string;
   home?: string;
-  iconVariant?: { base: string; requiredExports: string[] };
 }
 
 export interface BuiltFile extends SourceFile {

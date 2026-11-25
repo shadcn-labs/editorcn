@@ -28,7 +28,6 @@
         "@tiptap/suggestion@>=2.11.5 <4",
         "class-variance-authority@^0.7.1",
         "clsx@^2.1.1",
-        "lucide-react@>=0.400.0 <1.0.0",
         "tailwind-merge@^3.0.0"
       ],
       "description": "A Notion-style block editor built on Tiptap with shadcn/ui tokens.",
@@ -192,67 +191,6 @@
       ],
       "name": "block-editor",
       "title": "Block Editor",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@hugeicons/core-free-icons@^4.3.5",
-        "@hugeicons/react@^1.1.10"
-      ],
-      "description": "HugeIcons variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
-      "files": [
-        {
-          "path": "block-editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "block-editor-icons-hugeicons",
-      "title": "Block Editor (HugeIcons)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@phosphor-icons/react@^2.1.10"
-      ],
-      "description": "Phosphor Icons variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
-      "files": [
-        {
-          "path": "block-editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "block-editor-icons-phosphor",
-      "title": "Block Editor (Phosphor Icons)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@remixicon/react@^4.9.0"
-      ],
-      "description": "Remix Icon variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
-      "files": [
-        {
-          "path": "block-editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "block-editor-icons-remixicon",
-      "title": "Block Editor (Remix Icon)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@tabler/icons-react@^3.48.0"
-      ],
-      "description": "Tabler Icons variant of the Block Editor icons. Install after the block-editor item; overwrites block-editor/icons.tsx.",
-      "files": [
-        {
-          "path": "block-editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "block-editor-icons-tabler",
-      "title": "Block Editor (Tabler Icons)",
       "type": "registry:component"
     },
     {
@@ -520,7 +458,6 @@
         "@tiptap/starter-kit@>=2.11.5 <4",
         "class-variance-authority@^0.7.1",
         "clsx@^2.1.1",
-        "lucide-react@>=0.400.0 <1.0.0",
         "radix-ui@^1.4.3",
         "tailwind-merge@^3.0.0"
       ],
@@ -705,67 +642,6 @@
       ],
       "name": "editor",
       "title": "Rich Text Editor",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@hugeicons/core-free-icons@^4.3.5",
-        "@hugeicons/react@^1.1.10"
-      ],
-      "description": "HugeIcons variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
-      "files": [
-        {
-          "path": "editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "editor-icons-hugeicons",
-      "title": "Rich Text Editor (HugeIcons)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@phosphor-icons/react@^2.1.10"
-      ],
-      "description": "Phosphor Icons variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
-      "files": [
-        {
-          "path": "editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "editor-icons-phosphor",
-      "title": "Rich Text Editor (Phosphor Icons)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@remixicon/react@^4.9.0"
-      ],
-      "description": "Remix Icon variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
-      "files": [
-        {
-          "path": "editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "editor-icons-remixicon",
-      "title": "Rich Text Editor (Remix Icon)",
-      "type": "registry:component"
-    },
-    {
-      "dependencies": [
-        "@tabler/icons-react@^3.48.0"
-      ],
-      "description": "Tabler Icons variant of the Rich Text Editor icons. Install after the editor item; overwrites editor/icons.tsx.",
-      "files": [
-        {
-          "path": "editor/icons.tsx",
-          "type": "registry:component"
-        }
-      ],
-      "name": "editor-icons-tabler",
-      "title": "Rich Text Editor (Tabler Icons)",
       "type": "registry:component"
     },
     {
