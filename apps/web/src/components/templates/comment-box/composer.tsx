@@ -76,11 +76,13 @@ const FormatMenu = ({ editor }: { editor: Editor | null }) => {
             editor?.commands.focus();
           }
         }}
-        className={buttonVariants({
-          className: "text-muted-foreground sm:hidden",
-          size: "icon-sm",
-          variant: "ghost",
-        })}
+        className={cn(
+          buttonVariants({
+            className: "text-muted-foreground sm:hidden",
+            size: "icon-sm",
+            variant: "ghost",
+          })
+        )}
       >
         <Type />
       </DropdownMenuTrigger>
