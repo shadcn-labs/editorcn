@@ -10,7 +10,7 @@
 
 .ProseMirror .ext-code-block pre {
   margin: 0;
-  padding: 2rem 1.25rem 1.75rem;
+  padding: 2rem 1.25rem;
   overflow-x: auto;
   background: transparent;
   border: none;
