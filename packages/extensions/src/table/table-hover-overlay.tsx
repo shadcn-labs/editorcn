@@ -575,7 +575,15 @@ export const TableHoverOverlay = ({
   // there would leave it blank when it scrolls back in.
   const isActive = hoveredCol !== null || hoveredRow !== null;
 
+  const cancelHide = useCallback(() => {
+    if (hideTimer.current) {
+      clearTimeout(hideTimer.current);
+      hideTimer.current = null;
+    }
+  }, []);
+
   const scheduleHide = useCallback(() => {
+    cancelHide();
     hideTimer.current = setTimeout(() => {
       activeTableRef.current = null;
       setHoveredCol(null);
@@ -583,14 +591,7 @@ export const TableHoverOverlay = ({
       setColMenuOpen(false);
       setRowMenuOpen(false);
     }, 200);
-  }, []);
-
-  const cancelHide = useCallback(() => {
-    if (hideTimer.current) {
-      clearTimeout(hideTimer.current);
-      hideTimer.current = null;
-    }
-  }, []);
+  }, [cancelHide]);
 
   const recompute = useCallback(() => {
     const table = activeTableRef.current;
@@ -684,6 +685,7 @@ export const TableHoverOverlay = ({
       dom.removeEventListener("pointerover", handleOver);
       dom.removeEventListener("pointerleave", handleLeave);
       anchor?.removeEventListener("pointerover", handleOverlayOver);
+      cancelHide();
     };
   }, [editor, recompute, cancelHide, scheduleHide]);
 

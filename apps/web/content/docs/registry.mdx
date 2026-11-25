@@ -21,6 +21,8 @@ Add the editorcn registry to your `components.json`:
 }
 ```
 
+This needs shadcn CLI 4.7.0 or newer (`npx shadcn@latest` always is). Older versions put the files in a literal `@components/` folder instead of your components directory.
+
 The shadcn CLI fills in `{style}` from the `style` in your `components.json`, so you get the build for your base:
 
 | Your `style`                         | You get             |

@@ -20,6 +20,7 @@ import {
 import {
   Tooltip,
   TooltipContent,
+  TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
@@ -32,21 +33,23 @@ export const Collaborators = ({
 }: {
   people: DocumentCollaborator[];
 }) => (
-  <div className="flex -space-x-1.5">
-    {people.map((person) => (
-      <Tooltip key={person.name}>
-        <TooltipTrigger className="rounded-full">
-          <Avatar className="ring-background size-6 ring-2">
-            {person.src && <AvatarImage alt={person.name} src={person.src} />}
-            <AvatarFallback className="text-[0.6rem] font-medium">
-              {initials(person.name)}
-            </AvatarFallback>
-          </Avatar>
-        </TooltipTrigger>
-        <TooltipContent>{person.name}</TooltipContent>
-      </Tooltip>
-    ))}
-  </div>
+  <TooltipProvider>
+    <div className="flex -space-x-1.5">
+      {people.map((person) => (
+        <Tooltip key={person.name}>
+          <TooltipTrigger className="rounded-full" type="button">
+            <Avatar className="ring-background size-6 ring-2">
+              {person.src && <AvatarImage alt={person.name} src={person.src} />}
+              <AvatarFallback className="text-[0.6rem] font-medium">
+                {initials(person.name)}
+              </AvatarFallback>
+            </Avatar>
+          </TooltipTrigger>
+          <TooltipContent>{person.name}</TooltipContent>
+        </Tooltip>
+      ))}
+    </div>
+  </TooltipProvider>
 );
 
 const ITEM = "rounded-md py-1 text-[13px] [&_svg]:size-3.5!";
@@ -105,7 +108,10 @@ export const MoreMenu = ({
       <DropdownMenuSeparator />
       <DropdownMenuItem
         className={ITEM}
-        onClick={() => navigator.clipboard.writeText(editor?.getHTML() ?? "")}
+        disabled={!editor}
+        onClick={() =>
+          editor && navigator.clipboard.writeText(editor.getHTML())
+        }
       >
         <Copy />
         Copy as HTML

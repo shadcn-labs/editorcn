@@ -23,7 +23,7 @@
         "@tiptap/extension-text-style@>=2.11.5 <4",
         "@tiptap/extension-underline@>=2.11.5 <4",
         "@tiptap/pm@>=2.11.5 <4",
-        "@tiptap/react@>=2.11.5 <4",
+        "@tiptap/react@>=3.0.1 <4",
         "@tiptap/starter-kit@>=2.11.5 <4",
         "@tiptap/suggestion@>=2.11.5 <4",
         "class-variance-authority@^0.7.1",
@@ -199,7 +199,7 @@
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "clsx@^2.1.1",
-        "lucide-react@>=0.400.0 <1.0.0",
+        "lucide-react@>=0.400.0 <2.0.0",
         "tailwind-merge@^3.0.0"
       ],
       "description": "Info, tip, warning, danger, and note boxes that hold rich content. Switch the type or remove the callout from its icon menu, insert one from a toolbar button, or type > [!NOTE] to create one. Round-trips as GitHub alert syntax in markdown.",
@@ -304,7 +304,7 @@
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "clsx@^2.1.1",
-        "lucide-react@>=0.400.0 <1.0.0",
+        "lucide-react@>=0.400.0 <2.0.0",
         "mermaid@^11.0.0",
         "prettier@^3.0.0",
         "shiki@^4.0.0",
@@ -410,7 +410,7 @@
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/starter-kit@>=3.0.0 <4",
         "@tiptap/static-renderer@>=3.21.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "lucide-react@>=0.400.0 <2.0.0"
       ],
       "description": "A comment thread with avatars, relative times, emoji reactions, a delete menu, and an editor composer with onPost, onReact, and onDelete hooks.",
       "files": [
@@ -454,7 +454,7 @@
         "@tiptap/extension-text-style@>=2.11.5 <4",
         "@tiptap/extension-underline@>=2.11.5 <4",
         "@tiptap/pm@>=2.11.5 <4",
-        "@tiptap/react@>=2.11.5 <4",
+        "@tiptap/react@>=3.0.1 <4",
         "@tiptap/starter-kit@>=2.11.5 <4",
         "class-variance-authority@^0.7.1",
         "clsx@^2.1.1",
@@ -652,7 +652,7 @@
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/starter-kit@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "lucide-react@>=0.400.0 <2.0.0"
       ],
       "description": "An email card with To and Subject fields, a message body with bold, italic, underline, link and list controls, and Send and Discard buttons. onSend receives the body as Tiptap JSON.",
       "files": [
@@ -692,7 +692,7 @@
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/starter-kit@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "lucide-react@>=0.400.0 <2.0.0"
       ],
       "description": "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
       "files": [
@@ -746,7 +746,7 @@
         "@tiptap/extension-image@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "clsx@^2.1.1",
-        "lucide-react@>=0.400.0 <1.0.0",
+        "lucide-react@>=0.400.0 <2.0.0",
         "tailwind-merge@^3.0.0"
       ],
       "description": "A Notion-style image placeholder node that lets you upload or embed an image by URL, with a resizable image node view and its own toolbar button.",
@@ -863,7 +863,7 @@
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "clsx@^2.1.1",
-        "lucide-react@>=0.400.0 <1.0.0",
+        "lucide-react@>=0.400.0 <2.0.0",
         "tailwind-merge@^3.0.0"
       ],
       "description": "Load, store, and paste markdown. Wraps the official Tiptap markdown extension so editor.getMarkdown() and contentType: \"markdown\" work, adds an opt-in pasteMarkdown option, and ships a toolbar button to import, export, or copy markdown.",
@@ -945,7 +945,7 @@
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/suggestion@>=3.27.0 <4",
         "clsx@^2.1.1",
-        "lucide-react@>=0.400.0 <1.0.0",
+        "lucide-react@>=0.400.0 <2.0.0",
         "tailwind-merge@^3.0.0"
       ],
       "description": "An @ picker that inserts inline mention nodes with a stable id and label. Items load from a sync or async source with debounce, loading and empty states, and keyboard navigation. Backspace removes the whole mention.",
@@ -1016,7 +1016,7 @@
         "@tiptap/core@>=3.30.5 <4",
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "lucide-react@>=0.400.0 <2.0.0"
       ],
       "description": "Cleans HTML pasted from Google Docs, Notion, Word, and web pages. Strips classes, ids, fonts, and colors, keeps bold, italic, underline, and links, turns Word list paragraphs into real nested lists, and drops empty paragraphs.",
       "files": [
@@ -1075,7 +1075,7 @@
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/starter-kit@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "lucide-react@>=0.400.0 <2.0.0"
       ],
       "description": "A document page with a breadcrumb header, collaborators, a floating toolbar, task lists, and a status bar with word count and shortcuts.",
       "files": [
@@ -1158,7 +1158,7 @@
         "@tiptap/extension-table@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "clsx@^2.1.1",
-        "lucide-react@>=0.400.0 <1.0.0",
+        "lucide-react@>=0.400.0 <2.0.0",
         "tailwind-merge@^3.0.0"
       ],
       "description": "A table node with a toolbar that inserts tables from a grid-size picker, lets you add or delete rows and columns, merge and split cells, toggle the header row, and manage rows and columns from hover context handles. Columns are resizable and a gap cursor is included by default.",
@@ -1263,7 +1263,7 @@
         "@tiptap/extension-gapcursor@>=3.0.0 <4",
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <1.0.0"
+        "lucide-react@>=0.400.0 <2.0.0"
       ],
       "description": "A Notion-style collapsible section that holds any block content, including other toggles. Click the triangle to collapse or expand, insert one from the slash menu or by typing +++ on an empty line, and press Enter in the title to jump into the content. The open state is saved with the document and native details HTML keeps it working in the static renderer without JavaScript.",
       "files": [

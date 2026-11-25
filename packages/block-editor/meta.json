@@ -22,7 +22,7 @@
     "@tiptap/extension-text-style@>=2.11.5 <4",
     "@tiptap/extension-underline@>=2.11.5 <4",
     "@tiptap/pm@>=2.11.5 <4",
-    "@tiptap/react@>=2.11.5 <4",
+    "@tiptap/react@>=3.0.1 <4",
     "@tiptap/starter-kit@>=2.11.5 <4",
     "@tiptap/suggestion@>=2.11.5 <4",
     "class-variance-authority"

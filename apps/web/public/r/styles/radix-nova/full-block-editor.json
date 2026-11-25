@@ -14,7 +14,7 @@
     "@tiptap/pm@>=3.0.0 <4",
     "@tiptap/react@>=3.0.0 <4",
     "@tiptap/starter-kit@>=3.0.0 <4",
-    "lucide-react@>=0.400.0 <1.0.0"
+    "lucide-react@>=0.400.0 <2.0.0"
   ],
   "description": "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
   "files": [

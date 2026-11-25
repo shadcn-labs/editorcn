@@ -149,11 +149,13 @@ const ResizableImageNode = ({
     window.addEventListener("mouseup", endResize);
     window.addEventListener("touchmove", handleTouchMove);
     window.addEventListener("touchend", handleTouchEnd);
+    window.addEventListener("touchcancel", handleTouchEnd);
     return () => {
       window.removeEventListener("mousemove", resize);
       window.removeEventListener("mouseup", endResize);
       window.removeEventListener("touchmove", handleTouchMove);
       window.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("touchcancel", handleTouchEnd);
     };
   }, [
     resizing,
