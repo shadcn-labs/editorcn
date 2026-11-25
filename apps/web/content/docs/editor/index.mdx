@@ -833,32 +833,29 @@ import { RichTextEditor, DEFAULT_ICONS } from "@/components/editor";
 
 ### Icon library
 
-The default icons ship with **lucide-react**. If your `components.json` uses a different `iconLibrary`, install the matching icon set after the editor — it overwrites `components/editor/icons.tsx` and installs only that library's package:
+The icons follow the `iconLibrary` in your `components.json`. `editor/icons.tsx` is written with shadcn's `IconPlaceholder`, and when you add the editor, the shadcn CLI swaps each placeholder for the matching icon from Lucide, Tabler, HugeIcons, Phosphor or Remix Icon. This needs shadcn CLI 3.7.0 or newer, which `npx shadcn@latest` always is.
 
-| `iconLibrary`      | Install                                                                         |
-| ------------------ | ------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                      |
-| `phosphor`         | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-remixicon.json"` |
+The CLI doesn't install the icon package. `shadcn init` installs it for your `iconLibrary`, so it's usually there already. If not, add it:
 
-Order matters — add the editor first, then the icon set:
+| `iconLibrary` | Package                                             |
+| ------------- | --------------------------------------------------- |
+| `lucide`      | `lucide-react`                                      |
+| `tabler`      | `@tabler/icons-react`                               |
+| `hugeicons`   | `@hugeicons/react` and `@hugeicons/core-free-icons` |
+| `phosphor`    | `@phosphor-icons/react`                             |
+| `remixicon`   | `@remixicon/react`                                  |
 
-```bash
-npx shadcn@latest add "https://www.rtecn.space/r/editor.json"
-npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-phosphor.json"
-```
+Every toolbar icon has a mapping for all five libraries, so switching libraries swaps the whole toolbar. `icons.tsx` is yours after install, so you can still edit it or override single keys with the `icons` prop.
 
-Each set covers all 28 toolbar icons and reuses the shared language icons, so switching libraries swaps the whole toolbar consistently. Because `icons.tsx` is yours after install, you can still hand-edit or override individual keys with the `icons` prop on top.
-
-Already installed with lucide? Migrate instead of reinstalling:
+Changed `iconLibrary` after installing? Re-add the editor (this overwrites your edits to its files), or migrate the installed files:
 
 ```bash
 npx shadcn@latest migrate icons --from lucide --to phosphor "src/components/editor/**"
 ```
 
-> **npm/pnpm installs**: the icon sets are registry items, so they apply to registry installs. With npm, override the `icons` prop yourself — the `icons` prop and all 28 icon keys are unchanged.
+The `editor-icons-*` items from earlier releases are gone, because the editor itself now installs the right icons.
+
+> **npm/pnpm installs**: the npm package uses `lucide-react`. To use another library, pass your own icons through the `icons` prop.
 
 See the [Customization docs](/docs/customization) for icon sizing and per-key overrides.
 

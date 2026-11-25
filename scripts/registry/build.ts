@@ -15,29 +15,6 @@ import { transform } from "./transform.ts";
 import type { BuiltItem, Item } from "./types.ts";
 import { verify } from "./verify.ts";
 
-const checkIconVariant = (
-  item: Item,
-  content: string,
-  specifiers: string[]
-) => {
-  const { name } = item.meta;
-  if (specifiers.includes("./icons")) {
-    throw new Error(
-      `${name}: icons.tsx imports "./icons", which it overwrites. Import the icon types from "./icon-types" instead.`
-    );
-  }
-  if (!specifiers.includes("./icon-types")) {
-    throw new Error(
-      `${name}: icons.tsx should take its types from "./icon-types".`
-    );
-  }
-  for (const exported of item.iconVariant?.requiredExports ?? []) {
-    if (!new RegExp(`export (const|function) ${exported}\\b`).test(content)) {
-      throw new Error(`${name}: icons.tsx must export ${exported}.`);
-    }
-  }
-};
-
 const build = (item: Item, discovered: Item[], style?: string): BuiltItem => {
   const files = item.files.map((file) => {
     const label = relative(root, file.source);
@@ -45,9 +22,6 @@ const build = (item: Item, discovered: Item[], style?: string): BuiltItem => {
     const specifiers = isScript(file.source)
       ? scanImports(content, label).map(({ specifier }) => specifier)
       : [];
-    if (item.iconVariant) {
-      checkIconVariant(item, content, specifiers);
-    }
     return { ...file, content, specifiers };
   });
   const specifiers = files.flatMap((file) => file.specifiers);
@@ -105,12 +79,7 @@ writeFileSync(
   serialize(bases.map((base) => ({ label: base.label, name: styleName(base) })))
 );
 
-const overlays = new Map(
-  discovered.flatMap((item) =>
-    item.iconVariant ? [[item.meta.name, item.iconVariant.base] as const] : []
-  )
-);
-const errors = verify(target, overlays);
+const errors = verify(target);
 if (errors.length > 0) {
   console.error(`Registry verification failed with ${errors.length} error(s):`);
   for (const error of errors) {

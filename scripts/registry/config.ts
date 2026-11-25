@@ -1,4 +1,4 @@
-import type { AliasTarget, Base, IconSet, Source } from "./types.ts";
+import type { AliasTarget, Base, Source } from "./types.ts";
 
 export const homepage = "https://www.rtecn.space";
 
@@ -12,6 +12,8 @@ export const bases: Base[] = [
 ];
 
 export const defaultBase = "base";
+
+export const iconPlaceholderModule = "icon-placeholder";
 
 export const styleName = (base: Base) => `${base.name}-nova`;
 
@@ -88,13 +90,6 @@ export const ranges: Record<string, string> = {
   "tailwind-merge": "^3.0.0",
   xss: "^1.0.17",
 };
-
-export const iconSets: IconSet[] = [
-  { file: "icons-phosphor.tsx", name: "phosphor", title: "Phosphor Icons" },
-  { file: "icons-tabler.tsx", name: "tabler", title: "Tabler Icons" },
-  { file: "icons-hugeicons.tsx", name: "hugeicons", title: "HugeIcons" },
-  { file: "icons-remix.tsx", name: "remixicon", title: "Remix Icon" },
-];
 
 export const primitivePairs = {
   base: "packages/editor/src/ui",

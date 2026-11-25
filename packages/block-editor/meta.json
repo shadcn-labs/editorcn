@@ -27,8 +27,5 @@
     "@tiptap/suggestion@>=2.11.5 <4",
     "class-variance-authority"
   ],
-  "exclude": ["icon-library.ts"],
-  "iconSets": {
-    "requiredExports": ["HeadingIcon"]
-  }
+  "exclude": ["icon-placeholder.tsx", "icon-library.ts"]
 }
