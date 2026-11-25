@@ -82,7 +82,7 @@ export const ranges: Record<string, string> = {
   "@tiptap/*": ">=3.0.0 <4",
   "class-variance-authority": "^0.7.1",
   clsx: "^2.1.1",
-  "lucide-react": ">=0.400.0 <1.0.0",
+  "lucide-react": ">=0.400.0 <2.0.0",
   mermaid: "^11.0.0",
   prettier: "^3.0.0",
   "radix-ui": "^1.4.3",

@@ -343,7 +343,9 @@ const myItems: SlashCommandSuggestionItem[] = [
 
 ### Icon library
 
-The icons follow the `iconLibrary` in your `components.json`. `block-editor/icons.tsx` is written with shadcn's `IconPlaceholder`, and when you add the block editor, the shadcn CLI swaps each placeholder for the matching icon from Lucide, Tabler, HugeIcons, Phosphor or Remix Icon. This needs shadcn CLI 3.7.0 or newer, which `npx shadcn@latest` always is.
+The icons follow the `iconLibrary` in your `components.json`. `block-editor/icons.tsx` is written with shadcn's `IconPlaceholder`, and when you add the block editor, the shadcn CLI swaps each placeholder for the matching icon from Lucide, Tabler, HugeIcons, Phosphor or Remix Icon. This needs shadcn CLI 4.7.0 or newer, which `npx shadcn@latest` always is.
+
+`iconLibrary` has to be one of the five libraries above. Older projects may still have `"iconLibrary": "radix"`, which the CLI skips, so the placeholders stay in the file and the build fails on the `./icon-placeholder` import. Set it to `"lucide"` (or another supported library) before adding the block editor.
 
 The CLI doesn't install the icon package. `shadcn init` installs it for your `iconLibrary`, so it's usually there already. If not, add it:
 

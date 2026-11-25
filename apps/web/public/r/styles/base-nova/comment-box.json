@@ -8,7 +8,7 @@
     "@tiptap/react@>=3.0.0 <4",
     "@tiptap/starter-kit@>=3.0.0 <4",
     "@tiptap/static-renderer@>=3.21.0 <4",
-    "lucide-react@>=0.400.0 <1.0.0"
+    "lucide-react@>=0.400.0 <2.0.0"
   ],
   "description": "A comment thread with avatars, relative times, emoji reactions, a delete menu, and an editor composer with onPost, onReact, and onDelete hooks.",
   "files": [

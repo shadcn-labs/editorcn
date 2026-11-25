@@ -32,6 +32,8 @@ const useDropdownPill = (
   useLayoutEffect(() => {
     if (activeItem) {
       setRect(measure(activeItem));
+    } else if (activeItem === null) {
+      setRect(null);
     }
   }, [activeItem]);
 
