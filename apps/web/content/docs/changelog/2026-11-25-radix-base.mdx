@@ -1,0 +1,42 @@
+---
+title: "November 25, 2026 - Radix UI support"
+description: "Every registry item now comes in a Base UI and a Radix UI build, and the shadcn CLI picks the one that matches your project's style."
+date: "2026-11-25"
+---
+
+editorcn was built on Base UI, so a Radix shadcn project got the editor's Base UI primitives next to its own Radix components. Two templates also used Radix's `asChild`, which Base UI ignores, so their menu triggers rendered a button inside a button. Every registry item is now built twice, once with Base UI and once with Radix UI, and the shadcn CLI installs the build that matches the `style` in your `components.json`.
+
+## Highlights
+
+- **One registry URL for both bases**: `https://www.rtecn.space/r/styles/{style}/{name}.json`. The CLI fills in `{style}`, so `radix-nova` projects get Radix components and `base-nova` projects get Base UI components. See [Registry](/docs/registry#setup).
+- **Every style works**: other `base-*` and `radix-*` styles (`base-vega`, `radix-maia` and so on) are served the matching build. Older Radix styles like `new-york` get the Radix build.
+- **Templates on both bases**: the comment box and simple document editor templates no longer use `asChild`, so their menus, tooltips and dialogs work with Base UI and Radix.
+- **Base switch in the docs**: install commands with a registry URL now have a Base UI / Radix UI switch next to the package manager tabs.
+
+React Aria styles (`aria-*`) aren't supported yet. Installing in an `aria-*` project fails with a 404.
+
+## Upgrading
+
+### shadcn registry
+
+Change the editorcn registry in your `components.json`:
+
+```json
+{
+  "registries": {
+    "@editorcn": "https://www.rtecn.space/r/styles/{style}/{name}.json"
+  }
+}
+```
+
+Then re-add the items you use, for example:
+
+```bash
+npx shadcn@latest add @editorcn/editor
+```
+
+Base UI projects don't have to change anything. The old URLs (`https://www.rtecn.space/r/{name}.json`) still work and keep installing the Base UI build. In a Radix project, re-adding the editor replaces its Base UI primitives in `components/editor/ui/` with Radix ones, and you can remove `@base-ui/react` if nothing else uses it.
+
+### npm
+
+Nothing changes. The npm packages still use Base UI.
