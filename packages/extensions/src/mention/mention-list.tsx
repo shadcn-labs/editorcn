@@ -165,6 +165,7 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>(
     );
   }
 );
+MentionList.displayName = "MentionList";
 
 export const renderMentionList = (
   options: MentionListOptions

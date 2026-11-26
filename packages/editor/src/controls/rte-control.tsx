@@ -114,6 +114,7 @@ export const RichTextEditorControl = forwardRef<
     );
   }
 );
+RichTextEditorControl.displayName = "RichTextEditorControl";
 
 type EditorStateSelector = (ctx: { editor: Editor | null }) => {
   active: boolean;

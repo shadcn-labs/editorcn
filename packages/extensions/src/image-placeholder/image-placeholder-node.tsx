@@ -2,7 +2,7 @@
 
 import type { NodeViewProps } from "@tiptap/react";
 import { NodeViewWrapper } from "@tiptap/react";
-import { Image, Link, Upload } from "lucide-react";
+import { ImageIcon, Link, Upload } from "lucide-react";
 import type { DragEvent, FormEvent } from "react";
 import { useCallback, useId, useState } from "react";
 
@@ -164,7 +164,7 @@ export const ImagePlaceholderNode = ({
             className={triggerClass}
             type="button"
           >
-            <Image />
+            <ImageIcon />
             {labels.imagePlaceholder}
           </button>
         }
