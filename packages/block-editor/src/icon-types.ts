@@ -11,6 +11,10 @@ export interface BlockEditorIcons {
   slashDividerIcon: React.ReactNode;
   slashImageIcon: React.ReactNode;
   slashTableIcon: React.ReactNode;
+  slashCalloutIcon: React.ReactNode;
+  slashToggleIcon: React.ReactNode;
+  slashImportMarkdownIcon: React.ReactNode;
+  slashExportMarkdownIcon: React.ReactNode;
   searchIcon: React.ReactNode;
   fallbackIcon: React.ReactNode;
   dragHandleIcon: React.ReactNode;

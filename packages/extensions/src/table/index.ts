@@ -1,9 +1,10 @@
 import type { CommandProps } from "@tiptap/core";
-import { Gapcursor } from "@tiptap/extension-gapcursor";
 import { Table as TiptapTable } from "@tiptap/extension-table";
 import { TableCell } from "@tiptap/extension-table-cell";
 import { TableHeader } from "@tiptap/extension-table-header";
 import { TableRow } from "@tiptap/extension-table-row";
+
+export { tableSlashCommandItem } from "./slash-command-item";
 
 export interface TableConfigOptions {
   HTMLAttributes?: Record<string, unknown>;
@@ -144,7 +145,7 @@ export const Table = TiptapTable.extend<TableConfigOptions>({
     };
   },
   addExtensions() {
-    return [TableRow, TableCell, TableHeader, Gapcursor];
+    return [TableRow, TableCell, TableHeader];
   },
   addOptions() {
     return {

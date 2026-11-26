@@ -22,6 +22,7 @@ export {
   unwrapCallout,
 } from "./utils";
 export type { CalloutAttributes, CalloutVariant } from "./utils";
+export { calloutSlashCommandItem } from "./slash-command-item";
 
 export interface CalloutOptions {
   HTMLAttributes: Record<string, unknown>;

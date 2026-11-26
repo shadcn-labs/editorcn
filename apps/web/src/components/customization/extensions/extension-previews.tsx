@@ -8,12 +8,13 @@ import {
 } from "@editorcn/block-editor";
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
 import { RichTextEditor } from "@editorcn/editor";
-import { Callout } from "@editorcn/extensions/callout";
+import { Callout, calloutSlashCommandItem } from "@editorcn/extensions/callout";
 import { CalloutToolbar } from "@editorcn/extensions/callout-toolbar";
 import { CodeBlock } from "@editorcn/extensions/code-block";
 import { ToolbarProvider } from "@editorcn/extensions/core";
 import {
   ImagePlaceholder,
+  imagePlaceholderSlashCommandItem,
   ResizableImage,
 } from "@editorcn/extensions/image-placeholder";
 import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-toolbar";
@@ -21,7 +22,7 @@ import { Markdown } from "@editorcn/extensions/markdown";
 import { MarkdownToolbar } from "@editorcn/extensions/markdown-toolbar";
 import { Mention } from "@editorcn/extensions/mention";
 import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
-import { Table } from "@editorcn/extensions/table";
+import { Table, tableSlashCommandItem } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { TableToolbar } from "@editorcn/extensions/table-toolbar";
 import { Toggle, toggleSlashCommandItem } from "@editorcn/extensions/toggle";
@@ -56,21 +57,7 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
     content:
       '<div data-type="callout" data-variant="info"><p>Click the icon to switch the callout type or remove it. Callouts hold any block content, like lists:</p><ul><li><p>Press Enter on an empty last line to leave the callout.</p></li></ul></div><div data-type="callout" data-variant="tip"><p>Type <code>&gt; [!WARNING]</code> followed by a space in an empty line to create a warning callout.</p></div><div data-type="callout" data-variant="warning" data-emoji="🔥"><p>Callouts can show a custom emoji instead of the icon.</p></div><p></p>',
     extensions: [StarterKit, Callout],
-    slashItems: [
-      {
-        command: ({ editor, range }) =>
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setCallout({ variant: "info" })
-            .run(),
-        description: "Highlight a note, tip, or warning",
-        id: "callout",
-        keywords: ["callout", "note", "tip", "warning", "alert", "info"],
-        title: "Callout",
-      },
-    ],
+    slashItems: [calloutSlashCommandItem],
     toolbar: <CalloutToolbar />,
   },
   "code-block": {
@@ -83,21 +70,7 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
     content:
       "<p>Click the image button in the toolbar to insert a placeholder, then upload a file or paste an image URL to replace it. The inserted image can be resized from its handles.</p>",
     extensions: [StarterKit, ResizableImage, ImagePlaceholder],
-    slashItems: [
-      {
-        command: ({ editor, range }) =>
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .insertImagePlaceholder()
-            .run(),
-        description: "Insert an image placeholder",
-        id: "insertImagePlaceholder",
-        keywords: ["image", "photo", "picture"],
-        title: "Image",
-      },
-    ],
+    slashItems: [imagePlaceholderSlashCommandItem],
     toolbar: <ImagePlaceholderToolbar />,
   },
   markdown: {
@@ -125,21 +98,7 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
     content:
       "<h2>Table</h2><p>Click inside the table, then use the Table control to add or remove rows and columns, merge or split cells, and toggle the header row. In the block editor, type <code>/</code> to insert a table from the command menu.</p><table><thead><tr><th>Feature</th><th>Status</th></tr></thead><tbody><tr><td>Rows</td><td>Add / delete</td></tr><tr><td>Columns</td><td>Add / delete</td></tr><tr><td>Cells</td><td>Merge / split</td></tr></tbody></table>",
     extensions: [StarterKit, Table],
-    slashItems: [
-      {
-        command: ({ editor, range }) =>
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .insertTableWithHeader()
-            .run(),
-        description: "Insert a table with a header row",
-        id: "insertTableWithHeader",
-        keywords: ["table", "row", "column"],
-        title: "Insert table",
-      },
-    ],
+    slashItems: [tableSlashCommandItem],
     toolbar: <TableToolbar />,
   },
   toggle: {

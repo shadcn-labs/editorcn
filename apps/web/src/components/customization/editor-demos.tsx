@@ -36,7 +36,11 @@ const EDITOR_CONTENT = `
 `.trim();
 
 const extensions = [
-  StarterKit.configure({ heading: { levels: [1, 2, 3, 4, 5, 6] } }),
+  StarterKit.configure({
+    heading: { levels: [1, 2, 3, 4, 5, 6] },
+    link: false,
+    underline: false,
+  }),
   Link,
   Underline,
   Highlight,
