@@ -8,6 +8,8 @@ Templates are complete, ready-made Tiptap editors for React. Each one is a real 
 
 <TemplateGallery />
 
+The complete editors from the [homepage](/) install the same way: the [Full Toolbar Editor](/docs/editor#full-setup) (`npx shadcn@latest add @editorcn/full-editor`) and the [Full Block Editor](/docs/block-editor#full-setup) (`npx shadcn@latest add @editorcn/full-block-editor`), with every editorcn extension wired up.
+
 ## How templates work
 
 Each template installs as a shadcn block: the CLI adds the template, the [editor](/docs/editor), and every component and extension it depends on. The template lands in its own folder, `components/templates/<name>/`, split into small files (types, constants, toolbar, panels and so on) with `index.tsx` as the entry point.

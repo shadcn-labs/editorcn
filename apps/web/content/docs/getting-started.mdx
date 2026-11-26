@@ -8,7 +8,7 @@ description: "Add a rich text editor to your React or Next.js app. Prerequisites
 
 - React 18 or 19
 - A shadcn/ui setup with Tailwind CSS v4
-- Tiptap v2 or v3 (`>=2.11.5 <4`)
+- Tiptap v3 (`@tiptap/react` 3.x)
 
 ## Choose your editor
 
@@ -54,10 +54,12 @@ Since the shadcn registry is the recommended install method, add the editorcn re
 npx shadcn@latest add @editorcn/editor
 ```
 
+This also installs every Tiptap extension the toolbar controls use (text align, placeholder, character count, color and highlight), so the example below works without installing anything else.
+
 **Or install via npm:**
 
 ```bash
-npm install @editorcn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-underline @tiptap/extension-character-count @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
+npm install @editorcn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-text-align @tiptap/extension-placeholder @tiptap/extension-character-count @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
 ```
 
 Import the styles:
@@ -86,7 +88,6 @@ The toolbar, menus and other chrome are styled with Tailwind classes, and Tailwi
 
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { Underline } from "@tiptap/extension-underline";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { TextStyle } from "@tiptap/extension-text-style";
@@ -101,9 +102,8 @@ export function MyEditor() {
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,
     extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2, 3, 4, 5, 6] } }),
+      StarterKit.configure({ heading: { levels: [1, 2, 3, 4, 5, 6] }, link: false }),
       Link,
-      Underline,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({ placeholder: "Start typing..." }),
       CharacterCount,
@@ -111,7 +111,6 @@ export function MyEditor() {
       Color,
       Highlight.configure({ multicolor: true }),
     ],
-    content: "<p>Start typing...</p>",
   });
 
   return (
@@ -165,19 +164,25 @@ export function MyEditor() {
 }
 ```
 
+`StarterKit` v3 already includes `Link` and `Underline`. Pass `link: false` so it doesn't register a second link extension next to editorcn's `Link`, and don't add `@tiptap/extension-underline` yourself. Otherwise Tiptap warns about duplicate extension names.
+
 ### Option 2: @editorcn/block-editor (Blocks-style)
 
 **Install via the shadcn registry (recommended):**
 
 ```bash
-npx shadcn@latest add @editorcn/block-editor
+npx shadcn@latest add @editorcn/block-editor @editorcn/table @editorcn/image-placeholder
 ```
+
+This installs the block editor with the Tiptap extensions it uses (placeholder, task lists, text align, color and highlight), plus the editorcn [Table](/docs/extensions/table) and [Image Placeholder](/docs/extensions/image-placeholder) extensions used in the example below.
 
 **Or install via npm:**
 
 ```bash
-npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react @tiptap/extension-link @tiptap/extension-underline @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
+npm install @editorcn/block-editor @editorcn/extensions @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react @tiptap/extension-placeholder @tiptap/extension-task-list @tiptap/extension-task-item @tiptap/extension-text-align @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
 ```
+
+With npm, import the extensions from `@editorcn/extensions/table` and `@editorcn/extensions/image-placeholder` instead of `@/components/extensions/...`.
 
 Import the styles:
 
@@ -199,15 +204,28 @@ The toolbar, menus and other chrome are styled with Tailwind classes, and Tailwi
 
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { Underline } from "@tiptap/extension-underline";
 import { Placeholder } from "@tiptap/extension-placeholder";
+import { TaskList } from "@tiptap/extension-task-list";
+import { TaskItem } from "@tiptap/extension-task-item";
+import { TextAlign } from "@tiptap/extension-text-align";
+import { TextStyle } from "@tiptap/extension-text-style";
+import { Color } from "@tiptap/extension-color";
+import { Highlight } from "@tiptap/extension-highlight";
 import {
   BlockEditor,
   SlashCommand,
-  defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@/components/block-editor";
+import {
+  ImagePlaceholder,
+  ResizableImage,
+  imagePlaceholderSlashCommandItem,
+} from "@/components/extensions/image-placeholder";
+import { Table, tableSlashCommandItem } from "@/components/extensions/table";
+import { TableHoverOverlay } from "@/components/extensions/table/table-hover-overlay";
 import "@/components/block-editor/style.css";
+import "@/components/extensions/image-placeholder/style.css";
+import "@/components/extensions/table/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
@@ -216,24 +234,59 @@ export function MyEditor() {
     extensions: [
       StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
       Placeholder.configure({ placeholder: "Type / for commands..." }),
-      Underline,
+      TaskList,
+      TaskItem.configure({ nested: true }),
+      TextAlign.configure({ types: ["heading", "paragraph"] }),
+      TextStyle,
+      Color,
+      Highlight.configure({ multicolor: true }),
+      Table,
+      ResizableImage,
+      ImagePlaceholder,
       SlashCommand.configure({
-        suggestion: getSlashCommandSuggestion(),
+        suggestion: getSlashCommandSuggestion([
+          imagePlaceholderSlashCommandItem,
+          tableSlashCommandItem,
+        ]),
       }),
     ],
   });
 
-  return <BlockEditor editor={editor} />;
+  return (
+    <div className="relative mx-auto w-full max-w-3xl px-4">
+      <BlockEditor editor={editor} />
+      <TableHoverOverlay editor={editor} />
+    </div>
+  );
 }
 ```
+
+The block editor fills its container, and its drag handles sit in a gutter on the left. Put it in a container with a max width and some side padding, such as `mx-auto w-full max-w-3xl px-4`, so the handles don't land on the edge of the window.
+
+<Callout title="Next.js with cacheComponents">
+  Tiptap's `useEditor` reads `Math.random()`, which Next.js `cacheComponents`
+  rejects during prerender. If you get that error, render the editor inside a
+  `<Suspense>` boundary.
+</Callout>
+
+## Full setup in one command
+
+To start from the complete editors on the [homepage](/), with every control and all editorcn extensions (callout, code block, image placeholder, markdown, mention, paste cleanup, table and toggle) already wired up, install a full setup instead:
+
+```bash
+npx shadcn@latest add @editorcn/full-editor
+npx shadcn@latest add @editorcn/full-block-editor
+```
+
+See [Full setup](/docs/editor#full-setup) for the toolbar editor and [Full setup](/docs/block-editor#full-setup) for the block editor.
 
 > See the [@editorcn/editor docs](./editor) or [@editorcn/block-editor docs](./block-editor) for detailed API references.
 
 ## Peer dependencies
 
-All `@tiptap/*` packages are **peer dependencies** — you must install them in your project. This ensures a single copy of Tiptap's types and avoids "duplicate instance" TypeScript errors.
+All `@tiptap/*` packages are **peer dependencies**, so your project has a single copy of Tiptap and its types don't clash.
 
-This applies regardless of install method: npm installs list them explicitly as shown above, and the shadcn registry installer will prompt you to add any peer dependencies it detects are missing.
+The shadcn CLI installs every `@tiptap/*` package an item needs. With npm, the install commands above list them.
 
 ### Keep Tiptap versions in sync
 

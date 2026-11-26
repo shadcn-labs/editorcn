@@ -77,7 +77,7 @@ export function PostEditor() {
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,
     extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
+      StarterKit.configure({ heading: { levels: [1, 2, 3] }, link: false }),
       Link,
       Placeholder.configure({ placeholder: "Write something..." }),
     ],
@@ -205,7 +205,7 @@ export default async function PostPage({
   const post = await getPost(id);
 
   return (
-    <StaticRenderer content={post.content} extensions={[StarterKit, Link]} />
+    <StaticRenderer content={post.content} extensions={[StarterKit.configure({ link: false }), Link]} />
   );
 }
 ```

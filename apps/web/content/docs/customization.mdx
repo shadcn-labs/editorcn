@@ -146,7 +146,7 @@ Use the `editable` prop on `RichTextEditor` — the toolbar is hidden automatica
 ```tsx
 const editor = useEditor({
   editable: false,
-  extensions: [StarterKit, Link],
+  extensions: [StarterKit.configure({ link: false }), Link],
 });
 
 <RichTextEditor editor={editor} editable={false}>
@@ -309,10 +309,11 @@ Add your own items to the slash command (`/`) menu by passing custom items to `g
 ```tsx
 import {
   SlashCommand,
-  defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@/components/block-editor";
 import type { SlashCommandSuggestionItem } from "@/components/block-editor";
+import { imagePlaceholderSlashCommandItem } from "@/components/extensions/image-placeholder";
+import { tableSlashCommandItem } from "@/components/extensions/table";
 
 const customItems: SlashCommandSuggestionItem[] = [
   {
@@ -329,17 +330,8 @@ const customItems: SlashCommandSuggestionItem[] = [
         .run();
     },
   },
-  {
-    id: "image",
-    title: "Image",
-    description: "Insert an image.",
-    keywords: ["image", "img", "picture"],
-    command: ({ editor, range }) => {
-      const url = window.prompt("Enter image URL"); // Replace with your own dialog/modal
-      if (!url) return;
-      editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
-    },
-  },
+  imagePlaceholderSlashCommandItem,
+  tableSlashCommandItem,
 ];
 
 SlashCommand.configure({
@@ -347,7 +339,7 @@ SlashCommand.configure({
 });
 ```
 
-Custom items appear at the top of the menu. Built-in items with the same `id` are replaced; all others are appended below your custom items.
+Custom items appear at the top of the menu. Built-in items with the same `id` are replaced; all others are appended below your custom items. The Image and Table items come from the [Image Placeholder](/docs/extensions/image-placeholder) and [Table](/docs/extensions/table) extensions, which also need to be registered in the editor. See [Slash items from editorcn extensions](/docs/block-editor#slash-items-from-editorcn-extensions).
 
 ### Custom Icon Overrides
 
@@ -374,17 +366,7 @@ Individual slash command items also accept an `icon` property:
 
 ```tsx
 const myItems: SlashCommandSuggestionItem[] = [
-  ...defaultSlashCommandItems,
-  {
-    id: "image",
-    title: "Image",
-    description: "Insert an image.",
-    keywords: ["image", "img", "picture"],
-    icon: <ImageIcon />, // Custom icon for this item
-    command: ({ editor, range }) => {
-      /* ... */
-    },
-  },
+  { ...imagePlaceholderSlashCommandItem, icon: <MyImageIcon /> },
 ];
 ```
 

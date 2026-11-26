@@ -73,7 +73,7 @@ editor.commands.insertContent("**bold**", { contentType: "markdown" });
 
 ### With `@editorcn/block-editor`
 
-The block editor takes the same `editor` instance, so the setup is identical:
+The block editor takes the same `editor` instance. Add `getMarkdownSlashCommandItems()` to get **Import Markdown** and **Export Markdown** in the slash menu. It takes the export file name, `document.md` by default:
 
 <ExtensionPreview slug="markdown" editor="block" />
 
@@ -83,7 +83,11 @@ const editor = useEditor({
   extensions: [
     StarterKit,
     Markdown.configure({ pasteMarkdown: true }),
-    SlashCommand.configure({ suggestion: getSlashCommandSuggestion() }),
+    SlashCommand.configure({
+      suggestion: getSlashCommandSuggestion(
+        getMarkdownSlashCommandItems("notes.md")
+      ),
+    }),
   ],
   content: markdown,
   contentType: "markdown",
@@ -171,7 +175,7 @@ const json = new MarkdownManager({ extensions }).parse(markdown);
 
 ### `importMarkdownFile`, `downloadMarkdown`, `copyMarkdown`
 
-The functions behind the toolbar. Use them to build your own menu, such as slash commands in the block editor:
+The functions behind the toolbar and the slash items. Use them to build your own menu:
 
 ```tsx
 importMarkdownFile(editor);
