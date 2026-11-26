@@ -131,7 +131,7 @@ export const DEFAULT_ICONS: BlockEditorIcons = {
     <IconPlaceholder
       lucide="GripVertical"
       tabler="IconGripVertical"
-      hugeicons="Drag01Icon"
+      hugeicons="DragDropVerticalIcon"
       phosphor="DotsSixVerticalIcon"
       remixicon="RiDraggable"
       className="block-editor-drag-handle-icon"
