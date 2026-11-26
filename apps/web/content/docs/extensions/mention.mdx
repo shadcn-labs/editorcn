@@ -122,9 +122,9 @@ const peopleByEditor = new WeakMap<Editor, User[]>();
 
 Mention.configure({
   items: (query, editor) =>
-    (peopleByEditor.get(editor) ?? []).filter((u) =>
-      u.name.toLowerCase().includes(query.toLowerCase())
-    ),
+    (peopleByEditor.get(editor) ?? [])
+      .filter((u) => u.name.toLowerCase().includes(query.toLowerCase()))
+      .map((u) => ({ id: u.id, label: u.name, avatar: u.imageUrl })),
 });
 ```
 
