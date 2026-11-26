@@ -100,7 +100,7 @@ const filter = new FilterXSS({
     mark: ["data-color", "style"],
     ol: ["start", "type"],
     p: ["style"],
-    pre: [],
+    pre: ["data-caption", "data-wrap"],
     s: [],
     span: [
       "style",
