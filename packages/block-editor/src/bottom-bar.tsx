@@ -1,5 +1,4 @@
 import type { Editor } from "@tiptap/react";
-import { Plus } from "lucide-react";
 import { useEffect, useRef } from "react";
 
 import { TextAlignSelector } from "./bubble-menu/align-selector";
@@ -7,6 +6,7 @@ import { ColorSelector } from "./bubble-menu/color-selector";
 import { LinkSelector } from "./bubble-menu/link-selector";
 import { NodeSelector } from "./bubble-menu/node-selector";
 import { TextButtons } from "./bubble-menu/text-buttons";
+import { IconPlaceholder } from "./icon-placeholder";
 import { BubbleButton, BubbleSeparator } from "./ui";
 
 export interface BottomBarProps {
@@ -65,7 +65,13 @@ export const BottomBar = ({ editor }: BottomBarProps) => {
           onMouseDown={(e) => e.preventDefault()}
           onClick={handleAdd}
         >
-          <Plus />
+          <IconPlaceholder
+            lucide="Plus"
+            tabler="IconPlus"
+            hugeicons="PlusSignIcon"
+            phosphor="PlusIcon"
+            remixicon="RiAddLine"
+          />
         </BubbleButton>
         <NodeSelector editor={editor} />
         <BubbleSeparator />

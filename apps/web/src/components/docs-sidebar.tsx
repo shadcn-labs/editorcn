@@ -62,7 +62,7 @@ const SidebarPageGroup = ({
 
   return (
     <SidebarGroup className="py-0">
-      <SidebarGroupLabel className="px-2.5 text-xs font-medium text-muted-foreground">
+      <SidebarGroupLabel className="px-2.5 text-xs font-semibold text-foreground">
         {label}
       </SidebarGroupLabel>
       <SidebarGroupContent>
@@ -106,7 +106,7 @@ export const DocsSidebar = ({
       <div className="absolute top-12 right-2 bottom-0 hidden h-full w-px bg-linear-to-b from-transparent via-border to-transparent lg:flex" />
       <SidebarContent className="mx-auto no-scrollbar w-(--sidebar-menu-width) overflow-x-hidden px-2">
         <SidebarGroup className="pt-6">
-          <SidebarGroupLabel className="px-2.5 text-xs font-medium text-muted-foreground">
+          <SidebarGroupLabel className="px-2.5 text-xs font-semibold text-foreground">
             Sections
           </SidebarGroupLabel>
           <SidebarGroupContent>

@@ -1,7 +1,15 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { basename, isAbsolute, join, relative, resolve, sep } from "node:path";
+import {
+  basename,
+  isAbsolute,
+  join,
+  posix,
+  relative,
+  resolve,
+  sep,
+} from "node:path";
 
-import { iconSets, ignoredFiles, sources } from "./config.ts";
+import { iconPlaceholderModule, ignoredFiles, sources } from "./config.ts";
 import { isScript, resolveRelative, scanImports } from "./imports.ts";
 import { registryTypes } from "./types.ts";
 import type { Item, Meta, RegistryType, Source, SourceFile } from "./types.ts";
@@ -64,7 +72,11 @@ const relativeImports = (path: string) =>
   isScript(path)
     ? scanImports(readText(path), path)
         .map(({ specifier }) => specifier)
-        .filter((specifier) => specifier.startsWith("."))
+        .filter(
+          (specifier) =>
+            specifier.startsWith(".") &&
+            posix.basename(specifier) !== iconPlaceholderModule
+        )
         .map((specifier) => resolveRelative(path, specifier))
     : [];
 
@@ -116,37 +128,11 @@ const sharedFiles = (
   });
 };
 
-const iconVariants = (item: Item & { home: string; filesDir: string }) =>
-  iconSets.map(
-    (set): Item => ({
-      files: [
-        {
-          path: `${item.home}/icons.tsx`,
-          source: join(item.filesDir, set.file),
-          type: "registry:component",
-        },
-      ],
-      iconVariant: {
-        base: item.meta.name,
-        requiredExports: item.meta.iconSets?.requiredExports ?? [],
-      },
-      meta: {
-        description: `${set.title} variant of the ${item.meta.title} icons. Install after the ${item.meta.name} item; overwrites ${item.home}/icons.tsx.`,
-        name: `${item.meta.name}-icons-${set.name}`,
-        title: `${item.meta.title} (${set.title})`,
-        type: "registry:component",
-      },
-      source: {},
-      themeFiles: [],
-    })
-  );
-
 const metaKeys = new Set([
   "dependencies",
   "description",
   "exclude",
   "fileTypes",
-  "iconSets",
   "name",
   "registryDependencies",
   "title",
@@ -181,10 +167,7 @@ const readItem = (source: Source, dir: string): Item[] => {
     );
   }
   const filesDir = source.filesDir ? join(dir, source.filesDir) : dir;
-  const excluded = [
-    ...(meta.exclude ?? []),
-    ...(meta.iconSets ? iconSets.map((set) => set.file) : []),
-  ].map(globToRegExp);
+  const excluded = (meta.exclude ?? []).map(globToRegExp);
   const ownFiles = walk(filesDir, (rel) =>
     excluded.some((pattern) => pattern.test(rel))
   );
@@ -209,7 +192,7 @@ const readItem = (source: Source, dir: string): Item[] => {
     source,
     themeFiles: files.filter(isTheme).map((file) => file.source),
   };
-  return meta.iconSets ? [item, ...iconVariants(item)] : [item];
+  return [item];
 };
 
 export const sharedHomes = sources.flatMap((source) =>

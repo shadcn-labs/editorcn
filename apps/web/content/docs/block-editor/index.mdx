@@ -15,6 +15,15 @@ npx shadcn@latest add @editorcn/block-editor
 
 This copies the component source directly into your project, so you can customize it freely.
 
+<Callout title="Check your iconLibrary">
+  The icons are written for the `iconLibrary` in your `components.json`, which
+  must be `lucide`, `tabler`, `hugeicons`, `phosphor` or `remixicon`. Older
+  projects with `"iconLibrary": "radix"` get a build error about
+  `./icon-placeholder`. Change it to `"lucide"` before installing, and install
+  `lucide-react` if your project doesn't have it (the CLI doesn't install icon
+  packages). See [Icon library](#icon-library).
+</Callout>
+
 **Or install via npm/pnpm:**
 
 ```bash
@@ -189,7 +198,7 @@ The root wrapper that provides editor context. Renders the full editor UI by def
 
 ### Icons
 
-By default all icons come from **lucide-react**, which inherits your theme's colors automatically (they render with `currentColor`). The block editor declares `lucide-react` as a dependency, so it is installed automatically via the shadcn registry or alongside the npm package.
+The default icons come from the `iconLibrary` in your `components.json` (see [Icon library](#icon-library)) and inherit your theme's colors (they render with `currentColor`). The npm package uses `lucide-react`.
 
 ### Labels
 
@@ -298,7 +307,7 @@ Pass the custom items array to `getSlashCommandSuggestion(myItems)`. Items with 
 
 ### Custom icons
 
-All default icons come from **lucide-react**. Override any built-in icon via the `icons` prop. All icons accept a `ReactNode`, so you can use inline SVGs, emoji, or any icon library.
+The default icons follow your `iconLibrary` (see [Icon library](#icon-library)). Override any built-in icon via the `icons` prop. All icons accept a `ReactNode`, so you can use inline SVGs, emoji, or any icon library.
 
 ```tsx
 import { BlockEditor, DEFAULT_ICONS } from "@/components/block-editor";
@@ -343,34 +352,31 @@ const myItems: SlashCommandSuggestionItem[] = [
 
 ### Icon library
 
-The default icons ship with **lucide-react**. If your `components.json` uses a different `iconLibrary`, install the matching icon set after the block editor — it overwrites `components/block-editor/icons.tsx` and installs only that library's package:
+The icons follow the `iconLibrary` in your `components.json`. `block-editor/icons.tsx` is written with shadcn's `IconPlaceholder`, and when you add the block editor, the shadcn CLI swaps each placeholder for the matching icon from Lucide, Tabler, HugeIcons, Phosphor or Remix Icon. This needs shadcn CLI 4.7.0 or newer, which `npx shadcn@latest` always is.
 
-| `iconLibrary`      | Install                                                                               |
-| ------------------ | ------------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                            |
-| `phosphor`         | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-remixicon.json"` |
+`iconLibrary` has to be one of the five libraries above. Older projects may still have `"iconLibrary": "radix"`, which the CLI skips, so the placeholders stay in the file and the build fails on the `./icon-placeholder` import. Set it to `"lucide"` (or another supported library) before adding the block editor.
 
-Order matters — add the block editor first, then the icon set:
+The CLI doesn't install the icon package. `shadcn init` installs it for your `iconLibrary`, so it's usually there already. If not, add it:
 
-```bash
-npx shadcn@latest add "https://www.rtecn.space/r/block-editor.json"
-npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-phosphor.json"
-```
+| `iconLibrary` | Package                                             |
+| ------------- | --------------------------------------------------- |
+| `lucide`      | `lucide-react`                                      |
+| `tabler`      | `@tabler/icons-react`                               |
+| `hugeicons`   | `@hugeicons/react` and `@hugeicons/core-free-icons` |
+| `phosphor`    | `@phosphor-icons/react`                             |
+| `remixicon`   | `@remixicon/react`                                  |
 
-Each set covers every slash menu, bubble menu, and drag handle icon, and reuses the shared language icons. Once installed you own `icons.tsx`, so you can still hand-edit it or override individual keys with the `icons` prop.
+This covers every slash menu, bubble menu and drag handle icon, plus the add-block buttons. `icons.tsx` is yours after install, so you can still edit it or override single keys with the `icons` prop.
 
-Already installed with lucide? Migrate instead of reinstalling:
+Changed `iconLibrary` after installing? Re-add the block editor (this overwrites your edits to its files), or migrate the installed files:
 
 ```bash
 npx shadcn@latest migrate icons --from lucide --to phosphor "src/components/block-editor/**"
 ```
 
-> **npm/pnpm installs**: the icon sets are registry items, so they apply to registry installs. With npm, override the `icons` prop yourself — the prop and all icon keys are unchanged.
+The `block-editor-icons-*` items from earlier releases are gone, because the block editor itself now installs the right icons.
 
-See the [Customization docs](/docs/customization) for icon sizing and per-key overrides.
+> **npm/pnpm installs**: the npm package uses `lucide-react`. To use another library, pass your own icons through the `icons` prop.
 
 ### Language icons
 

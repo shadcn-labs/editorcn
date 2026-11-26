@@ -1,8 +1,26 @@
-import type { AliasTarget, IconSet, Source } from "./types.ts";
+import type { AliasTarget, Base, Source } from "./types.ts";
 
 export const homepage = "https://www.rtecn.space";
 
-export const registryUrl = (name: string) => `${homepage}/r/${name}.json`;
+export const bases: Base[] = [
+  { label: "Base UI", name: "base", packages: [/^@base-ui\//] },
+  {
+    label: "Radix UI",
+    name: "radix",
+    packages: [/^radix-ui$/, /^@radix-ui\//],
+  },
+];
+
+export const defaultBase = "base";
+
+export const iconPlaceholderModule = "icon-placeholder";
+
+export const styleName = (base: Base) => `${base.name}-nova`;
+
+export const registryUrl = (name: string, style?: string) =>
+  style
+    ? `${homepage}/r/styles/${style}/${name}.json`
+    : `${homepage}/r/${name}.json`;
 
 export const outDir = "apps/web/public/r";
 
@@ -64,20 +82,14 @@ export const ranges: Record<string, string> = {
   "@tiptap/*": ">=3.0.0 <4",
   "class-variance-authority": "^0.7.1",
   clsx: "^2.1.1",
-  "lucide-react": ">=0.400.0 <1.0.0",
+  "lucide-react": ">=0.400.0 <2.0.0",
   mermaid: "^11.0.0",
   prettier: "^3.0.0",
+  "radix-ui": "^1.4.3",
   shiki: "^4.0.0",
   "tailwind-merge": "^3.0.0",
   xss: "^1.0.17",
 };
-
-export const iconSets: IconSet[] = [
-  { file: "icons-phosphor.tsx", name: "phosphor", title: "Phosphor Icons" },
-  { file: "icons-tabler.tsx", name: "tabler", title: "Tabler Icons" },
-  { file: "icons-hugeicons.tsx", name: "hugeicons", title: "HugeIcons" },
-  { file: "icons-remix.tsx", name: "remixicon", title: "Remix Icon" },
-];
 
 export const primitivePairs = {
   base: "packages/editor/src/ui",

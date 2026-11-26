@@ -14,12 +14,50 @@ Add the editorcn registry to your `components.json`:
 
 ```json
 {
-  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "$schema": "https://ui.shadcn.com/schema.json",
   "registries": {
-    "@editorcn": "https://www.rtecn.space/r/{name}.json"
+    "@editorcn": "https://www.rtecn.space/r/styles/{style}/{name}.json"
   }
 }
 ```
+
+This needs shadcn CLI 4.7.0 or newer (`npx shadcn@latest` always is). Older versions put the files in a literal `@components/` folder instead of your components directory.
+
+The shadcn CLI fills in `{style}` from the `style` in your `components.json`, so you get the build for your base:
+
+| Your `style`                         | You get             |
+| ------------------------------------ | ------------------- |
+| `base-*` (for example `base-nova`)   | Base UI components  |
+| `radix-*` (for example `radix-nova`) | Radix UI components |
+| `new-york`, `default`                | Radix UI components |
+| `aria-*`                             | Not supported yet   |
+
+<Callout title="Check your iconLibrary">
+  The icons are written for the `iconLibrary` in your `components.json`, which
+  must be `lucide`, `tabler`, `hugeicons`, `phosphor` or `remixicon`. Older
+  projects with `"iconLibrary": "radix"` get a build error about
+  `./icon-placeholder`. Change it to `"lucide"` before installing, and install
+  `lucide-react` if your project doesn't have it (the CLI doesn't install icon
+  packages). See [Icon library](/docs/editor#icon-library).
+</Callout>
+
+Only a few of the editor's own primitives depend on the base (button, dialog, input, popover, toggle and tooltip), and they look the same in every style, so `base-vega` and `base-nova` get the same editorcn files. shadcn components that the templates use, like `dropdown-menu`, still come from your own style.
+
+<Callout>
+  React Aria styles (`aria-*`) aren't supported yet. The CLI asks for
+  `/r/styles/aria-nova/...`, which doesn't exist, and the install fails with a
+  404. Use a `base-*` or `radix-*` style for now.
+</Callout>
+
+### Installing by URL
+
+You can also install an item by its full URL without adding the registry. Pick the base in the URL:
+
+```bash
+npx shadcn@latest add "https://www.rtecn.space/r/styles/radix-nova/editor.json"
+```
+
+Install commands in these docs show a base switch next to the package manager tabs, so you can copy the URL for your base. The older URLs without `/styles/` (`https://www.rtecn.space/r/editor.json`) still work and always install the Base UI build.
 
 ## Available packages
 
@@ -134,15 +172,18 @@ For the full API reference, props, and customization options, see the [Editor](.
 
 ## How it works
 
-The registry is served as static JSON files from `https://www.rtecn.space/r/`:
+The registry is served as static JSON files, one folder per base:
 
-- **`registry.json`** — catalog listing all available packages with metadata
-- **`editor.json`** — item schema for the toolbar editor (42 files, 21 dependencies)
-- **`block-editor.json`** — item schema for the block editor (38 files, 29 dependencies)
+- **`/r/styles/base-nova/`**: every item built with Base UI primitives
+- **`/r/styles/radix-nova/`**: the same items built with Radix UI primitives
+- **`/r/styles/index.json`**: the list of bases
+- **`/r/{name}.json`**: the Base UI build at the older URLs, for existing installs
 
-When you run `shadcn add @editorcn/editor`, the CLI:
+Each folder has a `registry.json` catalog and one JSON file per item. Other `base-*` and `radix-*` style names are served from these two folders.
 
-1. Fetches `https://www.rtecn.space/r/editor.json`
+When you run `shadcn add @editorcn/editor` in a project with `"style": "radix-nova"`, the CLI:
+
+1. Fetches `https://www.rtecn.space/r/styles/radix-nova/editor.json`
 2. Reads the `files` array to know which source files to install
 3. Copies each file's `content` into your project at the configured paths
 4. Installs all `dependencies` into your project

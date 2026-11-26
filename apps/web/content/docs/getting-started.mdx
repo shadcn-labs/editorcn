@@ -30,12 +30,21 @@ Since the shadcn registry is the recommended install method, add the editorcn re
 
 ```json
 {
-  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "$schema": "https://ui.shadcn.com/schema.json",
   "registries": {
-    "@editorcn": "https://www.rtecn.space/r/{name}.json"
+    "@editorcn": "https://www.rtecn.space/r/styles/{style}/{name}.json"
   }
 }
 ```
+
+<Callout title="Check your iconLibrary">
+  The icons are written for the `iconLibrary` in your `components.json`, which
+  must be `lucide`, `tabler`, `hugeicons`, `phosphor` or `remixicon`. Older
+  projects with `"iconLibrary": "radix"` get a build error about
+  `./icon-placeholder`. Change it to `"lucide"` before installing, and install
+  `lucide-react` if your project doesn't have it (the CLI doesn't install icon
+  packages). See [Icon library](/docs/editor#icon-library).
+</Callout>
 
 ### Option 1: @editorcn/editor (Toolbar-style)
 

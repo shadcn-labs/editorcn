@@ -259,17 +259,7 @@ See the [Styling docs](/docs/styling#change-icon-size) for more on sizing.
 
 ### Icon Library
 
-The toolbar icons ship with **lucide-react**. If your `components.json` uses a different `iconLibrary`, install the matching set after the editor — it overwrites `editor/icons.tsx` and installs only that set's package:
-
-| `iconLibrary`      | Install                                                                         |
-| ------------------ | ------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                      |
-| `phosphor`         | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://www.rtecn.space/r/editor-icons-remixicon.json"` |
-
-To migrate an existing install instead: `npx shadcn@latest migrate icons --from lucide --to phosphor "src/components/editor/**"`.
+The toolbar icons follow the `iconLibrary` in your `components.json`: the shadcn CLI (4.7.0 or newer) writes them with your library when you add the editor. See [Icon library](/docs/editor#icon-library) for details.
 
 ## BlockEditor
 
@@ -361,17 +351,9 @@ Custom items appear at the top of the menu. Built-in items with the same `id` ar
 
 ### Custom Icon Overrides
 
-Replace any built-in icon via the `icons` prop. All 28 icons accept a React node — use inline SVGs, emoji, or any icon library. The defaults come from **lucide-react** and inherit your theme automatically (`currentColor`).
+Replace any built-in icon via the `icons` prop. All 28 icons accept a React node — use inline SVGs, emoji, or any icon library. They inherit your theme automatically (`currentColor`).
 
-If your `components.json` uses a different `iconLibrary`, install the matching set after the block editor — it overwrites `block-editor/icons.tsx` and installs only that set's package:
-
-| `iconLibrary`      | Install                                                                               |
-| ------------------ | ------------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                            |
-| `phosphor`         | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://www.rtecn.space/r/block-editor-icons-remixicon.json"` |
+The defaults follow the `iconLibrary` in your `components.json`. See [Icon library](/docs/block-editor#icon-library).
 
 ```tsx
 import { BlockEditor, DEFAULT_ICONS } from "@/components/block-editor";

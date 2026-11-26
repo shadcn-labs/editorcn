@@ -18,7 +18,7 @@ import {
 import { useCallback, useEffect, useRef } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -68,21 +68,23 @@ const FormatMenu = ({ editor }: { editor: Editor | null }) => {
   const refocus = useRef(false);
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          aria-label="Formatting"
-          className="text-muted-foreground sm:hidden"
-          onFocus={() => {
-            if (refocus.current) {
-              refocus.current = false;
-              editor?.commands.focus();
-            }
-          }}
-          size="icon-sm"
-          variant="ghost"
-        >
-          <Type />
-        </Button>
+      <DropdownMenuTrigger
+        aria-label="Formatting"
+        onFocus={() => {
+          if (refocus.current) {
+            refocus.current = false;
+            editor?.commands.focus();
+          }
+        }}
+        className={cn(
+          buttonVariants({
+            className: "text-muted-foreground sm:hidden",
+            size: "icon-sm",
+            variant: "ghost",
+          })
+        )}
+      >
+        <Type />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="min-w-40 p-1">
         {FORMATS.map(({ Icon, label, mark, toggle }) => (

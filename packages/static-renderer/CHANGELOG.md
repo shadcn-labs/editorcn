@@ -1,5 +1,15 @@
 # @editorcn/static-renderer
 
+## 0.4.0
+
+Code blocks now look like the editor's Code Block, and can be syntax highlighted with Shiki.
+
+### Changes
+
+- Code blocks use the muted theme background, the mono font and a thin scrollbar, in light and dark mode, instead of a dark background. Output with highlight.js classes (`.hljs`) keeps its dark style.
+- New `highlighter` prop: pass a Shiki highlighter with the `github-light` and `github-dark` themes to color code blocks the way the editor does, in both HTML and JSON mode. `StaticRenderer` doesn't load Shiki itself, so it stays synchronous and works in server components.
+- `data-wrap` on code blocks soft-wraps long lines. The sanitizer now keeps `data-wrap` and `data-caption` on `<pre>`.
+
 ## 0.3.0
 
 Content styles are now shared with the editors as presets, so rendered content matches the editor it came from.

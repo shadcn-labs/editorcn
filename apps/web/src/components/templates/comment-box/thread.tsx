@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,15 +38,17 @@ const EmojiPicker = ({ onPick }: { onPick: (emoji: string) => void }) => {
   const [open, setOpen] = useState(false);
   return (
     <Popover onOpenChange={setOpen} open={open}>
-      <PopoverTrigger asChild>
-        <Button
-          aria-label="Add reaction"
-          className="text-muted-foreground size-7 rounded-full border"
-          size="icon-sm"
-          variant="ghost"
-        >
-          <SmilePlus className="size-3.5" />
-        </Button>
+      <PopoverTrigger
+        aria-label="Add reaction"
+        className={cn(
+          buttonVariants({
+            className: "text-muted-foreground size-7 rounded-full border",
+            size: "icon-sm",
+            variant: "ghost",
+          })
+        )}
+      >
+        <SmilePlus className="size-3.5" />
       </PopoverTrigger>
       <PopoverContent
         align="start"
@@ -81,15 +83,18 @@ const CommentMenu = ({
   onDelete: () => void;
 }) => (
   <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button
-        aria-label="Comment options"
-        className="text-muted-foreground size-7 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 data-[state=open]:opacity-100 [@media(hover:none)]:opacity-100"
-        size="icon-sm"
-        variant="ghost"
-      >
-        <MoreHorizontal className="size-4" />
-      </Button>
+    <DropdownMenuTrigger
+      aria-label="Comment options"
+      className={cn(
+        buttonVariants({
+          className:
+            "text-muted-foreground size-7 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 aria-expanded:opacity-100 [@media(hover:none)]:opacity-100",
+          size: "icon-sm",
+          variant: "ghost",
+        })
+      )}
+    >
+      <MoreHorizontal className="size-4" />
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" className="min-w-36 p-1">
       <DropdownMenuItem className={ITEM} onClick={onCopy}>

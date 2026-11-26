@@ -1,0 +1,50 @@
+---
+title: "November 26, 2026 - Radix UI support and icon libraries"
+description: "Every registry item now comes in a Base UI and a Radix UI build, and the editors' icons follow your iconLibrary. The shadcn CLI picks both from your components.json."
+date: "2026-11-26"
+---
+
+editorcn was built on Base UI, so a Radix shadcn project got the editor's Base UI primitives next to its own Radix components. Two templates also used Radix's `asChild`, which Base UI ignores, so their menu triggers rendered a button inside a button. Every registry item is now built twice, once with Base UI and once with Radix UI, and the shadcn CLI installs the build that matches the `style` in your `components.json`.
+
+## Highlights
+
+- **One registry URL for both bases**: `https://www.rtecn.space/r/styles/{style}/{name}.json`. The CLI fills in `{style}`, so `radix-nova` projects get Radix components and `base-nova` projects get Base UI components. See [Registry](/docs/registry#setup).
+- **Every style works**: other `base-*` and `radix-*` styles (`base-vega`, `radix-maia` and so on) are served the matching build. Older Radix styles like `new-york` get the Radix build.
+- **Templates on both bases**: the comment box and simple document editor templates no longer use `asChild`, so their menus, tooltips and dialogs work with Base UI and Radix.
+- **Icons follow your `iconLibrary`**: the editor and block editor icons use shadcn's `IconPlaceholder`, so the CLI writes them with Lucide, Tabler, HugeIcons, Phosphor or Remix Icon, whichever your `components.json` names. The editor no longer pulls in `lucide-react` for other libraries. See [Icon library](/docs/editor#icon-library).
+- **Static renderer code blocks**: code blocks look like the editor's Code Block in light and dark mode, and a new `highlighter` prop colors them with Shiki. See [Syntax highlighting](/docs/static-renderer#syntax-highlighting).
+- **Base switch in the docs**: install commands with a registry URL now have a Base UI / Radix UI switch next to the package manager tabs.
+
+React Aria styles (`aria-*`) aren't supported yet. Installing in an `aria-*` project fails with a 404.
+
+The registry needs shadcn CLI 4.7.0 or newer, which `npx shadcn@latest` always is. Projects with a legacy `"iconLibrary": "radix"` need to switch it to one of the five supported libraries.
+
+## Upgrading
+
+### shadcn registry
+
+Change the editorcn registry in your `components.json`:
+
+```json
+{
+  "registries": {
+    "@editorcn": "https://www.rtecn.space/r/styles/{style}/{name}.json"
+  }
+}
+```
+
+Then re-add the items you use, for example:
+
+```bash
+npx shadcn@latest add @editorcn/editor
+```
+
+Base UI projects don't have to change anything. The old URLs (`https://www.rtecn.space/r/{name}.json`) still work and keep installing the Base UI build. In a Radix project, re-adding the editor replaces its Base UI primitives in `components/editor/ui/` with Radix ones, and you can remove `@base-ui/react` if nothing else uses it.
+
+### Icon sets
+
+The `editor-icons-*` and `block-editor-icons-*` items are removed. Re-adding the editor or block editor now writes the icons for your `iconLibrary`, so you don't need them. If you installed one before, re-add the editor instead. The CLI doesn't install icon packages, so make sure your library's package is installed (see [Icon library](/docs/editor#icon-library)).
+
+### npm
+
+Update to `@editorcn/editor@0.5.1` and `@editorcn/block-editor@0.5.1`. The npm packages still use Base UI and `lucide-react`, and need no setup changes. 0.5.1 fixes focus returning to toolbar buttons that open dialogs, and allows `lucide-react` 1.x. It also requires `@tiptap/react` 3.0.1 or newer. `@editorcn/static-renderer` goes to 0.4.0 for the code block changes below.

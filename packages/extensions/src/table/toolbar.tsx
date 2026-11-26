@@ -81,15 +81,26 @@ export const TableToolbar = ({
 
   const state = useEditorState(
     editor,
-    (edit) => ({
-      canDeleteColumn: edit.can().deleteColumn(),
-      canDeleteRow: edit.can().deleteRow(),
-      canMerge: edit.can().mergeCells(),
-      canSplit: edit.can().splitCell(),
-      disabled: !extensionPresent(edit, "table"),
-      headerOn: edit.isActive("tableHeader"),
-      inTable: edit.isActive("table"),
-    }),
+    (edit) =>
+      extensionPresent(edit, "table")
+        ? {
+            canDeleteColumn: edit.can().deleteColumn(),
+            canDeleteRow: edit.can().deleteRow(),
+            canMerge: edit.can().mergeCells(),
+            canSplit: edit.can().splitCell(),
+            disabled: false,
+            headerOn: edit.isActive("tableHeader"),
+            inTable: edit.isActive("table"),
+          }
+        : {
+            canDeleteColumn: false,
+            canDeleteRow: false,
+            canMerge: false,
+            canSplit: false,
+            disabled: true,
+            headerOn: false,
+            inTable: false,
+          },
     shallowEqual
   ) ?? {
     canDeleteColumn: false,

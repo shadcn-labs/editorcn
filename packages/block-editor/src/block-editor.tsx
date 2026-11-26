@@ -1,12 +1,12 @@
 import { DragHandle } from "@tiptap/extension-drag-handle-react";
 import type { Node } from "@tiptap/pm/model";
 import { EditorContent } from "@tiptap/react";
-import { Plus } from "lucide-react";
 import { useCallback, useRef } from "react";
 
 import { BottomBar } from "./bottom-bar";
 import { BubbleMenu } from "./bubble-menu";
 import { BlockEditorProvider, useBlockEditorContext } from "./context";
+import { IconPlaceholder } from "./icon-placeholder";
 import { cn } from "./lib/utils";
 import type { BlockEditorProps } from "./types";
 
@@ -62,7 +62,13 @@ const BlockEditorDragHandle = () => {
         onClick={handleAdd}
         onDragStart={(event) => event.preventDefault()}
       >
-        <Plus />
+        <IconPlaceholder
+          lucide="Plus"
+          tabler="IconPlus"
+          hugeicons="PlusSignIcon"
+          phosphor="PlusIcon"
+          remixicon="RiAddLine"
+        />
       </button>
       {icons.dragHandleIcon}
     </DragHandle>

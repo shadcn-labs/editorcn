@@ -1,5 +1,16 @@
 # @editorcn/block-editor
 
+## 0.5.1
+
+### Dependencies
+
+- `@tiptap/react` peer range is now `>=3.0.1 <4`. The bubble menu imports `@tiptap/react/menus`, which 3.0.0 doesn't export.
+- `lucide-react` range is now `>=0.400.0 <2.0.0`, so projects on lucide-react 1.x don't get a second copy.
+
+### Changes
+
+- No visible change to the icons. `icons.tsx` is now shared with the shadcn registry (where it follows the project's `iconLibrary`), and the npm build still renders lucide icons.
+
 ## 0.5.0
 
 The block editor chrome is now styled with Tailwind classes instead of a hand-written stylesheet. It looks the same, but npm installs need two lines of Tailwind setup.
