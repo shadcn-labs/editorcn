@@ -67,6 +67,7 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
 
   return (
     <TiptapBubbleMenu
+      className="z-50"
       editor={editor}
       options={{ offset: 8, placement: "top" }}
       shouldShow={shouldShow}
