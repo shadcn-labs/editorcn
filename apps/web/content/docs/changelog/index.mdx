@@ -3,6 +3,10 @@ title: Changelog
 description: Latest updates and announcements for editorcn.
 ---
 
+## November 26, 2026 - Safer defaults and clean installs
+
+`StaticRenderer` now sanitizes HTML strings by default. The comment box template builds with Next.js `cacheComponents`, the main usage examples build on Next.js 16, and registry installs no longer fail `next lint`. Mention's `items` callback also receives the editor. See the [full entry](/docs/changelog/2026-11-26-install-fixes).
+
 ## November 26, 2026 - Radix UI support and icon libraries
 
 Every registry item now comes in a Base UI and a Radix UI build. Point the registry at `https://www.rtecn.space/r/styles/{style}/{name}.json` and the shadcn CLI installs the one that matches your project's style. The editors' icons now follow your `iconLibrary` too, so the separate icon set items are gone. React Aria styles aren't supported yet. See the [full entry](/docs/changelog/2026-11-26-radix-base).

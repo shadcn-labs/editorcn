@@ -1,0 +1,32 @@
+---
+title: "November 26, 2026 - Safer defaults and clean installs"
+description: "The static renderer sanitizes HTML by default, the comment box builds with Next.js cacheComponents, and registry installs pass Next.js lint."
+date: "2026-11-26"
+---
+
+We installed every registry item into a fresh Next.js 16 app, the way a new user would, and fixed what got in the way: a build error, lint errors in the installed code, an unsafe default and a toolbar glitch.
+
+## Highlights
+
+- **Static renderer sanitizes by default**: HTML strings passed to `StaticRenderer` go through the built-in allowlist unless you pass `sanitize={false}`. Before, they were inserted as-is unless you remembered `sanitize`. See [Sanitizing HTML](/docs/static-renderer#sanitizing-html).
+- **Comment box builds with `cacheComponents`**: new Next.js 16 apps turn on `cacheComponents`, which failed the build on the comment box template with an unstable `Math.random()` error. Its composer now sits in a `<Suspense>` boundary, like the other templates.
+- **Copy-paste examples build on Next.js 16**: the usage examples in [Getting Started](/docs/getting-started), [Toolbar Editor](/docs/editor#usage) and [Block Editor](/docs/block-editor#usage) render the editor inside `<Suspense>`.
+- **Registry installs pass `next lint`**: installing every item into a project with `eslint-config-next` used to report 13 errors in editorcn's code. It now reports none. The fixes cover display names, unescaped quotes, an `eslint-disable` comment for a rule most projects don't have, and React Compiler rules in the shared editor-state hooks and the dropdown highlight.
+- **Mention `items` gets the editor**: `items(query, editor)` receives the editor as a second argument, so per-editor lists don't need a React ref. One-argument callbacks keep working. See [`items`](/docs/extensions/mention#items).
+- **Toolbar rows wrap cleanly**: when the toolbar wraps, new rows no longer start with a separator.
+
+## Upgrading
+
+### shadcn registry
+
+Re-add the items you use, for example:
+
+```bash
+npx shadcn@latest add @editorcn/editor @editorcn/static-renderer
+```
+
+If you render trusted HTML with markup outside the sanitizer's allowlist, pass `sanitize={false}` to `StaticRenderer`.
+
+### npm
+
+Update to `@editorcn/editor@0.5.3`, `@editorcn/block-editor@0.5.3` and `@editorcn/static-renderer@0.5.0`. The static renderer's new default is the only behavior change. See its [changelog](https://github.com/shadcn-labs/editorcn/blob/main/packages/static-renderer/CHANGELOG.md).

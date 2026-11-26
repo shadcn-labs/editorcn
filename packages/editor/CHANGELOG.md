@@ -1,5 +1,13 @@
 # @editorcn/editor
 
+## 0.5.3
+
+### Fixes
+
+- When the toolbar wraps onto more than one row, the first group on each new row no longer starts with a stray separator. The toolbar marks those groups with `data-line-start` and updates them when its width changes.
+- `RichTextEditor.Control` has a display name, so `react/display-name` no longer flags it.
+- The Twitter embed's lint suppression uses an `oxlint-disable` comment, so ESLint no longer reports `Definition for rule 'promise/avoid-new' was not found` in projects that install the editor through the registry.
+
 ## 0.5.1
 
 ### Fixes
