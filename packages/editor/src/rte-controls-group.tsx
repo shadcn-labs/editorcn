@@ -8,7 +8,7 @@ import type {
 import { cn } from "./ui/utils";
 
 const SEPARATOR =
-  "[.rte-controls-group+&]:before:w-px [.rte-controls-group+&]:before:shrink-0 [.rte-controls-group+&]:before:bg-border [.rte-controls-group+&]:before:content-['']";
+  "[.rte-controls-group+&]:before:w-px [.rte-controls-group+&]:before:shrink-0 [.rte-controls-group+&]:before:bg-border [.rte-controls-group+&]:before:content-[''] [.rte-controls-group+&]:data-line-start:before:hidden";
 
 const BUTTON =
   "[&>button]:border-none [&>button]:bg-transparent [&>button]:transition-[background-color,color] [&>button]:duration-150 [&>button]:ease-[ease-out] [&>button:focus-visible]:outline-2 [&>button:focus-visible]:outline-offset-1 [&>button:focus-visible]:outline-ring/50 [&>button:focus-visible]:outline-solid";
