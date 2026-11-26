@@ -6,7 +6,11 @@ import { cn } from "./ui/utils";
 
 // Groups draw their separator before themselves, so when the toolbar wraps,
 // the first group on each new row would start with a stray separator. CSS
-// can't tell which flex item starts a line, so mark those groups here.
+// can't tell which flex item starts a line, so mark those groups here. The
+// marker only makes the separator invisible (it keeps its width), so marking
+// never changes the layout it was computed from and can't oscillate.
+const GROUPS = ":scope > .rte-controls-group";
+
 const useMarkLineStarts = (enabled: boolean) => {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -17,9 +21,7 @@ const useMarkLineStarts = (enabled: boolean) => {
     }
     const mark = () => {
       let previous: DOMRect | null = null;
-      for (const group of toolbar.querySelectorAll<HTMLElement>(
-        ":scope > .rte-controls-group"
-      )) {
+      for (const group of toolbar.querySelectorAll<HTMLElement>(GROUPS)) {
         if (group.getClientRects().length === 0) {
           continue;
         }
@@ -29,11 +31,24 @@ const useMarkLineStarts = (enabled: boolean) => {
         previous = rect;
       }
     };
-    mark();
+    // Watch the toolbar and every group, so controls appearing or resizing
+    // inside a group re-mark rows even when the toolbar's size stays the same.
     const resize = new ResizeObserver(mark);
-    resize.observe(toolbar);
-    const mutation = new MutationObserver(mark);
+    const observeAll = () => {
+      resize.disconnect();
+      resize.observe(toolbar);
+      for (const group of toolbar.querySelectorAll<HTMLElement>(GROUPS)) {
+        resize.observe(group);
+      }
+    };
+    // Only child list changes: the marker attribute never re-triggers this.
+    const mutation = new MutationObserver(() => {
+      observeAll();
+      mark();
+    });
     mutation.observe(toolbar, { childList: true });
+    observeAll();
+    mark();
     return () => {
       resize.disconnect();
       mutation.disconnect();
