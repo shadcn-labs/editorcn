@@ -23,7 +23,7 @@
       "type": "registry:component"
     },
     {
-      "content": "import type { SlashCommandItem } from \"../core/types\";\n\n/** Slash command item for the `@editorcn/block-editor` menu. */\nexport const calloutSlashCommandItem: SlashCommandItem = {\n  command: ({ editor, range }) => {\n    editor\n      .chain()\n      .focus()\n      .deleteRange(range)\n      .setCallout({ variant: \"info\" })\n      .run();\n  },\n  description: \"Highlight a note, tip, or warning.\",\n  id: \"callout\",\n  keywords: [\"callout\", \"note\", \"tip\", \"warning\", \"alert\", \"info\"],\n  title: \"Callout\",\n};\n",
+      "content": "import type { SlashCommandItem } from \"../core/types\";\n\n/** Slash command item for the `@editorcn/block-editor` menu. */\nexport const calloutSlashCommandItem: SlashCommandItem = {\n  command: ({ editor, range }) => {\n    if (!editor.can().setCallout({ variant: \"info\" })) {\n      return;\n    }\n    editor\n      .chain()\n      .focus()\n      .deleteRange(range)\n      .setCallout({ variant: \"info\" })\n      .run();\n  },\n  description: \"Highlight a note, tip, or warning.\",\n  id: \"callout\",\n  keywords: [\"callout\", \"note\", \"tip\", \"warning\", \"alert\", \"info\"],\n  title: \"Callout\",\n};\n",
       "path": "extensions/callout/slash-command-item.ts",
       "target": "@components/extensions/callout/slash-command-item.ts",
       "type": "registry:component"

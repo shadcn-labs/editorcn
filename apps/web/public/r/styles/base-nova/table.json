@@ -62,7 +62,7 @@
       "type": "registry:component"
     },
     {
-      "content": "import type { SlashCommandItem } from \"../core/types\";\n\n/** Slash command item for the `@editorcn/block-editor` menu. */\nexport const tableSlashCommandItem: SlashCommandItem = {\n  command: ({ editor, range }) => {\n    editor.chain().focus().deleteRange(range).insertTableWithHeader().run();\n  },\n  description: \"Insert a table.\",\n  id: \"table\",\n  keywords: [\"table\", \"grid\"],\n  title: \"Table\",\n};\n",
+      "content": "import type { SlashCommandItem } from \"../core/types\";\n\n/** Slash command item for the `@editorcn/block-editor` menu. */\nexport const tableSlashCommandItem: SlashCommandItem = {\n  command: ({ editor, range }) => {\n    if (!editor.can().insertTableWithHeader()) {\n      return;\n    }\n    editor.chain().focus().deleteRange(range).insertTableWithHeader().run();\n  },\n  description: \"Insert a table.\",\n  id: \"table\",\n  keywords: [\"table\", \"grid\"],\n  title: \"Table\",\n};\n",
       "path": "extensions/table/slash-command-item.ts",
       "target": "@components/extensions/table/slash-command-item.ts",
       "type": "registry:component"

@@ -26,11 +26,18 @@ const ICON_KEYS_BY_ID: Record<
   string,
   Extract<keyof BlockEditorIcons, `slash${string}`>
 > = {
+  blockquote: "slashBlockquoteIcon",
+  bulletList: "slashBulletListIcon",
   callout: "slashCalloutIcon",
+  codeBlock: "slashCodeBlockIcon",
+  divider: "slashDividerIcon",
   exportMarkdown: "slashExportMarkdownIcon",
   image: "slashImageIcon",
   importMarkdown: "slashImportMarkdownIcon",
+  orderedList: "slashOrderedListIcon",
   table: "slashTableIcon",
+  taskList: "slashTaskListIcon",
+  text: "slashTextIcon",
   toggle: "slashToggleIcon",
 };
 
