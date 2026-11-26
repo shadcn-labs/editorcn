@@ -9,7 +9,7 @@
   "description": "Cleans HTML pasted from Google Docs, Notion, Word, and web pages. Strips classes, ids, fonts, and colors, keeps bold, italic, underline, and links, turns Word list paragraphs into real nested lists, and drops empty paragraphs.",
   "files": [
     {
-      "content": "export { chainFocus, isValidUrl } from \"./commands\";\nexport { extensionPresent, nodeActive } from \"./detection\";\nexport { shallowEqual, useEditable, useEditorState } from \"./editor-state\";\nexport { DEFAULT_EXTENSION_LABELS } from \"./labels\";\nexport type { ExtensionLabelKey, ExtensionLabels } from \"./labels\";\nexport { ToolbarProvider, useToolbar, useToolbarEditor } from \"./context\";\nexport type { ToolbarContextValue, ToolbarProviderProps } from \"./context\";\nexport type { ToolbarComponentProps } from \"./types\";\n",
+      "content": "export { chainFocus, isValidUrl } from \"./commands\";\nexport { extensionPresent, nodeActive } from \"./detection\";\nexport { shallowEqual, useEditable, useEditorState } from \"./editor-state\";\nexport { DEFAULT_EXTENSION_LABELS } from \"./labels\";\nexport type { ExtensionLabelKey, ExtensionLabels } from \"./labels\";\nexport { ToolbarProvider, useToolbar, useToolbarEditor } from \"./context\";\nexport type { ToolbarContextValue, ToolbarProviderProps } from \"./context\";\nexport type { SlashCommandItem, ToolbarComponentProps } from \"./types\";\n",
       "path": "extensions/core/index.ts",
       "target": "@components/extensions/core/index.ts",
       "type": "registry:component"
@@ -45,7 +45,7 @@
       "type": "registry:component"
     },
     {
-      "content": "import type { Editor } from \"@tiptap/core\";\n\nexport interface ToolbarComponentProps {\n  className?: string;\n  editor?: Editor | null;\n  size?: \"icon\" | \"icon-lg\" | \"icon-sm\";\n}\n",
+      "content": "import type { Editor, Range } from \"@tiptap/core\";\nimport type { ReactNode } from \"react\";\n\nexport interface ToolbarComponentProps {\n  className?: string;\n  editor?: Editor | null;\n  size?: \"icon\" | \"icon-lg\" | \"icon-sm\";\n}\n\nexport interface SlashCommandItem {\n  id: string;\n  title: string;\n  description: string;\n  keywords: string[];\n  icon?: ReactNode;\n  command: (props: { editor: Editor; range: Range }) => void;\n}\n",
       "path": "extensions/core/types.ts",
       "target": "@components/extensions/core/types.ts",
       "type": "registry:component"

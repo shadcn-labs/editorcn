@@ -213,6 +213,10 @@
           "type": "registry:component"
         },
         {
+          "path": "extensions/callout/slash-command-item.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "extensions/callout/style.css",
           "type": "registry:style"
         },
@@ -691,8 +695,7 @@
         "@tiptap/extension-underline@>=3.0.0 <4",
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
-        "@tiptap/starter-kit@>=3.0.0 <4",
-        "lucide-react@>=0.400.0 <2.0.0"
+        "@tiptap/starter-kit@>=3.0.0 <4"
       ],
       "description": "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
       "files": [
@@ -789,6 +792,10 @@
         },
         {
           "path": "extensions/image-placeholder/image.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/image-placeholder/slash-command-item.ts",
           "type": "registry:component"
         },
         {
@@ -898,6 +905,14 @@
         },
         {
           "path": "extensions/markdown/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/markdown/files.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/markdown/slash-command-items.ts",
           "type": "registry:component"
         },
         {
@@ -1155,7 +1170,6 @@
     {
       "dependencies": [
         "@tiptap/core@>=3.30.5 <4",
-        "@tiptap/extension-gapcursor@>=3.0.0 <4",
         "@tiptap/extension-table-cell@>=3.0.0 <4",
         "@tiptap/extension-table-header@>=3.0.0 <4",
         "@tiptap/extension-table-row@>=3.0.0 <4",
@@ -1165,7 +1179,7 @@
         "lucide-react@>=0.400.0 <2.0.0",
         "tailwind-merge@^3.0.0"
       ],
-      "description": "A table node with a toolbar that inserts tables from a grid-size picker, lets you add or delete rows and columns, merge and split cells, toggle the header row, and manage rows and columns from hover context handles. Columns are resizable and a gap cursor is included by default.",
+      "description": "A table node with a toolbar that inserts tables from a grid-size picker, lets you add or delete rows and columns, merge and split cells, toggle the header row, and manage rows and columns from hover context handles. Columns are resizable.",
       "files": [
         {
           "path": "extensions/core/index.ts",
@@ -1197,6 +1211,10 @@
         },
         {
           "path": "extensions/table/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/table/slash-command-item.ts",
           "type": "registry:component"
         },
         {
