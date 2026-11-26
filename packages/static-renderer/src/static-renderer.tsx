@@ -8,6 +8,8 @@ import type {
 import { createElement } from "react";
 import type { ElementType, HTMLAttributes, ReactNode } from "react";
 
+import type { CodeHighlighter } from "./highlight";
+import { highlightCodeBlocksInHtml, renderHighlightedCode } from "./highlight";
 import { cn } from "./lib/utils";
 import { sanitizeHtml } from "./sanitize";
 
@@ -77,7 +79,28 @@ export type StaticRendererProps = Omit<
   sanitize?: boolean | ((html: string) => string);
   // Content preset, defaults to "block". Use "document" for RichTextEditor output.
   preset?: StaticRendererPreset;
+  // A Shiki highlighter with the github-light and github-dark themes loaded; code blocks in loaded languages get the editor's syntax colors.
+  highlighter?: CodeHighlighter;
 };
+
+const codeBlockMapping =
+  (highlighter: CodeHighlighter) =>
+  ({ node }: { node: Node }) => {
+    const language = (node.attrs.language as string | null) ?? "";
+    const caption = node.attrs.caption as string | null | undefined;
+    return createElement(
+      "pre",
+      {
+        "data-caption": caption ?? undefined,
+        "data-wrap": node.attrs.wrap ? "" : undefined,
+      },
+      createElement(
+        "code",
+        { className: language ? `language-${language}` : undefined },
+        renderHighlightedCode(highlighter, node.textContent, language)
+      )
+    );
+  };
 
 export const StaticRenderer = ({
   as: Tag = "div",
@@ -88,6 +111,7 @@ export const StaticRenderer = ({
   options,
   sanitize,
   preset = "block",
+  highlighter,
   ...props
 }: StaticRendererProps) => {
   const rootProps = {
@@ -99,14 +123,30 @@ export const StaticRenderer = ({
   if (typeof content === "string") {
     return createElement(Tag, {
       ...rootProps,
-      dangerouslySetInnerHTML: { __html: toSafeHtml(content, sanitize) },
+      dangerouslySetInnerHTML: {
+        __html: highlighter
+          ? highlightCodeBlocksInHtml(
+              toSafeHtml(content, sanitize),
+              highlighter
+            )
+          : toSafeHtml(content, sanitize),
+      },
     });
   }
 
   const children = renderToReactElement({
     content,
     extensions: resolveUniqueExtensions(extensions ?? []),
-    options,
+    options:
+      highlighter && !options?.nodeMapping?.codeBlock
+        ? {
+            ...options,
+            nodeMapping: {
+              ...options?.nodeMapping,
+              codeBlock: codeBlockMapping(highlighter),
+            },
+          }
+        : options,
     staticEditorOptions,
   });
 

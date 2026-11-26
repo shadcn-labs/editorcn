@@ -1123,6 +1123,10 @@
           "type": "registry:component"
         },
         {
+          "path": "static-renderer/highlight.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "static-renderer/sanitize.ts",
           "type": "registry:lib"
         },

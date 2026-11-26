@@ -14,6 +14,54 @@
   margin-bottom: 0;
 }
 
+.rte-static-renderer pre:not(:has(.hljs)) {
+  margin: 0.5em 0;
+  padding: 1.25rem;
+  overflow-x: auto;
+  border: none;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--muted) 60%, transparent);
+  color: var(--foreground);
+  font-family: var(
+    --font-mono,
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace
+  );
+  font-size: 0.85em;
+  line-height: 1.5;
+  tab-size: 2;
+  scrollbar-color: var(--border) transparent;
+  scrollbar-width: thin;
+}
+
+.rte-static-renderer pre:not(:has(.hljs)) code {
+  font-size: inherit;
+}
+
+.rte-static-renderer pre:not(:has(.hljs)) code {
+  font-size: inherit;
+}
+
+.rte-static-renderer pre[data-wrap] {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.rte-static-renderer pre code span[style] {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style);
+  font-weight: var(--shiki-light-font-weight);
+}
+
+.dark .rte-static-renderer pre code span[style] {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
+}
+
 /* ── Syntax Highlighting (lowlight / highlight.js) ── */
 
 .rte-static-renderer pre .hljs-comment,

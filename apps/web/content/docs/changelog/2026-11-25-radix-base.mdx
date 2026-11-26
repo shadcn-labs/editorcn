@@ -12,6 +12,7 @@ editorcn was built on Base UI, so a Radix shadcn project got the editor's Base U
 - **Every style works**: other `base-*` and `radix-*` styles (`base-vega`, `radix-maia` and so on) are served the matching build. Older Radix styles like `new-york` get the Radix build.
 - **Templates on both bases**: the comment box and simple document editor templates no longer use `asChild`, so their menus, tooltips and dialogs work with Base UI and Radix.
 - **Icons follow your `iconLibrary`**: the editor and block editor icons use shadcn's `IconPlaceholder`, so the CLI writes them with Lucide, Tabler, HugeIcons, Phosphor or Remix Icon, whichever your `components.json` names. The editor no longer pulls in `lucide-react` for other libraries. See [Icon library](/docs/editor#icon-library).
+- **Static renderer code blocks**: code blocks look like the editor's Code Block in light and dark mode, and a new `highlighter` prop colors them with Shiki. See [Syntax highlighting](/docs/static-renderer#syntax-highlighting).
 - **Base switch in the docs**: install commands with a registry URL now have a Base UI / Radix UI switch next to the package manager tabs.
 
 React Aria styles (`aria-*`) aren't supported yet. Installing in an `aria-*` project fails with a 404.
@@ -46,4 +47,4 @@ The `editor-icons-*` and `block-editor-icons-*` items are removed. Re-adding the
 
 ### npm
 
-Update to `@editorcn/editor@0.5.1` and `@editorcn/block-editor@0.5.1`. The npm packages still use Base UI and `lucide-react`, and need no setup changes. 0.5.1 fixes focus returning to toolbar buttons that open dialogs, and allows `lucide-react` 1.x. It also requires `@tiptap/react` 3.0.1 or newer. `@editorcn/static-renderer` stays at 0.3.0.
+Update to `@editorcn/editor@0.5.1` and `@editorcn/block-editor@0.5.1`. The npm packages still use Base UI and `lucide-react`, and need no setup changes. 0.5.1 fixes focus returning to toolbar buttons that open dialogs, and allows `lucide-react` 1.x. It also requires `@tiptap/react` 3.0.1 or newer. `@editorcn/static-renderer` goes to 0.4.0 for the code block changes below.

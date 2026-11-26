@@ -304,21 +304,42 @@ that wraps the image in a figure with a caption.
 > (`ReactNodeViewRenderer`) don't work outside a live editor; use `nodeMapping`
 > instead.
 
+### Syntax highlighting
+
+Code blocks look like the editor's [Code Block](/docs/extensions/code-block): the muted theme background, the mono font, and `data-wrap` for soft wrapping. The editor colors code while you type, and those colors aren't part of the saved content. To color it in the renderer as well, pass a [Shiki](https://shiki.style) highlighter with the `github-light` and `github-dark` themes and the languages your posts use:
+
+```tsx
+import { StaticRenderer } from "@/components/static-renderer";
+import { createHighlighter } from "shiki";
+
+const highlighter = await createHighlighter({
+  langs: ["typescript", "tsx", "bash"],
+  themes: ["github-light", "github-dark"],
+});
+
+export default async function PostView({ html }: { html: string }) {
+  return <StaticRenderer content={html} highlighter={highlighter} sanitize />;
+}
+```
+
+Create the highlighter once and reuse it. `StaticRenderer` itself doesn't load Shiki, so it stays synchronous and works in server components. In a client component, create the highlighter in an effect and render without it until it's ready. Code in a language the highlighter hasn't loaded renders as plain text. In HTML mode, highlighting runs after sanitizing. In JSON mode it replaces the `codeBlock` rendering, unless you pass your own `nodeMapping.codeBlock`.
+
 ## Props
 
 `StaticRenderer` renders a wrapper with the `rte-static-renderer` class. It
 accepts the usual `HTMLAttributes` plus:
 
-| Prop                  | Type                                                          | Default   | Description                                                                                      |
-| --------------------- | ------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------ |
-| `content`             | `string \| JSONContent \| Node`                               | -         | HTML from `editor.getHTML()`, or a ProseMirror JSON document                                     |
-| `as`                  | `ElementType`                                                 | `"div"`   | Root element to render                                                                           |
-| `className`           | `string`                                                      | -         | Merged with the wrapper class via `tailwind-merge`                                               |
-| `extensions`          | `Extensions`                                                  | -         | Tiptap extensions used to render JSON content (JSON mode only)                                   |
-| `staticEditorOptions` | `StaticEditorOptions`                                         | -         | Editor-level options applied while rendering JSON                                                |
-| `options`             | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>` | -         | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes                              |
-| `sanitize`            | `boolean \| (html: string) => string`                         | -         | Sanitize HTML strings with the built-in allowlist (`true`) or your own function (HTML mode only) |
-| `preset`              | `"block" \| "document"`                                       | `"block"` | [Content preset](/docs/styling#content-presets). Use `"document"` for `RichTextEditor` output    |
+| Prop                  | Type                                                          | Default   | Description                                                                                                        |
+| --------------------- | ------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------ |
+| `content`             | `string \| JSONContent \| Node`                               | -         | HTML from `editor.getHTML()`, or a ProseMirror JSON document                                                       |
+| `as`                  | `ElementType`                                                 | `"div"`   | Root element to render                                                                                             |
+| `className`           | `string`                                                      | -         | Merged with the wrapper class via `tailwind-merge`                                                                 |
+| `extensions`          | `Extensions`                                                  | -         | Tiptap extensions used to render JSON content (JSON mode only)                                                     |
+| `staticEditorOptions` | `StaticEditorOptions`                                         | -         | Editor-level options applied while rendering JSON                                                                  |
+| `options`             | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>` | -         | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes                                                |
+| `sanitize`            | `boolean \| (html: string) => string`                         | -         | Sanitize HTML strings with the built-in allowlist (`true`) or your own function (HTML mode only)                   |
+| `preset`              | `"block" \| "document"`                                       | `"block"` | [Content preset](/docs/styling#content-presets). Use `"document"` for `RichTextEditor` output                      |
+| `highlighter`         | `CodeHighlighter` (a Shiki highlighter)                       | -         | Colors code blocks with the `github-light` / `github-dark` themes. See [Syntax highlighting](#syntax-highlighting) |
 
 ## Styling
 
@@ -330,13 +351,14 @@ automatically.
 
 The renderer's element gets the `rte-static-renderer` and `editorcn-content` classes and a `data-preset` attribute. Document content is styled by the [content preset](/docs/styling#content-presets) (`"block"` by default, `"document"` for `RichTextEditor` output), and the renderer's own stylesheet adds the nodes only it handles:
 
-| Content                                                                                  | Selector                                                     |
-| ---------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| Headings, paragraphs, lists, blockquotes, code, rules, links, images, tables, task lists | `.editorcn-content[data-preset="block"] h1`, `p`, `ul`, ...  |
-| Syntax highlighting                                                                      | `.rte-static-renderer pre .hljs-*` (lowlight / highlight.js) |
-| Callouts                                                                                 | `.rte-static-renderer div[data-type="callout"]`              |
-| Toggles                                                                                  | `.rte-static-renderer details`                               |
-| Embeds (toolbar)                                                                         | `.rte-static-renderer div[data-type="youtube" / "twitter"]`  |
+| Content                                                                                  | Selector                                                                     |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Headings, paragraphs, lists, blockquotes, code, rules, links, images, tables, task lists | `.editorcn-content[data-preset="block"] h1`, `p`, `ul`, ...                  |
+| Code blocks (Shiki colors with `highlighter`)                                            | `.rte-static-renderer pre`, `span[style]` (`--shiki-light` / `--shiki-dark`) |
+| Syntax highlighting                                                                      | `.rte-static-renderer pre .hljs-*` (lowlight / highlight.js)                 |
+| Callouts                                                                                 | `.rte-static-renderer div[data-type="callout"]`                              |
+| Toggles                                                                                  | `.rte-static-renderer details`                                               |
+| Embeds (toolbar)                                                                         | `.rte-static-renderer div[data-type="youtube" / "twitter"]`                  |
 
 YouTube and Twitter embeds are serialized as empty `<div>`s carrying
 `data-type`, `data-src` / `data-tweet-id` attributes, which render as 16:9
