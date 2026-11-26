@@ -311,6 +311,19 @@ describe(sanitizeHtml, () => {
   });
 });
 
+describe("task list class", () => {
+  it("keeps rte-task-list on ul and drops other classes", () => {
+    expect(
+      sanitizeHtml('<ul class="rte-task-list" data-type="taskList"></ul>')
+    ).toBe('<ul class="rte-task-list" data-type="taskList"></ul>');
+    expect(sanitizeHtml('<ul class="rte-task-list evil"></ul>')).toBe(
+      '<ul class="rte-task-list"></ul>'
+    );
+    expect(sanitizeHtml('<ul class="evil"></ul>')).toBe("<ul></ul>");
+    expect(sanitizeHtml('<p class="rte-task-list">x</p>')).toBe("<p>x</p>");
+  });
+});
+
 describe("StaticRenderer sanitize prop", () => {
   const payload = '<p>safe</p><img src="x" onerror="alert(1)">';
 

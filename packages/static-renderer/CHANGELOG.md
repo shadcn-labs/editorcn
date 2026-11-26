@@ -15,6 +15,7 @@ HTML strings are now sanitized by default.
 ### Changes
 
 - `sanitize` defaults to `true`. The development warning for unsanitized HTML is removed.
+- The sanitizer keeps `class="rte-task-list"` on `<ul>` (and drops any other class there), so task lists from the toolbar editor keep their styling in the `document` preset.
 - The code block mapping used with `highlighter` is a named component, so `react/display-name` no longer flags it.
 
 ## 0.4.0
