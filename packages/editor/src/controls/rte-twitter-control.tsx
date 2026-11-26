@@ -42,7 +42,7 @@ const loadTwitterScript = (): Promise<void> => {
     return twitterScriptPromise;
   }
 
-  // eslint-disable-next-line promise/avoid-new
+  // oxlint-disable-next-line promise/avoid-new
   twitterScriptPromise = new Promise<void>((resolve, reject) => {
     let script = document.querySelector<HTMLScriptElement>(
       `script[src="${WIDGET_SCRIPT_URL}"]`

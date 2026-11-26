@@ -111,7 +111,7 @@ const EmailComposerInner = ({
             className="rounded-full bg-rose-500/10 px-2 py-0.5 text-xs font-medium text-rose-700 dark:text-rose-400"
             role="alert"
           >
-            Couldn't send. Try again.
+            Couldn’t send. Try again.
           </p>
         )}
       </header>

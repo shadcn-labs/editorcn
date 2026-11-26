@@ -203,7 +203,7 @@ const SuggestionList = forwardRef<SuggestionListHandle, SuggestionListProps>(
             ))
           ) : (
             <div className="block-editor-slash-menu-empty px-2 py-6 text-center text-[0.8125rem] text-muted-foreground">
-              No results for "{searchQuery}"
+              No results for “{searchQuery}”
             </div>
           )}
         </SlashMenuList>
@@ -211,5 +211,6 @@ const SuggestionList = forwardRef<SuggestionListHandle, SuggestionListProps>(
     );
   }
 );
+SuggestionList.displayName = "SuggestionList";
 
 export default SuggestionList;

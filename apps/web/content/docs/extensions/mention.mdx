@@ -115,6 +115,19 @@ Mention.configure({
 });
 ```
 
+The second argument is the editor the query comes from. Use it when the list differs per editor, for example several comment boxes on one page, without closing over React refs or state:
+
+```tsx
+const peopleByEditor = new WeakMap<Editor, User[]>();
+
+Mention.configure({
+  items: (query, editor) =>
+    (peopleByEditor.get(editor) ?? [])
+      .filter((u) => u.name.toLowerCase().includes(query.toLowerCase()))
+      .map((u) => ({ id: u.id, label: u.name, avatar: u.imageUrl })),
+});
+```
+
 ### `heading`
 
 A small label shown at the top of the picker. Off by default.

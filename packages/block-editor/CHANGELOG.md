@@ -1,5 +1,12 @@
 # @editorcn/block-editor
 
+## 0.5.3
+
+### Fixes
+
+- The slash menu's suggestion list has a display name, and its empty state uses curly quotes (`No results for “…”`), so `react/display-name` and `react/no-unescaped-entities` no longer flag it.
+- The image slash item uses lucide's `ImageIcon` export instead of `Image`, so `jsx-a11y/alt-text` no longer mistakes the icon for an `<img>`.
+
 ## 0.5.1
 
 ### Dependencies

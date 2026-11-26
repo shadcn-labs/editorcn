@@ -9,7 +9,7 @@ import {
   SmilePlus,
   Trash2,
 } from "lucide-react";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -33,6 +33,11 @@ import type {
   ThreadActions,
 } from "./types";
 import { EMOJIS, EXTENSIONS, ITEM, mention, timeAgo } from "./utils";
+
+// timeAgo reads Date.now(), which Next.js `cacheComponents` rejects during
+// prerender. Only this text waits for the client; the rest of the thread
+// still prerenders.
+const RelativeTime = ({ iso }: { iso: string }) => <>{timeAgo(iso)}</>;
 
 const EmojiPicker = ({ onPick }: { onPick: (emoji: string) => void }) => {
   const [open, setOpen] = useState(false);
@@ -175,7 +180,9 @@ const CommentBody = ({
           suppressHydrationWarning
           title={new Date(comment.createdAt).toLocaleString()}
         >
-          {timeAgo(comment.createdAt)}
+          <Suspense fallback={null}>
+            <RelativeTime iso={comment.createdAt} />
+          </Suspense>
         </time>
         <div className="ml-auto">
           <CommentMenu

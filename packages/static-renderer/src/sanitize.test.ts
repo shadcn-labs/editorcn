@@ -311,6 +311,19 @@ describe(sanitizeHtml, () => {
   });
 });
 
+describe("task list class", () => {
+  it("keeps rte-task-list on ul and drops other classes", () => {
+    expect(
+      sanitizeHtml('<ul class="rte-task-list" data-type="taskList"></ul>')
+    ).toBe('<ul class="rte-task-list" data-type="taskList"></ul>');
+    expect(sanitizeHtml('<ul class="rte-task-list evil"></ul>')).toBe(
+      '<ul class="rte-task-list"></ul>'
+    );
+    expect(sanitizeHtml('<ul class="evil"></ul>')).toBe("<ul></ul>");
+    expect(sanitizeHtml('<p class="rte-task-list">x</p>')).toBe("<p>x</p>");
+  });
+});
+
 describe("StaticRenderer sanitize prop", () => {
   const payload = '<p>safe</p><img src="x" onerror="alert(1)">';
 
@@ -332,18 +345,20 @@ describe("StaticRenderer sanitize prop", () => {
     expect(markup).toContain("<p>custom</p>");
   });
 
-  it("warns once in development when sanitize is not set", () => {
-    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
-    const render = (sanitize?: boolean) =>
-      renderToStaticMarkup(
-        createElement(StaticRenderer, { content: payload, sanitize })
-      );
+  it("sanitizes HTML strings by default", () => {
+    const markup = renderToStaticMarkup(
+      createElement(StaticRenderer, {
+        content: `${payload}<script>alert(2)</script>`,
+      })
+    );
+    expect(markup).toContain("<p>safe</p>");
+    expect(markup).not.toMatch(/onerror|<script/i);
+  });
 
-    render(false);
-    expect(warn).not.toHaveBeenCalled();
-    render();
-    render();
-    expect(warn).toHaveBeenCalledOnce();
-    warn.mockRestore();
+  it("renders trusted HTML as-is with sanitize={false}", () => {
+    const markup = renderToStaticMarkup(
+      createElement(StaticRenderer, { content: payload, sanitize: false })
+    );
+    expect(markup).toContain('onerror="alert(1)"');
   });
 });

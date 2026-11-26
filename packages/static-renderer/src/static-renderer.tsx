@@ -13,36 +13,12 @@ import { highlightCodeBlocksInHtml, renderHighlightedCode } from "./highlight";
 import { cn } from "./lib/utils";
 import { sanitizeHtml } from "./sanitize";
 
-declare const process: { env: { NODE_ENV?: string } };
-
-let warnedUnsanitized = false;
-
-const isProduction = () => {
-  try {
-    return process.env.NODE_ENV === "production";
-  } catch {
-    return true;
-  }
-};
-
-const warnUnsanitized = () => {
-  if (warnedUnsanitized || isProduction()) {
-    return;
-  }
-  warnedUnsanitized = true;
-  console.warn(
-    "StaticRenderer: rendering an HTML string without `sanitize`. Pass `sanitize` when the HTML can come from users, or `sanitize={false}` if it is trusted."
-  );
-};
-
+// HTML strings go through dangerouslySetInnerHTML, so they are sanitized
+// unless the caller opts out with `sanitize={false}` for trusted HTML.
 const toSafeHtml = (
   html: string,
-  sanitize: StaticRendererProps["sanitize"]
+  sanitize: StaticRendererProps["sanitize"] = true
 ) => {
-  if (sanitize === undefined) {
-    warnUnsanitized();
-    return html;
-  }
   if (typeof sanitize === "function") {
     return sanitize(html);
   }
@@ -76,6 +52,8 @@ export type StaticRendererProps = Omit<
   staticEditorOptions?: StaticEditorOptions;
   // renderToReactElement options — nodeMapping/markMapping for custom nodes.
   options?: Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>;
+  // HTML mode only. Defaults to true (built-in allowlist). Pass a function for
+  // your own sanitizer, or false to render trusted HTML as-is.
   sanitize?: boolean | ((html: string) => string);
   // Content preset, defaults to "block". Use "document" for RichTextEditor output.
   preset?: StaticRendererPreset;
@@ -83,9 +61,8 @@ export type StaticRendererProps = Omit<
   highlighter?: CodeHighlighter;
 };
 
-const codeBlockMapping =
-  (highlighter: CodeHighlighter) =>
-  ({ node }: { node: Node }) => {
+const codeBlockMapping = (highlighter: CodeHighlighter) => {
+  const HighlightedCodeBlock = ({ node }: { node: Node }) => {
     const language = (node.attrs.language as string | null) ?? "";
     const caption = node.attrs.caption as string | null | undefined;
     return createElement(
@@ -101,6 +78,8 @@ const codeBlockMapping =
       )
     );
   };
+  return HighlightedCodeBlock;
+};
 
 export const StaticRenderer = ({
   as: Tag = "div",

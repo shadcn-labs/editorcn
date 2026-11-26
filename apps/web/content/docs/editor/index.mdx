@@ -105,6 +105,7 @@ npm install @tiptap/extension-text-align @tiptap/extension-placeholder
 "use client";
 
 import { useEditor } from "@tiptap/react";
+import { Suspense } from "react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Placeholder } from "@tiptap/extension-placeholder";
@@ -122,7 +123,7 @@ const content = `
 </ul>
 `;
 
-function MyEditor() {
+function MyEditorInner() {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -180,7 +181,24 @@ function MyEditor() {
     </RichTextEditor>
   );
 }
+
+// Tiptap's useEditor reads Math.random(), which Next.js `cacheComponents`
+// rejects during prerender. The Suspense boundary keeps the build working.
+export function MyEditor() {
+  return (
+    <Suspense fallback={null}>
+      <MyEditorInner />
+    </Suspense>
+  );
+}
 ```
+
+<Callout title="Next.js with cacheComponents">
+  Tiptap's `useEditor` reads `Math.random()`, which Next.js `cacheComponents`
+  (on by default in new Next.js 16 apps) rejects during prerender. That's why
+  the example renders the editor inside a `<Suspense>` boundary. Keep the
+  boundary when you move the editor into your own components.
+</Callout>
 
 `StarterKit` v3 already includes `Link` and `Underline`. Pass `link: false` so it doesn't register a second link extension next to editorcn's `Link`, and don't add `@tiptap/extension-underline` yourself. Otherwise Tiptap warns about duplicate extension names.
 

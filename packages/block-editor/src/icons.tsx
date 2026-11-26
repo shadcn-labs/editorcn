@@ -250,7 +250,7 @@ export const DEFAULT_ICONS: BlockEditorIcons = {
   ),
   slashImageIcon: (
     <IconPlaceholder
-      lucide="Image"
+      lucide="ImageIcon"
       tabler="IconPhoto"
       hugeicons="Image01Icon"
       phosphor="ImageIcon"

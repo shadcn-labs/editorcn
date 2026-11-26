@@ -46,6 +46,8 @@ const EMBED_ATTRS = [
   "data-youtube-video",
 ];
 
+const TASK_LIST_CLASS = "rte-task-list";
+
 const filter = new FilterXSS({
   css: {
     whiteList: {
@@ -60,6 +62,13 @@ const filter = new FilterXSS({
     },
   },
   onTagAttr: (tag, name, value) => {
+    // Task lists from the toolbar editor carry `class="rte-task-list"`, which
+    // the document preset styles. Keep that class and drop any other.
+    if (tag === "ul" && name === "class") {
+      return value.split(/\s+/).includes(TASK_LIST_CLASS)
+        ? `class="${TASK_LIST_CLASS}"`
+        : "";
+    }
     if (tag === "iframe" && name === "src") {
       return isEmbedUrl(value) ? undefined : "";
     }
@@ -121,7 +130,7 @@ const filter = new FilterXSS({
     thead: [],
     tr: [],
     u: [],
-    ul: ["data-type"],
+    ul: ["data-type", "class"],
   },
 });
 

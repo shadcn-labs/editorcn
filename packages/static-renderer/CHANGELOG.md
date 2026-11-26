@@ -1,5 +1,23 @@
 # @editorcn/static-renderer
 
+## 0.5.0
+
+HTML strings are now sanitized by default.
+
+### Upgrading
+
+`StaticRenderer` used to insert HTML strings as-is unless you passed `sanitize`, and only warned in development. It now runs them through the built-in allowlist by default, so user-written HTML can't inject scripts or event handlers.
+
+- If you already pass `sanitize` or a sanitizer function, nothing changes.
+- If you render trusted HTML that uses markup outside the allowlist, pass `sanitize={false}` to keep the old output. Never do this for HTML that users can write.
+- JSON content is unaffected. It renders through React, never as raw HTML.
+
+### Changes
+
+- `sanitize` defaults to `true`. The development warning for unsanitized HTML is removed.
+- The sanitizer keeps `class="rte-task-list"` on `<ul>` (and drops any other class there), so task lists from the toolbar editor keep their styling in the `document` preset.
+- The code block mapping used with `highlighter` is a named component, so `react/display-name` no longer flags it.
+
 ## 0.4.0
 
 Code blocks now look like the editor's Code Block, and can be syntax highlighted with Shiki.

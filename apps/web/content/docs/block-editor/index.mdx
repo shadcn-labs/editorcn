@@ -109,6 +109,7 @@ The Tiptap extensions it also uses (placeholder, task lists) come with `@editorc
 "use client";
 
 import { useEditor } from "@tiptap/react";
+import { Suspense } from "react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { TaskList } from "@tiptap/extension-task-list";
@@ -129,7 +130,7 @@ import "@/components/block-editor/style.css";
 import "@/components/extensions/image-placeholder/style.css";
 import "@/components/extensions/table/style.css";
 
-function MyBlockEditor() {
+function MyBlockEditorInner() {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -158,7 +159,24 @@ function MyBlockEditor() {
     </div>
   );
 }
+
+// Tiptap's useEditor reads Math.random(), which Next.js `cacheComponents`
+// rejects during prerender. The Suspense boundary keeps the build working.
+export function MyBlockEditor() {
+  return (
+    <Suspense fallback={null}>
+      <MyBlockEditorInner />
+    </Suspense>
+  );
+}
 ```
+
+<Callout title="Next.js with cacheComponents">
+  Tiptap's `useEditor` reads `Math.random()`, which Next.js `cacheComponents`
+  (on by default in new Next.js 16 apps) rejects during prerender. That's why
+  the example renders the editor inside a `<Suspense>` boundary. Keep the
+  boundary when you move the editor into your own components.
+</Callout>
 
 Each editorcn extension exports a ready-made slash item (`imagePlaceholderSlashCommandItem`, `tableSlashCommandItem`, `calloutSlashCommandItem`, `toggleSlashCommandItem`, and `getMarkdownSlashCommandItems()` for Markdown import and export). Items you pass are merged with the built-in ones, so you only list the extras.
 

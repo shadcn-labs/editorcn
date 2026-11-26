@@ -1,5 +1,5 @@
 import { Mention } from "@editorcn/extensions/mention";
-import type { JSONContent } from "@tiptap/core";
+import type { Editor, JSONContent } from "@tiptap/core";
 import { StarterKit } from "@tiptap/starter-kit";
 
 import type {
@@ -22,6 +22,30 @@ export const STARTER_KIT = StarterKit.configure({
 });
 
 export const EXTENSIONS = [STARTER_KIT, Mention];
+
+// Who can be @mentioned in each composer. The Mention extension below is
+// shared by every composer, so it looks the list up by editor instead of
+// closing over a React ref.
+const mentionable = new WeakMap<Editor, CommentAuthor[]>();
+
+export const setMentionable = (editor: Editor, people: CommentAuthor[]) => {
+  mentionable.set(editor, people);
+};
+
+export const MENTION = Mention.configure({
+  debounce: 0,
+  heading: "People",
+  items: (query, editor) =>
+    (mentionable.get(editor) ?? [])
+      .filter((p) => p.name.toLowerCase().includes(query.toLowerCase()))
+      .slice(0, 6)
+      .map((p) => ({
+        avatar: p.avatar,
+        description: p.description,
+        id: p.id,
+        label: p.name,
+      })),
+});
 
 const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
   ["year", 31_536_000],
