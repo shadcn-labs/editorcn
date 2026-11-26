@@ -1,4 +1,5 @@
 import { createInlineMarkdownSpec } from "@tiptap/core";
+import type { Editor } from "@tiptap/core";
 import { Mention as TiptapMention } from "@tiptap/extension-mention";
 import type { MentionOptions as TiptapMentionOptions } from "@tiptap/extension-mention";
 import type { EditorState } from "@tiptap/pm/state";
@@ -17,7 +18,10 @@ export interface MentionItem {
 export interface MentionOptions extends TiptapMentionOptions<MentionItem> {
   debounce: number;
   heading?: string;
-  items: (query: string) => MentionItem[] | Promise<MentionItem[]>;
+  items: (
+    query: string,
+    editor: Editor
+  ) => MentionItem[] | Promise<MentionItem[]>;
   renderItem?: (item: MentionItem) => ReactNode;
   trigger: string;
 }
@@ -93,7 +97,7 @@ export const Mention = TiptapMention.extend<MentionOptions>({
     this.options.suggestion = {
       char: trigger,
       debounce,
-      items: ({ query }) => items(query),
+      items: ({ editor, query }) => items(query, editor),
       pluginKey: mentionPluginKey,
       render: () => renderMentionList({ heading, renderItem }),
       ...suggestion,
