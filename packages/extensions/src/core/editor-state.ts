@@ -7,8 +7,6 @@ import {
   useSyncExternalStore,
 } from "react";
 
-const defaultEqual = <T>(a: T, b: T): boolean => a === b;
-
 export const shallowEqual = <T extends Record<string, unknown>>(
   a: T,
   b: T
@@ -26,6 +24,15 @@ export const shallowEqual = <T extends Record<string, unknown>>(
   }
   return ak.every((k) => a[k] === b[k]);
 };
+
+const isObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null;
+
+// Selectors often return a fresh object or array. Comparing those shallowly
+// by default keeps getSnapshot returning the same reference while the
+// selected state is unchanged, even without an explicit comparator.
+const defaultEqual = <T>(a: T, b: T): boolean =>
+  a === b || (isObject(a) && isObject(b) && shallowEqual(a, b));
 
 export const useEditorState = <T>(
   editor: Editor | null,
