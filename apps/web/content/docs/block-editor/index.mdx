@@ -411,16 +411,19 @@ Slash items without their own `icon` get one by `id`: `image`, `table`, `callout
 
 Each editorcn extension exports a slash item, so you don't have to write the command yourself. Register the extension and pass its item:
 
-| Item                               | Extension                                                  |
-| ---------------------------------- | ---------------------------------------------------------- |
-| `imagePlaceholderSlashCommandItem` | [Image Placeholder](/docs/extensions/image-placeholder)    |
-| `tableSlashCommandItem`            | [Table](/docs/extensions/table)                            |
-| `calloutSlashCommandItem`          | [Callout](/docs/extensions/callout)                        |
-| `toggleSlashCommandItem`           | [Toggle](/docs/extensions/toggle)                          |
-| `getMarkdownSlashCommandItems()`   | [Markdown](/docs/extensions/markdown) (import and export)  |
+| Item                               | Extension                                                 |
+| ---------------------------------- | --------------------------------------------------------- |
+| `imagePlaceholderSlashCommandItem` | [Image Placeholder](/docs/extensions/image-placeholder)   |
+| `tableSlashCommandItem`            | [Table](/docs/extensions/table)                           |
+| `calloutSlashCommandItem`          | [Callout](/docs/extensions/callout)                       |
+| `toggleSlashCommandItem`           | [Toggle](/docs/extensions/toggle)                         |
+| `getMarkdownSlashCommandItems()`   | [Markdown](/docs/extensions/markdown) (import and export) |
 
 ```tsx
-import { calloutSlashCommandItem, Callout } from "@/components/extensions/callout";
+import {
+  calloutSlashCommandItem,
+  Callout,
+} from "@/components/extensions/callout";
 import {
   ImagePlaceholder,
   ResizableImage,

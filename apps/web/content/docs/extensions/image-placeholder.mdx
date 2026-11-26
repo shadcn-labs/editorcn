@@ -104,7 +104,9 @@ export function MyBlockEditor() {
       ResizableImage,
       ImagePlaceholder,
       SlashCommand.configure({
-        suggestion: getSlashCommandSuggestion([imagePlaceholderSlashCommandItem]),
+        suggestion: getSlashCommandSuggestion([
+          imagePlaceholderSlashCommandItem,
+        ]),
       }),
     ],
   });
