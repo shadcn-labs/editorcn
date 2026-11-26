@@ -17,10 +17,11 @@ All templates store content as Tiptap JSON (`editor.getJSON()`) and display it w
 ## Requirements
 
 <Callout title="Templates use Tailwind CSS">
-  The editor and static renderer ship plain CSS and work in any React app.
   Templates are styled with Tailwind CSS v4 and built on shadcn/ui components,
-  so your project needs Tailwind and shadcn/ui. Run `npx shadcn@latest init`
-  first if it isn't set up.
+  so your project needs Tailwind and shadcn/ui. The editors need Tailwind v4 as
+  well, because their toolbars and menus are styled with Tailwind classes (see
+  [Styling](/docs/styling)). Only the static renderer ships plain CSS. Run `npx
+  shadcn@latest init` first if it isn't set up.
 </Callout>
 
 <Callout title="Already using Tiptap?">
