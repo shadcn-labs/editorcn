@@ -36,8 +36,9 @@ The shadcn CLI fills in `{style}` from the `style` in your `components.json`, so
   The icons are written for the `iconLibrary` in your `components.json`, which
   must be `lucide`, `tabler`, `hugeicons`, `phosphor` or `remixicon`. Older
   projects with `"iconLibrary": "radix"` get a build error about
-  `./icon-placeholder`. Change it to `"lucide"` before installing. See [Icon
-  library](/docs/editor#icon-library).
+  `./icon-placeholder`. Change it to `"lucide"` before installing, and install
+  `lucide-react` if your project doesn't have it (the CLI doesn't install icon
+  packages). See [Icon library](/docs/editor#icon-library).
 </Callout>
 
 Only a few of the editor's own primitives depend on the base (button, dialog, input, popover, toggle and tooltip), and they look the same in every style, so `base-vega` and `base-nova` get the same editorcn files. shadcn components that the templates use, like `dropdown-menu`, still come from your own style.

@@ -582,16 +582,18 @@ export const TableHoverOverlay = ({
     }
   }, []);
 
+  const resetHover = useCallback(() => {
+    activeTableRef.current = null;
+    setHoveredCol(null);
+    setHoveredRow(null);
+    setColMenuOpen(false);
+    setRowMenuOpen(false);
+  }, []);
+
   const scheduleHide = useCallback(() => {
     cancelHide();
-    hideTimer.current = setTimeout(() => {
-      activeTableRef.current = null;
-      setHoveredCol(null);
-      setHoveredRow(null);
-      setColMenuOpen(false);
-      setRowMenuOpen(false);
-    }, 200);
-  }, [cancelHide]);
+    hideTimer.current = setTimeout(resetHover, 200);
+  }, [cancelHide, resetHover]);
 
   const recompute = useCallback(() => {
     const table = activeTableRef.current;
@@ -686,8 +688,9 @@ export const TableHoverOverlay = ({
       dom.removeEventListener("pointerleave", handleLeave);
       anchor?.removeEventListener("pointerover", handleOverlayOver);
       cancelHide();
+      resetHover();
     };
-  }, [editor, recompute, cancelHide, scheduleHide]);
+  }, [editor, recompute, cancelHide, scheduleHide, resetHover]);
 
   useEffect(() => {
     if (!isActive) {

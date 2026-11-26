@@ -125,7 +125,6 @@ export const CodeBlockCommand = ({
                 align="end"
                 className="min-w-32"
                 collisionPadding={8}
-                onCloseAutoFocus={(e) => e.preventDefault()}
               >
                 {REGISTRY_BASES.map((base) => (
                   <DropdownMenuItem
