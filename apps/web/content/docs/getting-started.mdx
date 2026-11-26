@@ -182,10 +182,14 @@ This installs the block editor with the Tiptap extensions it uses (placeholder, 
 **Or install via npm:**
 
 ```bash
-npm install @editorcn/block-editor @editorcn/extensions @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react @tiptap/extension-placeholder @tiptap/extension-task-list @tiptap/extension-task-item @tiptap/extension-text-align @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
+npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react @tiptap/extension-placeholder @tiptap/extension-task-list @tiptap/extension-task-item @tiptap/extension-text-align @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
 ```
 
-With npm, import the extensions from `@editorcn/extensions/table` and `@editorcn/extensions/image-placeholder` instead of `@/components/extensions/...`.
+The editorcn extensions aren't published to npm. Add the Table and Image Placeholder extensions from the registry even when the block editor comes from npm:
+
+```bash
+npx shadcn@latest add @editorcn/table @editorcn/image-placeholder
+```
 
 Import the styles:
 
@@ -274,7 +278,7 @@ The block editor fills its container, and its drag handles sit in a gutter on th
 
 ## Full setup in one command
 
-To start from the complete editors on the [homepage](/), with every control and all editorcn extensions (callout, code block, image placeholder, markdown, mention, paste cleanup, table and toggle) already wired up, install a full setup instead:
+To start from the complete editors on the [homepage](/), install a full setup instead. The Full Block Editor wires up every editorcn extension (callout, code block, image placeholder, markdown, mention, paste cleanup, table and toggle). The Full Toolbar Editor wires up all of them except Toggle:
 
 ```bash
 npx shadcn@latest add @editorcn/full-editor

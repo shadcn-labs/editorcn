@@ -101,7 +101,7 @@ The usage example below uses the editorcn [Table](/docs/extensions/table) and [I
 npx shadcn@latest add @editorcn/table @editorcn/image-placeholder
 ```
 
-The Tiptap extensions it also uses (placeholder, task lists) come with `@editorcn/block-editor`. With npm, install `@editorcn/extensions @tiptap/extension-placeholder @tiptap/extension-task-list @tiptap/extension-task-item` and import the extensions from `@editorcn/extensions/table` and `@editorcn/extensions/image-placeholder`.
+The Tiptap extensions it also uses (placeholder, task lists) come with `@editorcn/block-editor`. With npm, install `@tiptap/extension-placeholder @tiptap/extension-task-list @tiptap/extension-task-item` yourself. The editorcn extensions aren't published to npm, so add them with the command above either way.
 
 ## Usage
 
@@ -405,7 +405,7 @@ Exported constants:
 | `codeBlockLanguageIcon`   | Code block language selector                             |
 | `languageIcons`           | Code block language selector (Record of language → icon) |
 
-Slash items without their own `icon` get one by `id`: `image`, `table`, `callout`, `toggle`, `importMarkdown` and `exportMarkdown` use the matching key above, so the items exported by the [editorcn extensions](/docs/extensions) follow your icon library and your `icons` overrides. Any other item without an icon gets `fallbackIcon`.
+Slash items without their own `icon` get one by `id` from the keys above. That covers the built-in items (except the headings, which use a per-level icon) and the items exported by the [editorcn extensions](/docs/extensions), so they follow your icon library and your `icons` overrides. Any other item without an icon gets `fallbackIcon`.
 
 ### Slash items from editorcn extensions
 
