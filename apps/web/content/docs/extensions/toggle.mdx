@@ -15,7 +15,7 @@ The Toggle extension adds collapsible sections, like Notion. A toggle holds any 
 ## Installation
 
 ```bash
-npx shadcn@latest add "https://editorcn.vercel.app/r/toggle.json"
+npx shadcn@latest add "https://www.rtecn.space/r/toggle.json"
 ```
 
 This installs `extensions/toggle`, `extensions/core/`, and the styles at `extensions/toggle/style.css`.
@@ -71,19 +71,12 @@ import { StarterKit } from "@tiptap/starter-kit";
 import {
   BlockEditor,
   SlashCommand,
-  defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@/components/block-editor";
-import type { SlashCommandSuggestionItem } from "@/components/block-editor";
 import { Toggle, toggleSlashCommandItem } from "@/components/extensions/toggle";
 
 import "@/components/block-editor/style.css";
 import "@/components/extensions/toggle/style.css";
-
-const items: SlashCommandSuggestionItem[] = [
-  ...defaultSlashCommandItems,
-  toggleSlashCommandItem,
-];
 
 export function MyBlockEditor() {
   const editor = useEditor({
@@ -91,7 +84,9 @@ export function MyBlockEditor() {
     extensions: [
       StarterKit,
       Toggle,
-      SlashCommand.configure({ suggestion: getSlashCommandSuggestion(items) }),
+      SlashCommand.configure({
+        suggestion: getSlashCommandSuggestion([toggleSlashCommandItem]),
+      }),
     ],
   });
 

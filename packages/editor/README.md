@@ -53,13 +53,12 @@ Make sure your `components.json` includes the editorcn registry:
 
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { Underline } from "@tiptap/extension-underline";
 import { RichTextEditor, Link } from "@editorcn/editor";
 import "@editorcn/editor/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
-    extensions: [StarterKit, Link, Underline],
+    extensions: [StarterKit.configure({ link: false }), Link],
     content: "<p>Start typing...</p>",
   });
 

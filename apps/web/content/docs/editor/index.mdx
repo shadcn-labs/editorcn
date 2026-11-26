@@ -27,7 +27,7 @@ This copies the component source directly into your project, so you can customiz
 **Or install via npm/pnpm:**
 
 ```bash
-npm install @editorcn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
+npm install @editorcn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
 ```
 
 After installation, import the editor styles at the root of your application:
@@ -95,12 +95,17 @@ The `RichTextEditor` component does not manage state for you — controls just e
 
 ## Usage
 
+The example uses `TextAlign` and `Placeholder`. The shadcn CLI installs them for you. With npm, install them yourself:
+
+```bash
+npm install @tiptap/extension-text-align @tiptap/extension-placeholder
+```
+
 ```tsx
 "use client";
 
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { Underline } from "@tiptap/extension-underline";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { RichTextEditor, Link } from "@/components/editor";
@@ -121,9 +126,8 @@ function MyEditor() {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit,
+      StarterKit.configure({ link: false }),
       Link,
-      Underline,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({ placeholder: "Start typing..." }),
     ],
@@ -178,6 +182,8 @@ function MyEditor() {
 }
 ```
 
+`StarterKit` v3 already includes `Link` and `Underline`. Pass `link: false` so it doesn't register a second link extension next to editorcn's `Link`, and don't add `@tiptap/extension-underline` yourself. Otherwise Tiptap warns about duplicate extension names.
+
 ## RichTextEditor (Root)
 
 The root wrapper that provides the editor context to all children.
@@ -193,6 +199,7 @@ The root wrapper that provides the editor context to all children.
 | `preset`    | `"document" \| "block"`              | `"document"`     | [Content preset](/docs/styling#content-presets)       |
 | `labels`    | `Partial<RichTextEditorLabels>`      | `DEFAULT_LABELS` | Override default labels for accessibility and UI text |
 | `icons`     | `Partial<RichTextEditorIcons>`       | `DEFAULT_ICONS`  | Override default toolbar icons                        |
+| `editable`  | `boolean`                            | `true`           | Set to `false` for read-only. Hides the toolbar       |
 
 ## RichTextEditor.Toolbar
 
@@ -225,10 +232,12 @@ Groups related controls together. Automatically adds a visual separator between 
 
 ## RichTextEditor.Content
 
-Renders the Tiptap editor content area. Accepts an optional `className` prop.
+Renders the Tiptap editor content area. Accepts an optional `className`, and `children` that render inside the content area, such as the [Table](/docs/extensions/table) extension's `TableHoverOverlay`.
 
 ```tsx
-<RichTextEditor.Content />
+<RichTextEditor.Content>
+  <TableHoverOverlay editor={editor} />
+</RichTextEditor.Content>
 ```
 
 ## RichTextEditor.Footer
@@ -463,7 +472,7 @@ function InsertExampleLink() {
           ?.chain()
           .focus()
           .insertContent("editorcn")
-          .setLink({ href: "https://github.com/AbdullahMukadam/editorcn" })
+          .setLink({ href: "https://github.com/shadcn-labs/editorcn" })
           .run()
       }
       aria-label="Insert example link"
@@ -486,7 +495,7 @@ function InsertExampleLink() {
 
 ## Controls and extensions
 
-Some controls require additional [Tiptap extensions](https://tiptap.dev/extensions) to be installed and configured. If you installed via the shadcn registry, the CLI will prompt you to add any missing peer dependencies automatically; with npm/pnpm you'll need to add them yourself as shown below.
+Some controls require additional [Tiptap extensions](https://tiptap.dev/extensions) to be registered in your editor. The shadcn registry install already adds every package listed below; with npm/pnpm, install them yourself as shown.
 
 ### Included with `@tiptap/starter-kit` (no extra installation needed)
 
@@ -505,16 +514,7 @@ Some controls require additional [Tiptap extensions](https://tiptap.dev/extensio
 | `RichTextEditor.Hr`                     | `@tiptap/starter-kit` |
 | `RichTextEditor.Undo`                   | `@tiptap/starter-kit` |
 | `RichTextEditor.Redo`                   | `@tiptap/starter-kit` |
-
-### Controls requiring `@tiptap/extension-underline`
-
-```bash
-npm install @tiptap/extension-underline
-```
-
-| Control                    |
-| -------------------------- |
-| `RichTextEditor.Underline` |
+| `RichTextEditor.Underline`              | `@tiptap/starter-kit` |
 
 ### Controls requiring `@tiptap/extension-text-align`
 
@@ -567,6 +567,19 @@ npm install @tiptap/extension-superscript
 | ---------------------------- |
 | `RichTextEditor.Superscript` |
 
+### Controls from editorcn extensions
+
+The [editorcn extensions](/docs/extensions) ship their own toolbar controls. Put them in a `RichTextEditor.ControlsGroup` like any other control:
+
+| Control                   | Extension                                               |
+| ------------------------- | ------------------------------------------------------- |
+| `TableToolbar`            | [Table](/docs/extensions/table)                         |
+| `ImagePlaceholderToolbar` | [Image Placeholder](/docs/extensions/image-placeholder) |
+| `CalloutToolbar`          | [Callout](/docs/extensions/callout)                     |
+| `MarkdownToolbar`         | [Markdown](/docs/extensions/markdown)                   |
+
+[Code Block](/docs/extensions/code-block), [Mention](/docs/extensions/mention), [Paste Cleanup](/docs/extensions/paste-cleanup) and [Toggle](/docs/extensions/toggle) work without a toolbar control.
+
 ## Link extension
 
 `@editorcn/editor` ships a custom `Link` extension that extends `@tiptap/extension-link`. It is required for the `Mod-K` keyboard shortcut and the link popover UI to work correctly.
@@ -576,7 +589,7 @@ import { Link, RichTextEditor } from "@/components/editor";
 
 const editor = useEditor({
   extensions: [
-    StarterKit,
+    StarterKit.configure({ link: false }),
     Link, // replaces @tiptap/extension-link
   ],
 });

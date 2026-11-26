@@ -21,6 +21,9 @@ export const useBlockEditorContext = () => {
   return ctx;
 };
 
+export const useOptionalBlockEditorContext = () =>
+  useContext(BlockEditorContext);
+
 export interface BlockEditorProviderProps {
   editor: Editor | null;
   children: ReactNode;

@@ -131,7 +131,7 @@ export const DEFAULT_ICONS: BlockEditorIcons = {
     <IconPlaceholder
       lucide="GripVertical"
       tabler="IconGripVertical"
-      hugeicons="Drag01Icon"
+      hugeicons="DragDropVerticalIcon"
       phosphor="DotsSixVerticalIcon"
       remixicon="RiDraggable"
       className="block-editor-drag-handle-icon"
@@ -203,6 +203,15 @@ export const DEFAULT_ICONS: BlockEditorIcons = {
       remixicon="RiListUnordered"
     />
   ),
+  slashCalloutIcon: (
+    <IconPlaceholder
+      lucide="MessageSquareWarning"
+      tabler="IconMessageExclamation"
+      hugeicons="MessageNotification01Icon"
+      phosphor="WarningCircleIcon"
+      remixicon="RiErrorWarningLine"
+    />
+  ),
   slashCodeBlockIcon: (
     <IconPlaceholder
       lucide="SquareCode"
@@ -221,6 +230,15 @@ export const DEFAULT_ICONS: BlockEditorIcons = {
       remixicon="RiSeparator"
     />
   ),
+  slashExportMarkdownIcon: (
+    <IconPlaceholder
+      lucide="FileDown"
+      tabler="IconFileDownload"
+      hugeicons="FileDownloadIcon"
+      phosphor="FileArrowDownIcon"
+      remixicon="RiFileDownloadLine"
+    />
+  ),
   slashHeadingIcon: (
     <IconPlaceholder
       lucide="Heading"
@@ -237,6 +255,15 @@ export const DEFAULT_ICONS: BlockEditorIcons = {
       hugeicons="Image01Icon"
       phosphor="ImageIcon"
       remixicon="RiImageLine"
+    />
+  ),
+  slashImportMarkdownIcon: (
+    <IconPlaceholder
+      lucide="FileUp"
+      tabler="IconFileUpload"
+      hugeicons="FileUploadIcon"
+      phosphor="FileArrowUpIcon"
+      remixicon="RiFileUploadLine"
     />
   ),
   slashOrderedListIcon: (
@@ -273,6 +300,15 @@ export const DEFAULT_ICONS: BlockEditorIcons = {
       hugeicons="TextIcon"
       phosphor="TextTSlashIcon"
       remixicon="RiText"
+    />
+  ),
+  slashToggleIcon: (
+    <IconPlaceholder
+      lucide="ChevronRight"
+      tabler="IconChevronRight"
+      hugeicons="ArrowRight01Icon"
+      phosphor="CaretRightIcon"
+      remixicon="RiArrowRightSLine"
     />
   ),
   strikethroughIcon: (

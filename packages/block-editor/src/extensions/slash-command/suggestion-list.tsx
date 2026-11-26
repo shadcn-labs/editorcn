@@ -10,6 +10,8 @@ import {
   useRef,
 } from "react";
 
+import { useOptionalBlockEditorContext } from "../../context";
+import type { BlockEditorIcons } from "../../icon-types";
 import { DEFAULT_ICONS } from "../../icons";
 import {
   SlashMenu,
@@ -19,6 +21,36 @@ import {
   SlashMenuSearchInput,
 } from "../../ui";
 import type { SlashCommandSuggestionItem } from "./slash-command";
+
+const ICON_KEYS_BY_ID: Record<
+  string,
+  Extract<keyof BlockEditorIcons, `slash${string}`>
+> = {
+  blockquote: "slashBlockquoteIcon",
+  bulletList: "slashBulletListIcon",
+  callout: "slashCalloutIcon",
+  codeBlock: "slashCodeBlockIcon",
+  divider: "slashDividerIcon",
+  exportMarkdown: "slashExportMarkdownIcon",
+  image: "slashImageIcon",
+  importMarkdown: "slashImportMarkdownIcon",
+  orderedList: "slashOrderedListIcon",
+  table: "slashTableIcon",
+  taskList: "slashTaskListIcon",
+  text: "slashTextIcon",
+  toggle: "slashToggleIcon",
+};
+
+const getItemIcon = (
+  item: SlashCommandSuggestionItem,
+  icons: BlockEditorIcons
+) => {
+  if (item.icon) {
+    return item.icon;
+  }
+  const key = ICON_KEYS_BY_ID[item.id];
+  return key ? icons[key] : icons.fallbackIcon;
+};
 
 export type SuggestionListProps = SuggestionProps<
   SlashCommandSuggestionItem,
@@ -31,6 +63,7 @@ export interface SuggestionListHandle {
 
 const SuggestionList = forwardRef<SuggestionListHandle, SuggestionListProps>(
   (props, ref) => {
+    const icons = useOptionalBlockEditorContext()?.icons ?? DEFAULT_ICONS;
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [searchQuery, setSearchQuery] = useState("");
     const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -120,7 +153,7 @@ const SuggestionList = forwardRef<SuggestionListHandle, SuggestionListProps>(
       <SlashMenu>
         {/* Search Header */}
         <SlashMenuSearch>
-          {DEFAULT_ICONS.searchIcon}
+          {icons.searchIcon}
           <SlashMenuSearchInput
             placeholder="Search commands..."
             value={searchQuery}
@@ -154,7 +187,7 @@ const SuggestionList = forwardRef<SuggestionListHandle, SuggestionListProps>(
                 onMouseEnter={() => setSelectedIndex(i)}
               >
                 <div className="block-editor-slash-menu-item-icon flex size-4 shrink-0 items-center justify-center text-muted-foreground [transition:color_100ms_ease-out] [&_svg]:size-full">
-                  {item.icon ?? DEFAULT_ICONS.fallbackIcon}
+                  {getItemIcon(item, icons)}
                 </div>
                 <div className="block-editor-slash-menu-item-content flex min-w-0 flex-col gap-0.5">
                   <span className="block-editor-slash-menu-item-label text-[0.8125rem] leading-tight font-medium">

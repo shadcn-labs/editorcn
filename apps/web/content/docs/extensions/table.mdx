@@ -6,7 +6,7 @@ description: "A Tiptap table extension for shadcn/ui with a Notion-style grid pi
 
 The Table extension extends Tiptap's `Table` with a `TableToolbar` that inserts a table by dragging across a grid-size picker (like Notion), then manages it while the cursor is inside a table: add or delete rows and columns, merge and split cells, and toggle the header row. Columns are resizable by dragging their edges. Each column has a fixed default width (8rem), so adding a column extends the table and shows a horizontal scroll instead of shrinking existing columns.
 
-While the cursor is inside a table, a hover overlay shows three-dot menu handles at the top of the hovered column and to the left of the hovered row. The handles detect hover over the entire `.tableWrapper` container, so they stay visible when the pointer is in the scroll area around the table. They are positioned from the editor's visible box, so they track the table while it scrolls sideways and are dropped as soon as the table, row or column scrolls out of view. Hover a handle to reveal its `⋮` menu, or click it to open that row's or column's actions, or use the toolbar control. The `Gapcursor` extension is bundled automatically, so you can click between blocks to move the cursor into or past a table with no extra setup.
+While the cursor is inside a table, a hover overlay shows three-dot menu handles at the top of the hovered column and to the left of the hovered row. The handles detect hover over the entire `.tableWrapper` container, so they stay visible when the pointer is in the scroll area around the table. They are positioned from the editor's visible box, so they track the table while it scrolls sideways and are dropped as soon as the table, row or column scrolls out of view. Hover a handle to reveal its `⋮` menu, or click it to open that row's or column's actions, or use the toolbar control. `@tiptap/starter-kit` includes the `Gapcursor` extension, so you can click between blocks to move the cursor into or past a table.
 
 <ExtensionPreview slug="table" editor="toolbar" />
 
@@ -20,13 +20,11 @@ npx shadcn@latest add "https://www.rtecn.space/r/table.json"
 
 This installs `extensions/table`, `extensions/core/`, `extensions/ui/` and the `@tiptap/extension-table*` packages that the table node depends on. Table styles are installed as `extensions/table/style.css`, and the menu animations are added to the CSS file that imports `tailwindcss`.
 
-To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/table):
+To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src/table):
 
 ```bash
-npm install @tiptap/core @tiptap/extension-table @tiptap/extension-table-row @tiptap/extension-table-cell @tiptap/extension-table-header @tiptap/extension-gapcursor
+npm install @tiptap/core @tiptap/extension-table @tiptap/extension-table-row @tiptap/extension-table-cell @tiptap/extension-table-header
 ```
-
-`@tiptap/extension-gapcursor` is only needed if you register `Table` yourself — the extension includes `Gapcursor` by default.
 
 ## Usage
 
@@ -87,25 +85,14 @@ import { StarterKit } from "@tiptap/starter-kit";
 import {
   BlockEditor,
   SlashCommand,
-  defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@/components/block-editor";
-import type { SlashCommandSuggestionItem } from "@/components/block-editor";
 
-import { Table } from "@/components/extensions/table";
+import { Table, tableSlashCommandItem } from "@/components/extensions/table";
 import { TableHoverOverlay } from "@/components/extensions/table/table-hover-overlay";
 
 import "@/components/block-editor/style.css";
 import "@/components/extensions/table/style.css";
-
-const tableItem: SlashCommandSuggestionItem = {
-  command: ({ editor, range }) =>
-    editor.chain().focus().deleteRange(range).insertTableWithHeader().run(),
-  description: "Insert a table with a header row",
-  id: "insertTableWithHeader",
-  keywords: ["table", "row", "column"],
-  title: "Insert table",
-};
 
 function MyBlockEditor() {
   const editor = useEditor({
@@ -114,10 +101,7 @@ function MyBlockEditor() {
       StarterKit,
       Table,
       SlashCommand.configure({
-        suggestion: getSlashCommandSuggestion([
-          ...defaultSlashCommandItems,
-          tableItem,
-        ]),
+        suggestion: getSlashCommandSuggestion([tableSlashCommandItem]),
       }),
     ],
   });

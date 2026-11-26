@@ -62,7 +62,6 @@ const SimpleDocumentEditorInner = ({
     extensions: [
       StarterKit.configure({
         codeBlock: false,
-        gapcursor: false,
         heading: { levels: [1, 2, 3] },
         link: false,
       }),

@@ -75,37 +75,19 @@ Add a **Callout** item to the slash commands:
 
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { MessageSquareWarning } from "lucide-react";
 
 import {
   BlockEditor,
   SlashCommand,
-  defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@/components/block-editor";
-import type { SlashCommandSuggestionItem } from "@/components/block-editor";
-import { Callout } from "@/components/extensions/callout";
+import {
+  Callout,
+  calloutSlashCommandItem,
+} from "@/components/extensions/callout";
 
 import "@/components/block-editor/style.css";
 import "@/components/extensions/callout/style.css";
-
-const items: SlashCommandSuggestionItem[] = [
-  ...defaultSlashCommandItems,
-  {
-    command: ({ editor, range }) =>
-      editor
-        .chain()
-        .focus()
-        .deleteRange(range)
-        .setCallout({ variant: "info" })
-        .run(),
-    description: "Highlight a note, tip, or warning.",
-    icon: <MessageSquareWarning />,
-    id: "callout",
-    keywords: ["callout", "note", "tip", "warning", "alert"],
-    title: "Callout",
-  },
-];
 
 export function MyBlockEditor() {
   const editor = useEditor({
@@ -113,7 +95,9 @@ export function MyBlockEditor() {
     extensions: [
       StarterKit,
       Callout,
-      SlashCommand.configure({ suggestion: getSlashCommandSuggestion(items) }),
+      SlashCommand.configure({
+        suggestion: getSlashCommandSuggestion([calloutSlashCommandItem]),
+      }),
     ],
   });
 

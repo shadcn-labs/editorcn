@@ -61,10 +61,24 @@ Install commands in these docs show a base switch next to the package manager ta
 
 ## Available packages
 
-| Package                                  | Command                                        |
-| ---------------------------------------- | ---------------------------------------------- |
-| [@editorcn/editor](./editor)             | `npx shadcn@latest add @editorcn/editor`       |
-| [@editorcn/block-editor](./block-editor) | `npx shadcn@latest add @editorcn/block-editor` |
+| Item                                                         | Command                                                  |
+| ------------------------------------------------------------ | -------------------------------------------------------- |
+| [Toolbar editor](./editor)                                   | `npx shadcn@latest add @editorcn/editor`                 |
+| [Block editor](./block-editor)                               | `npx shadcn@latest add @editorcn/block-editor`           |
+| [Static Renderer](./static-renderer)                         | `npx shadcn@latest add @editorcn/static-renderer`        |
+| [Callout](./extensions/callout)                              | `npx shadcn@latest add @editorcn/callout`                |
+| [Code Block](./extensions/code-block)                        | `npx shadcn@latest add @editorcn/code-block`             |
+| [Image Placeholder](./extensions/image-placeholder)          | `npx shadcn@latest add @editorcn/image-placeholder`      |
+| [Markdown](./extensions/markdown)                            | `npx shadcn@latest add @editorcn/markdown`               |
+| [Mention](./extensions/mention)                              | `npx shadcn@latest add @editorcn/mention`                |
+| [Paste Cleanup](./extensions/paste-cleanup)                  | `npx shadcn@latest add @editorcn/paste-cleanup`          |
+| [Table](./extensions/table)                                  | `npx shadcn@latest add @editorcn/table`                  |
+| [Toggle](./extensions/toggle)                                | `npx shadcn@latest add @editorcn/toggle`                 |
+| [Full Toolbar Editor](./editor#full-setup)                   | `npx shadcn@latest add @editorcn/full-editor`            |
+| [Full Block Editor](./block-editor#full-setup)               | `npx shadcn@latest add @editorcn/full-block-editor`      |
+| [Comment Box](./templates/comment-box)                       | `npx shadcn@latest add @editorcn/comment-box`            |
+| [Email Composer](./templates/email-composer)                 | `npx shadcn@latest add @editorcn/email-composer`         |
+| [Simple Document Editor](./templates/simple-document-editor) | `npx shadcn@latest add @editorcn/simple-document-editor` |
 
 ## Usage
 
@@ -88,12 +102,12 @@ For the block editor:
 import "@/components/block-editor/style.css";
 ```
 
-### 2. Install peer dependencies
+### 2. Peer dependencies
 
-The `@tiptap/*` packages are peer dependencies. The shadcn CLI will prompt you to install any it detects as missing, but you can also add them yourself:
+The `@tiptap/*` packages are peer dependencies. The shadcn CLI installs the ones each item needs. To add the core ones yourself:
 
 ```bash
-npm install @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-underline
+npm install @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
 ```
 
 See the [Editor](./editor) or [Block Editor](./block-editor) docs for the full list of extensions.
@@ -116,7 +130,7 @@ function MyEditor() {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit,
+      StarterKit.configure({ link: false }),
       Link,
       Placeholder.configure({ placeholder: "Start typing..." }),
     ],
@@ -148,7 +162,6 @@ import { Placeholder } from "@tiptap/extension-placeholder";
 import {
   BlockEditor,
   SlashCommand,
-  defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@/components/block-editor";
 
@@ -159,7 +172,7 @@ function MyBlockEditor() {
       StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
       Placeholder.configure({ placeholder: "Type / for commands..." }),
       SlashCommand.configure({
-        suggestion: getSlashCommandSuggestion(defaultSlashCommandItems),
+        suggestion: getSlashCommandSuggestion(),
       }),
     ],
   });
@@ -195,11 +208,11 @@ When you run `shadcn add @editorcn/editor` in a project with `"style": "radix-no
 | Install location         | `node_modules`                      | Your project source                    |
 | Customizable             | No (published dist)                 | Yes (edit the source)                  |
 | Versioning               | Semver via npm                      | Latest from source                     |
-| Peer dependency handling | Manual install                      | CLI prompts for missing ones           |
+| Peer dependency handling | Manual install                      | Installed by the CLI                   |
 | Use case                 | Quick setup, no source edits needed | Full control over styling and behavior |
 
 Use the registry unless you have a specific reason to prefer a versioned npm dependency (for example, pinning to an exact release in a monorepo with strict dependency management).
 
 ## Source
 
-The registry is built from the same source as the npm packages. See [`scripts/registry/`](https://github.com/AbdullahMukadam/editorcn/tree/main/scripts/registry) for the build script.
+The registry is built from the same source as the npm packages. See [`scripts/registry/`](https://github.com/shadcn-labs/editorcn/tree/main/scripts/registry) for the build script.

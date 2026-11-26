@@ -8,7 +8,7 @@ Rich text editor components built on [Tiptap](https://tiptap.dev/) for the [shad
 
 ## Packages
 
-This monorepo provides two editor packages:
+editorcn provides two editors, a set of extensions that work with both, and a read-only renderer:
 
 ### [@editorcn/editor](/docs/editor)
 
@@ -27,10 +27,22 @@ A **Notion-style** block-type rich text editor. Ideal for modern, block-based wr
 - `BlockEditor` — block-type editor with slash commands and drag handles
 - Slash command menu (type `/` to insert blocks)
 - Bubble menu for inline formatting
-- Block-level actions (duplicate, delete, reorder)
-- Built-in image and table blocks
+- Drag handles to reorder blocks, with copy and delete actions
+- Images, tables, callouts and toggles through the [extensions](/docs/extensions), each with a ready-made slash item
 
 [View docs →](/docs/block-editor)
+
+### [Extensions](/docs/extensions)
+
+Ready-made Tiptap extensions for both editors: Callout, Code Block, Image Placeholder, Markdown, Mention, Paste Cleanup, Table and Toggle. Each installs on its own with the shadcn CLI and brings its toolbar control or slash item.
+
+### [Static Renderer](/docs/static-renderer)
+
+Renders saved editor content as read-only HTML, for blog posts, previews and chat history, without loading an editor.
+
+### [Templates](/docs/templates)
+
+Complete editors you install in one command, such as the full toolbar and block editors from the homepage, a comment box and an email composer.
 
 ## Which one should I use?
 

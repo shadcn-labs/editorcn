@@ -22,7 +22,7 @@ import { Link } from "@editorcn/editor";
 
 const editor = useEditor({
   extensions: [
-    StarterKit,
+    StarterKit.configure({ link: false }),
     Link, // replaces @tiptap/extension-link
   ],
 });

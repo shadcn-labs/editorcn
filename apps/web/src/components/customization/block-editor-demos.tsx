@@ -8,25 +8,23 @@ import {
 } from "@editorcn/block-editor";
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
 import { CodeBlock } from "@editorcn/extensions/code-block";
-import type { Editor, Range } from "@tiptap/core";
-import { Image } from "@tiptap/extension-image";
-import { Link } from "@tiptap/extension-link";
+import {
+  ImagePlaceholder,
+  ResizableImage,
+  imagePlaceholderSlashCommandItem,
+} from "@editorcn/extensions/image-placeholder";
+import { Table, tableSlashCommandItem } from "@editorcn/extensions/table";
 import { Placeholder } from "@tiptap/extension-placeholder";
-import { Table } from "@tiptap/extension-table";
-import { TableCell } from "@tiptap/extension-table-cell";
-import { TableHeader } from "@tiptap/extension-table-header";
-import { TableRow } from "@tiptap/extension-table-row";
 import { TaskItem } from "@tiptap/extension-task-item";
 import { TaskList } from "@tiptap/extension-task-list";
 import { TextAlign } from "@tiptap/extension-text-align";
-import { Underline } from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 
-import { showImagePrompt } from "@/components/image-prompt";
-
 import "@editorcn/block-editor/style.css";
 import "@editorcn/extensions/code-block/style.css";
+import "@editorcn/extensions/image-placeholder/style.css";
+import "@editorcn/extensions/table/style.css";
 
 const BLOCK_CONTENT = `
 <h2>Getting Started</h2>
@@ -39,57 +37,27 @@ const BLOCK_CONTENT = `
 <pre><code class="language-javascript">console.log("Hello, world!");</code></pre>
 `.trim();
 
-const blockItems = [
-  ...defaultSlashCommandItems,
-  {
-    command: async ({ editor, range }: { editor: Editor; range: Range }) => {
-      const url = await showImagePrompt();
-      if (!url) {
-        return;
-      }
-      editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
-    },
-    description: "Insert an image.",
-    id: "image",
-    keywords: ["image", "img"],
-    title: "Image",
-  },
-  {
-    command: ({ editor, range }: { editor: Editor; range: Range }) => {
-      editor
-        .chain()
-        .focus()
-        .deleteRange(range)
-        .insertTable({ cols: 3, rows: 3, withHeaderRow: true })
-        .run();
-    },
-    description: "Insert a table.",
-    id: "table",
-    keywords: ["table"],
-    title: "Table",
-  },
-];
-
-const extensions = [
-  StarterKit.configure({ codeBlock: false, heading: { levels: [1, 2, 3] } }),
+const createExtensions = (slashItems: SlashCommandSuggestionItem[]) => [
+  StarterKit.configure({
+    codeBlock: false,
+    heading: { levels: [1, 2, 3] },
+  }),
   Placeholder.configure({ placeholder: "Type / for commands..." }),
-  Underline,
   TaskList,
   TaskItem.configure({ nested: true }),
   CodeBlock,
   TextAlign.configure({ types: ["heading", "paragraph"] }),
   Table,
-  TableRow,
-  TableCell,
-  TableHeader,
-  Image,
-  Link.configure({
-    autolink: true,
-    defaultProtocol: "https",
-    openOnClick: true,
-  }),
-  SlashCommand.configure({ suggestion: getSlashCommandSuggestion(blockItems) }),
+  ResizableImage,
+  ImagePlaceholder,
+  SlashCommand.configure({ suggestion: getSlashCommandSuggestion(slashItems) }),
 ];
+
+const extensions = createExtensions([
+  ...defaultSlashCommandItems,
+  imagePlaceholderSlashCommandItem,
+  tableSlashCommandItem,
+]);
 
 export const BlockEditorVariantsDemo = () => {
   const editor = useEditor({
@@ -160,57 +128,11 @@ const customSlashItems: SlashCommandSuggestionItem[] = [
     keywords: ["hello", "hi", "greeting"],
     title: "Greeting",
   },
-  {
-    command: async ({ editor, range }) => {
-      const url = await showImagePrompt();
-      if (!url) {
-        return;
-      }
-      editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
-    },
-    description: "Insert an image.",
-    id: "image",
-    keywords: ["image", "img", "picture"],
-    title: "Image",
-  },
-  {
-    command: ({ editor, range }) => {
-      editor
-        .chain()
-        .focus()
-        .deleteRange(range)
-        .insertTable({ cols: 3, rows: 3, withHeaderRow: true })
-        .run();
-    },
-    description: "Insert a table.",
-    id: "table",
-    keywords: ["table", "grid"],
-    title: "Table",
-  },
+  imagePlaceholderSlashCommandItem,
+  tableSlashCommandItem,
 ];
 
-const customSlashExtensions = [
-  StarterKit.configure({ codeBlock: false, heading: { levels: [1, 2, 3] } }),
-  Placeholder.configure({ placeholder: "Type / for commands..." }),
-  Underline,
-  TaskList,
-  TaskItem.configure({ nested: true }),
-  CodeBlock,
-  TextAlign.configure({ types: ["heading", "paragraph"] }),
-  Table,
-  TableRow,
-  TableCell,
-  TableHeader,
-  Image,
-  Link.configure({
-    autolink: true,
-    defaultProtocol: "https",
-    openOnClick: true,
-  }),
-  SlashCommand.configure({
-    suggestion: getSlashCommandSuggestion(customSlashItems),
-  }),
-];
+const customSlashExtensions = createExtensions(customSlashItems);
 
 export const BlockEditorCustomSlashCommandsDemo = () => {
   const editor = useEditor({

@@ -536,9 +536,6 @@ importers:
       '@tiptap/extension-details':
         specifier: ^3.33.0
         version: 3.33.0(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/extension-text-style@3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5)))(@tiptap/pm@3.30.5)
-      '@tiptap/extension-gapcursor':
-        specifier: ^3.30.0
-        version: 3.30.5(@tiptap/extensions@3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/pm@3.30.5))
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
