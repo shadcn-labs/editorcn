@@ -1,5 +1,15 @@
 # @editorcn/static-renderer
 
+## 0.6.0
+
+Mermaid diagrams from the new Mermaid extension get a styled card.
+
+### Changes
+
+- `div[data-type="mermaid"]` renders as a bordered card with its source inside, in light and dark mode, so diagrams saved by the editor read as diagrams instead of a loose code block. Drawn SVGs fit the card's width.
+- The sanitizer keeps Mermaid diagram markup, so the source survives HTML mode.
+- To draw the diagrams, wrap the renderer in `MermaidDiagrams` from the Mermaid extension, or map the node to `MermaidPreview` in JSON mode. `StaticRenderer` itself doesn't load Mermaid, so it stays synchronous and works in server components. See [Mermaid](https://www.rtecn.space/docs/extensions/mermaid#static-renderer).
+
 ## 0.5.0
 
 HTML strings are now sanitized by default.

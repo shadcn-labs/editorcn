@@ -1,0 +1,40 @@
+---
+title: "November 27, 2026 - Mermaid diagrams"
+description: "A new Mermaid extension adds diagram blocks with copy, edit and delete actions, a split code and live preview editor, a toolbar button, a slash command, and Static Renderer support."
+date: "2026-11-27"
+---
+
+Docs, specs and knowledge-base editors can now draw flowcharts, sequence diagrams and other charts with the new [Mermaid extension](/docs/extensions/mermaid). Thanks to [Santos Vilanculos](https://github.com/SantosVilanculos) for building the first version.
+
+```bash
+npx shadcn@latest add @editorcn/mermaid
+```
+
+## Highlights
+
+- **Diagram-first blocks**: a diagram shows only the drawing. Hover it, or tap it on touch screens, to copy the source, edit it or delete the block. Double-click to edit.
+- **Split editor**: edit shows the source next to a live preview that redraws 300ms after you stop typing, with code, split and preview layouts. **Apply** (<kbd>Cmd/Ctrl</kbd>+<kbd>Enter</kbd>) saves the change as one undo step, and **Cancel** (<kbd>Esc</kbd>) discards it.
+- **Toolbar and slash command**: a `MermaidToolbar` button for the toolbar editor and a **Diagram** slash command item for the block editor.
+- **Light and dark**: diagrams follow the `dark` class on `<html>`, and syntax errors show above the last diagram that worked.
+- **Loaded on demand**: Mermaid is imported the first time a diagram renders, so it stays out of your initial bundle, and runs with `securityLevel: "strict"`.
+- **Markdown**: with the Markdown extension, diagrams round-trip as fenced `mermaid` blocks.
+- **Static Renderer**: diagrams render as a card with their source, and `MermaidDiagrams` draws them on the client in HTML or JSON mode.
+- **Mobile**: larger tap targets, no zoom when the source box gets focus on iOS, and a stacked layout on narrow screens.
+
+The landing page editors and the Full Toolbar Editor and Full Block Editor templates now include it.
+
+## Upgrading
+
+### shadcn registry
+
+Add the extension, and re-add the static renderer if you use it to get the diagram card:
+
+```bash
+npx shadcn@latest add @editorcn/mermaid @editorcn/static-renderer
+```
+
+Installing Mermaid doesn't change the shared `extensions/core` files, so it won't ask to overwrite anything from your other extensions.
+
+### npm
+
+Update to `@editorcn/static-renderer@0.6.0`. See its [changelog](https://github.com/shadcn-labs/editorcn/blob/main/packages/static-renderer/CHANGELOG.md).

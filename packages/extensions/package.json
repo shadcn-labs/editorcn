@@ -19,6 +19,8 @@
     "./paste-cleanup": "./src/paste-cleanup/index.ts",
     "./mention": "./src/mention/index.ts",
     "./mention/style.css": "./src/mention/style.css",
+    "./mermaid": "./src/mermaid/index.ts",
+    "./mermaid-toolbar": "./src/mermaid/toolbar.tsx",
     "./table": "./src/table/index.ts",
     "./table-hover-overlay": "./src/table/table-hover-overlay.tsx",
     "./table-toolbar": "./src/table/toolbar.tsx",

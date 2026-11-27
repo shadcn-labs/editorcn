@@ -16,6 +16,7 @@ import {
 import { Markdown } from "@editorcn/extensions/markdown";
 import { Mention } from "@editorcn/extensions/mention";
 import type { MentionItem } from "@editorcn/extensions/mention";
+import { Mermaid } from "@editorcn/extensions/mermaid";
 import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
@@ -86,6 +87,7 @@ const FullEditorInner = ({
       CharacterCount,
       CodeBlock,
       Callout,
+      Mermaid,
       Table.configure({ resizable: true }),
       ResizableImage,
       ImagePlaceholder,

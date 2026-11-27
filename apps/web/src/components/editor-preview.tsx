@@ -45,11 +45,13 @@ const DEMO_CONTENT = `
 <pre><code class="language-javascript">function greet(name) {
   return \`Hello, \${name}! Welcome to editorcn.\`;
 }</code></pre>
-<p>Set the language to <strong>Mermaid</strong> and the diagram renders live below the code:</p>
-<pre><code class="language-mermaid">graph LR
-  A[Type in the editor] --&gt; B{Code or diagram?}
-  B --&gt;|Code| C[Shiki highlighting]
-  B --&gt;|Mermaid| D[Live preview]</code></pre>
+<h2>Diagrams</h2>
+<p>Use the <strong>diagram</strong> button in the toolbar to add a Mermaid diagram. Hover it to copy, edit or delete it:</p>
+<div data-type="mermaid"><pre><code class="language-mermaid">graph LR
+  A[Write Mermaid] --&gt; B{Looks right?}
+  B --&gt;|Yes| C[Apply]
+  B --&gt;|No| D[Edit the source]
+  D --&gt; B</code></pre></div>
 <h2>Alignment</h2>
 <p style="text-align: left;">Left aligned — the default for most content.</p>
 <p style="text-align: center;">Center aligned — great for headings or callouts.</p>

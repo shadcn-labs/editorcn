@@ -697,7 +697,7 @@
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/starter-kit@>=3.0.0 <4"
       ],
-      "description": "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
+      "description": "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, Mermaid diagrams, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
       "files": [
         {
           "path": "templates/full-block-editor/index.tsx",
@@ -728,7 +728,7 @@
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/starter-kit@>=3.0.0 <4"
       ],
-      "description": "The full toolbar editor from the editorcn homepage: every toolbar control plus callouts, code blocks, tables, images, embeds, mentions, Markdown and paste cleanup.",
+      "description": "The full toolbar editor from the editorcn homepage: every toolbar control plus callouts, Mermaid diagrams, code blocks, tables, images, embeds, mentions, Markdown and paste cleanup.",
       "files": [
         {
           "path": "templates/full-editor/index.tsx",
@@ -1024,6 +1024,90 @@
       ],
       "name": "mention",
       "title": "Mention",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <2.0.0",
+        "mermaid@^11.0.0",
+        "tailwind-merge@^3.0.0"
+      ],
+      "description": "A Mermaid diagram block that shows just the diagram, with hover actions to copy, edit and delete. Edit opens a split code and live preview editor with Apply and Cancel, and the preview re-renders 300ms after you stop typing, following light and dark mode. Insert one from the slash menu as \"Diagram\". Mermaid is loaded on first use, and the source round-trips as a fenced mermaid block in markdown.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/diagrams.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/preview.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/render.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/slash-command-item.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/utils.ts",
+          "type": "registry:component"
+        }
+      ],
+      "name": "mermaid",
+      "title": "Mermaid",
       "type": "registry:component"
     },
     {

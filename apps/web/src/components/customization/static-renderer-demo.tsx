@@ -1,6 +1,12 @@
 "use client";
 
 import { Link, RichTextEditor } from "@editorcn/editor";
+import {
+  Mermaid,
+  MermaidDiagrams,
+  MermaidPreview,
+} from "@editorcn/extensions/mermaid";
+import { MermaidToolbar } from "@editorcn/extensions/mermaid-toolbar";
 import { StaticRenderer } from "@editorcn/static-renderer";
 import type { CodeHighlighter } from "@editorcn/static-renderer";
 import { Image } from "@tiptap/extension-image";
@@ -62,6 +68,14 @@ const CONTENT = `
   <strong>emphasis</strong>, <em>italics</em>, <u>underlines</u>, or
   <s>struck-through</s> text exactly as the author left it.
 </p>
+<p>
+  Mermaid diagrams keep their source in the HTML. The HTML pane draws them by
+  wrapping the renderer in <code>MermaidDiagrams</code>, and the JSON pane maps
+  the node to <code>MermaidPreview</code>.
+</p>
+<div data-type="mermaid"><pre><code class="language-mermaid">graph LR
+  A[Editor] --&gt; B[Saved HTML or JSON]
+  B --&gt; C[StaticRenderer]</code></pre></div>
 <pre><code class="language-typescript">export const isOnboardingV2 = (team: Team) =&gt;
   flags.enabled("onboarding-v2", { teamId: team.id });</code></pre>
 `.trim();
@@ -73,6 +87,7 @@ const extensions = [
     underline: false,
   }),
   Image,
+  Mermaid,
   Underline,
   Link,
   Placeholder.configure({ placeholder: "Start typing..." }),
@@ -169,6 +184,7 @@ export const StaticRendererDemo = () => {
               >
                 <ImageIcon className="size-4" />
               </RichTextEditor.Control>
+              <MermaidToolbar editor={editor} />
             </RichTextEditor.ControlsGroup>
             <RichTextEditor.ControlsGroup>
               <RichTextEditor.AlignLeft />
@@ -192,7 +208,13 @@ export const StaticRendererDemo = () => {
             Static output — HTML
           </div>
           <div className="p-5">
-            <StaticRenderer content={doc} highlighter={highlighter} sanitize />
+            <MermaidDiagrams>
+              <StaticRenderer
+                content={doc}
+                highlighter={highlighter}
+                sanitize
+              />
+            </MermaidDiagrams>
           </div>
         </div>
         <div className="overflow-hidden rounded-md border border-border">
@@ -209,6 +231,11 @@ export const StaticRendererDemo = () => {
                 options={{
                   nodeMapping: {
                     image: ({ node }) => <DemoImage node={node} />,
+                    mermaid: ({ node }) => (
+                      <div data-type="mermaid">
+                        <MermaidPreview value={node.attrs.value} />
+                      </div>
+                    ),
                   },
                 }}
               />
