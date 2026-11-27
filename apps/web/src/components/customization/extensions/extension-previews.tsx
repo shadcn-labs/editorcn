@@ -21,6 +21,7 @@ import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-
 import { Markdown } from "@editorcn/extensions/markdown";
 import { MarkdownToolbar } from "@editorcn/extensions/markdown-toolbar";
 import { Mention } from "@editorcn/extensions/mention";
+import { Mermaid, mermaidSlashCommandItem } from "@editorcn/extensions/mermaid";
 import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
 import { Table, tableSlashCommandItem } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
@@ -86,6 +87,13 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
       StarterKit,
       Mention.configure({ heading: "People", items: searchPeople }),
     ],
+    toolbar: null,
+  },
+  mermaid: {
+    content:
+      '<p>Switch between the Preview and Code tabs. Edit the source and the diagram re-renders after you stop typing. In the block editor, type <code>/diagram</code> to insert a new one.</p><div data-type="mermaid"><pre><code>graph LR\n  A[Write Mermaid] --&gt; B{Valid?}\n  B --&gt;|Yes| C[Diagram]\n  B --&gt;|No| D[Inline error]\n  D --&gt; A</code></pre></div><p></p>',
+    extensions: [StarterKit, Mermaid],
+    slashItems: [mermaidSlashCommandItem],
     toolbar: null,
   },
   "paste-cleanup": {

@@ -26,6 +26,12 @@ export { TableHoverOverlay } from "./table/table-hover-overlay";
 export { TableToolbar } from "./table/toolbar";
 export { Mention, isMentionActive, mentionPluginKey } from "./mention";
 export type { MentionItem, MentionOptions } from "./mention";
+export { Mermaid, MermaidPreview, mermaidSlashCommandItem } from "./mermaid";
+export type {
+  MermaidAttributes,
+  MermaidOptions,
+  MermaidPreviewProps,
+} from "./mermaid";
 export {
   Markdown,
   copyMarkdown,

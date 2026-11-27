@@ -1,0 +1,6 @@
+{
+  "name": "mermaid",
+  "type": "registry:component",
+  "title": "Mermaid",
+  "description": "A Mermaid diagram block with Preview and Code tabs. Insert one from the slash menu as \"Diagram\", write the source in the Code tab, and the preview re-renders 300ms after you stop typing, following light and dark mode. Mermaid is loaded on first use, and the source round-trips as a fenced mermaid block in markdown."
+}

@@ -1029,6 +1029,82 @@
     {
       "dependencies": [
         "@tiptap/core@>=3.30.5 <4",
+        "@tiptap/react@>=3.0.0 <4",
+        "clsx@^2.1.1",
+        "lucide-react@>=0.400.0 <2.0.0",
+        "mermaid@^11.0.0",
+        "tailwind-merge@^3.0.0"
+      ],
+      "description": "A Mermaid diagram block with Preview and Code tabs. Insert one from the slash menu as \"Diagram\", write the source in the Code tab, and the preview re-renders 300ms after you stop typing, following light and dark mode. Mermaid is loaded on first use, and the source round-trips as a fenced mermaid block in markdown.",
+      "files": [
+        {
+          "path": "extensions/core/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/detection.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/editor-state.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/core/types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/preview.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/slash-command-item.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/view.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/tabs.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/use-floating.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/utils.ts",
+          "type": "registry:component"
+        }
+      ],
+      "name": "mermaid",
+      "title": "Mermaid",
+      "type": "registry:component"
+    },
+    {
+      "dependencies": [
+        "@tiptap/core@>=3.30.5 <4",
         "@tiptap/pm@>=3.0.0 <4",
         "@tiptap/react@>=3.0.0 <4",
         "lucide-react@>=0.400.0 <2.0.0"
