@@ -27,6 +27,7 @@ export { TableToolbar } from "./table/toolbar";
 export { Mention, isMentionActive, mentionPluginKey } from "./mention";
 export type { MentionItem, MentionOptions } from "./mention";
 export { Mermaid, MermaidPreview, mermaidSlashCommandItem } from "./mermaid";
+export { MermaidToolbar } from "./mermaid/toolbar";
 export type {
   MermaidAttributes,
   MermaidOptions,

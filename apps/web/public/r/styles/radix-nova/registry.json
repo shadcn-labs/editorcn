@@ -697,7 +697,7 @@
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/starter-kit@>=3.0.0 <4"
       ],
-      "description": "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
+      "description": "The full block editor from the editorcn homepage: a slash menu and drag handles plus callouts, toggles, Mermaid diagrams, code blocks, tables, images, task lists, mentions, Markdown and paste cleanup.",
       "files": [
         {
           "path": "templates/full-block-editor/index.tsx",
@@ -728,7 +728,7 @@
         "@tiptap/react@>=3.0.0 <4",
         "@tiptap/starter-kit@>=3.0.0 <4"
       ],
-      "description": "The full toolbar editor from the editorcn homepage: every toolbar control plus callouts, code blocks, tables, images, embeds, mentions, Markdown and paste cleanup.",
+      "description": "The full toolbar editor from the editorcn homepage: every toolbar control plus callouts, Mermaid diagrams, code blocks, tables, images, embeds, mentions, Markdown and paste cleanup.",
       "files": [
         {
           "path": "templates/full-editor/index.tsx",
@@ -1075,6 +1075,10 @@
         },
         {
           "path": "extensions/mermaid/slash-command-item.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/toolbar.tsx",
           "type": "registry:component"
         },
         {

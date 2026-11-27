@@ -322,6 +322,25 @@
   margin-bottom: 0;
 }
 
+.rte-static-renderer div[data-type="mermaid"] {
+  margin: 0.75em 0;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--border) 60%, transparent);
+  border-radius: calc(var(--radius) + 4px);
+  background: var(--card);
+}
+
+.rte-static-renderer div[data-type="mermaid"] > pre {
+  margin: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.rte-static-renderer div[data-type="mermaid"] svg {
+  max-width: 100%;
+  height: auto;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rte-static-renderer details > summary::before {
     transition: none;

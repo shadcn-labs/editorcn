@@ -14,6 +14,7 @@ import {
 import { Markdown } from "@editorcn/extensions/markdown";
 import { Mention } from "@editorcn/extensions/mention";
 import type { MentionItem } from "@editorcn/extensions/mention";
+import { Mermaid } from "@editorcn/extensions/mermaid";
 import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
 import { Table } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
@@ -80,6 +81,7 @@ const FullBlockEditorInner = ({
       CodeBlock,
       Callout,
       Toggle,
+      Mermaid,
       SlashCommand.configure({
         suggestion: getSlashCommandSuggestion(
           createSlashItems(markdownFilename)

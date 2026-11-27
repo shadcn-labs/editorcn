@@ -38,7 +38,7 @@ npm install @tiptap/core @tiptap/react @tiptap/pm mermaid lucide-react clsx tail
 
 ## Usage
 
-Add `Mermaid` to the extensions. The copy, edit and delete actions and the editor come from a built-in node view, so no toolbar component is needed.
+Add `Mermaid` to the extensions and `MermaidToolbar` to the toolbar. The toolbar button inserts a new diagram and opens its editor. The copy, edit and delete actions come from a built-in node view.
 
 ```tsx
 "use client";
@@ -48,6 +48,7 @@ import { StarterKit } from "@tiptap/starter-kit";
 
 import { RichTextEditor } from "@/components/editor";
 import { Mermaid } from "@/components/extensions/mermaid";
+import { MermaidToolbar } from "@/components/extensions/mermaid/toolbar";
 
 import "@/components/editor/style.css";
 
@@ -59,6 +60,13 @@ export function MyEditor() {
 
   return (
     <RichTextEditor editor={editor}>
+      <RichTextEditor.Toolbar>
+        <RichTextEditor.ControlsGroup>
+          <RichTextEditor.Bold />
+          <RichTextEditor.Italic />
+          <MermaidToolbar editor={editor} />
+        </RichTextEditor.ControlsGroup>
+      </RichTextEditor.Toolbar>
       <RichTextEditor.Content />
     </RichTextEditor>
   );
@@ -164,7 +172,7 @@ If the Code Block extension is also installed, `mermaid` fences become diagram b
 
 ## Static Renderer
 
-The [Static Renderer](/docs/static-renderer) shows the source as a code block by default. To draw the diagram, map the node to `MermaidPreview`. It renders on the client and shows the source until Mermaid has loaded:
+The [Static Renderer](/docs/static-renderer) styles `div[data-type="mermaid"]` as a card and, in HTML mode, shows the source inside it, so the output works in server components without Mermaid. To draw the diagram, render JSON and map the node to `MermaidPreview`. It runs on the client and shows the source until Mermaid has loaded:
 
 ```tsx
 import { StaticRenderer } from "@/components/static-renderer";
@@ -175,7 +183,11 @@ import { Mermaid, MermaidPreview } from "@/components/extensions/mermaid";
   extensions={[StarterKit, Mermaid]}
   options={{
     nodeMapping: {
-      mermaid: ({ node }) => <MermaidPreview value={node.attrs.value} />,
+      mermaid: ({ node }) => (
+        <div data-type="mermaid">
+          <MermaidPreview value={node.attrs.value} />
+        </div>
+      ),
     },
   }}
 />;

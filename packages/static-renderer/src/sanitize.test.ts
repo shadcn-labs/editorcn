@@ -309,6 +309,12 @@ describe(sanitizeHtml, () => {
       )
     ).toBe("<details open><summary>x</summary></details>");
   });
+
+  it("keeps mermaid diagram source", () => {
+    const html =
+      '<div data-type="mermaid"><pre><code class="language-mermaid">graph TD\n  A--&gt;B</code></pre></div>';
+    expect(sanitizeHtml(html)).toBe(html);
+  });
 });
 
 describe("task list class", () => {

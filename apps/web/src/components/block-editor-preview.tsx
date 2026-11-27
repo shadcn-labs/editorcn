@@ -55,11 +55,12 @@ function MyEditor() {
   return &lt;BlockEditor editor={editor} /&gt;;
 }</code></pre>
 <h2>Mermaid Diagram</h2>
-<p>Set a code block language to <strong>Mermaid</strong> to see a live diagram below the code.</p>
-<pre><code class="language-mermaid">graph LR
-  A[Type in the editor] --&gt; B{Code or diagram?}
-  B --&gt;|Code| C[Shiki highlighting]
-  B --&gt;|Mermaid| D[Live preview]</code></pre>
+<p>Type <code>/diagram</code> to insert one. Hover a diagram to copy, edit or delete it; edit shows the source next to a live preview.</p>
+<div data-type="mermaid"><pre><code class="language-mermaid">graph LR
+  A[Write Mermaid] --&gt; B{Looks right?}
+  B --&gt;|Yes| C[Apply]
+  B --&gt;|No| D[Edit the source]
+  D --&gt; B</code></pre></div>
 <h2>Callout</h2>
 <div data-type="callout" data-variant="info"><p>Type <code>/callout</code> to insert a callout, or <code>&gt; [!WARNING]</code> and a space. Click the icon to switch between info, tip, warning, danger, and note.</p></div>
 <h2>Blockquote</h2>

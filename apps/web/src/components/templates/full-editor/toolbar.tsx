@@ -4,6 +4,7 @@ import { RichTextEditor } from "@editorcn/editor";
 import { CalloutToolbar } from "@editorcn/extensions/callout-toolbar";
 import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-toolbar";
 import { MarkdownToolbar } from "@editorcn/extensions/markdown-toolbar";
+import { MermaidToolbar } from "@editorcn/extensions/mermaid-toolbar";
 import { TableToolbar } from "@editorcn/extensions/table-toolbar";
 import type { Editor } from "@tiptap/react";
 
@@ -61,6 +62,7 @@ export const FullEditorToolbar = ({
       <CalloutToolbar editor={editor} />
       <ImagePlaceholderToolbar editor={editor} />
       <TableToolbar editor={editor} />
+      <MermaidToolbar editor={editor} />
       <MarkdownToolbar editor={editor} filename={markdownFilename} />
     </RichTextEditor.ControlsGroup>
     <RichTextEditor.ControlsGroup>

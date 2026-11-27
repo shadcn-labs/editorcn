@@ -352,14 +352,15 @@ automatically.
 
 The renderer's element gets the `rte-static-renderer` and `editorcn-content` classes and a `data-preset` attribute. Document content is styled by the [content preset](/docs/styling#content-presets) (`"block"` by default, `"document"` for `RichTextEditor` output), and the renderer's own stylesheet adds the nodes only it handles:
 
-| Content                                                                                  | Selector                                                                     |
-| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| Headings, paragraphs, lists, blockquotes, code, rules, links, images, tables, task lists | `.editorcn-content[data-preset="block"] h1`, `p`, `ul`, ...                  |
-| Code blocks (Shiki colors with `highlighter`)                                            | `.rte-static-renderer pre`, `span[style]` (`--shiki-light` / `--shiki-dark`) |
-| Syntax highlighting                                                                      | `.rte-static-renderer pre .hljs-*` (lowlight / highlight.js)                 |
-| Callouts                                                                                 | `.rte-static-renderer div[data-type="callout"]`                              |
-| Toggles                                                                                  | `.rte-static-renderer details`                                               |
-| Embeds (toolbar)                                                                         | `.rte-static-renderer div[data-type="youtube" / "twitter"]`                  |
+| Content                                                                                                                 | Selector                                                                     |
+| ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Headings, paragraphs, lists, blockquotes, code, rules, links, images, tables, task lists                                | `.editorcn-content[data-preset="block"] h1`, `p`, `ul`, ...                  |
+| Code blocks (Shiki colors with `highlighter`)                                                                           | `.rte-static-renderer pre`, `span[style]` (`--shiki-light` / `--shiki-dark`) |
+| Syntax highlighting                                                                                                     | `.rte-static-renderer pre .hljs-*` (lowlight / highlight.js)                 |
+| Callouts                                                                                                                | `.rte-static-renderer div[data-type="callout"]`                              |
+| Toggles                                                                                                                 | `.rte-static-renderer details`                                               |
+| Mermaid diagrams (source card; draw them with a `nodeMapping`, see [Mermaid](/docs/extensions/mermaid#static-renderer)) | `.rte-static-renderer div[data-type="mermaid"]`                              |
+| Embeds (toolbar)                                                                                                        | `.rte-static-renderer div[data-type="youtube" / "twitter"]`                  |
 
 YouTube and Twitter embeds are serialized as empty `<div>`s carrying
 `data-type`, `data-src` / `data-tweet-id` attributes, which render as 16:9

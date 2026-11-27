@@ -24,6 +24,7 @@ export interface ExtensionLabels {
   insertTable: string;
   markdown: string;
   mergeCells: string;
+  mermaid: string;
   removeCallout: string;
   resetCalloutIcon: string;
   rowActions: string;
@@ -60,6 +61,7 @@ export const DEFAULT_EXTENSION_LABELS: ExtensionLabels = {
   insertTable: "Insert table",
   markdown: "Markdown",
   mergeCells: "Merge cells",
+  mermaid: "Diagram",
   removeCallout: "Remove callout",
   resetCalloutIcon: "Use default icon",
   rowActions: "Row actions",
