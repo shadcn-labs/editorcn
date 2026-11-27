@@ -39,7 +39,7 @@ const IS_MAC =
   /Mac|iPhone|iPad/.test(navigator.userAgent);
 
 const ICON_BUTTON_CLASS =
-  "size-7 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground [&>svg]:size-3.5";
+  "size-7 rounded-md text-muted-foreground hover:bg-muted hover:text-foreground [&>svg]:size-3.5 [@media(hover:none)_and_(pointer:coarse)]:size-9 [@media(hover:none)_and_(pointer:coarse)]:[&>svg]:size-4";
 
 const KBD_CLASS =
   "rounded-md border border-border/60 bg-background px-1.5 py-px font-sans text-[0.6875rem] text-muted-foreground";
@@ -87,13 +87,13 @@ const MermaidCard = ({
   return (
     <div
       className={cn(
-        "ext-mermaid-box group/mermaid relative rounded-xl border border-border/60 bg-card select-none [transition:box-shadow_150ms_ease-out]",
+        "ext-mermaid-box group/mermaid @container/mermaid-card relative rounded-xl border border-border/60 bg-card select-none [transition:box-shadow_150ms_ease-out]",
         selected && "border-ring ring-[3px] ring-ring/30 ring-inset"
       )}
       contentEditable={false}
       onDoubleClick={editable ? onEdit : undefined}
     >
-      <div className="ext-mermaid-actions absolute top-2 right-2 z-10 flex items-center gap-0.5 rounded-lg border border-border/60 bg-background p-0.5 opacity-0 shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)] [transition:opacity_150ms_ease-out] group-hover/mermaid:opacity-100 focus-within:opacity-100 motion-reduce:transition-none">
+      <div className="ext-mermaid-actions absolute top-2 right-2 z-10 flex items-center gap-0.5 rounded-lg border border-border/60 bg-background p-0.5 opacity-0 shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)] [transition:opacity_150ms_ease-out] group-hover/mermaid:opacity-100 focus-within:opacity-100 motion-reduce:transition-none [@media(hover:none)_and_(pointer:coarse)]:opacity-100 [@media(hover:none)_and_(pointer:coarse)]:shadow-none">
         <Button
           size="icon-sm"
           className={ICON_BUTTON_CLASS}
@@ -131,7 +131,10 @@ const MermaidCard = ({
           </>
         )}
       </div>
-      <MermaidPreview value={value} className="min-h-40 px-6 py-8" />
+      <MermaidPreview
+        value={value}
+        className="min-h-32 px-3 py-5 @md/mermaid-card:min-h-40 @md/mermaid-card:px-6 @md/mermaid-card:py-8 [@media(hover:none)_and_(pointer:coarse)]:pt-14"
+      />
     </div>
   );
 };
@@ -209,21 +212,23 @@ export const MermaidView = ({
         <div className="ext-mermaid-header flex items-center justify-between gap-2 py-1 pr-1 pl-2.5">
           <div className="flex min-w-0 items-center gap-2">
             <Workflow className="size-3.5 shrink-0 text-muted-foreground" />
-            <span className="text-sm font-medium text-foreground">Diagram</span>
+            <span className="hidden text-sm font-medium text-foreground @xs/mermaid:inline">
+              Diagram
+            </span>
             <span className="hidden text-xs text-muted-foreground tabular-nums @sm/mermaid:inline">
               {lines} {lines === 1 ? "line" : "lines"}
             </span>
           </div>
           <div className="flex items-center gap-1">
             <fieldset
-              className="ext-mermaid-layout m-0 flex h-8 min-w-0 items-center gap-0.5 rounded-lg border border-border/60 bg-background p-0.5"
+              className="ext-mermaid-layout m-0 flex h-8 min-w-0 items-center gap-0.5 rounded-lg border border-border/60 bg-background p-0.5 [@media(hover:none)_and_(pointer:coarse)]:h-10"
               aria-label="Layout"
             >
               {LAYOUTS.map((option) => (
                 <Button
                   key={option.value}
                   className={cn(
-                    "h-7 gap-1.5 rounded-md px-2 text-xs font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground [&>svg]:size-3.5",
+                    "h-7 gap-1.5 rounded-md px-2 text-xs font-medium text-muted-foreground hover:bg-muted/60 hover:text-foreground [&>svg]:size-3.5 [@media(hover:none)_and_(pointer:coarse)]:h-9 [@media(hover:none)_and_(pointer:coarse)]:px-2.5 [@media(hover:none)_and_(pointer:coarse)]:[&>svg]:size-4",
                     layout === option.value &&
                       "bg-muted text-foreground hover:bg-muted"
                   )}
@@ -240,7 +245,10 @@ export const MermaidView = ({
             </fieldset>
             <Button
               size="icon-sm"
-              className={cn(ICON_BUTTON_CLASS, "size-8")}
+              className={cn(
+                ICON_BUTTON_CLASS,
+                "size-8 [@media(hover:none)_and_(pointer:coarse)]:size-10"
+              )}
               aria-label="Copy source"
               tooltip={copied ? "Copied" : "Copy source"}
               disabled={!draft}
@@ -252,7 +260,7 @@ export const MermaidView = ({
         </div>
         <div
           className={cn(
-            "ext-mermaid-panel grid min-h-64 overflow-hidden rounded-lg border border-border/60 bg-card",
+            "ext-mermaid-panel grid overflow-hidden @xl/mermaid:min-h-64 rounded-lg border border-border/60 bg-card",
             showCode && showPreview && "@xl/mermaid:grid-cols-2"
           )}
         >
@@ -261,23 +269,29 @@ export const MermaidView = ({
               aria-label="Mermaid source"
               autoFocus
               className={cn(
-                "ext-mermaid-source block min-h-64 w-full resize-none border-0 bg-transparent p-4 font-mono text-[0.8125rem] leading-relaxed text-foreground outline-none select-text placeholder:text-muted-foreground/50 [.ProseMirror-hideselection_&]:selection:text-foreground",
+                "ext-mermaid-source block max-h-112 min-h-40 w-full resize-none overflow-x-auto [field-sizing:content] border-0 bg-transparent p-4 font-mono text-[0.8125rem] whitespace-pre @xl/mermaid:min-h-64 [@media(hover:none)_and_(pointer:coarse)]:text-base leading-relaxed text-foreground outline-none select-text placeholder:text-muted-foreground/50 [.ProseMirror-hideselection_&]:selection:text-foreground",
                 showPreview &&
                   "border-b border-border/60 @xl/mermaid:border-r @xl/mermaid:border-b-0"
               )}
               placeholder={PLACEHOLDER}
               spellCheck={false}
+              autoCapitalize="off"
+              autoCorrect="off"
+              wrap="off"
               value={draft}
               onChange={(event) => setDraft(event.target.value)}
               onKeyDown={onKeyDown}
             />
           )}
           {showPreview && (
-            <MermaidPreview value={draft} className="min-h-64 justify-center" />
+            <MermaidPreview
+              value={draft}
+              className="min-h-40 justify-center @xl/mermaid:min-h-64"
+            />
           )}
         </div>
         <div className="ext-mermaid-footer flex items-center justify-between gap-2 py-1.5 pr-1 pl-2.5">
-          <div className="hidden items-center gap-3 text-xs text-muted-foreground @md/mermaid:flex">
+          <div className="hidden items-center gap-3 text-xs text-muted-foreground @md/mermaid:flex [@media(hover:none)_and_(pointer:coarse)]:hidden">
             <span className="flex items-center gap-1">
               <kbd className={KBD_CLASS}>{IS_MAC ? "⌘" : "Ctrl"}</kbd>
               <kbd className={KBD_CLASS}>Enter</kbd>
@@ -290,13 +304,13 @@ export const MermaidView = ({
           </div>
           <div className="ml-auto flex items-center gap-1.5">
             <Button
-              className="h-7 rounded-lg border border-border bg-background px-2.5 text-xs font-medium hover:bg-muted"
+              className="h-7 rounded-lg border border-border bg-background px-2.5 text-xs font-medium hover:bg-muted [@media(hover:none)_and_(pointer:coarse)]:h-9 [@media(hover:none)_and_(pointer:coarse)]:px-3.5 [@media(hover:none)_and_(pointer:coarse)]:text-sm"
               onClick={cancel}
             >
               Cancel
             </Button>
             <Button
-              className="h-7 rounded-lg border-transparent bg-primary px-2.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground disabled:opacity-50"
+              className="h-7 rounded-lg border-transparent bg-primary px-2.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground disabled:opacity-50 [@media(hover:none)_and_(pointer:coarse)]:h-9 [@media(hover:none)_and_(pointer:coarse)]:px-3.5 [@media(hover:none)_and_(pointer:coarse)]:text-sm"
               disabled={!dirty && Boolean(value)}
               onClick={apply}
             >
