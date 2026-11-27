@@ -172,7 +172,24 @@ If the Code Block extension is also installed, `mermaid` fences become diagram b
 
 ## Static Renderer
 
-The [Static Renderer](/docs/static-renderer) styles `div[data-type="mermaid"]` as a card and, in HTML mode, shows the source inside it, so the output works in server components without Mermaid. To draw the diagram, render JSON and map the node to `MermaidPreview`. It runs on the client and shows the source until Mermaid has loaded:
+The [Static Renderer](/docs/static-renderer) styles `div[data-type="mermaid"]` as a card with the source inside it, so the output still works in server components and without JavaScript. Mermaid draws in the browser, so the diagram comes from a client component, which shows the source until Mermaid has loaded and keeps it if the source has a syntax error.
+
+### HTML
+
+Wrap the renderer in `MermaidDiagrams`. It finds the diagrams in the rendered HTML and draws them, and redraws when the content or the theme changes:
+
+```tsx
+import { StaticRenderer } from "@/components/static-renderer";
+import { MermaidDiagrams } from "@/components/extensions/mermaid";
+
+<MermaidDiagrams>
+  <StaticRenderer content={html} />
+</MermaidDiagrams>;
+```
+
+### JSON
+
+Map the node to `MermaidPreview`:
 
 ```tsx
 import { StaticRenderer } from "@/components/static-renderer";
@@ -192,3 +209,5 @@ import { Mermaid, MermaidPreview } from "@/components/extensions/mermaid";
   }}
 />;
 ```
+
+`MermaidDiagrams` also works around JSON output, so you can skip the `nodeMapping` and wrap the renderer instead.

@@ -1,72 +1,11 @@
 "use client";
 
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { cn } from "../ui/utils";
-
-type MermaidTheme = "dark" | "default";
+import { cache, renderCached, useMermaidTheme } from "./render";
 
 const RENDER_DELAY = 300;
-const CACHE_LIMIT = 100;
-
-const cache = new Map<string, string>();
-let queue: Promise<unknown> = Promise.resolve();
-let renderCount = 0;
-
-const settled = async (promise: Promise<unknown>) => {
-  try {
-    return await promise;
-  } catch (error) {
-    return error;
-  }
-};
-
-const renderDiagram = (source: string, theme: MermaidTheme) => {
-  const previous = queue;
-  const task = (async () => {
-    await previous;
-    const { default: mermaid } = await import("mermaid");
-    mermaid.initialize({
-      securityLevel: "strict",
-      startOnLoad: false,
-      suppressErrorRendering: true,
-      theme,
-    });
-    renderCount += 1;
-    const { svg } = await mermaid.render(`ext-mermaid-${renderCount}`, source);
-    return svg;
-  })();
-  queue = settled(task);
-  return task;
-};
-
-const remember = (key: string, svg: string) => {
-  cache.delete(key);
-  cache.set(key, svg);
-  if (cache.size > CACHE_LIMIT) {
-    const oldest = cache.keys().next().value;
-    if (oldest !== undefined) {
-      cache.delete(oldest);
-    }
-  }
-};
-
-const subscribeToTheme = (onChange: () => void) => {
-  const observer = new MutationObserver(onChange);
-  observer.observe(document.documentElement, {
-    attributeFilter: ["class"],
-    attributes: true,
-  });
-  return () => observer.disconnect();
-};
-
-const useMermaidTheme = (): MermaidTheme =>
-  useSyncExternalStore(
-    subscribeToTheme,
-    () =>
-      document.documentElement.classList.contains("dark") ? "dark" : "default",
-    () => "default"
-  );
 
 interface RenderState {
   error?: string;
@@ -101,8 +40,7 @@ export const MermaidPreview = ({ className, value }: MermaidPreviewProps) => {
     const timer = setTimeout(
       async () => {
         try {
-          const svg = await renderDiagram(source, theme);
-          remember(key, svg);
+          const svg = await renderCached(source, theme);
           if (!cancelled) {
             rendered.current = true;
             setState({ key, svg });

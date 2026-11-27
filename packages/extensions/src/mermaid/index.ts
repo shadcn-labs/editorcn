@@ -3,6 +3,8 @@ import { ReactNodeViewRenderer } from "@tiptap/react";
 
 import { MermaidView } from "./view";
 
+export { MermaidDiagrams } from "./diagrams";
+export type { MermaidDiagramsProps } from "./diagrams";
 export { MermaidPreview } from "./preview";
 export type { MermaidPreviewProps } from "./preview";
 export { mermaidSlashCommandItem } from "./slash-command-item";

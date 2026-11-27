@@ -1,7 +1,11 @@
 "use client";
 
 import { Link, RichTextEditor } from "@editorcn/editor";
-import { Mermaid, MermaidPreview } from "@editorcn/extensions/mermaid";
+import {
+  Mermaid,
+  MermaidDiagrams,
+  MermaidPreview,
+} from "@editorcn/extensions/mermaid";
 import { MermaidToolbar } from "@editorcn/extensions/mermaid-toolbar";
 import { StaticRenderer } from "@editorcn/static-renderer";
 import type { CodeHighlighter } from "@editorcn/static-renderer";
@@ -65,8 +69,9 @@ const CONTENT = `
   <s>struck-through</s> text exactly as the author left it.
 </p>
 <p>
-  Mermaid diagrams keep their source in the HTML. The HTML pane shows it as a
-  code card, and the JSON pane draws it with <code>MermaidPreview</code>.
+  Mermaid diagrams keep their source in the HTML. The HTML pane draws them by
+  wrapping the renderer in <code>MermaidDiagrams</code>, and the JSON pane maps
+  the node to <code>MermaidPreview</code>.
 </p>
 <div data-type="mermaid"><pre><code class="language-mermaid">graph LR
   A[Editor] --&gt; B[Saved HTML or JSON]
@@ -203,7 +208,13 @@ export const StaticRendererDemo = () => {
             Static output — HTML
           </div>
           <div className="p-5">
-            <StaticRenderer content={doc} highlighter={highlighter} sanitize />
+            <MermaidDiagrams>
+              <StaticRenderer
+                content={doc}
+                highlighter={highlighter}
+                sanitize
+              />
+            </MermaidDiagrams>
           </div>
         </div>
         <div className="overflow-hidden rounded-md border border-border">

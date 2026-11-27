@@ -1070,7 +1070,15 @@
           "type": "registry:component"
         },
         {
+          "path": "extensions/mermaid/diagrams.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "extensions/mermaid/preview.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/mermaid/render.ts",
           "type": "registry:component"
         },
         {
