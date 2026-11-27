@@ -136,7 +136,7 @@ export const MermaidPreview = ({ className, value }: MermaidPreviewProps) => {
           className
         )}
       >
-        Empty diagram. Open the Code tab to write one.
+        Empty diagram
       </div>
     );
   }

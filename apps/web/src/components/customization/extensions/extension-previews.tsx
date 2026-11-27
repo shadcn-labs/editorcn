@@ -91,7 +91,7 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
   },
   mermaid: {
     content:
-      '<p>Switch between the Preview and Code tabs. Edit the source and the diagram re-renders after you stop typing. In the block editor, type <code>/diagram</code> to insert a new one.</p><div data-type="mermaid"><pre><code>graph LR\n  A[Write Mermaid] --&gt; B{Valid?}\n  B --&gt;|Yes| C[Diagram]\n  B --&gt;|No| D[Inline error]\n  D --&gt; A</code></pre></div><p></p>',
+      '<p>Hover the diagram to copy, edit or delete it. Edit opens the source next to a live preview; click Apply to save. In the block editor, type <code>/diagram</code> to insert a new one.</p><div data-type="mermaid"><pre><code>graph LR\n  A[Write Mermaid] --&gt; B{Valid?}\n  B --&gt;|Yes| C[Diagram]\n  B --&gt;|No| D[Inline error]\n  D --&gt; A</code></pre></div><p></p>',
     extensions: [StarterKit, Mermaid],
     slashItems: [mermaidSlashCommandItem],
     toolbar: null,

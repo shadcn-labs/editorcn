@@ -1035,7 +1035,7 @@
         "mermaid@^11.0.0",
         "tailwind-merge@^3.0.0"
       ],
-      "description": "A Mermaid diagram block with Preview and Code tabs. Insert one from the slash menu as \"Diagram\", write the source in the Code tab, and the preview re-renders 300ms after you stop typing, following light and dark mode. Mermaid is loaded on first use, and the source round-trips as a fenced mermaid block in markdown.",
+      "description": "A Mermaid diagram block that shows just the diagram, with hover actions to copy, edit and delete. Edit opens a split code and live preview editor with Apply and Cancel, and the preview re-renders 300ms after you stop typing, following light and dark mode. Insert one from the slash menu as \"Diagram\". Mermaid is loaded on first use, and the source round-trips as a fenced mermaid block in markdown.",
       "files": [
         {
           "path": "extensions/core/index.ts",
@@ -1083,10 +1083,6 @@
         },
         {
           "path": "extensions/ui/button.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "extensions/ui/tabs.tsx",
           "type": "registry:component"
         },
         {

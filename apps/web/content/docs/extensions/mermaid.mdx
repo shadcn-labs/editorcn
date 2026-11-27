@@ -1,12 +1,14 @@
 ---
 title: Mermaid
 seoTitle: "Tiptap Mermaid Extension: Diagram Blocks for shadcn/ui"
-description: "A Mermaid diagram block for shadcn/ui and Tiptap with Preview and Code tabs, debounced live rendering, light and dark themes, a slash command, and markdown round-trip as a fenced mermaid block."
+description: "A Mermaid diagram block for shadcn/ui and Tiptap with hover actions to copy, edit and delete, a split code and live preview editor, light and dark themes, a slash command, and markdown round-trip as a fenced mermaid block."
 ---
 
-The Mermaid extension adds a diagram block. You write [Mermaid](https://mermaid.js.org/) source in the **Code** tab and the **Preview** tab draws the diagram.
+The Mermaid extension adds a diagram block. The block shows only the diagram. Hover it to copy the [Mermaid](https://mermaid.js.org/) source, edit it, or delete the block.
 
-- Pick **Diagram** from the slash menu to insert an empty diagram. It opens on the Code tab with an example as the placeholder.
+- Pick **Diagram** from the slash menu to insert a diagram. It opens in the editor with an example as the placeholder.
+- The editor shows the source next to a live preview. Switch between code, split and preview layouts from the header.
+- Click **Apply** or press <kbd>Cmd/Ctrl</kbd>+<kbd>Enter</kbd> to save, or **Cancel** / <kbd>Esc</kbd> to discard. Cancelling a new, empty diagram removes it.
 - The preview re-renders 300ms after you stop typing, and follows the `dark` class on `<html>` for light and dark mode.
 - Syntax errors show above the last diagram that rendered, so a typo doesn't blank the block.
 - Mermaid is loaded with a dynamic import the first time a diagram renders, so it stays out of your initial bundle.
@@ -17,7 +19,7 @@ The Mermaid extension adds a diagram block. You write [Mermaid](https://mermaid.
   set a code block's language to Mermaid and the diagram renders below the code.
   Use the code block when you want the source visible and edited as normal
   document text. Use this extension when you want the diagram as its own block,
-  with the source tucked behind a tab.
+  with the source tucked behind an editor.
 </Callout>
 
 ## Installation
@@ -36,7 +38,7 @@ npm install @tiptap/core @tiptap/react @tiptap/pm mermaid lucide-react clsx tail
 
 ## Usage
 
-Add `Mermaid` to the extensions. The tabs, copy and delete buttons come from a built-in node view, so no toolbar component is needed.
+Add `Mermaid` to the extensions. The copy, edit and delete actions and the editor come from a built-in node view, so no toolbar component is needed.
 
 ```tsx
 "use client";
@@ -130,7 +132,7 @@ Mermaid.configure({ HTMLAttributes: { class: "my-diagram" } });
 | --------- | ---------------- | ------- | ------------------- |
 | `value`   | `string \| null` | `null`  | The Mermaid source. |
 
-The source is stored as a node attribute, not as editable text. In a collaborative document, two people editing the same diagram at once don't merge: the last change wins.
+The source is stored as a node attribute, not as editable text. Each **Apply** is one change, so a single undo reverts it. In a collaborative document, two people editing the same diagram at once don't merge: the last apply wins.
 
 ## Output
 
