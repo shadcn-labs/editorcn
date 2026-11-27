@@ -1,0 +1,6 @@
+{
+  "name": "callout",
+  "type": "registry:component",
+  "title": "Callout",
+  "description": "Info, tip, warning, danger, and note boxes that hold rich content. Switch the type or remove the callout from its icon menu, insert one from a toolbar button, or type > [!NOTE] to create one. Round-trips as GitHub alert syntax in markdown."
+}

@@ -9,7 +9,11 @@ export {
   defaultSlashCommandItems,
 } from "./extensions";
 export type { SlashCommandSuggestionItem, OnCommandSelect } from "./extensions";
-export type { BlockEditorProps, BlockEditorLabels } from "./types";
+export type {
+  BlockEditorLabels,
+  BlockEditorPreset,
+  BlockEditorProps,
+} from "./types";
 export { DEFAULT_BLOCK_EDITOR_LABELS } from "./labels";
 export type { BlockEditorIcons } from "./icon-types";
 export { DEFAULT_ICONS } from "./icons";

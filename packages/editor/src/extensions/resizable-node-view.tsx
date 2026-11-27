@@ -10,6 +10,24 @@ import {
   EditUrlIcon,
   OpenInYouTubeIcon,
 } from "../icons";
+import { cn } from "../ui/utils";
+
+const SELECTOR_BUTTON =
+  "rte-embed-selector-btn inline-flex h-8 min-w-8 cursor-pointer items-center justify-center rounded-sm border-none bg-transparent px-2 text-[0.75rem] font-medium text-popover-foreground [transition:background-color_150ms_ease-out,color_150ms_ease-out,scale_100ms_ease-out] hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-solid focus-visible:outline-ring/50 focus-visible:-outline-offset-2 active:scale-96";
+
+const SELECTOR_GROUP = "rte-embed-selector-group flex items-center gap-0.5";
+
+const SELECTOR_DIVIDER =
+  "rte-embed-selector-divider mx-0.5 h-4 w-px shrink-0 bg-border";
+
+const HANDLE =
+  "rte-resize-handle absolute z-10 opacity-0 group-data-selected/embed:opacity-100";
+
+const EDGE_HANDLE = `${HANDLE} bg-transparent [transition:opacity_150ms_ease-out,background-color_150ms_ease-out] after:absolute after:rounded-[1px] after:bg-primary after:content-['']`;
+
+const SIDE_HANDLE = `${EDGE_HANDLE} inset-y-0 w-1.5 cursor-ew-resize after:inset-x-px after:inset-y-1 after:w-0.5 after:[transition:width_150ms_ease-out,inset_150ms_ease-out] hover:after:inset-x-0 hover:after:w-1`;
+
+const CORNER_HANDLE = `${HANDLE} rte-resize-handle--corner size-3 rounded-[3px] border-2 border-background bg-primary [transition:transform_150ms_ease-out] hover:[transform:scale(1.1)]`;
 
 interface ResizableNodeViewProps extends NodeViewProps {
   children: React.ReactNode;
@@ -57,14 +75,14 @@ const EmbedToolbar = ({
 }: EmbedToolbarProps) => {
   if (isEditingUrl) {
     return (
-      <div className="rte-embed-selector-edit-form">
+      <div className="rte-embed-selector-edit-form flex items-center gap-1.5">
         <input
           ref={inputRef}
           type="text"
           value={urlInput}
           onChange={(e) => setUrlInput(e.target.value)}
           placeholder="Paste YouTube URL or video ID..."
-          className="rte-embed-selector-input"
+          className="rte-embed-selector-input h-8 w-[220px] rounded-md border border-[color:var(--input,var(--border))] bg-background px-2.5 text-[0.8125rem] text-foreground outline-none [transition:border-color_150ms_ease-out,box-shadow_150ms_ease-out] focus:border-ring focus:shadow-[0_0_0_3px_color-mix(in_srgb,var(--ring)_50%,transparent)]"
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               handleSaveUrl();
@@ -76,14 +94,17 @@ const EmbedToolbar = ({
         <button
           type="button"
           onClick={handleSaveUrl}
-          className="rte-embed-selector-btn rte-embed-selector-btn--save"
+          className={cn(
+            SELECTOR_BUTTON,
+            "rte-embed-selector-btn--save bg-primary px-2 text-primary-foreground hover:bg-primary/85 hover:text-primary-foreground"
+          )}
         >
           Save
         </button>
         <button
           type="button"
           onClick={() => setIsEditingUrl(false)}
-          className="rte-embed-selector-btn"
+          className={SELECTOR_BUTTON}
         >
           Cancel
         </button>
@@ -93,14 +114,18 @@ const EmbedToolbar = ({
 
   return (
     <>
-      <div className="rte-embed-selector-group">
+      <div className={SELECTOR_GROUP}>
         {(["left", "center", "right"] as const).map((dir) => (
           <button
             key={dir}
             type="button"
             title={`Align ${dir.charAt(0).toUpperCase()}${dir.slice(1)}`}
             aria-label={`Align ${dir.charAt(0).toUpperCase()}${dir.slice(1)}`}
-            className={`rte-embed-selector-btn ${align === dir ? "rte-embed-selector-btn--active" : ""}`}
+            className={cn(
+              SELECTOR_BUTTON,
+              align === dir &&
+                "rte-embed-selector-btn--active bg-muted text-foreground"
+            )}
             onClick={() => updateAttributes({ align: dir })}
           >
             <AlignIcon dir={dir} />
@@ -108,15 +133,18 @@ const EmbedToolbar = ({
         ))}
       </div>
 
-      <div className="rte-embed-selector-divider" />
+      <div className={SELECTOR_DIVIDER} />
 
-      <div className="rte-embed-selector-group">
+      <div className={SELECTOR_GROUP}>
         {([25, 50, 75, 100] as const).map((pct) => (
           <button
             key={pct}
             type="button"
             title={`${pct}%`}
-            className="rte-embed-selector-btn rte-embed-selector-btn--preset"
+            className={cn(
+              SELECTOR_BUTTON,
+              "rte-embed-selector-btn--preset text-[0.75rem] font-medium tabular-nums"
+            )}
             onClick={() => handleApplyPreset(pct)}
           >
             {pct}%
@@ -124,15 +152,15 @@ const EmbedToolbar = ({
         ))}
       </div>
 
-      <div className="rte-embed-selector-divider" />
+      <div className={SELECTOR_DIVIDER} />
 
-      <div className="rte-embed-selector-group">
+      <div className={SELECTOR_GROUP}>
         {(videoSrc || nodeSrc) && (
           <button
             type="button"
             title="Edit URL"
             aria-label="Edit URL"
-            className="rte-embed-selector-btn"
+            className={SELECTOR_BUTTON}
             onClick={() => {
               setUrlInput(videoSrc || nodeSrc || "");
               setIsEditingUrl(true);
@@ -146,7 +174,7 @@ const EmbedToolbar = ({
             type="button"
             title="Open video in YouTube"
             aria-label="Open video in YouTube"
-            className="rte-embed-selector-btn"
+            className={SELECTOR_BUTTON}
             onClick={() => window.open(watchUrl, "_blank")}
           >
             <OpenInYouTubeIcon />
@@ -157,7 +185,10 @@ const EmbedToolbar = ({
             type="button"
             title="Delete Embed"
             aria-label="Delete Embed"
-            className="rte-embed-selector-btn rte-embed-selector-btn--danger"
+            className={cn(
+              SELECTOR_BUTTON,
+              "rte-embed-selector-btn--danger hover:bg-destructive/15 hover:text-destructive"
+            )}
             onClick={() => deleteNode()}
           >
             <DeleteEmbedIcon />
@@ -387,7 +418,7 @@ export const ResizableNodeView = ({
 
   return (
     <NodeViewWrapper
-      className="rte-embed-wrapper"
+      className="rte-embed-wrapper group/embed"
       data-selected={selected || undefined}
       data-align={align}
     >
@@ -404,7 +435,10 @@ export const ResizableNodeView = ({
         {children}
 
         {selected && isEditable && (
-          <div className="rte-embed-selector" contentEditable={false}>
+          <div
+            className="rte-embed-selector pointer-events-auto absolute top-[-46px] left-1/2 z-50 flex h-10 animate-rte-bubble-pop-in items-center gap-1 rounded-lg border border-[color-mix(in_srgb,var(--border)_60%,transparent)] bg-popover px-1 whitespace-nowrap shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)] [transform:translateX(-50%)]"
+            contentEditable={false}
+          >
             <EmbedToolbar
               align={align}
               videoSrc={videoSrc}
@@ -424,7 +458,7 @@ export const ResizableNodeView = ({
         )}
 
         {isResizing && currentDimensions && (
-          <div className="rte-embed-resize-badge">
+          <div className="rte-embed-resize-badge pointer-events-none absolute right-2 bottom-2 z-40 rounded-sm bg-foreground/85 px-1.5 py-0.5 font-[family-name:var(--font-mono,monospace)] text-[0.75rem] font-medium text-background tabular-nums backdrop-blur-xs">
             {currentDimensions.w} × {currentDimensions.h} px
           </div>
         )}
@@ -432,27 +466,27 @@ export const ResizableNodeView = ({
         {selected && isEditable && (
           <>
             <div
-              className="rte-resize-handle rte-resize-handle--left"
+              className={`${SIDE_HANDLE} rte-resize-handle--left -left-[3px]`}
               onMouseDown={(e) => handleMouseDown(e, "left")}
               role="presentation"
             />
             <div
-              className="rte-resize-handle rte-resize-handle--right"
+              className={`${SIDE_HANDLE} rte-resize-handle--right -right-[3px]`}
               onMouseDown={(e) => handleMouseDown(e, "right")}
               role="presentation"
             />
             <div
-              className="rte-resize-handle rte-resize-handle--bottom"
+              className={`${EDGE_HANDLE} rte-resize-handle--bottom inset-x-0 -bottom-[3px] h-1.5 cursor-ns-resize after:inset-x-1 after:bottom-px after:h-0.5 after:[transition:height_150ms_ease-out,bottom_150ms_ease-out] hover:after:bottom-0 hover:after:h-1`}
               onMouseDown={(e) => handleMouseDown(e, "bottom")}
               role="presentation"
             />
             <div
-              className="rte-resize-handle rte-resize-handle--corner rte-resize-handle--corner-bl"
+              className={`${CORNER_HANDLE} rte-resize-handle--corner-bl -bottom-[5px] -left-[5px] cursor-nesw-resize`}
               onMouseDown={(e) => handleMouseDown(e, "corner-bl")}
               role="presentation"
             />
             <div
-              className="rte-resize-handle rte-resize-handle--corner rte-resize-handle--corner-br"
+              className={`${CORNER_HANDLE} rte-resize-handle--corner-br -right-[5px] -bottom-[5px] cursor-nwse-resize`}
               onMouseDown={(e) => handleMouseDown(e, "corner-br")}
               role="presentation"
             />

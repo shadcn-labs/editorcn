@@ -61,7 +61,7 @@ const createEditor = () =>
   new Editor({
     element: null,
     extensions: [
-      StarterKit.configure({ gapcursor: false }),
+      StarterKit,
       Image,
       TaskList,
       TaskItem.configure({ nested: true }),

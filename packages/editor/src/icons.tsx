@@ -1,35 +1,6 @@
-import {
-  Bold,
-  Code,
-  Heading1,
-  Heading2,
-  Heading3,
-  Heading4,
-  Heading5,
-  Heading6,
-  Highlighter,
-  Italic,
-  Link,
-  Link2Off,
-  List,
-  ListOrdered,
-  Minus,
-  Redo2,
-  RemoveFormatting,
-  SquareCode,
-  Strikethrough,
-  Subscript,
-  Superscript,
-  TextAlignCenter,
-  TextAlignEnd,
-  TextAlignJustify,
-  TextAlignStart,
-  TextQuote,
-  Underline,
-  Undo2,
-} from "lucide-react";
 import React from "react";
 
+import { IconPlaceholder } from "./icon-placeholder";
 import type { RichTextEditorIcons } from "./icon-types";
 import { DEFAULT_LANGUAGE_ICONS } from "./language-icons";
 
@@ -132,33 +103,285 @@ export const DeleteEmbedIcon = () => (
 const iconProps = { className: "rte-editor-icon" };
 
 export const DEFAULT_ICONS: RichTextEditorIcons = {
-  alignCenterControlIcon: <TextAlignCenter {...iconProps} />,
-  alignJustifyControlIcon: <TextAlignJustify {...iconProps} />,
-  alignLeftControlIcon: <TextAlignStart {...iconProps} />,
-  alignRightControlIcon: <TextAlignEnd {...iconProps} />,
-  blockquoteControlIcon: <TextQuote {...iconProps} />,
-  boldControlIcon: <Bold {...iconProps} />,
-  bulletListControlIcon: <List {...iconProps} />,
-  clearFormattingControlIcon: <RemoveFormatting {...iconProps} />,
-  codeBlockControlIcon: <SquareCode {...iconProps} />,
-  codeControlIcon: <Code {...iconProps} />,
-  h1ControlIcon: <Heading1 {...iconProps} />,
-  h2ControlIcon: <Heading2 {...iconProps} />,
-  h3ControlIcon: <Heading3 {...iconProps} />,
-  h4ControlIcon: <Heading4 {...iconProps} />,
-  h5ControlIcon: <Heading5 {...iconProps} />,
-  h6ControlIcon: <Heading6 {...iconProps} />,
-  highlightControlIcon: <Highlighter {...iconProps} />,
-  hrControlIcon: <Minus {...iconProps} />,
-  italicControlIcon: <Italic {...iconProps} />,
+  alignCenterControlIcon: (
+    <IconPlaceholder
+      lucide="AlignCenter"
+      tabler="IconAlignCenter"
+      hugeicons="TextAlignCenterIcon"
+      phosphor="TextAlignCenterIcon"
+      remixicon="RiAlignCenter"
+      {...iconProps}
+    />
+  ),
+  alignJustifyControlIcon: (
+    <IconPlaceholder
+      lucide="AlignJustify"
+      tabler="IconAlignJustified"
+      hugeicons="TextAlignJustifyCenterIcon"
+      phosphor="TextAlignJustifyIcon"
+      remixicon="RiAlignJustify"
+      {...iconProps}
+    />
+  ),
+  alignLeftControlIcon: (
+    <IconPlaceholder
+      lucide="AlignLeft"
+      tabler="IconAlignLeft"
+      hugeicons="TextAlignLeftIcon"
+      phosphor="TextAlignLeftIcon"
+      remixicon="RiAlignLeft"
+      {...iconProps}
+    />
+  ),
+  alignRightControlIcon: (
+    <IconPlaceholder
+      lucide="AlignRight"
+      tabler="IconAlignRight"
+      hugeicons="TextAlignRightIcon"
+      phosphor="TextAlignRightIcon"
+      remixicon="RiAlignRight"
+      {...iconProps}
+    />
+  ),
+  blockquoteControlIcon: (
+    <IconPlaceholder
+      lucide="TextQuote"
+      tabler="IconQuote"
+      hugeicons="LeftToRightBlockQuoteIcon"
+      phosphor="QuotesIcon"
+      remixicon="RiQuoteText"
+      {...iconProps}
+    />
+  ),
+  boldControlIcon: (
+    <IconPlaceholder
+      lucide="Bold"
+      tabler="IconBold"
+      hugeicons="BoldIcon"
+      phosphor="TextBIcon"
+      remixicon="RiBold"
+      {...iconProps}
+    />
+  ),
+  bulletListControlIcon: (
+    <IconPlaceholder
+      lucide="List"
+      tabler="IconList"
+      hugeicons="LeftToRightListBulletIcon"
+      phosphor="ListBulletsIcon"
+      remixicon="RiListUnordered"
+      {...iconProps}
+    />
+  ),
+  clearFormattingControlIcon: (
+    <IconPlaceholder
+      lucide="RemoveFormatting"
+      tabler="IconEraser"
+      hugeicons="TextClearIcon"
+      phosphor="EraserIcon"
+      remixicon="RiFormatClear"
+      {...iconProps}
+    />
+  ),
+  codeBlockControlIcon: (
+    <IconPlaceholder
+      lucide="SquareCode"
+      tabler="IconSourceCode"
+      hugeicons="SourceCodeSquareIcon"
+      phosphor="CodeBlockIcon"
+      remixicon="RiCodeBoxLine"
+      {...iconProps}
+    />
+  ),
+  codeControlIcon: (
+    <IconPlaceholder
+      lucide="Code"
+      tabler="IconCode"
+      hugeicons="SourceCodeIcon"
+      phosphor="CodeIcon"
+      remixicon="RiCodeLine"
+      {...iconProps}
+    />
+  ),
+  h1ControlIcon: (
+    <IconPlaceholder
+      lucide="Heading1"
+      tabler="IconH1"
+      hugeicons="Heading01Icon"
+      phosphor="TextHOneIcon"
+      remixicon="RiH1"
+      {...iconProps}
+    />
+  ),
+  h2ControlIcon: (
+    <IconPlaceholder
+      lucide="Heading2"
+      tabler="IconH2"
+      hugeicons="Heading02Icon"
+      phosphor="TextHTwoIcon"
+      remixicon="RiH2"
+      {...iconProps}
+    />
+  ),
+  h3ControlIcon: (
+    <IconPlaceholder
+      lucide="Heading3"
+      tabler="IconH3"
+      hugeicons="Heading03Icon"
+      phosphor="TextHThreeIcon"
+      remixicon="RiH3"
+      {...iconProps}
+    />
+  ),
+  h4ControlIcon: (
+    <IconPlaceholder
+      lucide="Heading4"
+      tabler="IconH4"
+      hugeicons="Heading04Icon"
+      phosphor="TextHFourIcon"
+      remixicon="RiH4"
+      {...iconProps}
+    />
+  ),
+  h5ControlIcon: (
+    <IconPlaceholder
+      lucide="Heading5"
+      tabler="IconH5"
+      hugeicons="Heading05Icon"
+      phosphor="TextHFiveIcon"
+      remixicon="RiH5"
+      {...iconProps}
+    />
+  ),
+  h6ControlIcon: (
+    <IconPlaceholder
+      lucide="Heading6"
+      tabler="IconH6"
+      hugeicons="Heading06Icon"
+      phosphor="TextHSixIcon"
+      remixicon="RiH6"
+      {...iconProps}
+    />
+  ),
+  highlightControlIcon: (
+    <IconPlaceholder
+      lucide="Highlighter"
+      tabler="IconHighlight"
+      hugeicons="HighlighterIcon"
+      phosphor="HighlighterIcon"
+      remixicon="RiMarkPenLine"
+      {...iconProps}
+    />
+  ),
+  hrControlIcon: (
+    <IconPlaceholder
+      lucide="Minus"
+      tabler="IconMinus"
+      hugeicons="MinusSignIcon"
+      phosphor="MinusIcon"
+      remixicon="RiSeparator"
+      {...iconProps}
+    />
+  ),
+  italicControlIcon: (
+    <IconPlaceholder
+      lucide="Italic"
+      tabler="IconItalic"
+      hugeicons="ItalicIcon"
+      phosphor="TextItalicIcon"
+      remixicon="RiItalic"
+      {...iconProps}
+    />
+  ),
   languageIcons: DEFAULT_LANGUAGE_ICONS,
-  linkControlIcon: <Link {...iconProps} />,
-  orderedListControlIcon: <ListOrdered {...iconProps} />,
-  redoControlIcon: <Redo2 {...iconProps} />,
-  strikeControlIcon: <Strikethrough {...iconProps} />,
-  subscriptControlIcon: <Subscript {...iconProps} />,
-  superscriptControlIcon: <Superscript {...iconProps} />,
-  underlineControlIcon: <Underline {...iconProps} />,
-  undoControlIcon: <Undo2 {...iconProps} />,
-  unlinkControlIcon: <Link2Off {...iconProps} />,
+  linkControlIcon: (
+    <IconPlaceholder
+      lucide="Link"
+      tabler="IconLink"
+      hugeicons="Link01Icon"
+      phosphor="LinkIcon"
+      remixicon="RiLink"
+      {...iconProps}
+    />
+  ),
+  orderedListControlIcon: (
+    <IconPlaceholder
+      lucide="ListOrdered"
+      tabler="IconListNumbers"
+      hugeicons="LeftToRightListNumberIcon"
+      phosphor="ListNumbersIcon"
+      remixicon="RiListOrdered"
+      {...iconProps}
+    />
+  ),
+  redoControlIcon: (
+    <IconPlaceholder
+      lucide="Redo2"
+      tabler="IconArrowForwardUp"
+      hugeicons="RedoIcon"
+      phosphor="ArrowClockwiseIcon"
+      remixicon="RiArrowGoForwardLine"
+      {...iconProps}
+    />
+  ),
+  strikeControlIcon: (
+    <IconPlaceholder
+      lucide="Strikethrough"
+      tabler="IconStrikethrough"
+      hugeicons="StrikethroughIcon"
+      phosphor="TextStrikethroughIcon"
+      remixicon="RiStrikethrough"
+      {...iconProps}
+    />
+  ),
+  subscriptControlIcon: (
+    <IconPlaceholder
+      lucide="Subscript"
+      tabler="IconSubscript"
+      hugeicons="SubscriptIcon"
+      phosphor="TextSubscriptIcon"
+      remixicon="RiSubscript"
+      {...iconProps}
+    />
+  ),
+  superscriptControlIcon: (
+    <IconPlaceholder
+      lucide="Superscript"
+      tabler="IconSuperscript"
+      hugeicons="SuperscriptIcon"
+      phosphor="TextSuperscriptIcon"
+      remixicon="RiSuperscript"
+      {...iconProps}
+    />
+  ),
+  underlineControlIcon: (
+    <IconPlaceholder
+      lucide="Underline"
+      tabler="IconUnderline"
+      hugeicons="UnderlineIcon"
+      phosphor="TextUnderlineIcon"
+      remixicon="RiUnderline"
+      {...iconProps}
+    />
+  ),
+  undoControlIcon: (
+    <IconPlaceholder
+      lucide="Undo2"
+      tabler="IconArrowBackUp"
+      hugeicons="UndoIcon"
+      phosphor="ArrowCounterClockwiseIcon"
+      remixicon="RiArrowGoBackLine"
+      {...iconProps}
+    />
+  ),
+  unlinkControlIcon: (
+    <IconPlaceholder
+      lucide="Link2Off"
+      tabler="IconUnlink"
+      hugeicons="UnlinkIcon"
+      phosphor="LinkBreakIcon"
+      remixicon="RiLinkUnlink"
+      {...iconProps}
+    />
+  ),
 };

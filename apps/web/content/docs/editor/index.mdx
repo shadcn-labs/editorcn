@@ -15,10 +15,19 @@ npx shadcn@latest add @editorcn/editor
 
 This copies the component source directly into your project, so you can customize it freely.
 
+<Callout title="Check your iconLibrary">
+  The icons are written for the `iconLibrary` in your `components.json`, which
+  must be `lucide`, `tabler`, `hugeicons`, `phosphor` or `remixicon`. Older
+  projects with `"iconLibrary": "radix"` get a build error about
+  `./icon-placeholder`. Change it to `"lucide"` before installing, and install
+  `lucide-react` if your project doesn't have it (the CLI doesn't install icon
+  packages). See [Icon library](#icon-library).
+</Callout>
+
 **Or install via npm/pnpm:**
 
 ```bash
-npm install @editorcn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
+npm install @editorcn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
 ```
 
 After installation, import the editor styles at the root of your application:
@@ -40,6 +49,44 @@ import { RichTextEditor, Link } from "@editorcn/editor";
 import "@editorcn/editor/style.css";
 ```
 
+Then add the package to Tailwind's sources in the CSS file that imports `tailwindcss` (the path is relative to that file). The editor's chrome is styled with Tailwind classes, and Tailwind doesn't scan `node_modules` by default:
+
+```css
+@source "../node_modules/@editorcn/editor/dist";
+```
+
+## Full setup
+
+To start from the complete editor on the [homepage](/) instead of building the toolbar yourself, install the **Full Toolbar Editor**. It brings the editor, every toolbar control, and the [Callout](/docs/extensions/callout), [Code Block](/docs/extensions/code-block), [Image Placeholder](/docs/extensions/image-placeholder), [Markdown](/docs/extensions/markdown), [Mention](/docs/extensions/mention), [Paste Cleanup](/docs/extensions/paste-cleanup) and [Table](/docs/extensions/table) extensions in one command:
+
+```bash
+npx shadcn@latest add "https://www.rtecn.space/r/full-editor.json"
+```
+
+It lands in `components/templates/full-editor/`:
+
+```tsx
+import { FullEditor } from "@/components/templates/full-editor";
+
+export const Editor = ({ doc }) => (
+  <FullEditor
+    content={doc.content}
+    onChange={(json) => saveDocument(doc.id, json)}
+    searchUsers={(query) => fetchUsers(query)}
+  />
+);
+```
+
+| Prop               | Type       | Description                                            |
+| ------------------ | ---------- | ------------------------------------------------------ |
+| `content`          | `Content`  | Tiptap JSON or HTML to start with                      |
+| `onChange`         | `function` | Gets the document as Tiptap JSON                       |
+| `searchUsers`      | `function` | Gets the `@` query, returns `MentionItem[]` (async ok) |
+| `placeholder`      | `string`   | Placeholder for an empty document                      |
+| `markdownFilename` | `string`   | File name for Markdown export, default `document.md`   |
+| `variant`          | `string`   | Editor variant, default `default`                      |
+| `className`        | `string`   | Outer container classes                                |
+
 ## Tiptap editor
 
 `@editorcn/editor` provides a UI layer for [Tiptap](https://tiptap.dev/). The `RichTextEditor` component works with the [Editor](https://tiptap.dev/api/editor) instance of Tiptap. This means you have full control over the editor [state and configuration](https://tiptap.dev/guide/configuration) via the [useEditor hook](https://tiptap.dev/installation/react).
@@ -48,12 +95,18 @@ The `RichTextEditor` component does not manage state for you — controls just e
 
 ## Usage
 
+The example uses `TextAlign` and `Placeholder`. The shadcn CLI installs them for you. With npm, install them yourself:
+
+```bash
+npm install @tiptap/extension-text-align @tiptap/extension-placeholder
+```
+
 ```tsx
 "use client";
 
 import { useEditor } from "@tiptap/react";
+import { Suspense } from "react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { Underline } from "@tiptap/extension-underline";
 import { TextAlign } from "@tiptap/extension-text-align";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { RichTextEditor, Link } from "@/components/editor";
@@ -70,13 +123,12 @@ const content = `
 </ul>
 `;
 
-function MyEditor() {
+function MyEditorInner() {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit,
+      StarterKit.configure({ link: false }),
       Link,
-      Underline,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({ placeholder: "Start typing..." }),
     ],
@@ -129,7 +181,26 @@ function MyEditor() {
     </RichTextEditor>
   );
 }
+
+// Tiptap's useEditor reads Math.random(), which Next.js `cacheComponents`
+// rejects during prerender. The Suspense boundary keeps the build working.
+export function MyEditor() {
+  return (
+    <Suspense fallback={null}>
+      <MyEditorInner />
+    </Suspense>
+  );
+}
 ```
+
+<Callout title="Next.js with cacheComponents">
+  Tiptap's `useEditor` reads `Math.random()`, which Next.js `cacheComponents`
+  (on by default in new Next.js 16 apps) rejects during prerender. That's why
+  the example renders the editor inside a `<Suspense>` boundary. Keep the
+  boundary when you move the editor into your own components.
+</Callout>
+
+`StarterKit` v3 already includes `Link` and `Underline`. Pass `link: false` so it doesn't register a second link extension next to editorcn's `Link`, and don't add `@tiptap/extension-underline` yourself. Otherwise Tiptap warns about duplicate extension names.
 
 ## RichTextEditor (Root)
 
@@ -143,8 +214,10 @@ The root wrapper that provides the editor context to all children.
 | `children`  | `ReactNode`                          | —                | Toolbar, content, controls                            |
 | `className` | `string`                             | —                | Additional CSS classes (merged via `tailwind-merge`)  |
 | `variant`   | `"default" \| "subtle" \| "compact"` | `"default"`      | Visual variant                                        |
+| `preset`    | `"document" \| "block"`              | `"document"`     | [Content preset](/docs/styling#content-presets)       |
 | `labels`    | `Partial<RichTextEditorLabels>`      | `DEFAULT_LABELS` | Override default labels for accessibility and UI text |
 | `icons`     | `Partial<RichTextEditorIcons>`       | `DEFAULT_ICONS`  | Override default toolbar icons                        |
+| `editable`  | `boolean`                            | `true`           | Set to `false` for read-only. Hides the toolbar       |
 
 ## RichTextEditor.Toolbar
 
@@ -177,10 +250,12 @@ Groups related controls together. Automatically adds a visual separator between 
 
 ## RichTextEditor.Content
 
-Renders the Tiptap editor content area. Accepts an optional `className` prop.
+Renders the Tiptap editor content area. Accepts an optional `className`, and `children` that render inside the content area, such as the [Table](/docs/extensions/table) extension's `TableHoverOverlay`.
 
 ```tsx
-<RichTextEditor.Content />
+<RichTextEditor.Content>
+  <TableHoverOverlay editor={editor} />
+</RichTextEditor.Content>
 ```
 
 ## RichTextEditor.Footer
@@ -415,7 +490,7 @@ function InsertExampleLink() {
           ?.chain()
           .focus()
           .insertContent("editorcn")
-          .setLink({ href: "https://github.com/AbdullahMukadam/editorcn" })
+          .setLink({ href: "https://github.com/shadcn-labs/editorcn" })
           .run()
       }
       aria-label="Insert example link"
@@ -438,7 +513,7 @@ function InsertExampleLink() {
 
 ## Controls and extensions
 
-Some controls require additional [Tiptap extensions](https://tiptap.dev/extensions) to be installed and configured. If you installed via the shadcn registry, the CLI will prompt you to add any missing peer dependencies automatically; with npm/pnpm you'll need to add them yourself as shown below.
+Some controls require additional [Tiptap extensions](https://tiptap.dev/extensions) to be registered in your editor. The shadcn registry install already adds every package listed below; with npm/pnpm, install them yourself as shown.
 
 ### Included with `@tiptap/starter-kit` (no extra installation needed)
 
@@ -457,16 +532,7 @@ Some controls require additional [Tiptap extensions](https://tiptap.dev/extensio
 | `RichTextEditor.Hr`                     | `@tiptap/starter-kit` |
 | `RichTextEditor.Undo`                   | `@tiptap/starter-kit` |
 | `RichTextEditor.Redo`                   | `@tiptap/starter-kit` |
-
-### Controls requiring `@tiptap/extension-underline`
-
-```bash
-npm install @tiptap/extension-underline
-```
-
-| Control                    |
-| -------------------------- |
-| `RichTextEditor.Underline` |
+| `RichTextEditor.Underline`              | `@tiptap/starter-kit` |
 
 ### Controls requiring `@tiptap/extension-text-align`
 
@@ -519,6 +585,19 @@ npm install @tiptap/extension-superscript
 | ---------------------------- |
 | `RichTextEditor.Superscript` |
 
+### Controls from editorcn extensions
+
+The [editorcn extensions](/docs/extensions) ship their own toolbar controls. Put them in a `RichTextEditor.ControlsGroup` like any other control:
+
+| Control                   | Extension                                               |
+| ------------------------- | ------------------------------------------------------- |
+| `TableToolbar`            | [Table](/docs/extensions/table)                         |
+| `ImagePlaceholderToolbar` | [Image Placeholder](/docs/extensions/image-placeholder) |
+| `CalloutToolbar`          | [Callout](/docs/extensions/callout)                     |
+| `MarkdownToolbar`         | [Markdown](/docs/extensions/markdown)                   |
+
+[Code Block](/docs/extensions/code-block), [Mention](/docs/extensions/mention), [Paste Cleanup](/docs/extensions/paste-cleanup) and [Toggle](/docs/extensions/toggle) work without a toolbar control.
+
 ## Link extension
 
 `@editorcn/editor` ships a custom `Link` extension that extends `@tiptap/extension-link`. It is required for the `Mod-K` keyboard shortcut and the link popover UI to work correctly.
@@ -528,7 +607,7 @@ import { Link, RichTextEditor } from "@/components/editor";
 
 const editor = useEditor({
   extensions: [
-    StarterKit,
+    StarterKit.configure({ link: false }),
     Link, // replaces @tiptap/extension-link
   ],
 });
@@ -794,32 +873,31 @@ import { RichTextEditor, DEFAULT_ICONS } from "@/components/editor";
 
 ### Icon library
 
-The default icons ship with **lucide-react**. If your `components.json` uses a different `iconLibrary`, install the matching icon set after the editor — it overwrites `components/editor/icons.tsx` and installs only that library's package:
+The icons follow the `iconLibrary` in your `components.json`. `editor/icons.tsx` is written with shadcn's `IconPlaceholder`, and when you add the editor, the shadcn CLI swaps each placeholder for the matching icon from Lucide, Tabler, HugeIcons, Phosphor or Remix Icon. This needs shadcn CLI 4.7.0 or newer, which `npx shadcn@latest` always is.
 
-| `iconLibrary`      | Install                                                                             |
-| ------------------ | ----------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                          |
-| `phosphor`         | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-remixicon.json"` |
+`iconLibrary` has to be one of the five libraries above. Older projects may still have `"iconLibrary": "radix"`, which the CLI skips, so the placeholders stay in the file and the build fails on the `./icon-placeholder` import. Set it to `"lucide"` (or another supported library) before adding the editor.
 
-Order matters — add the editor first, then the icon set:
+The CLI doesn't install the icon package. `shadcn init` installs it for your `iconLibrary`, so it's usually there already. If not, add it:
 
-```bash
-npx shadcn@latest add "https://editorcn.vercel.app/r/editor.json"
-npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-phosphor.json"
-```
+| `iconLibrary` | Package                                             |
+| ------------- | --------------------------------------------------- |
+| `lucide`      | `lucide-react`                                      |
+| `tabler`      | `@tabler/icons-react`                               |
+| `hugeicons`   | `@hugeicons/react` and `@hugeicons/core-free-icons` |
+| `phosphor`    | `@phosphor-icons/react`                             |
+| `remixicon`   | `@remixicon/react`                                  |
 
-Each set covers all 28 toolbar icons and reuses the shared language icons, so switching libraries swaps the whole toolbar consistently. Because `icons.tsx` is yours after install, you can still hand-edit or override individual keys with the `icons` prop on top.
+Every toolbar icon has a mapping for all five libraries, so switching libraries swaps the whole toolbar. `icons.tsx` is yours after install, so you can still edit it or override single keys with the `icons` prop.
 
-Already installed with lucide? Migrate instead of reinstalling:
+Changed `iconLibrary` after installing? Re-add the editor (this overwrites your edits to its files), or migrate the installed files:
 
 ```bash
 npx shadcn@latest migrate icons --from lucide --to phosphor "src/components/editor/**"
 ```
 
-> **npm/pnpm installs**: the icon sets are registry items, so they apply to registry installs. With npm, override the `icons` prop yourself — the `icons` prop and all 28 icon keys are unchanged.
+The `editor-icons-*` items from earlier releases are gone, because the editor itself now installs the right icons.
+
+> **npm/pnpm installs**: the npm package uses `lucide-react`. To use another library, pass your own icons through the `icons` prop.
 
 See the [Customization docs](/docs/customization) for icon sizing and per-key overrides.
 

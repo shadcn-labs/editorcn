@@ -70,7 +70,8 @@ export const CalloutView = ({
             onOpenChange={setOpen}
             trigger={
               <Button
-                className="ext-btn--icon-sm ext-callout-trigger"
+                className="ext-callout-trigger size-7 text-(--ext-callout-accent) hover:bg-[color-mix(in_oklab,var(--ext-callout-accent)_15%,transparent)] hover:text-(--ext-callout-accent) [&>svg]:size-4.5"
+                size="icon-sm"
                 aria-label={labels.calloutType}
               >
                 {icon}
@@ -85,7 +86,10 @@ export const CalloutView = ({
             />
           </DropdownMenu>
         ) : (
-          <span className="ext-callout-trigger" aria-hidden="true">
+          <span
+            className="ext-callout-trigger inline-flex size-7 items-center justify-center text-(--ext-callout-accent) [&>svg]:size-4.5"
+            aria-hidden="true"
+          >
             {icon}
           </span>
         )}

@@ -7,8 +7,6 @@ import {
   useSyncExternalStore,
 } from "react";
 
-const defaultEqual = <T>(a: T, b: T): boolean => a === b;
-
 export const shallowEqual = <T extends Record<string, unknown>>(
   a: T,
   b: T
@@ -27,34 +25,38 @@ export const shallowEqual = <T extends Record<string, unknown>>(
   return ak.every((k) => a[k] === b[k]);
 };
 
-const isPlainEmpty = <T>(value: T | undefined): value is undefined =>
-  value === undefined;
+const isObject = (value: unknown): value is Record<string, unknown> =>
+  typeof value === "object" && value !== null;
+
+// Selectors often return a fresh object or array. Comparing those shallowly
+// by default keeps getSnapshot returning the same reference while the
+// selected state is unchanged, even without an explicit comparator.
+const defaultEqual = <T>(a: T, b: T): boolean =>
+  a === b || (isObject(a) && isObject(b) && shallowEqual(a, b));
 
 export const useEditorState = <T>(
   editor: Editor | null,
   selector: (e: Editor) => T,
   isEqual: (a: T, b: T) => boolean = defaultEqual
 ): T | undefined => {
-  const selectorRef = useRef(selector);
-  const isEqualRef = useRef(isEqual);
-  selectorRef.current = selector;
-  isEqualRef.current = isEqual;
+  // getSnapshot must keep returning the same value until the selection
+  // actually changes, or useSyncExternalStore re-renders forever. The cache
+  // is only read and written inside getSnapshot, never in the render body,
+  // and getSnapshot always uses the current selector (no stale "latest ref").
+  const cacheRef = useRef<{ value: T } | null>(null);
 
-  const snapshotRef = useRef<{ value: T | undefined }>({
-    value: editor ? selector(editor) : undefined,
-  });
-
-  const computeSnapshot = useCallback((): T | undefined => {
+  const getSnapshot = useCallback((): T | undefined => {
     if (!editor) {
       return undefined;
     }
-    const next = selectorRef.current(editor);
-    const current = snapshotRef.current.value;
-    if (isPlainEmpty(current) || !isEqualRef.current(current, next)) {
-      snapshotRef.current.value = next;
+    const next = selector(editor);
+    const { current: cached } = cacheRef;
+    if (cached && isEqual(cached.value, next)) {
+      return cached.value;
     }
-    return snapshotRef.current.value;
-  }, [editor]);
+    cacheRef.current = { value: next };
+    return next;
+  }, [editor, selector, isEqual]);
 
   const subscribe = useCallback(
     (onStoreChange: () => void) => {
@@ -63,21 +65,17 @@ export const useEditorState = <T>(
           /* Nothing to subscribe to. */
         };
       }
-      const update = () => {
-        computeSnapshot();
-        onStoreChange();
-      };
-      editor.on("selectionUpdate", update);
-      editor.on("transaction", update);
+      editor.on("selectionUpdate", onStoreChange);
+      editor.on("transaction", onStoreChange);
       return () => {
-        editor.off("selectionUpdate", update);
-        editor.off("transaction", update);
+        editor.off("selectionUpdate", onStoreChange);
+        editor.off("transaction", onStoreChange);
       };
     },
-    [editor, computeSnapshot]
+    [editor]
   );
 
-  return useSyncExternalStore(subscribe, computeSnapshot, computeSnapshot);
+  return useSyncExternalStore(subscribe, getSnapshot, getSnapshot);
 };
 
 export const useEditable = (editor: Editor | null): boolean => {
@@ -87,7 +85,6 @@ export const useEditable = (editor: Editor | null): boolean => {
 
   useEffect(() => {
     if (!editor || editor.isDestroyed) {
-      setEditable(false);
       return;
     }
     const sync = () => setEditable(!editor.isDestroyed && editor.isEditable);
@@ -113,5 +110,6 @@ export const useEditable = (editor: Editor | null): boolean => {
     };
   }, [editor]);
 
-  return editable;
+  // No live editor means not editable; derive it instead of syncing state.
+  return Boolean(editor && !editor.isDestroyed) && editable;
 };

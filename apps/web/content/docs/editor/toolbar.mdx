@@ -66,3 +66,23 @@ The `RichTextEditor` from `@editorcn/editor` provides a comprehensive set of too
 | --------------------- | ----------- |
 | `RichTextEditor.Undo` | Undo        |
 | `RichTextEditor.Redo` | Redo        |
+
+## Embeds
+
+| Component                     | Description                                                 |
+| ----------------------------- | ----------------------------------------------------------- |
+| `RichTextEditor.YouTubeEmbed` | Insert a YouTube video (needs the `YouTubeEmbed` extension) |
+| `RichTextEditor.TwitterEmbed` | Insert a tweet (needs the `TwitterEmbed` extension)         |
+
+See [Embed extensions](/docs/editor#embed-extensions).
+
+## Controls from extensions
+
+The [editorcn extensions](/docs/extensions) add their own controls, which go in a `RichTextEditor.ControlsGroup` like the ones above:
+
+| Component                 | Extension                                               |
+| ------------------------- | ------------------------------------------------------- |
+| `TableToolbar`            | [Table](/docs/extensions/table)                         |
+| `ImagePlaceholderToolbar` | [Image Placeholder](/docs/extensions/image-placeholder) |
+| `CalloutToolbar`          | [Callout](/docs/extensions/callout)                     |
+| `MarkdownToolbar`         | [Markdown](/docs/extensions/markdown)                   |

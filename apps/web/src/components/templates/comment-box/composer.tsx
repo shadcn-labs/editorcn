@@ -1,7 +1,7 @@
 "use client";
 
 import { RichTextEditor } from "@editorcn/editor";
-import { Mention, isMentionActive } from "@editorcn/extensions/mention";
+import { isMentionActive } from "@editorcn/extensions/mention";
 import type { JSONContent } from "@tiptap/core";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { useEditor, useEditorState } from "@tiptap/react";
@@ -15,10 +15,10 @@ import {
   Strikethrough,
   Type,
 } from "lucide-react";
-import { useCallback, useEffect, useRef } from "react";
+import { Suspense, useCallback, useEffect, useRef } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -29,7 +29,7 @@ import { Kbd, KbdGroup } from "@/components/ui/kbd";
 import { cn } from "@/lib/utils";
 
 import type { CommentAuthor } from "./types";
-import { ITEM, STARTER_KIT, initials } from "./utils";
+import { ITEM, MENTION, STARTER_KIT, initials, setMentionable } from "./utils";
 
 export const UserAvatar = ({
   author,
@@ -68,21 +68,23 @@ const FormatMenu = ({ editor }: { editor: Editor | null }) => {
   const refocus = useRef(false);
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          aria-label="Formatting"
-          className="text-muted-foreground sm:hidden"
-          onFocus={() => {
-            if (refocus.current) {
-              refocus.current = false;
-              editor?.commands.focus();
-            }
-          }}
-          size="icon-sm"
-          variant="ghost"
-        >
-          <Type />
-        </Button>
+      <DropdownMenuTrigger
+        aria-label="Formatting"
+        onFocus={() => {
+          if (refocus.current) {
+            refocus.current = false;
+            editor?.commands.focus();
+          }
+        }}
+        className={cn(
+          buttonVariants({
+            className: "text-muted-foreground sm:hidden",
+            size: "icon-sm",
+            variant: "ghost",
+          })
+        )}
+      >
+        <Type />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="min-w-40 p-1">
         {FORMATS.map(({ Icon, label, mark, toggle }) => (
@@ -104,7 +106,19 @@ const FormatMenu = ({ editor }: { editor: Editor | null }) => {
   );
 };
 
-export const Composer = ({
+interface ComposerProps {
+  author: CommentAuthor;
+  autoFocus?: boolean;
+  className?: string;
+  initialContent?: JSONContent;
+  mentionable?: CommentAuthor[];
+  onCancel?: () => void;
+  onPost: (content: JSONContent) => Promise<void>;
+  placeholder: string;
+  submitLabel?: string;
+}
+
+const ComposerInner = ({
   author,
   autoFocus = false,
   className,
@@ -114,22 +128,10 @@ export const Composer = ({
   onPost,
   placeholder,
   submitLabel = "Comment",
-}: {
-  author: CommentAuthor;
-  autoFocus?: boolean;
-  className?: string;
-  initialContent?: JSONContent;
-  mentionable?: CommentAuthor[];
-  onCancel?: () => void;
-  onPost: (content: JSONContent) => void;
-  placeholder: string;
-  submitLabel?: string;
-}) => {
+}: ComposerProps) => {
   const handlers = useRef<{ cancel?: () => void; post: () => void } | null>(
     null
   );
-  const people = useRef(mentionable);
-
   const editor = useEditor({
     autofocus: autoFocus ? "end" : false,
     content: initialContent ?? "",
@@ -149,24 +151,7 @@ export const Composer = ({
         return false;
       },
     },
-    extensions: [
-      STARTER_KIT,
-      Mention.configure({
-        debounce: 0,
-        heading: "People",
-        items: (query) =>
-          people.current
-            .filter((p) => p.name.toLowerCase().includes(query.toLowerCase()))
-            .slice(0, 6)
-            .map((p) => ({
-              avatar: p.avatar,
-              description: p.description,
-              id: p.id,
-              label: p.name,
-            })),
-      }),
-      Placeholder.configure({ placeholder }),
-    ],
+    extensions: [STARTER_KIT, MENTION, Placeholder.configure({ placeholder })],
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,
   });
@@ -177,18 +162,34 @@ export const Composer = ({
       selector: ({ editor: e }) => !e || e.isEmpty,
     }) ?? true;
 
-  const post = useCallback(() => {
-    if (!editor || editor.isDestroyed || editor.isEmpty) {
+  const posting = useRef(false);
+
+  const post = useCallback(async () => {
+    if (!editor || editor.isDestroyed || editor.isEmpty || posting.current) {
       return;
     }
-    onPost(editor.getJSON());
-    editor.commands.clearContent();
+    posting.current = true;
+    try {
+      await onPost(editor.getJSON());
+    } catch {
+      return;
+    } finally {
+      posting.current = false;
+    }
+    if (!editor.isDestroyed) {
+      editor.commands.clearContent();
+    }
   }, [editor, onPost]);
 
   useEffect(() => {
     handlers.current = { cancel: onCancel, post };
-    people.current = mentionable;
-  }, [mentionable, onCancel, post]);
+  }, [onCancel, post]);
+
+  useEffect(() => {
+    if (editor) {
+      setMentionable(editor, mentionable);
+    }
+  }, [editor, mentionable]);
 
   const mod = /Mac|iPhone|iPad/.test(globalThis.navigator?.userAgent ?? "")
     ? "⌘"
@@ -243,3 +244,13 @@ export const Composer = ({
     </div>
   );
 };
+
+// Tiptap's useEditor reads Math.random(), which Next.js `cacheComponents`
+// rejects during prerender unless the component sits under a Suspense boundary.
+// The boundary sits here rather than around CommentBox so the thread still
+// prerenders and every composer (including replies) is covered.
+export const Composer = (props: ComposerProps) => (
+  <Suspense fallback={null}>
+    <ComposerInner {...props} />
+  </Suspense>
+);

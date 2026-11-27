@@ -1,0 +1,6 @@
+{
+  "name": "table",
+  "type": "registry:component",
+  "title": "Table",
+  "description": "A table node with a toolbar that inserts tables from a grid-size picker, lets you add or delete rows and columns, merge and split cells, toggle the header row, and manage rows and columns from hover context handles. Columns are resizable."
+}

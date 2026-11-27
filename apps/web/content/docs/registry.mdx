@@ -14,19 +14,71 @@ Add the editorcn registry to your `components.json`:
 
 ```json
 {
-  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "$schema": "https://ui.shadcn.com/schema.json",
   "registries": {
-    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+    "@editorcn": "https://www.rtecn.space/r/styles/{style}/{name}.json"
   }
 }
 ```
 
+This needs shadcn CLI 4.7.0 or newer (`npx shadcn@latest` always is). Older versions put the files in a literal `@components/` folder instead of your components directory.
+
+The shadcn CLI fills in `{style}` from the `style` in your `components.json`, so you get the build for your base:
+
+| Your `style`                         | You get             |
+| ------------------------------------ | ------------------- |
+| `base-*` (for example `base-nova`)   | Base UI components  |
+| `radix-*` (for example `radix-nova`) | Radix UI components |
+| `new-york`, `default`                | Radix UI components |
+| `aria-*`                             | Not supported yet   |
+
+<Callout title="Check your iconLibrary">
+  The icons are written for the `iconLibrary` in your `components.json`, which
+  must be `lucide`, `tabler`, `hugeicons`, `phosphor` or `remixicon`. Older
+  projects with `"iconLibrary": "radix"` get a build error about
+  `./icon-placeholder`. Change it to `"lucide"` before installing, and install
+  `lucide-react` if your project doesn't have it (the CLI doesn't install icon
+  packages). See [Icon library](/docs/editor#icon-library).
+</Callout>
+
+Only a few of the editor's own primitives depend on the base (button, dialog, input, popover, toggle and tooltip), and they look the same in every style, so `base-vega` and `base-nova` get the same editorcn files. shadcn components that the templates use, like `dropdown-menu`, still come from your own style.
+
+<Callout>
+  React Aria styles (`aria-*`) aren't supported yet. The CLI asks for
+  `/r/styles/aria-nova/...`, which doesn't exist, and the install fails with a
+  404. Use a `base-*` or `radix-*` style for now.
+</Callout>
+
+### Installing by URL
+
+You can also install an item by its full URL without adding the registry. Pick the base in the URL:
+
+```bash
+npx shadcn@latest add "https://www.rtecn.space/r/styles/radix-nova/editor.json"
+```
+
+Install commands in these docs show a base switch next to the package manager tabs, so you can copy the URL for your base. The older URLs without `/styles/` (`https://www.rtecn.space/r/editor.json`) still work and always install the Base UI build.
+
 ## Available packages
 
-| Package                                  | Command                                        |
-| ---------------------------------------- | ---------------------------------------------- |
-| [@editorcn/editor](./editor)             | `npx shadcn@latest add @editorcn/editor`       |
-| [@editorcn/block-editor](./block-editor) | `npx shadcn@latest add @editorcn/block-editor` |
+| Item                                                         | Command                                                  |
+| ------------------------------------------------------------ | -------------------------------------------------------- |
+| [Toolbar editor](./editor)                                   | `npx shadcn@latest add @editorcn/editor`                 |
+| [Block editor](./block-editor)                               | `npx shadcn@latest add @editorcn/block-editor`           |
+| [Static Renderer](./static-renderer)                         | `npx shadcn@latest add @editorcn/static-renderer`        |
+| [Callout](./extensions/callout)                              | `npx shadcn@latest add @editorcn/callout`                |
+| [Code Block](./extensions/code-block)                        | `npx shadcn@latest add @editorcn/code-block`             |
+| [Image Placeholder](./extensions/image-placeholder)          | `npx shadcn@latest add @editorcn/image-placeholder`      |
+| [Markdown](./extensions/markdown)                            | `npx shadcn@latest add @editorcn/markdown`               |
+| [Mention](./extensions/mention)                              | `npx shadcn@latest add @editorcn/mention`                |
+| [Paste Cleanup](./extensions/paste-cleanup)                  | `npx shadcn@latest add @editorcn/paste-cleanup`          |
+| [Table](./extensions/table)                                  | `npx shadcn@latest add @editorcn/table`                  |
+| [Toggle](./extensions/toggle)                                | `npx shadcn@latest add @editorcn/toggle`                 |
+| [Full Toolbar Editor](./editor#full-setup)                   | `npx shadcn@latest add @editorcn/full-editor`            |
+| [Full Block Editor](./block-editor#full-setup)               | `npx shadcn@latest add @editorcn/full-block-editor`      |
+| [Comment Box](./templates/comment-box)                       | `npx shadcn@latest add @editorcn/comment-box`            |
+| [Email Composer](./templates/email-composer)                 | `npx shadcn@latest add @editorcn/email-composer`         |
+| [Simple Document Editor](./templates/simple-document-editor) | `npx shadcn@latest add @editorcn/simple-document-editor` |
 
 ## Usage
 
@@ -50,12 +102,12 @@ For the block editor:
 import "@/components/block-editor/style.css";
 ```
 
-### 2. Install peer dependencies
+### 2. Peer dependencies
 
-The `@tiptap/*` packages are peer dependencies. The shadcn CLI will prompt you to install any it detects as missing, but you can also add them yourself:
+The `@tiptap/*` packages are peer dependencies. The shadcn CLI installs the ones each item needs. To add the core ones yourself:
 
 ```bash
-npm install @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link @tiptap/extension-underline
+npm install @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
 ```
 
 See the [Editor](./editor) or [Block Editor](./block-editor) docs for the full list of extensions.
@@ -78,7 +130,7 @@ function MyEditor() {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
-      StarterKit,
+      StarterKit.configure({ link: false }),
       Link,
       Placeholder.configure({ placeholder: "Start typing..." }),
     ],
@@ -110,7 +162,6 @@ import { Placeholder } from "@tiptap/extension-placeholder";
 import {
   BlockEditor,
   SlashCommand,
-  defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@/components/block-editor";
 
@@ -121,7 +172,7 @@ function MyBlockEditor() {
       StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
       Placeholder.configure({ placeholder: "Type / for commands..." }),
       SlashCommand.configure({
-        suggestion: getSlashCommandSuggestion(defaultSlashCommandItems),
+        suggestion: getSlashCommandSuggestion(),
       }),
     ],
   });
@@ -134,15 +185,18 @@ For the full API reference, props, and customization options, see the [Editor](.
 
 ## How it works
 
-The registry is served as static JSON files from `https://editorcn.vercel.app/r/`:
+The registry is served as static JSON files, one folder per base:
 
-- **`registry.json`** — catalog listing all available packages with metadata
-- **`editor.json`** — item schema for the toolbar editor (42 files, 21 dependencies)
-- **`block-editor.json`** — item schema for the block editor (38 files, 29 dependencies)
+- **`/r/styles/base-nova/`**: every item built with Base UI primitives
+- **`/r/styles/radix-nova/`**: the same items built with Radix UI primitives
+- **`/r/styles/index.json`**: the list of bases
+- **`/r/{name}.json`**: the Base UI build at the older URLs, for existing installs
 
-When you run `shadcn add @editorcn/editor`, the CLI:
+Each folder has a `registry.json` catalog and one JSON file per item. Other `base-*` and `radix-*` style names are served from these two folders.
 
-1. Fetches `https://editorcn.vercel.app/r/editor.json`
+When you run `shadcn add @editorcn/editor` in a project with `"style": "radix-nova"`, the CLI:
+
+1. Fetches `https://www.rtecn.space/r/styles/radix-nova/editor.json`
 2. Reads the `files` array to know which source files to install
 3. Copies each file's `content` into your project at the configured paths
 4. Installs all `dependencies` into your project
@@ -154,11 +208,11 @@ When you run `shadcn add @editorcn/editor`, the CLI:
 | Install location         | `node_modules`                      | Your project source                    |
 | Customizable             | No (published dist)                 | Yes (edit the source)                  |
 | Versioning               | Semver via npm                      | Latest from source                     |
-| Peer dependency handling | Manual install                      | CLI prompts for missing ones           |
+| Peer dependency handling | Manual install                      | Installed by the CLI                   |
 | Use case                 | Quick setup, no source edits needed | Full control over styling and behavior |
 
 Use the registry unless you have a specific reason to prefer a versioned npm dependency (for example, pinning to an exact release in a monorepo with strict dependency management).
 
 ## Source
 
-The registry is built from the same source as the npm packages. See [`scripts/build-registry.mjs`](https://github.com/AbdullahMukadam/editorcn/blob/main/scripts/build-registry.mjs) for the build script.
+The registry is built from the same source as the npm packages. See [`scripts/registry/`](https://github.com/shadcn-labs/editorcn/tree/main/scripts/registry) for the build script.

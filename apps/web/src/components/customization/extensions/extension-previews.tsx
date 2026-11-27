@@ -8,12 +8,13 @@ import {
 } from "@editorcn/block-editor";
 import type { SlashCommandSuggestionItem } from "@editorcn/block-editor";
 import { RichTextEditor } from "@editorcn/editor";
-import { Callout } from "@editorcn/extensions/callout";
+import { Callout, calloutSlashCommandItem } from "@editorcn/extensions/callout";
 import { CalloutToolbar } from "@editorcn/extensions/callout-toolbar";
 import { CodeBlock } from "@editorcn/extensions/code-block";
 import { ToolbarProvider } from "@editorcn/extensions/core";
 import {
   ImagePlaceholder,
+  imagePlaceholderSlashCommandItem,
   ResizableImage,
 } from "@editorcn/extensions/image-placeholder";
 import { ImagePlaceholderToolbar } from "@editorcn/extensions/image-placeholder-toolbar";
@@ -21,9 +22,10 @@ import { Markdown } from "@editorcn/extensions/markdown";
 import { MarkdownToolbar } from "@editorcn/extensions/markdown-toolbar";
 import { Mention } from "@editorcn/extensions/mention";
 import { PasteCleanup } from "@editorcn/extensions/paste-cleanup";
-import { Table } from "@editorcn/extensions/table";
+import { Table, tableSlashCommandItem } from "@editorcn/extensions/table";
 import { TableHoverOverlay } from "@editorcn/extensions/table-hover-overlay";
 import { TableToolbar } from "@editorcn/extensions/table-toolbar";
+import { Toggle, toggleSlashCommandItem } from "@editorcn/extensions/toggle";
 import type { AnyExtension } from "@tiptap/core";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { useEditor } from "@tiptap/react";
@@ -34,12 +36,12 @@ import { searchPeople } from "@/lib/mention-people";
 
 import "@editorcn/block-editor/style.css";
 import "@editorcn/editor/style.css";
-import "@editorcn/extensions/ui/style.css";
 import "@editorcn/extensions/table/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/mention/style.css";
 import "@editorcn/extensions/code-block/style.css";
 import "@editorcn/extensions/callout/style.css";
+import "@editorcn/extensions/toggle/style.css";
 
 /* Table alignment + resize handle styling ships with
    @editorcn/extensions/table/style.css (see .ProseMirror.resize-cursor). */
@@ -55,21 +57,7 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
     content:
       '<div data-type="callout" data-variant="info"><p>Click the icon to switch the callout type or remove it. Callouts hold any block content, like lists:</p><ul><li><p>Press Enter on an empty last line to leave the callout.</p></li></ul></div><div data-type="callout" data-variant="tip"><p>Type <code>&gt; [!WARNING]</code> followed by a space in an empty line to create a warning callout.</p></div><div data-type="callout" data-variant="warning" data-emoji="🔥"><p>Callouts can show a custom emoji instead of the icon.</p></div><p></p>',
     extensions: [StarterKit, Callout],
-    slashItems: [
-      {
-        command: ({ editor, range }) =>
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .setCallout({ variant: "info" })
-            .run(),
-        description: "Highlight a note, tip, or warning",
-        id: "callout",
-        keywords: ["callout", "note", "tip", "warning", "alert", "info"],
-        title: "Callout",
-      },
-    ],
+    slashItems: [calloutSlashCommandItem],
     toolbar: <CalloutToolbar />,
   },
   "code-block": {
@@ -82,21 +70,7 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
     content:
       "<p>Click the image button in the toolbar to insert a placeholder, then upload a file or paste an image URL to replace it. The inserted image can be resized from its handles.</p>",
     extensions: [StarterKit, ResizableImage, ImagePlaceholder],
-    slashItems: [
-      {
-        command: ({ editor, range }) =>
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .insertImagePlaceholder()
-            .run(),
-        description: "Insert an image placeholder",
-        id: "insertImagePlaceholder",
-        keywords: ["image", "photo", "picture"],
-        title: "Image",
-      },
-    ],
+    slashItems: [imagePlaceholderSlashCommandItem],
     toolbar: <ImagePlaceholderToolbar />,
   },
   markdown: {
@@ -124,22 +98,15 @@ const PREVIEW_CONFIGS: Record<string, PreviewConfig> = {
     content:
       "<h2>Table</h2><p>Click inside the table, then use the Table control to add or remove rows and columns, merge or split cells, and toggle the header row. In the block editor, type <code>/</code> to insert a table from the command menu.</p><table><thead><tr><th>Feature</th><th>Status</th></tr></thead><tbody><tr><td>Rows</td><td>Add / delete</td></tr><tr><td>Columns</td><td>Add / delete</td></tr><tr><td>Cells</td><td>Merge / split</td></tr></tbody></table>",
     extensions: [StarterKit, Table],
-    slashItems: [
-      {
-        command: ({ editor, range }) =>
-          editor
-            .chain()
-            .focus()
-            .deleteRange(range)
-            .insertTableWithHeader()
-            .run(),
-        description: "Insert a table with a header row",
-        id: "insertTableWithHeader",
-        keywords: ["table", "row", "column"],
-        title: "Insert table",
-      },
-    ],
+    slashItems: [tableSlashCommandItem],
     toolbar: <TableToolbar />,
+  },
+  toggle: {
+    content:
+      '<p>Click the triangle to collapse or expand a section. Press <code>Enter</code> in the title to jump into the content, and <code>Backspace</code> on an empty title to remove the toggle. Toggles hold any block content, including other toggles:</p><details open><summary>What can go inside?</summary><div data-type="detailsContent"><p>Paragraphs, lists, code blocks, tables — and more toggles:</p><details><summary>A nested toggle</summary><div data-type="detailsContent"><p>Collapsed by default. Click the triangle to open it.</p></div></details></div></details><p></p>',
+    extensions: [StarterKit, Toggle],
+    slashItems: [toggleSlashCommandItem],
+    toolbar: null,
   },
 };
 
@@ -152,7 +119,7 @@ const ToolbarEditorPreview = ({ config }: { config: PreviewConfig }) => {
   });
 
   return (
-    <div className="overflow-hidden rounded-md border border-border">
+    <div>
       <RichTextEditor editor={editor}>
         <RichTextEditor.Toolbar>
           <RichTextEditor.ControlsGroup>

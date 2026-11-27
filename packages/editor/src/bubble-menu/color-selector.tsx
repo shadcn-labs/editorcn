@@ -176,9 +176,11 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
           />
           <RteDropdown variant="color">
             {recent.length > 0 ? (
-              <div className="rte-bubble-color-section">
-                <span className="rte-bubble-color-label">Recently Used</span>
-                <div className="rte-bubble-color-recent">
+              <div className="rte-bubble-color-section flex flex-col gap-2">
+                <span className="rte-bubble-color-label px-0.5 text-[0.75rem] leading-none font-medium text-muted-foreground">
+                  Recently Used
+                </span>
+                <div className="rte-bubble-color-recent flex flex-wrap justify-center gap-1.5">
                   {recent.map((item) => (
                     <RteColorSwatch
                       key={`${item.type}-${item.color}`}
@@ -203,9 +205,11 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
             {hasColor ? (
               <>
                 {recent.length > 0 && <RteDropdownDivider />}
-                <div className="rte-bubble-color-section">
-                  <span className="rte-bubble-color-label">Text Color</span>
-                  <div className="rte-bubble-color-grid">
+                <div className="rte-bubble-color-section flex flex-col gap-2">
+                  <span className="rte-bubble-color-label px-0.5 text-[0.75rem] leading-none font-medium text-muted-foreground">
+                    Text Color
+                  </span>
+                  <div className="rte-bubble-color-grid grid grid-cols-[repeat(5,1.5rem)] justify-center gap-1.5">
                     {TEXT_COLORS.map((item) => (
                       <RteColorSwatch
                         key={item.color}
@@ -223,11 +227,11 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
             {hasHighlight ? (
               <>
                 {(recent.length > 0 || hasColor) && <RteDropdownDivider />}
-                <div className="rte-bubble-color-section">
-                  <span className="rte-bubble-color-label">
+                <div className="rte-bubble-color-section flex flex-col gap-2">
+                  <span className="rte-bubble-color-label px-0.5 text-[0.75rem] leading-none font-medium text-muted-foreground">
                     Highlight Color
                   </span>
-                  <div className="rte-bubble-color-grid">
+                  <div className="rte-bubble-color-grid grid grid-cols-[repeat(5,1.5rem)] justify-center gap-1.5">
                     {HIGHLIGHT_COLORS.map((item) => (
                       <RteColorSwatch
                         key={item.color}

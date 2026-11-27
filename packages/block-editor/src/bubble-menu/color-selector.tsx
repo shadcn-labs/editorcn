@@ -31,8 +31,10 @@ const ColorGroup = ({
   children: React.ReactNode;
   className: string;
 }) => (
-  <div className="block-editor-color-section">
-    <span className="block-editor-color-label">{title}</span>
+  <div className="block-editor-color-section flex flex-col gap-2">
+    <span className="block-editor-color-label px-0.5 text-xs leading-none font-bold text-muted-foreground">
+      {title}
+    </span>
     <div className={className}>{children}</div>
   </div>
 );
@@ -159,7 +161,7 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
         onClick={() => setOpen(!open)}
         title="Text color"
       >
-        <span className="block-editor-color-icon">
+        <span className="block-editor-color-icon flex size-4 items-center justify-center [&_svg]:size-full">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -182,11 +184,11 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
             onClick={() => setOpen(false)}
             onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
           />
-          <BubbleDropdown className="block-editor-bubble-dropdown--color">
+          <BubbleDropdown className="block-editor-bubble-dropdown--color min-w-auto p-2 [&_.block-editor-bubble-dropdown-divider]:mx-0 [&_.block-editor-bubble-dropdown-divider]:mt-2 [&_.block-editor-bubble-dropdown-divider]:mb-1.5">
             {recent.length > 0 && (
               <ColorGroup
                 title="Recently Used"
-                className="block-editor-color-recent"
+                className="block-editor-color-recent flex flex-wrap justify-center gap-1.5"
               >
                 {recent.map((item) => (
                   <ColorSwatch
@@ -212,7 +214,7 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
                 {recent.length > 0 && <BubbleDropdownDivider />}
                 <ColorGroup
                   title="Text Color"
-                  className="block-editor-color-grid"
+                  className="block-editor-color-grid grid grid-cols-[repeat(5,1.5rem)] justify-center gap-1.5"
                 >
                   {TEXT_COLORS.map((item) => (
                     <ColorSwatch
@@ -235,7 +237,7 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
                 {(recent.length > 0 || hasColor) && <BubbleDropdownDivider />}
                 <ColorGroup
                   title="Highlight Color"
-                  className="block-editor-color-grid"
+                  className="block-editor-color-grid grid grid-cols-[repeat(5,1.5rem)] justify-center gap-1.5"
                 >
                   {HIGHLIGHT_COLORS.map((item) => (
                     <ColorSwatch

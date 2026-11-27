@@ -58,7 +58,11 @@ const FontSize = Extension.create({
 });
 
 const extensions = [
-  StarterKit.configure({ heading: { levels: [1, 2, 3, 4, 5, 6] } }),
+  StarterKit.configure({
+    heading: { levels: [1, 2, 3, 4, 5, 6] },
+    link: false,
+    underline: false,
+  }),
   Underline,
   TipTapLink.configure({
     openOnClick: true,
@@ -96,7 +100,7 @@ export const TemplateCard = ({
         <TabsTrigger value="code">Code</TabsTrigger>
       </TabsList>
       <TabsContent value="preview" className="pt-4">
-        <div className="overflow-hidden rounded-md border border-border">
+        <div>
           <RichTextEditor editor={editor}>
             <style>{`
               .rte-content table {

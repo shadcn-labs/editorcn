@@ -2,153 +2,68 @@
  * Targets the HTML produced by editor.getHTML() from both
  * @editorcn/editor and @editorcn/block-editor.
  */
+
+@import "@editorcn/content/presets/block.css";
+@import "@editorcn/content/presets/document.css";
+
 .rte-static-renderer {
   color: var(--foreground);
 }
 
-.rte-static-renderer > *:last-child {
+.rte-static-renderer.editorcn-content > *:last-child {
   margin-bottom: 0;
 }
 
-/* ── Typography ── */
-.rte-static-renderer h1 {
-  font-size: 1.875rem;
-  font-weight: 700;
-  line-height: 1.2;
-  margin: 0.5em 0 0.25em;
-}
-
-.rte-static-renderer h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  line-height: 1.25;
-  margin: 0.5em 0 0.25em;
-}
-
-.rte-static-renderer h3 {
-  font-size: 1.25rem;
-  font-weight: 600;
-  line-height: 1.3;
-  margin: 0.5em 0 0.25em;
-}
-
-.rte-static-renderer h4 {
-  font-size: 1.125rem;
-  font-weight: 600;
-  line-height: 1.35;
-  margin: 0.5em 0 0.25em;
-}
-
-.rte-static-renderer h5 {
-  font-size: 1rem;
-  font-weight: 600;
-  line-height: 1.4;
-  margin: 0.5em 0 0.25em;
-}
-
-.rte-static-renderer h6 {
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.45;
-  margin: 0.5em 0 0.25em;
-}
-
-.rte-static-renderer h1:first-child,
-.rte-static-renderer h2:first-child,
-.rte-static-renderer h3:first-child,
-.rte-static-renderer h4:first-child,
-.rte-static-renderer h5:first-child,
-.rte-static-renderer h6:first-child {
-  margin-top: 0;
-}
-
-.rte-static-renderer p {
-  margin: 0.25em 0;
-  line-height: 1.6;
-}
-
-.rte-static-renderer ul {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-  margin: 0.25em 0;
-}
-
-.rte-static-renderer ul ul {
-  list-style-type: circle;
-}
-
-.rte-static-renderer ul ul ul {
-  list-style-type: square;
-}
-
-.rte-static-renderer ol {
-  list-style-type: decimal;
-  padding-left: 1.5rem;
-  margin: 0.25em 0;
-}
-
-.rte-static-renderer li {
-  margin: 0.125em 0;
-}
-
-.rte-static-renderer li > p {
-  margin: 0;
-}
-
-.rte-static-renderer blockquote {
-  border-left: 3px solid var(--border);
-  padding-left: 1rem;
-  color: var(--muted-foreground);
+.rte-static-renderer pre:not(:has(.hljs)) {
   margin: 0.5em 0;
-}
-
-/* ── Links ── */
-.rte-static-renderer a {
-  color: var(--primary);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-color: color-mix(in srgb, var(--primary) 40%, transparent);
-}
-
-/* ── Horizontal rule ── */
-.rte-static-renderer hr {
-  border: none;
-  border-top: 1px solid var(--border);
-  margin: 1em 0;
-}
-
-/* ── Inline code ── */
-.rte-static-renderer code {
-  font-size: 0.875em;
-  font-weight: 500;
-  font-family: var(--font-mono, monospace);
-  background: color-mix(in srgb, var(--muted) 70%, transparent);
-  padding: 0.125rem 0.375rem;
-  border-radius: calc(var(--radius) - 4px);
-}
-
-/* ── Code blocks ── */
-.rte-static-renderer pre {
-  background: #1e1e2e;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 1rem;
+  padding: 1.25rem;
   overflow-x: auto;
-  font-size: 0.875rem;
+  border: none;
+  border-radius: var(--radius);
+  background: color-mix(in srgb, var(--muted) 60%, transparent);
+  color: var(--foreground);
+  font-family: var(
+    --font-mono,
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace
+  );
+  font-size: 0.85em;
   line-height: 1.5;
-  margin: 0.5em 0;
-  color: #cdd6f4;
+  tab-size: 2;
+  scrollbar-color: var(--border) transparent;
+  scrollbar-width: thin;
 }
 
-.rte-static-renderer pre code {
-  color: inherit;
-  background: none;
-  padding: 0;
-  font-weight: 400;
-  font-family: var(--font-mono, monospace);
+.rte-static-renderer pre:not(:has(.hljs)) code {
+  font-size: inherit;
+}
+
+.rte-static-renderer pre:not(:has(.hljs)) code {
+  font-size: inherit;
+}
+
+.rte-static-renderer pre[data-wrap] {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.rte-static-renderer pre code span[style] {
+  color: var(--shiki-light);
+  font-style: var(--shiki-light-font-style);
+  font-weight: var(--shiki-light-font-weight);
+}
+
+.dark .rte-static-renderer pre code span[style] {
+  color: var(--shiki-dark);
+  font-style: var(--shiki-dark-font-style);
+  font-weight: var(--shiki-dark-font-weight);
 }
 
 /* ── Syntax Highlighting (lowlight / highlight.js) ── */
+
 .rte-static-renderer pre .hljs-comment,
 .rte-static-renderer pre .hljs-quote {
   color: #6c7086;
@@ -193,35 +108,41 @@
 }
 
 /* Object/JSON keys & HTML/XML attribute names */
+
 .rte-static-renderer pre .hljs-attr {
   color: #89b4fa;
 }
 
 /* JSDoc-style tags, e.g. @param, @returns */
+
 .rte-static-renderer pre .hljs-doctag {
   color: #f38ba8;
   font-weight: 600;
 }
 
 /* Operators & punctuation (finer-grained grammars) */
+
 .rte-static-renderer pre .hljs-operator,
 .rte-static-renderer pre .hljs-punctuation {
   color: #9399b2;
 }
 
 /* CSS selector attributes/pseudo-classes, e.g. [type="text"], :hover */
+
 .rte-static-renderer pre .hljs-selector-attr,
 .rte-static-renderer pre .hljs-selector-pseudo {
   color: #94e2d5;
 }
 
 /* Language-level variables, e.g. this, super */
+
 .rte-static-renderer pre .hljs-variable.language_ {
   color: #cba6f7;
   font-style: italic;
 }
 
 /* Template literal substitutions, e.g. ${...} */
+
 .rte-static-renderer pre .hljs-subst {
   color: #cdd6f4;
 }
@@ -244,77 +165,11 @@
   background-color: color-mix(in srgb, #f38ba8 10%, transparent);
 }
 
-/* ── Images ── */
-.rte-static-renderer img {
-  max-width: 100%;
-  height: auto;
-  border-radius: var(--radius);
-}
-
-/* ── Tables ── */
-.rte-static-renderer table {
-  border-collapse: collapse;
-  width: 100%;
-  margin: 0.5em 0;
-}
-
-.rte-static-renderer th,
-.rte-static-renderer td {
-  border: 1px solid var(--border);
-  padding: 0.5rem;
-  min-width: 100px;
-  text-align: left;
-  vertical-align: top;
-}
-
-.rte-static-renderer th {
-  background: var(--muted);
-  font-weight: 600;
-}
-
-/* Table wrapper for horizontal scroll */
-.rte-static-renderer .tableWrapper {
-  overflow-x: auto;
-}
-
-/* ── Task lists ── */
-.rte-static-renderer ul[data-type="taskList"] {
-  list-style: none;
-  padding-left: 0;
-}
-
-.rte-static-renderer ul[data-type="taskList"] li {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-}
-
-.rte-static-renderer ul[data-type="taskList"] li > label {
-  flex-shrink: 0;
-  margin-top: 0.25rem;
-}
-
-.rte-static-renderer ul[data-type="taskList"] li > div > p {
-  margin: 0;
-}
-
-.rte-static-renderer
-  ul[data-type="taskList"]
-  li[data-checked="true"]
-  > div
-  > p {
-  text-decoration: line-through;
-  color: var(--muted-foreground);
-}
-
-.rte-static-renderer ul[data-type="taskList"] input[type="checkbox"] {
-  accent-color: var(--primary);
-}
-
 /* ── Embeds (toolbar editor only) ──
  * Serialized as empty divs with data attributes. Styled as 16:9 placeholder
  * cards; swap the inner markup for an iframe/widget if you need the live
  * media to render. */
+
 .rte-static-renderer div[data-type="youtube"],
 .rte-static-renderer div[data-type="twitter"] {
   width: 100%;
@@ -330,6 +185,7 @@
 }
 
 /* ── Callout ── */
+
 .rte-static-renderer div[data-type="callout"] {
   --ext-callout-info: oklch(0.6 0.17 250);
   --ext-callout-tip: oklch(0.62 0.15 155);
@@ -410,7 +266,64 @@
   --ext-callout-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M21 9a2.4 2.4 0 0 0-.706-1.706l-3.588-3.588A2.4 2.4 0 0 0 15 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2z'/%3E%3Cpath d='M15 3v5a1 1 0 0 0 1 1h5'/%3E%3C/svg%3E");
 }
 
-/* ── Selection ── */
-.rte-static-renderer ::selection {
-  background: color-mix(in srgb, var(--primary) 20%, transparent);
+/* ── Toggle ── */
+
+/* Native <details>/<summary> output, so collapsing works without JavaScript. */
+
+.rte-static-renderer details {
+  --ext-toggle-triangle: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M3.5 1.75v8.5L10.25 6z' fill='black' stroke='black' stroke-width='1.5' stroke-linejoin='round'/%3E%3C/svg%3E");
+  position: relative;
+  margin: 0.375em 0;
+  padding-left: 1.625rem;
+}
+
+.rte-static-renderer details > summary {
+  display: block;
+  font-weight: inherit;
+  cursor: pointer;
+  list-style: none;
+}
+
+.rte-static-renderer details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.rte-static-renderer details > summary:empty::after {
+  content: "Toggle";
+  color: var(--muted-foreground);
+}
+
+.rte-static-renderer details > summary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1.375rem;
+  height: 1.75em;
+  height: 1lh;
+  background: var(--foreground);
+  mask: var(--ext-toggle-triangle) center / 0.75rem 0.75rem no-repeat;
+  transition: transform 0.15s ease-out;
+}
+
+.rte-static-renderer details[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.rte-static-renderer details div[data-type="detailsContent"] {
+  margin-top: 0.375em;
+}
+
+.rte-static-renderer details div[data-type="detailsContent"] > :first-child {
+  margin-top: 0;
+}
+
+.rte-static-renderer details div[data-type="detailsContent"] > :last-child {
+  margin-bottom: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rte-static-renderer details > summary::before {
+    transition: none;
+  }
 }

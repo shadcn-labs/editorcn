@@ -7,6 +7,27 @@ const highlightCache = new LRUCache<string, string>({
   ttl: 1000 * 60 * 60,
 });
 
+const COMMANDS = [
+  { bun: "bun add", npm: "npm install", pnpm: "pnpm add", yarn: "yarn add" },
+  {
+    bun: "bunx --bun create-",
+    npm: "npx create-",
+    pnpm: "pnpm create ",
+    yarn: "yarn create ",
+  },
+  {
+    bun: "bun create",
+    npm: "npm create",
+    pnpm: "pnpm create",
+    yarn: "yarn create",
+  },
+  { bun: "bunx --bun", npm: "npx", pnpm: "pnpm dlx", yarn: "yarn dlx" },
+  { bun: "bun", npm: "npm run", pnpm: "pnpm", yarn: "yarn" },
+];
+
+const escapeRegExp = (value: string) =>
+  value.replaceAll(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 export const transformers = [
   {
     code(node) {
@@ -14,31 +35,14 @@ export const transformers = [
         const raw = this.source;
         node.properties.__raw__ = raw;
 
-        if (raw.startsWith("npm install")) {
-          node.properties.__npm__ = raw;
-          node.properties.__yarn__ = raw.replace("npm install", "yarn add");
-          node.properties.__pnpm__ = raw.replace("npm install", "pnpm add");
-          node.properties.__bun__ = raw.replace("npm install", "bun add");
-        } else if (raw.startsWith("npx create-")) {
-          node.properties.__npm__ = raw;
-          node.properties.__yarn__ = raw.replace("npx create-", "yarn create ");
-          node.properties.__pnpm__ = raw.replace("npx create-", "pnpm create ");
-          node.properties.__bun__ = raw.replace("npx", "bunx --bun");
-        } else if (raw.startsWith("npm create")) {
-          node.properties.__npm__ = raw;
-          node.properties.__yarn__ = raw.replace("npm create", "yarn create");
-          node.properties.__pnpm__ = raw.replace("npm create", "pnpm create");
-          node.properties.__bun__ = raw.replace("npm create", "bun create");
-        } else if (raw.startsWith("npx")) {
-          node.properties.__npm__ = raw;
-          node.properties.__yarn__ = raw.replace("npx", "yarn dlx");
-          node.properties.__pnpm__ = raw.replace("npx", "pnpm dlx");
-          node.properties.__bun__ = raw.replace("npx", "bunx --bun");
-        } else if (raw.startsWith("npm run")) {
-          node.properties.__npm__ = raw;
-          node.properties.__yarn__ = raw.replace("npm run", "yarn");
-          node.properties.__pnpm__ = raw.replace("npm run", "pnpm");
-          node.properties.__bun__ = raw.replace("npm run", "bun");
+        const command = COMMANDS.find(({ npm }) => raw.startsWith(npm));
+        if (command) {
+          for (const manager of ["npm", "yarn", "pnpm", "bun"] as const) {
+            node.properties[`__${manager}__`] = raw.replaceAll(
+              new RegExp(`^${escapeRegExp(command.npm)}`, "gm"),
+              command[manager]
+            );
+          }
         }
       }
     },

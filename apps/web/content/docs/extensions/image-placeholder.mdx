@@ -14,12 +14,12 @@ The inserted image ships its own node view: drag the left or right handles to re
 Run the following command to install the extension, its toolbar component and the shared extension runtime:
 
 ```bash
-npx shadcn@latest add "https://editorcn.vercel.app/r/image-placeholder.json"
+npx shadcn@latest add "https://www.rtecn.space/r/image-placeholder.json"
 ```
 
-This installs the node, the node view, the toolbar, `extensions/core/` and `extensions/ui/` into your project. It also installs `@tiptap/extension-image`, which the node view uses to insert the final image. Extension and shared UI styles are installed as `extensions/image-placeholder/style.css` and `extensions/ui/style.css`.
+This installs the node, the node view, the toolbar, `extensions/core/` and `extensions/ui/` into your project. It also installs `@tiptap/extension-image`, which the node view uses to insert the final image. Extension styles are installed as `extensions/image-placeholder/style.css`, and the menu animations are added to the CSS file that imports `tailwindcss`.
 
-To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/AbdullahMukadam/editorcn/tree/main/packages/extensions/src/image-placeholder):
+To install the files manually instead, install these packages and copy the code from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src/image-placeholder):
 
 ```bash
 npm install @tiptap/core @tiptap/react @tiptap/extension-image
@@ -46,7 +46,6 @@ import { RichTextEditor } from "@/components/editor";
 
 import "@/components/editor/style.css";
 import "@/components/extensions/image-placeholder/style.css";
-import "@/components/extensions/ui/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
@@ -74,7 +73,7 @@ export function MyEditor() {
 
 ### With `@editorcn/block-editor`
 
-The placeholder works in the block editor too, and `insertImagePlaceholder` can be wired into the slash command menu:
+The placeholder works in the block editor too. Add `imagePlaceholderSlashCommandItem` to the slash command menu:
 
 <ExtensionPreview slug="image-placeholder" editor="block" />
 
@@ -87,17 +86,16 @@ import { StarterKit } from "@tiptap/starter-kit";
 import {
   BlockEditor,
   SlashCommand,
-  defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@/components/block-editor";
 import {
   ImagePlaceholder,
   ResizableImage,
+  imagePlaceholderSlashCommandItem,
 } from "@/components/extensions/image-placeholder";
 
 import "@/components/block-editor/style.css";
 import "@/components/extensions/image-placeholder/style.css";
-import "@/components/extensions/ui/style.css";
 
 export function MyBlockEditor() {
   const editor = useEditor({
@@ -107,20 +105,7 @@ export function MyBlockEditor() {
       ImagePlaceholder,
       SlashCommand.configure({
         suggestion: getSlashCommandSuggestion([
-          ...defaultSlashCommandItems,
-          {
-            id: "insertImagePlaceholder",
-            title: "Image",
-            description: "Insert an image placeholder",
-            keywords: ["image", "photo", "picture"],
-            command: ({ editor, range }) =>
-              editor
-                .chain()
-                .focus()
-                .deleteRange(range)
-                .insertImagePlaceholder()
-                .run(),
-          },
+          imagePlaceholderSlashCommandItem,
         ]),
       }),
     ],

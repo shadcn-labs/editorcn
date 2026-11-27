@@ -24,9 +24,12 @@ export { RteDropdownIcon } from "./rte-dropdown-icon";
 export type { RteDropdownIconProps } from "./rte-dropdown-icon";
 export { Toggle, toggleVariants } from "./toggle";
 export {
+  createTooltipHandle,
   Tooltip,
   TooltipContent,
+  TooltipHost,
   TooltipProvider,
   TooltipTrigger,
 } from "./tooltip";
+export type { TooltipHandle } from "./tooltip";
 export { cn } from "./utils";

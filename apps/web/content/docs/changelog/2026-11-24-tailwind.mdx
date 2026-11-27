@@ -1,0 +1,55 @@
+---
+title: "November 24, 2026 - Tailwind styling"
+description: "The editors' toolbars, menus and popovers are now styled with Tailwind classes, document content comes from shared presets, and animations live in your Tailwind theme."
+date: "2026-11-24"
+---
+
+The editors used to ship about 4,200 lines of hand-written CSS. The toolbar, menus, popovers and other chrome are now styled with Tailwind classes in the components themselves, so you can restyle them with `className` and Tailwind like any other shadcn component. They look the same as before.
+
+## Highlights
+
+- **Tailwind chrome**: the toolbar, bubble menus, dropdowns, slash menu, drag handle, table handles, code block header and extension popovers use Tailwind utilities that read your shadcn theme.
+- **`className` wins**: classes you pass to `RichTextEditor.Toolbar`, `Footer`, `ControlsGroup` and `Content` are merged last with `tailwind-merge`, so they now override the variant styles.
+- **Plain CSS still works**: the old class names (`.rte-toolbar`, `.block-editor-bubble-menu` and so on) stay on the elements. The utilities live in Tailwind's `utilities` layer, so plain CSS that targets them wins without `!important`.
+- **Content presets**: document styles are shared by all three components as two presets, `"document"` (the toolbar editor) and `"block"` (the block editor). Pick one with the new `preset` prop on `RichTextEditor`, `BlockEditor` and `StaticRenderer`. See [Content presets](/docs/styling#content-presets).
+- **Theme animations**: menu and popover animations are `--animate-*` variables in your Tailwind theme, so you can change their timing in one place. See [Animations](/docs/styling#animations).
+
+## Upgrading
+
+### shadcn registry
+
+Re-add the items you use, for example:
+
+```bash
+npx shadcn@latest add "https://www.rtecn.space/r/editor.json"
+```
+
+The CLI updates the component files and adds the animations to the CSS file that imports `tailwindcss`. Add `full-editor` and `full-block-editor` in separate commands: added together, the CLI points the block editor template's toggle import at the wrong file.
+
+`extensions/ui/style.css` is gone. Its only rule is now part of the theme, so remove its import and delete the file.
+
+### npm
+
+Update to `@editorcn/editor@0.5.0`, `@editorcn/block-editor@0.5.0` and `@editorcn/static-renderer@0.3.0`. Then, in the CSS file that imports `tailwindcss`, import each editor's theme and add it to Tailwind's sources (the path is relative to that file):
+
+```css
+@import "@editorcn/editor/theme.css";
+@import "@editorcn/block-editor/theme.css";
+@source "../node_modules/@editorcn/editor/dist";
+@source "../node_modules/@editorcn/block-editor/dist";
+```
+
+Keep importing each package's `style.css` as before. Without `@source`, the chrome is unstyled. Without the theme imports, the build still passes but menus don't animate.
+
+### Static renderer output
+
+With the default `"block"` preset, `StaticRenderer` output now matches the block editor exactly:
+
+- A heading that's the first child keeps its top margin.
+- Nested bullets use discs.
+- Images get a 1px outline.
+- Inline code uses Tailwind's default mono font stack.
+
+Pass `preset="document"` to render `RichTextEditor` content the way that editor shows it. If you render HTML without the component, add the `editorcn-content` class and `data-preset="block"` next to `rte-static-renderer`.
+
+See [Styling](/docs/styling) for the class reference and override examples.

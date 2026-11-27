@@ -30,7 +30,7 @@ export interface CommentBoxProps {
   currentUser?: CommentAuthor;
   initialComments?: CommentItem[];
   onDelete?: (id: string) => void;
-  onPost?: (content: JSONContent, parentId?: string) => void;
+  onPost?: (content: JSONContent, parentId?: string) => unknown;
   onReact?: (id: string, emoji: string) => void;
   placeholder?: string;
   title?: string;
@@ -40,7 +40,7 @@ export interface CommentBoxProps {
 export interface ThreadActions {
   currentUser: CommentAuthor;
   mentionable: CommentAuthor[];
-  post: (content: JSONContent, parentId?: string) => void;
+  post: (content: JSONContent, parentId?: string) => Promise<void>;
   react: (id: string, emoji: string) => void;
   remove: (id: string) => void;
 }

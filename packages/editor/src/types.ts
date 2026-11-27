@@ -5,6 +5,11 @@ import type { RichTextEditorLabels } from "./labels";
 
 export type RichTextEditorVariant = "default" | "subtle" | "compact";
 
+export type RichTextEditorPreset =
+  | "document"
+  | "block"
+  | (string & Record<never, never>);
+
 export interface RichTextEditorProps {
   editor: Editor | null;
   children: React.ReactNode;
@@ -12,6 +17,7 @@ export interface RichTextEditorProps {
   labels?: Partial<RichTextEditorLabels>;
   icons?: Partial<RichTextEditorIcons>;
   variant?: RichTextEditorVariant;
+  preset?: RichTextEditorPreset;
   editable?: boolean;
 }
 

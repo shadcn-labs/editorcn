@@ -5,7 +5,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { toast } from "sonner";
 
+import { BlockEditorPreview } from "@/components/block-editor-preview";
+import { EditorPreview } from "@/components/editor-preview";
 import { CommentBox } from "@/components/templates/comment-box";
+import { EmailComposer } from "@/components/templates/email-composer";
 import { SimpleDocumentEditor } from "@/components/templates/simple-document-editor";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -108,6 +111,33 @@ const DEMO_COMMENTS = [
   },
 ];
 
+const DEMO_EMAIL = {
+  content: [
+    { content: [text("Hi Maya,")], type: "paragraph" },
+    {
+      content: [
+        text("Thanks for trying editorcn. Your trial includes "),
+        text("every template", "bold"),
+        text(", and here are a few things to try first:"),
+      ],
+      type: "paragraph",
+    },
+    {
+      content: [
+        "Install the comment box",
+        "Add a toolbar",
+        "Share a draft",
+      ].map((item) => ({
+        content: [{ content: [text(item)], type: "paragraph" }],
+        type: "listItem",
+      })),
+      type: "bulletList",
+    },
+    { content: [text("Best, Sofia")], type: "paragraph" },
+  ],
+  type: "doc",
+};
+
 const DEMOS = {
   "comment-box": (className?: string) => (
     <CommentBox
@@ -120,6 +150,19 @@ const DEMOS = {
       initialComments={DEMO_COMMENTS}
     />
   ),
+  "email-composer": (className?: string) => (
+    <EmailComposer
+      className={className ?? "mx-auto max-w-2xl"}
+      initialContent={DEMO_EMAIL}
+      initialSubject="Your editorcn trial"
+      initialTo="maya@example.com"
+      onSend={({ to }) => {
+        toast.success(`Message sent to ${to}`);
+      }}
+    />
+  ),
+  "full-block-editor": () => <BlockEditorPreview />,
+  "full-editor": () => <EditorPreview />,
   "simple-document-editor": (className?: string) => (
     <SimpleDocumentEditor
       className={className}
@@ -174,7 +217,7 @@ export const TemplateTabs = ({
       </Button>
     </div>
     <TabsContent value="preview" className="pt-4">
-      <div className="bg-muted/30 rounded-xl border p-4 sm:p-8">
+      <div className="rounded-xl border border-border/60 bg-card p-4 sm:p-8">
         {DEMOS[name]()}
       </div>
     </TabsContent>

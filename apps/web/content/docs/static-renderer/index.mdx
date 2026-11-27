@@ -42,9 +42,9 @@ Add the editorcn registry to your `components.json` if you haven't already
 
 ```json
 {
-  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "$schema": "https://ui.shadcn.com/schema.json",
   "registries": {
-    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+    "@editorcn": "https://www.rtecn.space/r/styles/{style}/{name}.json"
   }
 }
 ```
@@ -93,7 +93,7 @@ import "@editorcn/static-renderer/style.css";
 Pick a mode based on what you stored:
 
 - **HTML**: you saved `editor.getHTML()`. Simplest option; pass the string as
-  `content`, and add `sanitize` if users can write it.
+  `content`. It's sanitized by default.
 - **JSON**: you saved `editor.getJSON()`, or render a document received from
   an API. Pass the document as `content` plus the `extensions` that built it.
   JSON renders through React, never as raw HTML, so it is the safer choice for
@@ -105,18 +105,19 @@ Pick a mode based on what you stored:
 import { StaticRenderer } from "@editorcn/static-renderer";
 
 function PostView({ html }: { html: string }) {
-  return <StaticRenderer content={html} sanitize />;
+  return <StaticRenderer content={html} />;
 }
 ```
 
 ### Sanitizing HTML
 
-HTML strings are inserted with `dangerouslySetInnerHTML`. If the HTML can come
-from users (comments, posts, anything stored from a client), pass `sanitize`
-to prevent stored XSS:
+HTML strings are inserted with `dangerouslySetInnerHTML`, so `StaticRenderer`
+runs them through the built-in sanitizer by default. That prevents stored XSS
+when the HTML comes from users (comments, posts, anything stored from a
+client). You don't need to pass anything:
 
 ```tsx
-<StaticRenderer content={html} sanitize />
+<StaticRenderer content={html} />
 ```
 
 The built-in sanitizer works on the server and in the browser (it doesn't need
@@ -155,9 +156,9 @@ const sanitize = (html: string) =>
 The built-in sanitizer is also exported as `sanitizeHtml` if you need it
 outside the component.
 
-In development, `StaticRenderer` logs a one-time warning when it renders an
-HTML string without `sanitize`. If the HTML is trusted (for example, written
-only by your own team), pass `sanitize={false}` to silence it.
+If the HTML is trusted (for example, written only by your own team) and uses
+markup the allowlist drops, pass `sanitize={false}` to render it as-is. Never
+do this for HTML that users can write.
 
 ### JSON document
 
@@ -304,20 +305,42 @@ that wraps the image in a figure with a caption.
 > (`ReactNodeViewRenderer`) don't work outside a live editor; use `nodeMapping`
 > instead.
 
+### Syntax highlighting
+
+Code blocks look like the editor's [Code Block](/docs/extensions/code-block): the muted theme background, the mono font, and `data-wrap` for soft wrapping. The editor colors code while you type, and those colors aren't part of the saved content. To color it in the renderer as well, pass a [Shiki](https://shiki.style) highlighter with the `github-light` and `github-dark` themes and the languages your posts use:
+
+```tsx
+import { StaticRenderer } from "@/components/static-renderer";
+import { createHighlighter } from "shiki";
+
+const highlighter = await createHighlighter({
+  langs: ["typescript", "tsx", "bash"],
+  themes: ["github-light", "github-dark"],
+});
+
+export default async function PostView({ html }: { html: string }) {
+  return <StaticRenderer content={html} highlighter={highlighter} sanitize />;
+}
+```
+
+Create the highlighter once and reuse it. `StaticRenderer` itself doesn't load Shiki, so it stays synchronous and works in server components. In a client component, create the highlighter in an effect and render without it until it's ready. Code in a language the highlighter hasn't loaded renders as plain text. In HTML mode, highlighting runs after sanitizing. In JSON mode it replaces the `codeBlock` rendering, unless you pass your own `nodeMapping.codeBlock`.
+
 ## Props
 
 `StaticRenderer` renders a wrapper with the `rte-static-renderer` class. It
 accepts the usual `HTMLAttributes` plus:
 
-| Prop                  | Type                                                          | Default | Description                                                                                      |
-| --------------------- | ------------------------------------------------------------- | ------- | ------------------------------------------------------------------------------------------------ |
-| `content`             | `string \| JSONContent \| Node`                               | -       | HTML from `editor.getHTML()`, or a ProseMirror JSON document                                     |
-| `as`                  | `ElementType`                                                 | `"div"` | Root element to render                                                                           |
-| `className`           | `string`                                                      | -       | Merged with the wrapper class via `tailwind-merge`                                               |
-| `extensions`          | `Extensions`                                                  | -       | Tiptap extensions used to render JSON content (JSON mode only)                                   |
-| `staticEditorOptions` | `StaticEditorOptions`                                         | -       | Editor-level options applied while rendering JSON                                                |
-| `options`             | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>` | -       | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes                              |
-| `sanitize`            | `boolean \| (html: string) => string`                         | -       | Sanitize HTML strings with the built-in allowlist (`true`) or your own function (HTML mode only) |
+| Prop                  | Type                                                          | Default   | Description                                                                                                                               |
+| --------------------- | ------------------------------------------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `content`             | `string \| JSONContent \| Node`                               | -         | HTML from `editor.getHTML()`, or a ProseMirror JSON document                                                                              |
+| `as`                  | `ElementType`                                                 | `"div"`   | Root element to render                                                                                                                    |
+| `className`           | `string`                                                      | -         | Merged with the wrapper class via `tailwind-merge`                                                                                        |
+| `extensions`          | `Extensions`                                                  | -         | Tiptap extensions used to render JSON content (JSON mode only)                                                                            |
+| `staticEditorOptions` | `StaticEditorOptions`                                         | -         | Editor-level options applied while rendering JSON                                                                                         |
+| `options`             | `Partial<TiptapStaticRendererOptions<ReactNode, Mark, Node>>` | -         | `nodeMapping`, `markMapping`, `unhandledNode`, ... for custom nodes                                                                       |
+| `sanitize`            | `boolean \| (html: string) => string`                         | `true`    | Sanitize HTML strings with the built-in allowlist (`true`), your own function, or not at all (`false`, trusted HTML only). HTML mode only |
+| `preset`              | `"block" \| "document"`                                       | `"block"` | [Content preset](/docs/styling#content-presets). Use `"document"` for `RichTextEditor` output                                             |
+| `highlighter`         | `CodeHighlighter` (a Shiki highlighter)                       | -         | Colors code blocks with the `github-light` / `github-dark` themes. See [Syntax highlighting](#syntax-highlighting)                        |
 
 ## Styling
 
@@ -327,23 +350,16 @@ automatically.
 
 ### Supported output
 
-The stylesheet covers every block element the editors serialize:
+The renderer's element gets the `rte-static-renderer` and `editorcn-content` classes and a `data-preset` attribute. Document content is styled by the [content preset](/docs/styling#content-presets) (`"block"` by default, `"document"` for `RichTextEditor` output), and the renderer's own stylesheet adds the nodes only it handles:
 
-| Content             | Selector                                                     |
-| ------------------- | ------------------------------------------------------------ |
-| Headings            | `.rte-static-renderer h1` – `h6`                             |
-| Paragraphs          | `.rte-static-renderer p`                                     |
-| Lists               | `.rte-static-renderer ul`, `ol`, `li`                        |
-| Blockquote          | `.rte-static-renderer blockquote`                            |
-| Inline code         | `.rte-static-renderer code`                                  |
-| Code blocks         | `.rte-static-renderer pre`, `pre code`                       |
-| Syntax highlighting | `.rte-static-renderer pre .hljs-*` (lowlight / highlight.js) |
-| Horizontal rule     | `.rte-static-renderer hr`                                    |
-| Links               | `.rte-static-renderer a`                                     |
-| Images              | `.rte-static-renderer img`                                   |
-| Tables              | `.rte-static-renderer table`, `th`, `td`, `.tableWrapper`    |
-| Task lists          | `.rte-static-renderer ul[data-type="taskList"]`              |
-| Embeds (toolbar)    | `.rte-static-renderer div[data-type="youtube" / "twitter"]`  |
+| Content                                                                                  | Selector                                                                     |
+| ---------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| Headings, paragraphs, lists, blockquotes, code, rules, links, images, tables, task lists | `.editorcn-content[data-preset="block"] h1`, `p`, `ul`, ...                  |
+| Code blocks (Shiki colors with `highlighter`)                                            | `.rte-static-renderer pre`, `span[style]` (`--shiki-light` / `--shiki-dark`) |
+| Syntax highlighting                                                                      | `.rte-static-renderer pre .hljs-*` (lowlight / highlight.js)                 |
+| Callouts                                                                                 | `.rte-static-renderer div[data-type="callout"]`                              |
+| Toggles                                                                                  | `.rte-static-renderer details`                                               |
+| Embeds (toolbar)                                                                         | `.rte-static-renderer div[data-type="youtube" / "twitter"]`                  |
 
 YouTube and Twitter embeds are serialized as empty `<div>`s carrying
 `data-type`, `data-src` / `data-tweet-id` attributes, which render as 16:9
@@ -352,7 +368,7 @@ placeholder cards. To show the live media in JSON mode, provide a
 
 ### Scoping overrides
 
-Wrap the renderer in a container and scope your overrides:
+Wrap the renderer in a container and scope your overrides. Include `.editorcn-content` in content selectors so they're more specific than the preset:
 
 ```css
 .my-post {
@@ -360,14 +376,14 @@ Wrap the renderer in a container and scope your overrides:
   --primary: oklch(0.7 0.25 150);
 }
 
-.my-post .rte-static-renderer p {
+.my-post .editorcn-content p {
   line-height: 1.8;
 }
 ```
 
 ## Without the component
 
-Prefer plain HTML? Add the `rte-static-renderer` class yourself, and run
+Prefer plain HTML? Add the `rte-static-renderer` and `editorcn-content` classes and a `data-preset` attribute yourself, and run
 user-written HTML through `sanitizeHtml` first:
 
 ```tsx
@@ -376,7 +392,8 @@ import { sanitizeHtml } from "@editorcn/static-renderer";
 function RenderContent({ html }: { html: string }) {
   return (
     <div
-      className="rte-static-renderer"
+      className="rte-static-renderer editorcn-content"
+      data-preset="block"
       dangerouslySetInnerHTML={{ __html: sanitizeHtml(html) }}
     />
   );

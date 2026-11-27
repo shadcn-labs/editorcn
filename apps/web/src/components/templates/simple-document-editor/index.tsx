@@ -23,7 +23,7 @@ import { TextStyle } from "@tiptap/extension-text-style";
 import { useEditor, useEditorState } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { ChevronRight, FileText } from "lucide-react";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -44,9 +44,8 @@ import "@editorcn/editor/style.css";
 import "@editorcn/extensions/code-block/style.css";
 import "@editorcn/extensions/image-placeholder/style.css";
 import "@editorcn/extensions/table/style.css";
-import "@editorcn/extensions/ui/style.css";
 
-export const SimpleDocumentEditor = ({
+const SimpleDocumentEditorInner = ({
   className,
   collaborators = SAMPLE_COLLABORATORS,
   initialContent = SAMPLE_CONTENT,
@@ -63,7 +62,6 @@ export const SimpleDocumentEditor = ({
     extensions: [
       StarterKit.configure({
         codeBlock: false,
-        gapcursor: false,
         heading: { levels: [1, 2, 3] },
         link: false,
       }),
@@ -181,5 +179,13 @@ export const SimpleDocumentEditor = ({
     </div>
   );
 };
+
+// Tiptap's useEditor reads Math.random(), which Next.js `cacheComponents`
+// rejects during prerender unless the component sits under a Suspense boundary.
+export const SimpleDocumentEditor = (props: SimpleDocumentEditorProps) => (
+  <Suspense fallback={null}>
+    <SimpleDocumentEditorInner {...props} />
+  </Suspense>
+);
 
 export type { DocumentCollaborator, SimpleDocumentEditorProps } from "./types";

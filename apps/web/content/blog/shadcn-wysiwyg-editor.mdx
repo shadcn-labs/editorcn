@@ -39,7 +39,7 @@ editorcn covers all four. Like shadcn/ui, the CLI copies the source into your pr
 ```json title="components.json"
 {
   "registries": {
-    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+    "@editorcn": "https://www.rtecn.space/r/styles/{style}/{name}.json"
   }
 }
 ```
@@ -66,7 +66,6 @@ import "@/components/editor/style.css";
 
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { TextAlign } from "@tiptap/extension-text-align";
-import { Underline } from "@tiptap/extension-underline";
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 
@@ -77,8 +76,7 @@ export function WysiwygEditor() {
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,
     extensions: [
-      StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
-      Underline,
+      StarterKit.configure({ heading: { levels: [1, 2, 3] }, link: false }),
       Link,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
       Placeholder.configure({ placeholder: "Start writing..." }),
@@ -132,10 +130,10 @@ export function WysiwygEditor() {
 }
 ```
 
-`Underline` and `TextAlign` aren't part of StarterKit, so install them:
+`TextAlign` isn't part of StarterKit, so install it:
 
 ```bash
-npm install @tiptap/extension-underline @tiptap/extension-text-align
+npm install @tiptap/extension-text-align
 ```
 
 In Next.js, keep `"use client"` at the top and `immediatelyRender: false` in the options. Together they stop Tiptap from rendering on the server and avoid hydration mismatches.
@@ -173,7 +171,7 @@ It shows bold, italic, underline, strikethrough, and code. If you register `@tip
 Text pasted from Google Docs, Notion, or Word brings inline fonts, colors, and empty paragraphs that clash with your theme. The [Paste Cleanup](/docs/extensions/paste-cleanup) extension removes them and keeps the formatting that matters: bold, italic, links, and lists.
 
 ```bash
-npx shadcn@latest add "https://editorcn.vercel.app/r/paste-cleanup.json"
+npx shadcn@latest add "https://www.rtecn.space/r/paste-cleanup.json"
 ```
 
 ```tsx
@@ -206,7 +204,6 @@ npx shadcn@latest add @editorcn/static-renderer
 
 ```tsx title="app/posts/[id]/page.tsx"
 import { TextAlign } from "@tiptap/extension-text-align";
-import { Underline } from "@tiptap/extension-underline";
 import { StarterKit } from "@tiptap/starter-kit";
 
 import { Link } from "@/components/editor";
@@ -214,8 +211,7 @@ import { StaticRenderer } from "@/components/static-renderer";
 import "@/components/static-renderer/style.css";
 
 const extensions = [
-  StarterKit,
-  Underline,
+  StarterKit.configure({ link: false }),
   Link,
   TextAlign.configure({ types: ["heading", "paragraph"] }),
 ];

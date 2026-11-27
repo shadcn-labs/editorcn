@@ -1,6 +1,6 @@
 # @editorcn/block-editor
 
-A **Notion-style** block-type rich text editor built on [Tiptap](https://tiptap.dev/) with shadcn/ui design tokens. Part of the [editorcn](https://editorcn.vercel.app) editor suite.
+A **Notion-style** block-type rich text editor built on [Tiptap](https://tiptap.dev/) with shadcn/ui design tokens. Part of the [editorcn](https://www.rtecn.space) editor suite.
 
 ## Features
 
@@ -22,6 +22,15 @@ A **Notion-style** block-type rich text editor built on [Tiptap](https://tiptap.
 npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link lucide-react
 ```
 
+Then, in the CSS file that imports `tailwindcss`, import the theme and add the package to Tailwind's sources (the path is relative to that file):
+
+```css
+@import "@editorcn/block-editor/theme.css";
+@source "../node_modules/@editorcn/block-editor/dist";
+```
+
+The chrome is styled with Tailwind classes, which Tailwind doesn't scan in `node_modules` by default, and the theme holds the menu animations.
+
 > **Tiptap v3 required.** `@editorcn/block-editor` is built against Tiptap **v3**. Make sure your `@tiptap/*` packages are on v3, and import `BubbleMenu`/`FloatingMenu` from `@tiptap/react/menus` (not the `@tiptap/react` root) if you use them directly.
 
 ### shadcn registry
@@ -35,7 +44,7 @@ Make sure your `components.json` includes the editorcn registry:
 ```json
 {
   "registries": {
-    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+    "@editorcn": "https://www.rtecn.space/r/{name}.json"
   }
 }
 ```
@@ -48,7 +57,6 @@ Make sure your `components.json` includes the editorcn registry:
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { Placeholder } from "@tiptap/extension-placeholder";
-import { Underline } from "@tiptap/extension-underline";
 import { BlockEditor } from "@editorcn/block-editor";
 import "@editorcn/block-editor/style.css";
 
@@ -57,7 +65,6 @@ export function MyEditor() {
     extensions: [
       StarterKit.configure({ heading: { levels: [1, 2, 3] } }),
       Placeholder.configure({ placeholder: "Type / for commands..." }),
-      Underline,
     ],
   });
 
@@ -67,7 +74,7 @@ export function MyEditor() {
 
 ## Documentation
 
-Full API reference at [editorcn.vercel.app/docs/block-editor](https://editorcn.vercel.app/docs/block-editor).
+Full API reference at [www.rtecn.space/docs/block-editor](https://www.rtecn.space/docs/block-editor).
 
 ## License
 

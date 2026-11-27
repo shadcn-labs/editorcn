@@ -5,7 +5,7 @@ import { ReactRenderer } from "@tiptap/react";
 import type { SuggestionOptions } from "@tiptap/suggestion";
 import { createElement } from "react";
 
-import { DEFAULT_ICONS, HeadingIcon } from "../../icons";
+import { HeadingIcon } from "../../icons";
 import { chainFocus } from "../../lib/commands";
 import type { SlashCommandSuggestionItem } from "./slash-command";
 import SuggestionList from "./suggestion-list";
@@ -28,7 +28,6 @@ export const defaultSlashCommandItems: SlashCommandSuggestionItem[] = [
         .run();
     },
     description: "Just start typing with plain text.",
-    icon: DEFAULT_ICONS.slashTextIcon,
     id: "text",
     keywords: ["p", "paragraph"],
     title: "Text",
@@ -77,7 +76,6 @@ export const defaultSlashCommandItems: SlashCommandSuggestionItem[] = [
       chainFocus(editor).deleteRange(range).toggleBulletList().run();
     },
     description: "Create a simple bullet list.",
-    icon: DEFAULT_ICONS.slashBulletListIcon,
     id: "bulletList",
     keywords: ["unordered", "list", "bullet"],
     title: "Bullet List",
@@ -87,7 +85,6 @@ export const defaultSlashCommandItems: SlashCommandSuggestionItem[] = [
       chainFocus(editor).deleteRange(range).toggleOrderedList().run();
     },
     description: "Create a list with numbering.",
-    icon: DEFAULT_ICONS.slashOrderedListIcon,
     id: "orderedList",
     keywords: ["ordered", "list"],
     title: "Numbered List",
@@ -97,7 +94,6 @@ export const defaultSlashCommandItems: SlashCommandSuggestionItem[] = [
       chainFocus(editor).deleteRange(range).toggleTaskList().run();
     },
     description: "Create a task list with checkboxes.",
-    icon: DEFAULT_ICONS.slashTaskListIcon,
     id: "taskList",
     keywords: ["task", "todo", "checkbox"],
     title: "Task List",
@@ -110,7 +106,6 @@ export const defaultSlashCommandItems: SlashCommandSuggestionItem[] = [
         .toggleBlockquote()
         .run(),
     description: "Capture a quote.",
-    icon: DEFAULT_ICONS.slashBlockquoteIcon,
     id: "blockquote",
     keywords: ["blockquote"],
     title: "Quote",
@@ -122,7 +117,6 @@ export const defaultSlashCommandItems: SlashCommandSuggestionItem[] = [
         .toggleCodeBlock({ language: "plaintext" })
         .run(),
     description: "Capture a code snippet.",
-    icon: DEFAULT_ICONS.slashCodeBlockIcon,
     id: "codeBlock",
     keywords: ["codeblock"],
     title: "Code",
@@ -131,7 +125,6 @@ export const defaultSlashCommandItems: SlashCommandSuggestionItem[] = [
     command: ({ editor, range }) =>
       chainFocus(editor).deleteRange(range).setHorizontalRule().run(),
     description: "Create a horizontal divider.",
-    icon: DEFAULT_ICONS.slashDividerIcon,
     id: "divider",
     keywords: ["divider"],
     title: "Divider",

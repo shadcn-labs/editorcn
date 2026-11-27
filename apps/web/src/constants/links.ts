@@ -12,9 +12,10 @@ export const LINK = {
   GITHUB: githubUrl,
   LICENSE: `${githubUrl}/blob/main/LICENSE`,
   PORTFOLIO: "https://abdullahmukadam.fun",
+  PRO: "https://pro.rtecn.space/?ref=editorcn",
+  PRO_PRICING: "https://pro.rtecn.space/pricing?ref=editorcn",
+  PRO_TEMPLATES: "https://pro.rtecn.space/docs/templates?ref=editorcn",
   SHADCN_MCP_DOCS: "https://ui.shadcn.com/docs/mcp",
   SPONSOR: `https://github.com/sponsors/AbdullahMukadam`,
-  TRISTACK_GITHUB: "https://github.com/AbdullahMukadam/tristack",
-  TRISTACK_NEW: `https://tristack.space/new/?ref="editorcn"`,
   X_SHADCN_LABS: "https://x.com/shadcnlabs",
 } as const;

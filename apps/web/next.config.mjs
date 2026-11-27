@@ -37,6 +37,14 @@ const nextConfig = {
         destination: "/llms.mdx/docs/:path*",
         source: "/docs/:path*.md",
       },
+      {
+        destination: "/r/styles/base-nova/:path*",
+        source: "/r/styles/base-:style/:path*",
+      },
+      {
+        destination: "/r/styles/radix-nova/:path*",
+        source: "/r/styles/:style((?!base-|aria-)[^/]+)/:path*",
+      },
     ];
   },
   transpilePackages: ["@editorcn/extensions", "@editorcn/editor"],

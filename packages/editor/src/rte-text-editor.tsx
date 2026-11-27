@@ -1,4 +1,3 @@
-import { Tooltip as TooltipPrimitive } from "@base-ui/react/tooltip";
 import { useEffect, useMemo, useState } from "react";
 
 import { BubbleMenu } from "./bubble-menu/index";
@@ -18,7 +17,11 @@ import { ControlsGroup } from "./rte-controls-group";
 import { Footer } from "./rte-footer";
 import { Toolbar } from "./rte-toolbar";
 import type { RichTextEditorProps } from "./types";
-import { Tooltip, TooltipContent, TooltipProvider } from "./ui/tooltip";
+import {
+  createTooltipHandle,
+  TooltipHost,
+  TooltipProvider,
+} from "./ui/tooltip";
 import { cn } from "./ui/utils";
 
 const RichTextEditorRoot = ({
@@ -28,6 +31,7 @@ const RichTextEditorRoot = ({
   labels,
   icons,
   variant = "default",
+  preset = "document",
   editable = true,
 }: RichTextEditorProps) => {
   const mergedLabels = useMemo(
@@ -36,7 +40,7 @@ const RichTextEditorRoot = ({
   );
 
   const mergedIcons = useMemo(() => ({ ...DEFAULT_ICONS, ...icons }), [icons]);
-  const [tooltip] = useState(() => TooltipPrimitive.createHandle<string>());
+  const [tooltip] = useState(createTooltipHandle);
 
   useEffect(() => {
     if (editor && editor.isEditable !== editable) {
@@ -51,25 +55,26 @@ const RichTextEditorRoot = ({
         editor,
         icons: mergedIcons,
         labels: mergedLabels,
+        preset,
         tooltip,
         variant,
       }}
     >
       <div
         className={cn(
-          "rte-root",
+          "rte-root relative rounded-xl border border-(--rte-hairline) bg-background [--rte-float-shadow:0_8px_30px_-12px_rgb(0_0_0/0.15)] [--rte-hairline:color-mix(in_srgb,var(--border)_60%,transparent)] [--rte-strip:color-mix(in_srgb,var(--muted)_50%,var(--background))] [transition:border-color_150ms_ease-out] [&_.rte-editor-icon]:size-4 [&_.rte-editor-icon]:shrink-0",
+          variant === "default" && "bg-(--rte-strip) p-1",
           variant !== "default" && `rte-root--${variant}`,
+          variant === "compact" &&
+            "rounded-lg data-[variant=compact]:[&_.rte-editor-icon]:size-3.5",
           className
         )}
         data-variant={variant}
       >
         <TooltipProvider>
-          {children}
-          <Tooltip handle={tooltip}>
-            {({ payload }) => (
-              <TooltipContent side="bottom">{payload as string}</TooltipContent>
-            )}
-          </Tooltip>
+          <TooltipHost handle={tooltip} side="bottom">
+            {children}
+          </TooltipHost>
         </TooltipProvider>
       </div>
     </RichTextEditorContext.Provider>

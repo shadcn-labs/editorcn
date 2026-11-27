@@ -12,6 +12,7 @@ import { DropdownMenuItem } from "../ui/dropdown-item";
 import { Popover } from "../ui/popover";
 import { PopoverContent } from "../ui/popover-content";
 import { Separator } from "../ui/separator";
+import { cn } from "../ui/utils";
 
 const GRID_INIT_SIZE = 6;
 const GRID_MAX_SIZE = 10;
@@ -80,15 +81,26 @@ export const TableToolbar = ({
 
   const state = useEditorState(
     editor,
-    (edit) => ({
-      canDeleteColumn: edit.can().deleteColumn(),
-      canDeleteRow: edit.can().deleteRow(),
-      canMerge: edit.can().mergeCells(),
-      canSplit: edit.can().splitCell(),
-      disabled: !extensionPresent(edit, "table"),
-      headerOn: edit.isActive("tableHeader"),
-      inTable: edit.isActive("table"),
-    }),
+    (edit) =>
+      extensionPresent(edit, "table")
+        ? {
+            canDeleteColumn: edit.can().deleteColumn(),
+            canDeleteRow: edit.can().deleteRow(),
+            canMerge: edit.can().mergeCells(),
+            canSplit: edit.can().splitCell(),
+            disabled: false,
+            headerOn: edit.isActive("tableHeader"),
+            inTable: edit.isActive("table"),
+          }
+        : {
+            canDeleteColumn: false,
+            canDeleteRow: false,
+            canMerge: false,
+            canSplit: false,
+            disabled: true,
+            headerOn: false,
+            inTable: false,
+          },
     shallowEqual
   ) ?? {
     canDeleteColumn: false,
@@ -228,7 +240,8 @@ export const TableToolbar = ({
         <Button
           aria-label={labels.insertTable}
           active={state.inTable}
-          className={["ext-btn--icon-sm", className].filter(Boolean).join(" ")}
+          className={className}
+          size="icon-sm"
           disabled={state.disabled}
           tooltip={labels.insertTable}
         >
@@ -236,10 +249,15 @@ export const TableToolbar = ({
         </Button>
       }
     >
-      <PopoverContent className="ext-table-toolbar-popover">
+      <PopoverContent className="ext-table-toolbar-popover flex flex-col gap-1.5 p-2">
         {state.inTable ? (
-          <div className="ext-table-grid" role="menu">
-            <p className="ext-table-toolbar-label">{labels.rows}</p>
+          <div
+            className="ext-table-grid flex min-w-44 flex-col gap-1"
+            role="menu"
+          >
+            <p className="ext-table-toolbar-label px-2 pt-1 pb-1.5 text-[0.75rem] font-medium text-muted-foreground">
+              {labels.rows}
+            </p>
             <DropdownMenuItem
               onClick={() =>
                 run(editor, (c) => c.addRowBefore(), state.disabled)
@@ -261,7 +279,9 @@ export const TableToolbar = ({
               {labels.deleteRow}
             </DropdownMenuItem>
             <Separator />
-            <p className="ext-table-toolbar-label">{labels.columns}</p>
+            <p className="ext-table-toolbar-label px-2 pt-1 pb-1.5 text-[0.75rem] font-medium text-muted-foreground">
+              {labels.columns}
+            </p>
             <DropdownMenuItem
               onClick={() =>
                 run(editor, (c) => c.addColumnBefore(), state.disabled)
@@ -290,7 +310,7 @@ export const TableToolbar = ({
                 run(editor, (c) => c.toggleHeaderRow(), state.disabled)
               }
             >
-              <span className="ext-table-toolbar-item-spacer">
+              <span className="ext-table-toolbar-item-spacer flex-1">
                 {labels.headerRow}
               </span>
               {state.headerOn ? <CheckIcon /> : null}
@@ -318,9 +338,9 @@ export const TableToolbar = ({
             </DropdownMenuItem>
           </div>
         ) : (
-          <div className="ext-table-grid-popover">
+          <div className="ext-table-grid-popover flex flex-col gap-1.5">
             <div
-              className="ext-table-grid ext-table-grid--picker"
+              className="ext-table-grid ext-table-grid--picker flex min-w-44 flex-col gap-1"
               onPointerCancel={onPointerCancel}
               onPointerDown={onPointerDown}
               onPointerMove={onPointerMove}
@@ -328,17 +348,18 @@ export const TableToolbar = ({
               style={{ touchAction: "none" }}
             >
               {createRange(gridSize.rows).map((row) => (
-                <div className="ext-table-grid-row" key={`table-row-${row}`}>
+                <div
+                  className="ext-table-grid-row flex gap-1"
+                  key={`table-row-${row}`}
+                >
                   {createRange(gridSize.cols).map((col) => (
                     <div
-                      className={[
-                        "ext-table-grid-cell",
+                      className={cn(
+                        "ext-table-grid-cell size-4 cursor-pointer rounded-[2px] border border-border [transition:background-color_100ms_ease-out,border-color_100ms_ease-out]",
                         col <= selected.cols &&
                           row <= selected.rows &&
-                          "ext-table-grid-cell--selected",
-                      ]
-                        .filter(Boolean)
-                        .join(" ")}
+                          "ext-table-grid-cell--selected border-primary bg-primary"
+                      )}
                       data-cols={col}
                       data-rows={row}
                       data-table-grid-cell
@@ -348,7 +369,7 @@ export const TableToolbar = ({
                 </div>
               ))}
             </div>
-            <div className="ext-table-grid-result">
+            <div className="ext-table-grid-result rounded-sm bg-muted px-2 py-1 text-center text-[0.75rem] font-medium text-muted-foreground">
               {selected.rows} x {selected.cols}
             </div>
           </div>

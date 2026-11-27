@@ -11,9 +11,9 @@ Default nodes and marks, GFM tables, task lists, images, and the editorcn [Menti
 <Callout>
   Installed Mention or the editor before this release? Re-add them so their
   markdown rules are included: `npx shadcn@latest add
-  "https://editorcn.vercel.app/r/mention.json"
-  "https://editorcn.vercel.app/r/editor.json"`. Without them, mentions and
-  embeds are written to markdown as plain text.
+  "https://www.rtecn.space/r/mention.json"
+  "https://www.rtecn.space/r/editor.json"`. Without them, mentions and embeds
+  are written to markdown as plain text.
 </Callout>
 
 <ExtensionPreview slug="markdown" editor="toolbar" />
@@ -21,12 +21,12 @@ Default nodes and marks, GFM tables, task lists, images, and the editorcn [Menti
 ## Installation
 
 ```bash
-npx shadcn@latest add "https://editorcn.vercel.app/r/markdown.json"
+npx shadcn@latest add "https://www.rtecn.space/r/markdown.json"
 ```
 
-This installs `extensions/markdown` with its toolbar, `extensions/core/`, `extensions/ui/`, the style at `extensions/ui/style.css`, and the `@tiptap/markdown` package.
+This installs `extensions/markdown` with its toolbar, `extensions/core/`, `extensions/ui/`, the menu animations (added to the CSS file that imports `tailwindcss`), and the `@tiptap/markdown` package.
 
-To install the files manually instead, install these packages and copy the `markdown`, `core`, and `ui` folders from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src):
+To install the files manually instead, install these packages and copy the `markdown`, `core`, and `ui` folders from the [package source](https://github.com/shadcn-labs/editorcn/tree/main/packages/extensions/src). Copy the `@theme` block from `ui/theme.css` into the CSS file that imports `tailwindcss`, so the menus animate:
 
 ```bash
 npm install @tiptap/core @tiptap/react @tiptap/pm @tiptap/markdown lucide-react
@@ -73,7 +73,7 @@ editor.commands.insertContent("**bold**", { contentType: "markdown" });
 
 ### With `@editorcn/block-editor`
 
-The block editor takes the same `editor` instance, so the setup is identical:
+The block editor takes the same `editor` instance. Add `getMarkdownSlashCommandItems()` to get **Import Markdown** and **Export Markdown** in the slash menu. It takes the export file name, `document.md` by default:
 
 <ExtensionPreview slug="markdown" editor="block" />
 
@@ -83,7 +83,11 @@ const editor = useEditor({
   extensions: [
     StarterKit,
     Markdown.configure({ pasteMarkdown: true }),
-    SlashCommand.configure({ suggestion: getSlashCommandSuggestion() }),
+    SlashCommand.configure({
+      suggestion: getSlashCommandSuggestion(
+        getMarkdownSlashCommandItems("notes.md")
+      ),
+    }),
   ],
   content: markdown,
   contentType: "markdown",
@@ -104,8 +108,6 @@ The button is disabled when the `Markdown` extension isn't added to the editor.
 
 ```tsx
 import { MarkdownToolbar } from "@/components/extensions/markdown/toolbar";
-
-import "@/components/extensions/ui/style.css";
 
 <RichTextEditor.Toolbar>
   <RichTextEditor.ControlsGroup>
@@ -173,7 +175,7 @@ const json = new MarkdownManager({ extensions }).parse(markdown);
 
 ### `importMarkdownFile`, `downloadMarkdown`, `copyMarkdown`
 
-The functions behind the toolbar. Use them to build your own menu, such as slash commands in the block editor:
+The functions behind the toolbar and the slash items. Use them to build your own menu:
 
 ```tsx
 importMarkdownFile(editor);

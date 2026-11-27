@@ -2,7 +2,7 @@ name: CI
 
 on:
   pull_request:
-    branches: ["*"]
+    branches: ["**"]
   push:
     branches: ["main"]
   merge_group:
@@ -53,3 +53,24 @@ jobs:
 
       - name: Typecheck
         run: pnpm typecheck
+
+  registry:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup
+        uses: ./.github/actions/setup
+
+      - name: Build and verify the registry
+        run: pnpm build:registry
+
+      - name: Check the committed registry is up to date
+        run: |
+          git diff --exit-code -- apps/web/public/r
+          untracked=$(git ls-files --others --exclude-standard -- apps/web/public/r)
+          if [ -n "$untracked" ]; then
+            echo "Generated registry files are not committed:"
+            echo "$untracked"
+            exit 1
+          fi

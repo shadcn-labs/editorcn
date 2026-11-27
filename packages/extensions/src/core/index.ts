@@ -5,4 +5,4 @@ export { DEFAULT_EXTENSION_LABELS } from "./labels";
 export type { ExtensionLabelKey, ExtensionLabels } from "./labels";
 export { ToolbarProvider, useToolbar, useToolbarEditor } from "./context";
 export type { ToolbarContextValue, ToolbarProviderProps } from "./context";
-export type { ToolbarComponentProps } from "./types";
+export type { SlashCommandItem, ToolbarComponentProps } from "./types";

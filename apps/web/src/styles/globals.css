@@ -1,0 +1,12 @@
+@import "@editorcn/ui/globals.css";
+@import "../../../../packages/editor/src/theme.css";
+@import "../../../../packages/block-editor/src/theme.css";
+@import "../../../../packages/extensions/src/ui/theme.css";
+@import "../../../../packages/extensions/src/table/theme.css";
+
+@source "../../../../packages/editor/src";
+@source "../../../../packages/block-editor/src";
+@source "../../../../packages/extensions/src";
+@source "../../../../packages/static-renderer/src";
+@source "../../../../packages/ui/src";
+@source not "../../public/r";

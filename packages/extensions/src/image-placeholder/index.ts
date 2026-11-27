@@ -4,6 +4,7 @@ import { mergeAttributes, Node, ReactNodeViewRenderer } from "@tiptap/react";
 import { ImagePlaceholderNode } from "./image-placeholder-node";
 
 export { ResizableImage } from "./image";
+export { imagePlaceholderSlashCommandItem } from "./slash-command-item";
 
 export interface ImagePlaceholderOptions {
   HTMLAttributes: Record<string, unknown>;

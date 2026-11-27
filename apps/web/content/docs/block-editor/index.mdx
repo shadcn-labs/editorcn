@@ -15,10 +15,19 @@ npx shadcn@latest add @editorcn/block-editor
 
 This copies the component source directly into your project, so you can customize it freely.
 
+<Callout title="Check your iconLibrary">
+  The icons are written for the `iconLibrary` in your `components.json`, which
+  must be `lucide`, `tabler`, `hugeicons`, `phosphor` or `remixicon`. Older
+  projects with `"iconLibrary": "radix"` get a build error about
+  `./icon-placeholder`. Change it to `"lucide"` before installing, and install
+  `lucide-react` if your project doesn't have it (the CLI doesn't install icon
+  packages). See [Icon library](#icon-library).
+</Callout>
+
 **Or install via npm/pnpm:**
 
 ```bash
-npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react lucide-react @tiptap/extension-text-style @tiptap/extension-color @tiptap/extension-highlight
+npm install @editorcn/block-editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/suggestion @tiptap/extension-drag-handle-react
 ```
 
 After installation, import the editor styles at the root of your application:
@@ -47,13 +56,52 @@ import type { BlockEditorIcons } from "@editorcn/block-editor";
 import "@editorcn/block-editor/style.css";
 ```
 
-## Install Extensions
+Then add the package to Tailwind's sources in the CSS file that imports `tailwindcss` (the path is relative to that file). The block editor's chrome is styled with Tailwind classes, and Tailwind doesn't scan `node_modules` by default:
 
-For demo, we will use these extensions:
+```css
+@source "../node_modules/@editorcn/block-editor/dist";
+```
+
+## Full setup
+
+To start from the complete block editor on the [homepage](/), install the **Full Block Editor**. It brings the block editor, a slash menu with images, tables, callouts and Markdown import and export, and the [Callout](/docs/extensions/callout), [Code Block](/docs/extensions/code-block), [Image Placeholder](/docs/extensions/image-placeholder), [Markdown](/docs/extensions/markdown), [Mention](/docs/extensions/mention), [Paste Cleanup](/docs/extensions/paste-cleanup) and [Table](/docs/extensions/table) extensions in one command:
 
 ```bash
-npm install @tiptap/extension-placeholder @tiptap/extension-underline @tiptap/extension-task-item @tiptap/extension-task-list @tiptap/extension-image @tiptap/extension-table @tiptap/extension-table-row @tiptap/extension-table-cell @tiptap/extension-table-header
+npx shadcn@latest add "https://www.rtecn.space/r/full-block-editor.json"
 ```
+
+It lands in `components/templates/full-block-editor/`:
+
+```tsx
+import { FullBlockEditor } from "@/components/templates/full-block-editor";
+
+export const Page = ({ doc }) => (
+  <FullBlockEditor
+    content={doc.content}
+    onChange={(json) => saveDocument(doc.id, json)}
+    searchUsers={(query) => fetchUsers(query)}
+  />
+);
+```
+
+| Prop               | Type       | Description                                            |
+| ------------------ | ---------- | ------------------------------------------------------ |
+| `content`          | `Content`  | Tiptap JSON or HTML to start with                      |
+| `onChange`         | `function` | Gets the document as Tiptap JSON                       |
+| `searchUsers`      | `function` | Gets the `@` query, returns `MentionItem[]` (async ok) |
+| `placeholder`      | `string`   | Placeholder for an empty document                      |
+| `markdownFilename` | `string`   | File name for Markdown export, default `document.md`   |
+| `className`        | `string`   | Outer container classes                                |
+
+## Install extensions
+
+The usage example below uses the editorcn [Table](/docs/extensions/table) and [Image Placeholder](/docs/extensions/image-placeholder) extensions:
+
+```bash
+npx shadcn@latest add @editorcn/table @editorcn/image-placeholder
+```
+
+The Tiptap extensions it also uses (placeholder, task lists) come with `@editorcn/block-editor`. With npm, install `@tiptap/extension-placeholder @tiptap/extension-task-list @tiptap/extension-task-item` yourself. The editorcn extensions aren't published to npm, so add them with the command above either way.
 
 ## Usage
 
@@ -61,55 +109,28 @@ npm install @tiptap/extension-placeholder @tiptap/extension-underline @tiptap/ex
 "use client";
 
 import { useEditor } from "@tiptap/react";
+import { Suspense } from "react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { Placeholder } from "@tiptap/extension-placeholder";
-import { Underline } from "@tiptap/extension-underline";
 import { TaskList } from "@tiptap/extension-task-list";
 import { TaskItem } from "@tiptap/extension-task-item";
-import { Image } from "@tiptap/extension-image";
-import { Table } from "@tiptap/extension-table";
-import { TableRow } from "@tiptap/extension-table-row";
-import { TableCell } from "@tiptap/extension-table-cell";
-import { TableHeader } from "@tiptap/extension-table-header";
 import {
   BlockEditor,
   SlashCommand,
-  defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@/components/block-editor";
-import type { SlashCommandSuggestionItem } from "@/components/block-editor";
+import {
+  ImagePlaceholder,
+  ResizableImage,
+  imagePlaceholderSlashCommandItem,
+} from "@/components/extensions/image-placeholder";
+import { Table, tableSlashCommandItem } from "@/components/extensions/table";
+import { TableHoverOverlay } from "@/components/extensions/table/table-hover-overlay";
 import "@/components/block-editor/style.css";
+import "@/components/extensions/image-placeholder/style.css";
+import "@/components/extensions/table/style.css";
 
-const myItems: SlashCommandSuggestionItem[] = [
-  ...defaultSlashCommandItems,
-  {
-    id: "image",
-    title: "Image",
-    description: "Insert an image.",
-    keywords: ["image", "img", "picture", "photo"],
-    command: ({ editor, range }) => {
-      const url = window.prompt("Enter image URL"); // Replace with your own dialog component
-      if (!url) return;
-      editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
-    },
-  },
-  {
-    id: "table",
-    title: "Table",
-    description: "Insert a table.",
-    keywords: ["table", "grid"],
-    command: ({ editor, range }) => {
-      editor
-        .chain()
-        .focus()
-        .deleteRange(range)
-        .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-        .run();
-    },
-  },
-];
-
-function MyBlockEditor() {
+function MyBlockEditorInner() {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [
@@ -117,23 +138,49 @@ function MyBlockEditor() {
         heading: { levels: [1, 2, 3] },
       }),
       Placeholder.configure({ placeholder: "Type / for commands..." }),
-      Underline,
       TaskList,
       TaskItem.configure({ nested: true }),
       Table,
-      TableRow,
-      TableCell,
-      TableHeader,
-      Image,
+      ResizableImage,
+      ImagePlaceholder,
       SlashCommand.configure({
-        suggestion: getSlashCommandSuggestion(myItems),
+        suggestion: getSlashCommandSuggestion([
+          imagePlaceholderSlashCommandItem,
+          tableSlashCommandItem,
+        ]),
       }),
     ],
   });
 
-  return <BlockEditor editor={editor} />;
+  return (
+    <div className="relative mx-auto w-full max-w-3xl px-4">
+      <BlockEditor editor={editor} />
+      <TableHoverOverlay editor={editor} />
+    </div>
+  );
+}
+
+// Tiptap's useEditor reads Math.random(), which Next.js `cacheComponents`
+// rejects during prerender. The Suspense boundary keeps the build working.
+export function MyBlockEditor() {
+  return (
+    <Suspense fallback={null}>
+      <MyBlockEditorInner />
+    </Suspense>
+  );
 }
 ```
+
+<Callout title="Next.js with cacheComponents">
+  Tiptap's `useEditor` reads `Math.random()`, which Next.js `cacheComponents`
+  (on by default in new Next.js 16 apps) rejects during prerender. That's why
+  the example renders the editor inside a `<Suspense>` boundary. Keep the
+  boundary when you move the editor into your own components.
+</Callout>
+
+Each editorcn extension exports a ready-made slash item (`imagePlaceholderSlashCommandItem`, `tableSlashCommandItem`, `calloutSlashCommandItem`, `toggleSlashCommandItem`, and `getMarkdownSlashCommandItems()` for Markdown import and export). Items you pass are merged with the built-in ones, so you only list the extras.
+
+The block editor fills its container, and its drag handles sit in a gutter on the left. Put it in a container with a max width and some side padding, such as `mx-auto w-full max-w-3xl px-4`, so the handles don't land on the edge of the window.
 
 ## BlockEditor (Root)
 
@@ -146,12 +193,13 @@ The root wrapper that provides editor context. Renders the full editor UI by def
 | `editor`    | `Editor \| null`             | —                             | The Tiptap editor instance                                            |
 | `children`  | `ReactNode`                  | —                             | Optional custom children to replace the default layout                |
 | `className` | `string`                     | —                             | Additional CSS classes                                                |
+| `preset`    | `"block" \| "document"`      | `"block"`                     | [Content preset](/docs/styling#content-presets)                       |
 | `labels`    | `Partial<BlockEditorLabels>` | `DEFAULT_BLOCK_EDITOR_LABELS` | Override default slash command labels                                 |
 | `icons`     | `Partial<BlockEditorIcons>`  | `DEFAULT_ICONS`               | Override any built-in icon (slash commands, bubble menu, drag handle) |
 
 ### Icons
 
-By default all icons come from **lucide-react**, which inherits your theme's colors automatically (they render with `currentColor`). The block editor declares `lucide-react` as a dependency, so it is installed automatically via the shadcn registry or alongside the npm package.
+The default icons come from the `iconLibrary` in your `components.json` (see [Icon library](#icon-library)) and inherit your theme's colors (they render with `currentColor`). The npm package uses `lucide-react`.
 
 ### Labels
 
@@ -231,19 +279,10 @@ Type `/` to open the slash command menu. The menu shows available block types. N
 ### Custom slash command items
 
 ```tsx
-import {
-  BlockEditor,
-  SlashCommand,
-  defaultSlashCommandItems,
-  getSlashCommandSuggestion,
-} from "@/components/block-editor";
-import type {
-  SlashCommandSuggestionItem,
-  OnCommandSelect,
-} from "@/components/block-editor";
+import { getSlashCommandSuggestion } from "@/components/block-editor";
+import type { SlashCommandSuggestionItem } from "@/components/block-editor";
 
 const myItems: SlashCommandSuggestionItem[] = [
-  ...defaultSlashCommandItems,
   {
     id: "custom",
     title: "Custom",
@@ -256,11 +295,11 @@ const myItems: SlashCommandSuggestionItem[] = [
 ];
 ```
 
-Pass the custom items array to `getSlashCommandSuggestion(myItems)`. Items with the same `id` as a default item will override it.
+Pass the array to `getSlashCommandSuggestion(myItems)`. Your items are shown first, followed by the built-in ones, so you don't need to spread `defaultSlashCommandItems`. An item with the same `id` as a built-in one replaces it.
 
 ### Custom icons
 
-All default icons come from **lucide-react**. Override any built-in icon via the `icons` prop. All icons accept a `ReactNode`, so you can use inline SVGs, emoji, or any icon library.
+The default icons follow your `iconLibrary` (see [Icon library](#icon-library)). Override any built-in icon via the `icons` prop. All icons accept a `ReactNode`, so you can use inline SVGs, emoji, or any icon library.
 
 ```tsx
 import { BlockEditor, DEFAULT_ICONS } from "@/components/block-editor";
@@ -280,59 +319,41 @@ import type { BlockEditorIcons } from "@/components/block-editor";
 Each slash command item also accepts an `icon` property. Override individual items to change their icon without replacing all defaults:
 
 ```tsx
-import {
-  defaultSlashCommandItems,
-  getSlashCommandSuggestion,
-} from "@/components/block-editor";
-import type { SlashCommandSuggestionItem } from "@/components/block-editor";
+import { getSlashCommandSuggestion } from "@/components/block-editor";
+import { imagePlaceholderSlashCommandItem } from "@/components/extensions/image-placeholder";
 
-const myItems: SlashCommandSuggestionItem[] = [
-  ...defaultSlashCommandItems,
-  {
-    id: "image",
-    title: "Image",
-    description: "Insert an image.",
-    keywords: ["image", "img", "picture", "photo"],
-    icon: <ImageIcon />, // Your custom icon
-    command: ({ editor, range }) => {
-      const url = window.prompt("Enter image URL");
-      if (!url) return;
-      editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
-    },
-  },
-];
+const suggestion = getSlashCommandSuggestion([
+  { ...imagePlaceholderSlashCommandItem, icon: <MyImageIcon /> },
+]);
 ```
 
 ### Icon library
 
-The default icons ship with **lucide-react**. If your `components.json` uses a different `iconLibrary`, install the matching icon set after the block editor — it overwrites `components/block-editor/icons.tsx` and installs only that library's package:
+The icons follow the `iconLibrary` in your `components.json`. `block-editor/icons.tsx` is written with shadcn's `IconPlaceholder`, and when you add the block editor, the shadcn CLI swaps each placeholder for the matching icon from Lucide, Tabler, HugeIcons, Phosphor or Remix Icon. This needs shadcn CLI 4.7.0 or newer, which `npx shadcn@latest` always is.
 
-| `iconLibrary`      | Install                                                                                   |
-| ------------------ | ----------------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                                |
-| `phosphor`         | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-remixicon.json"` |
+`iconLibrary` has to be one of the five libraries above. Older projects may still have `"iconLibrary": "radix"`, which the CLI skips, so the placeholders stay in the file and the build fails on the `./icon-placeholder` import. Set it to `"lucide"` (or another supported library) before adding the block editor.
 
-Order matters — add the block editor first, then the icon set:
+The CLI doesn't install the icon package. `shadcn init` installs it for your `iconLibrary`, so it's usually there already. If not, add it:
 
-```bash
-npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor.json"
-npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-phosphor.json"
-```
+| `iconLibrary` | Package                                             |
+| ------------- | --------------------------------------------------- |
+| `lucide`      | `lucide-react`                                      |
+| `tabler`      | `@tabler/icons-react`                               |
+| `hugeicons`   | `@hugeicons/react` and `@hugeicons/core-free-icons` |
+| `phosphor`    | `@phosphor-icons/react`                             |
+| `remixicon`   | `@remixicon/react`                                  |
 
-Each set covers every slash menu, bubble menu, and drag handle icon, and reuses the shared language icons. Once installed you own `icons.tsx`, so you can still hand-edit it or override individual keys with the `icons` prop.
+This covers every slash menu, bubble menu and drag handle icon, plus the add-block buttons. `icons.tsx` is yours after install, so you can still edit it or override single keys with the `icons` prop.
 
-Already installed with lucide? Migrate instead of reinstalling:
+Changed `iconLibrary` after installing? Re-add the block editor (this overwrites your edits to its files), or migrate the installed files:
 
 ```bash
 npx shadcn@latest migrate icons --from lucide --to phosphor "src/components/block-editor/**"
 ```
 
-> **npm/pnpm installs**: the icon sets are registry items, so they apply to registry installs. With npm, override the `icons` prop yourself — the prop and all icon keys are unchanged.
+The `block-editor-icons-*` items from earlier releases are gone, because the block editor itself now installs the right icons.
 
-See the [Customization docs](/docs/customization) for icon sizing and per-key overrides.
+> **npm/pnpm installs**: the npm package uses `lucide-react`. To use another library, pass your own icons through the `icons` prop.
 
 ### Language icons
 
@@ -366,90 +387,96 @@ Exported constants:
 
 **Available icon keys:**
 
-| Key                     | Used in                                                  |
-| ----------------------- | -------------------------------------------------------- |
-| `slashTextIcon`         | Slash menu                                               |
-| `slashHeadingIcon`      | Slash menu                                               |
-| `slashBulletListIcon`   | Slash menu                                               |
-| `slashOrderedListIcon`  | Slash menu                                               |
-| `slashTaskListIcon`     | Slash menu                                               |
-| `slashBlockquoteIcon`   | Slash menu                                               |
-| `slashCodeBlockIcon`    | Slash menu                                               |
-| `slashDividerIcon`      | Slash menu                                               |
-| `slashImageIcon`        | Slash menu                                               |
-| `slashTableIcon`        | Slash menu                                               |
-| `searchIcon`            | Slash menu                                               |
-| `fallbackIcon`          | Slash menu                                               |
-| `dragHandleIcon`        | Drag handle                                              |
-| `boldIcon`              | Bubble menu                                              |
-| `italicIcon`            | Bubble menu                                              |
-| `underlineIcon`         | Bubble menu                                              |
-| `strikethroughIcon`     | Bubble menu                                              |
-| `codeIcon`              | Bubble menu                                              |
-| `alignLeftIcon`         | Bubble menu                                              |
-| `alignCenterIcon`       | Bubble menu                                              |
-| `alignRightIcon`        | Bubble menu                                              |
-| `linkIcon`              | Bubble menu                                              |
-| `unlinkIcon`            | Bubble menu                                              |
-| `checkIcon`             | Bubble menu                                              |
-| `copyIcon`              | Bubble menu                                              |
-| `deleteIcon`            | Bubble menu                                              |
-| `dropdownArrowIcon`     | Bubble menu                                              |
-| `codeBlockLanguageIcon` | Code block language selector                             |
-| `languageIcons`         | Code block language selector (Record of language → icon) |
+| Key                       | Used in                                                  |
+| ------------------------- | -------------------------------------------------------- |
+| `slashTextIcon`           | Slash menu                                               |
+| `slashHeadingIcon`        | Slash menu                                               |
+| `slashBulletListIcon`     | Slash menu                                               |
+| `slashOrderedListIcon`    | Slash menu                                               |
+| `slashTaskListIcon`       | Slash menu                                               |
+| `slashBlockquoteIcon`     | Slash menu                                               |
+| `slashCodeBlockIcon`      | Slash menu                                               |
+| `slashDividerIcon`        | Slash menu                                               |
+| `slashImageIcon`          | Slash menu, Image item                                   |
+| `slashTableIcon`          | Slash menu, Table item                                   |
+| `slashCalloutIcon`        | Slash menu, Callout item                                 |
+| `slashToggleIcon`         | Slash menu, Toggle item                                  |
+| `slashImportMarkdownIcon` | Slash menu, Import Markdown item                         |
+| `slashExportMarkdownIcon` | Slash menu, Export Markdown item                         |
+| `searchIcon`              | Slash menu                                               |
+| `fallbackIcon`            | Slash menu                                               |
+| `dragHandleIcon`          | Drag handle                                              |
+| `boldIcon`                | Bubble menu                                              |
+| `italicIcon`              | Bubble menu                                              |
+| `underlineIcon`           | Bubble menu                                              |
+| `strikethroughIcon`       | Bubble menu                                              |
+| `codeIcon`                | Bubble menu                                              |
+| `alignLeftIcon`           | Bubble menu                                              |
+| `alignCenterIcon`         | Bubble menu                                              |
+| `alignRightIcon`          | Bubble menu                                              |
+| `linkIcon`                | Bubble menu                                              |
+| `unlinkIcon`              | Bubble menu                                              |
+| `checkIcon`               | Bubble menu                                              |
+| `copyIcon`                | Bubble menu                                              |
+| `deleteIcon`              | Bubble menu                                              |
+| `dropdownArrowIcon`       | Bubble menu                                              |
+| `codeBlockLanguageIcon`   | Code block language selector                             |
+| `languageIcons`           | Code block language selector (Record of language → icon) |
 
-Custom items are commonly used for commands that require additional extensions, such as **Image** and **Table**:
+Slash items without their own `icon` get one by `id` from the keys above. That covers the built-in items (except the headings, which use a per-level icon) and the items exported by the [editorcn extensions](/docs/extensions), so they follow your icon library and your `icons` overrides. Any other item without an icon gets `fallbackIcon`.
+
+### Slash items from editorcn extensions
+
+Each editorcn extension exports a slash item, so you don't have to write the command yourself. Register the extension and pass its item:
+
+| Item                               | Extension                                                 |
+| ---------------------------------- | --------------------------------------------------------- |
+| `imagePlaceholderSlashCommandItem` | [Image Placeholder](/docs/extensions/image-placeholder)   |
+| `tableSlashCommandItem`            | [Table](/docs/extensions/table)                           |
+| `calloutSlashCommandItem`          | [Callout](/docs/extensions/callout)                       |
+| `toggleSlashCommandItem`           | [Toggle](/docs/extensions/toggle)                         |
+| `getMarkdownSlashCommandItems()`   | [Markdown](/docs/extensions/markdown) (import and export) |
 
 ```tsx
-import { Image } from "@tiptap/extension-image";
-import { Table } from "@tiptap/extension-table";
-import { TableRow } from "@tiptap/extension-table-row";
-import { TableCell } from "@tiptap/extension-table-cell";
-import { TableHeader } from "@tiptap/extension-table-header";
-
-const myItems: SlashCommandSuggestionItem[] = [
-  ...defaultSlashCommandItems,
-  {
-    id: "image",
-    title: "Image",
-    description: "Insert an image.",
-    keywords: ["image", "img", "picture", "photo"],
-    command: ({ editor, range }) => {
-      const url = window.prompt("Enter image URL"); // Replace with your own dialog component
-      if (!url) return;
-      editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
-    },
-  },
-  {
-    id: "table",
-    title: "Table",
-    description: "Insert a table.",
-    keywords: ["table", "grid"],
-    command: ({ editor, range }) => {
-      editor
-        .chain()
-        .focus()
-        .deleteRange(range)
-        .insertTable({ rows: 3, cols: 3, withHeaderRow: true })
-        .run();
-    },
-  },
-];
+import {
+  calloutSlashCommandItem,
+  Callout,
+} from "@/components/extensions/callout";
+import {
+  ImagePlaceholder,
+  ResizableImage,
+  imagePlaceholderSlashCommandItem,
+} from "@/components/extensions/image-placeholder";
+import {
+  Markdown,
+  getMarkdownSlashCommandItems,
+} from "@/components/extensions/markdown";
+import { Table, tableSlashCommandItem } from "@/components/extensions/table";
+import { Toggle, toggleSlashCommandItem } from "@/components/extensions/toggle";
 
 const editor = useEditor({
   extensions: [
     StarterKit,
     Table,
-    TableRow,
-    TableCell,
-    TableHeader,
-    Image,
+    ResizableImage,
+    ImagePlaceholder,
+    Callout,
+    Toggle,
+    Markdown,
     SlashCommand.configure({
-      suggestion: getSlashCommandSuggestion(myItems),
+      suggestion: getSlashCommandSuggestion([
+        imagePlaceholderSlashCommandItem,
+        tableSlashCommandItem,
+        calloutSlashCommandItem,
+        toggleSlashCommandItem,
+        ...getMarkdownSlashCommandItems("notes.md"),
+      ]),
     }),
   ],
 });
 ```
+
+Install the extensions with `npx shadcn@latest add @editorcn/image-placeholder @editorcn/table @editorcn/callout @editorcn/toggle @editorcn/markdown`, and import each extension's `style.css` as its page describes.
 
 ### Bubble menu
 
@@ -510,7 +537,7 @@ On touch devices the drag handle, add-block button, and bubble menu are hidden, 
 
 ## Extensions
 
-All `@tiptap/*` packages are **peer dependencies** — you must install them in your project. This ensures there is only one copy of Tiptap's types, avoiding "duplicate instance" TypeScript errors. If you installed via the shadcn registry, the CLI will prompt you to add any missing peer dependencies automatically.
+All `@tiptap/*` packages are **peer dependencies**, so there is only one copy of Tiptap in your project and its types don't clash. The shadcn registry install adds them for you; with npm/pnpm, install them yourself.
 
 | Extension                             | Purpose                             | Required |
 | ------------------------------------- | ----------------------------------- | -------- |
@@ -524,7 +551,7 @@ All `@tiptap/*` packages are **peer dependencies** — you must install them in 
 | `@tiptap/extension-color`             | Text color (requires Text Style)    | Optional |
 | `@tiptap/extension-highlight`         | Highlight (with `multicolor: true`) | Optional |
 
-Extensions for **Image**, **Table**, **Link**, and others are not included — add them as needed for your custom slash commands.
+`StarterKit` v3 already includes Link and Underline. For images, tables, callouts, toggles, code highlighting, mentions and Markdown, use the [editorcn extensions](/docs/extensions). Each one that inserts a block exports a slash item; see [Slash items from editorcn extensions](#slash-items-from-editorcn-extensions).
 
 ## Syntax highlighting
 

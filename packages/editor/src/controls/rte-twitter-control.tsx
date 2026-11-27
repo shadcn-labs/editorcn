@@ -42,7 +42,7 @@ const loadTwitterScript = (): Promise<void> => {
     return twitterScriptPromise;
   }
 
-  // eslint-disable-next-line promise/avoid-new
+  // oxlint-disable-next-line promise/avoid-new
   twitterScriptPromise = new Promise<void>((resolve, reject) => {
     let script = document.querySelector<HTMLScriptElement>(
       `script[src="${WIDGET_SCRIPT_URL}"]`
@@ -246,7 +246,9 @@ const TwitterNodeView = (props: NodeViewProps) => {
       minWidth={300}
       maxWidth={1200}
     >
-      {loading && <div className="rte-embed-loading">Loading tweet...</div>}
+      {loading && (
+        <div className="rte-embed-loading animate-pulse">Loading tweet...</div>
+      )}
       {!loading && failed && (
         <div className="rte-embed-error">
           <p>Couldn&apos;t load this tweet.</p>

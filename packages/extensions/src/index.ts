@@ -1,6 +1,7 @@
 export {
   CALLOUT_VARIANTS,
   Callout,
+  calloutSlashCommandItem,
   isCalloutVariant,
   toCalloutVariant,
   unwrapCallout,
@@ -12,11 +13,14 @@ export type {
 } from "./callout";
 export { CalloutToolbar } from "./callout/toolbar";
 export { CodeBlock, CODE_BLOCK_LANGUAGES } from "./code-block";
-export { ImagePlaceholder } from "./image-placeholder";
+export {
+  ImagePlaceholder,
+  imagePlaceholderSlashCommandItem,
+} from "./image-placeholder";
 export { ResizableImage } from "./image-placeholder";
 export type { ImagePlaceholderOptions } from "./image-placeholder";
 export { ImagePlaceholderToolbar } from "./image-placeholder/toolbar";
-export { Table } from "./table";
+export { Table, tableSlashCommandItem } from "./table";
 export type { TableConfigOptions } from "./table";
 export { TableHoverOverlay } from "./table/table-hover-overlay";
 export { TableToolbar } from "./table/toolbar";
@@ -26,6 +30,7 @@ export {
   Markdown,
   copyMarkdown,
   downloadMarkdown,
+  getMarkdownSlashCommandItems,
   importMarkdownFile,
   looksLikeMarkdown,
   markdownPastePluginKey,
@@ -39,3 +44,16 @@ export {
   pasteCleanupPluginKey,
 } from "./paste-cleanup";
 export type { PasteCleanupOptions } from "./paste-cleanup";
+export {
+  DetailsContent,
+  DetailsSummary,
+  Toggle,
+  ToggleDetails,
+  toggleSlashCommandItem,
+} from "./toggle";
+export type {
+  DetailsOptions,
+  DetailsRenderToggleButtonOptions,
+  ToggleSlashCommandItem,
+} from "./toggle";
+export type { SlashCommandItem } from "./core/types";

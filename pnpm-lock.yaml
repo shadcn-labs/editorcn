@@ -356,7 +356,7 @@ importers:
         specifier: '>=3.0.0 <4'
         version: 3.30.5
       '@tiptap/react':
-        specifier: '>=3.0.0 <4'
+        specifier: '>=3.0.1 <4'
         version: 3.30.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/pm@3.30.5)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tiptap/starter-kit':
         specifier: '>=3.0.0 <4'
@@ -371,8 +371,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       lucide-react:
-        specifier: '>=0.400.0 <1.0.0'
-        version: 0.546.0(react@19.2.7)
+        specifier: '>=0.400.0 <2.0.0'
+        version: 1.31.0(react@19.2.7)
       react:
         specifier: ^18 || ^19
         version: 19.2.7
@@ -383,6 +383,9 @@ importers:
         specifier: ^3.0.0
         version: 3.6.0
     devDependencies:
+      '@editorcn/content':
+        specifier: workspace:*
+        version: link:../content
       '@hugeicons/core-free-icons':
         specifier: ^4.3.5
         version: 4.3.5
@@ -410,6 +413,8 @@ importers:
 
   packages/config: {}
 
+  packages/content: {}
+
   packages/editor:
     dependencies:
       '@base-ui/react':
@@ -434,7 +439,7 @@ importers:
         specifier: '>=3.0.0 <4'
         version: 3.30.5
       '@tiptap/react':
-        specifier: '>=3.0.0 <4'
+        specifier: '>=3.0.1 <4'
         version: 3.30.5(@floating-ui/dom@1.7.6)(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/pm@3.30.5)(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       '@tiptap/starter-kit':
         specifier: '>=3.0.0 <4'
@@ -446,8 +451,8 @@ importers:
         specifier: ^2.1.1
         version: 2.1.1
       lucide-react:
-        specifier: '>=0.400.0 <1.0.0'
-        version: 0.546.0(react@19.2.7)
+        specifier: '>=0.400.0 <2.0.0'
+        version: 1.31.0(react@19.2.7)
       react:
         specifier: ^18 || ^19
         version: 19.2.7
@@ -458,6 +463,9 @@ importers:
         specifier: ^3.0.0
         version: 3.6.0
     devDependencies:
+      '@editorcn/content':
+        specifier: workspace:*
+        version: link:../content
       '@hugeicons/core-free-icons':
         specifier: ^4.3.5
         version: 4.3.5
@@ -476,12 +484,24 @@ importers:
       '@types/react':
         specifier: ^19
         version: 19.2.17
+      '@types/react-dom':
+        specifier: 'catalog:'
+        version: 19.2.3(@types/react@19.2.17)
+      happy-dom:
+        specifier: ^21.0.4
+        version: 21.0.4
+      radix-ui:
+        specifier: ^1.4.3
+        version: 1.6.7(@types/react-dom@19.2.3(@types/react@19.2.17))(@types/react@19.2.17)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       tsup:
         specifier: ^8.4.0
         version: 8.5.1(jiti@2.7.0)(postcss@8.5.23)(typescript@5.9.3)(yaml@2.9.0)
       typescript:
         specifier: ^5
         version: 5.9.3
+      vitest:
+        specifier: ^3.2.7
+        version: 3.2.7(@types/debug@4.1.13)(@types/node@22.19.21)(happy-dom@21.0.4)(jiti@2.7.0)(lightningcss@1.32.0)(msw@2.14.6(@types/node@22.19.21)(typescript@5.9.3))(yaml@2.9.0)
 
   packages/env:
     dependencies:
@@ -513,9 +533,12 @@ importers:
       '@tiptap/core':
         specifier: '>=3.0.0 <4'
         version: 3.30.5(@tiptap/pm@3.30.5)
-      '@tiptap/extension-gapcursor':
-        specifier: ^3.30.0
-        version: 3.30.5(@tiptap/extensions@3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/pm@3.30.5))
+      '@tiptap/extension-details':
+        specifier: ^3.33.0
+        version: 3.33.0(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/extension-text-style@3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5)))(@tiptap/pm@3.30.5)
+      clsx:
+        specifier: ^2.1.1
+        version: 2.1.1
       lucide-react:
         specifier: 'catalog:'
         version: 0.546.0(react@19.2.7)
@@ -525,6 +548,9 @@ importers:
       react-dom:
         specifier: ^18 || ^19
         version: 19.2.7(react@19.2.7)
+      tailwind-merge:
+        specifier: ^3.0.0
+        version: 3.6.0
     devDependencies:
       '@base-ui/react':
         specifier: ^1.0.0
@@ -641,6 +667,9 @@ importers:
         specifier: ^1.0.17
         version: 1.0.17
     devDependencies:
+      '@editorcn/content':
+        specifier: workspace:*
+        version: link:../content
       '@tiptap/extension-highlight':
         specifier: ^3.30.5
         version: 3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))
@@ -3138,6 +3167,13 @@ packages:
     resolution: {integrity: sha512-rsZ/HlCYagMoyqn8kKxLYaZwHvowGUTeHVVxEuMJqTantIrnnQMSQUA3a7+X22l2eD7ec/LlG4bBGPjw+gf3tw==}
     peerDependencies:
       '@tiptap/extension-text-style': 3.31.3
+
+  '@tiptap/extension-details@3.33.0':
+    resolution: {integrity: sha512-A4PUnLGgLEq2jFYWucztcBlZePq2uPBSgn3Rl2kcikv5bwTBn1jwR4aUOY250bPbSpdMDm9WTmKxJXO6EA6f0A==}
+    peerDependencies:
+      '@tiptap/core': 3.33.0
+      '@tiptap/extension-text-style': 3.33.0
+      '@tiptap/pm': 3.33.0
 
   '@tiptap/extension-document@3.30.5':
     resolution: {integrity: sha512-4mKoD3bBr5W2AQ2Y/7amOqcVw0eqJbUwRtwvxypeo5Hi0PB9O5Ev8P05c3EUTo10bllqdKYXGeCU5AcgdQsHWQ==}
@@ -8695,6 +8731,12 @@ snapshots:
   '@tiptap/extension-color@3.31.3(@tiptap/extension-text-style@3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5)))':
     dependencies:
       '@tiptap/extension-text-style': 3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))
+
+  '@tiptap/extension-details@3.33.0(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))(@tiptap/extension-text-style@3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5)))(@tiptap/pm@3.30.5)':
+    dependencies:
+      '@tiptap/core': 3.30.5(@tiptap/pm@3.30.5)
+      '@tiptap/extension-text-style': 3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))
+      '@tiptap/pm': 3.30.5
 
   '@tiptap/extension-document@3.30.5(@tiptap/core@3.30.5(@tiptap/pm@3.30.5))':
     dependencies:

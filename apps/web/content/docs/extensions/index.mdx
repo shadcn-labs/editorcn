@@ -1,11 +1,11 @@
 ---
 title: Extensions
-description: Ready-made Tiptap extensions and matching toolbar components, installed one at a time with a live preview and usage guide.
+description: Ready-made Tiptap extensions with toolbar controls and block editor slash items, installed one at a time with a live preview and usage guide.
 ---
 
-Editorcn ships a set of ready-to-use [Tiptap extensions](https://tiptap.dev) — real Tiptap `Node`s, `Mark`s and `Extension`s with their own commands — plus a matching toolbar component for each.
+Editorcn ships a set of ready-to-use [Tiptap extensions](https://tiptap.dev) — real Tiptap `Node`s, `Mark`s and `Extension`s with their own commands. Extensions that insert content come with a toolbar control for the [toolbar editor](/docs/editor#controls-from-editorcn-extensions) and a slash item for the [block editor](/docs/block-editor#slash-items-from-editorcn-extensions), so you don't write those yourself.
 
-Each extension is installed individually with the shadcn CLI and copied into your project as editable source, so you can adjust behavior, options and styles freely. Installing an extension brings its source, its toolbar component and the shared `extensions/core` runtime in one go.
+Each extension is installed individually with the shadcn CLI and copied into your project as editable source, so you can adjust behavior, options and styles freely. Installing an extension brings its source, its toolbar control and slash item when it has them, the Tiptap packages it depends on, and the shared `extensions/core` runtime in one go.
 
 Every extension page has a live preview, an installation guide, usage snippets, the options you can pass to `.configure()`, and the commands the extension adds.
 
@@ -18,3 +18,4 @@ Every extension page has a live preview, an installation guide, usage snippets, 
 - [Mention](/docs/extensions/mention) — an @ picker that inserts inline mentions with a stable id, with avatars, descriptions, async search and keyboard navigation.
 - [Paste Cleanup](/docs/extensions/paste-cleanup) — cleans HTML pasted from Google Docs, Notion, Word, and web pages, keeping formatting and lists while dropping fonts, colors, and empty lines.
 - [Table](/docs/extensions/table) — a table node with a grid-size picker toolbar, row and column management, cell merge and split, hover context handles, and resizable columns.
+- [Toggle](/docs/extensions/toggle) — a collapsible section with an editable summary, created with `+++` or the slash menu, that keeps its open state.

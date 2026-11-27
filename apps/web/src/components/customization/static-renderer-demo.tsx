@@ -2,6 +2,7 @@
 
 import { Link, RichTextEditor } from "@editorcn/editor";
 import { StaticRenderer } from "@editorcn/static-renderer";
+import type { CodeHighlighter } from "@editorcn/static-renderer";
 import { Image } from "@tiptap/extension-image";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { TextAlign } from "@tiptap/extension-text-align";
@@ -11,7 +12,7 @@ import { useEditor } from "@tiptap/react";
 import type { JSONContent } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import { Image as ImageIcon, Eye } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { showImagePrompt } from "@/components/image-prompt";
 
@@ -36,7 +37,7 @@ const CONTENT = `
   <li>Headings and paragraphs</li>
   <li>Lists, nesting, and inline <code>code</code></li>
   <li>
-    Links like the <a href="https://editorcn.vercel.app">project site</a>
+    Links like the <a href="https://www.rtecn.space">project site</a>
   </li>
 </ul>
 <ol>
@@ -61,6 +62,8 @@ const CONTENT = `
   <strong>emphasis</strong>, <em>italics</em>, <u>underlines</u>, or
   <s>struck-through</s> text exactly as the author left it.
 </p>
+<pre><code class="language-typescript">export const isOnboardingV2 = (team: Team) =&gt;
+  flags.enabled("onboarding-v2", { teamId: team.id });</code></pre>
 `.trim();
 
 const extensions = [
@@ -92,6 +95,26 @@ const DemoImage = ({ node }: { node: Node }) => (
 export const StaticRendererDemo = () => {
   const [doc, setDoc] = useState(CONTENT);
   const [json, setJson] = useState<JSONContent | null>(null);
+  const [highlighter, setHighlighter] = useState<CodeHighlighter>();
+
+  useEffect(() => {
+    let active = true;
+    const load = async () => {
+      const { createHighlighter } = await import("shiki");
+      const instance = await createHighlighter({
+        langs: ["typescript"],
+        themes: ["github-light", "github-dark"],
+      });
+      if (active) {
+        setHighlighter(instance);
+      }
+    };
+    load();
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const editor = useEditor({
     content: CONTENT,
     extensions,
@@ -119,7 +142,7 @@ export const StaticRendererDemo = () => {
 
   return (
     <div className="space-y-4 mt-4">
-      <div className="overflow-hidden rounded-md border border-border">
+      <div>
         <RichTextEditor editor={editor}>
           <RichTextEditor.Toolbar>
             <RichTextEditor.ControlsGroup>
@@ -169,7 +192,7 @@ export const StaticRendererDemo = () => {
             Static output — HTML
           </div>
           <div className="p-5">
-            <StaticRenderer content={doc} sanitize />
+            <StaticRenderer content={doc} highlighter={highlighter} sanitize />
           </div>
         </div>
         <div className="overflow-hidden rounded-md border border-border">
@@ -182,6 +205,7 @@ export const StaticRendererDemo = () => {
               <StaticRenderer
                 content={json}
                 extensions={extensions}
+                highlighter={highlighter}
                 options={{
                   nodeMapping: {
                     image: ({ node }) => <DemoImage node={node} />,

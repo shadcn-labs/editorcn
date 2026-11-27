@@ -5,7 +5,11 @@ import type { ReactNode } from "react";
 import type { BlockEditorIcons } from "./icon-types";
 import { DEFAULT_ICONS } from "./icons";
 import { DEFAULT_BLOCK_EDITOR_LABELS } from "./labels";
-import type { BlockEditorContextValue, BlockEditorLabels } from "./types";
+import type {
+  BlockEditorContextValue,
+  BlockEditorLabels,
+  BlockEditorPreset,
+} from "./types";
 
 const BlockEditorContext = createContext<BlockEditorContextValue | null>(null);
 
@@ -17,11 +21,15 @@ export const useBlockEditorContext = () => {
   return ctx;
 };
 
+export const useOptionalBlockEditorContext = () =>
+  useContext(BlockEditorContext);
+
 export interface BlockEditorProviderProps {
   editor: Editor | null;
   children: ReactNode;
   labels?: Partial<BlockEditorLabels>;
   icons?: Partial<BlockEditorIcons>;
+  preset?: BlockEditorPreset;
 }
 
 export const BlockEditorProvider = ({
@@ -29,6 +37,7 @@ export const BlockEditorProvider = ({
   children,
   labels,
   icons,
+  preset = "block",
 }: BlockEditorProviderProps) => {
   const mergedLabels = { ...DEFAULT_BLOCK_EDITOR_LABELS, ...labels };
   const mergedIcons = { ...DEFAULT_ICONS, ...icons };
@@ -39,6 +48,7 @@ export const BlockEditorProvider = ({
         editor,
         icons: mergedIcons,
         labels: mergedLabels,
+        preset,
       }}
     >
       {children}

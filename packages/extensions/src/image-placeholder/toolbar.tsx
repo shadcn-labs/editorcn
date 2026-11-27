@@ -1,6 +1,6 @@
 "use client";
 
-import { Image } from "lucide-react";
+import { ImageIcon } from "lucide-react";
 
 import { useToolbar, useToolbarEditor } from "../core/context";
 import { useEditorState } from "../core/editor-state";
@@ -27,7 +27,8 @@ export const ImagePlaceholderToolbar = ({
   return (
     <Button
       aria-label={labels.image}
-      className={["ext-btn--icon-sm", className].filter(Boolean).join(" ")}
+      className={className}
+      size="icon-sm"
       disabled={disabled}
       tooltip={labels.image}
       onClick={() => {
@@ -36,7 +37,7 @@ export const ImagePlaceholderToolbar = ({
         }
       }}
     >
-      <Image />
+      <ImageIcon />
     </Button>
   );
 };

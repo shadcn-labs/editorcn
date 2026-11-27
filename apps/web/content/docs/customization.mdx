@@ -9,11 +9,11 @@ description: See how to customize both editors through variants, CSS variables, 
 
 Switch between `default`, `subtle`, and `compact` variants using the `variant` prop.
 
-| Variant   | Look                                                                                        | Best for                                                                        |
-| --------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `default` | Bordered container with classic joined segmented toolbar buttons                            | Standard editor experiences where the toolbar should feel distinct from content |
-| `subtle`  | No visible border — uses a soft shadow. Muted, rounded toolbar buttons. Elevated card feel. | Forms, settings pages, or anywhere a less prominent editor fits                 |
-| `compact` | Muted toolbar fused with content area. Minimal spacing, smaller icons.                      | Sidebars, modals, inline editing — constrained spaces                           |
+| Variant   | Look                                                                       | Best for                                                                        |
+| --------- | -------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| `default` | Gray frame: toolbar and footer on the gray, content in a white inset panel | Standard editor experiences where the toolbar should feel distinct from content |
+| `subtle`  | Hairline card with a gray toolbar strip and muted, rounded toolbar buttons | Forms, settings pages, or anywhere a less prominent editor fits                 |
+| `compact` | Muted toolbar fused with content area. Minimal spacing, smaller icons.     | Sidebars, modals, inline editing — constrained spaces                           |
 
 <EditorVariantsDemo />
 
@@ -49,7 +49,7 @@ Pass Tailwind classes to the root component via `className`. They are merged usi
 ```tsx
 <RichTextEditor
   editor={editor}
-  className="rounded-xl shadow-lg ring-1 ring-black/5"
+  className="rounded-2xl border-dashed border-border"
 >
   <RichTextEditor.Toolbar>{/* toolbar controls */}</RichTextEditor.Toolbar>
   <RichTextEditor.Content />
@@ -146,7 +146,7 @@ Use the `editable` prop on `RichTextEditor` — the toolbar is hidden automatica
 ```tsx
 const editor = useEditor({
   editable: false,
-  extensions: [StarterKit, Link],
+  extensions: [StarterKit.configure({ link: false }), Link],
 });
 
 <RichTextEditor editor={editor} editable={false}>
@@ -259,17 +259,7 @@ See the [Styling docs](/docs/styling#change-icon-size) for more on sizing.
 
 ### Icon Library
 
-The toolbar icons ship with **lucide-react**. If your `components.json` uses a different `iconLibrary`, install the matching set after the editor — it overwrites `editor/icons.tsx` and installs only that set's package:
-
-| `iconLibrary`      | Install                                                                             |
-| ------------------ | ----------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                          |
-| `phosphor`         | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/editor-icons-remixicon.json"` |
-
-To migrate an existing install instead: `npx shadcn@latest migrate icons --from lucide --to phosphor "src/components/editor/**"`.
+The toolbar icons follow the `iconLibrary` in your `components.json`: the shadcn CLI (4.7.0 or newer) writes them with your library when you add the editor. See [Icon library](/docs/editor#icon-library) for details.
 
 ## BlockEditor
 
@@ -319,10 +309,11 @@ Add your own items to the slash command (`/`) menu by passing custom items to `g
 ```tsx
 import {
   SlashCommand,
-  defaultSlashCommandItems,
   getSlashCommandSuggestion,
 } from "@/components/block-editor";
 import type { SlashCommandSuggestionItem } from "@/components/block-editor";
+import { imagePlaceholderSlashCommandItem } from "@/components/extensions/image-placeholder";
+import { tableSlashCommandItem } from "@/components/extensions/table";
 
 const customItems: SlashCommandSuggestionItem[] = [
   {
@@ -339,17 +330,8 @@ const customItems: SlashCommandSuggestionItem[] = [
         .run();
     },
   },
-  {
-    id: "image",
-    title: "Image",
-    description: "Insert an image.",
-    keywords: ["image", "img", "picture"],
-    command: ({ editor, range }) => {
-      const url = window.prompt("Enter image URL"); // Replace with your own dialog/modal
-      if (!url) return;
-      editor.chain().focus().deleteRange(range).setImage({ src: url }).run();
-    },
-  },
+  imagePlaceholderSlashCommandItem,
+  tableSlashCommandItem,
 ];
 
 SlashCommand.configure({
@@ -357,21 +339,13 @@ SlashCommand.configure({
 });
 ```
 
-Custom items appear at the top of the menu. Built-in items with the same `id` are replaced; all others are appended below your custom items.
+Custom items appear at the top of the menu. Built-in items with the same `id` are replaced; all others are appended below your custom items. The Image and Table items come from the [Image Placeholder](/docs/extensions/image-placeholder) and [Table](/docs/extensions/table) extensions, which also need to be registered in the editor. See [Slash items from editorcn extensions](/docs/block-editor#slash-items-from-editorcn-extensions).
 
 ### Custom Icon Overrides
 
-Replace any built-in icon via the `icons` prop. All 28 icons accept a React node — use inline SVGs, emoji, or any icon library. The defaults come from **lucide-react** and inherit your theme automatically (`currentColor`).
+Replace any built-in icon via the `icons` prop. All 28 icons accept a React node — use inline SVGs, emoji, or any icon library. They inherit your theme automatically (`currentColor`).
 
-If your `components.json` uses a different `iconLibrary`, install the matching set after the block editor — it overwrites `block-editor/icons.tsx` and installs only that set's package:
-
-| `iconLibrary`      | Install                                                                                   |
-| ------------------ | ----------------------------------------------------------------------------------------- |
-| `lucide` (default) | nothing — already included                                                                |
-| `phosphor`         | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-phosphor.json"`  |
-| `tabler`           | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-tabler.json"`    |
-| `hugeicons`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-hugeicons.json"` |
-| `remixicon`        | `npx shadcn@latest add "https://editorcn.vercel.app/r/block-editor-icons-remixicon.json"` |
+The defaults follow the `iconLibrary` in your `components.json`. See [Icon library](/docs/block-editor#icon-library).
 
 ```tsx
 import { BlockEditor, DEFAULT_ICONS } from "@/components/block-editor";
@@ -392,17 +366,7 @@ Individual slash command items also accept an `icon` property:
 
 ```tsx
 const myItems: SlashCommandSuggestionItem[] = [
-  ...defaultSlashCommandItems,
-  {
-    id: "image",
-    title: "Image",
-    description: "Insert an image.",
-    keywords: ["image", "img", "picture"],
-    icon: <ImageIcon />, // Custom icon for this item
-    command: ({ editor, range }) => {
-      /* ... */
-    },
-  },
+  { ...imagePlaceholderSlashCommandItem, icon: <MyImageIcon /> },
 ];
 ```
 

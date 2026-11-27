@@ -32,6 +32,9 @@ interface MentionListHandle {
   onKeyDown: (props: SuggestionKeyDownProps) => boolean;
 }
 
+const AVATAR_CLASS =
+  "ext-mention-avatar inline-flex size-8 shrink-0 items-center justify-center rounded-full bg-muted object-cover text-[0.75rem] font-semibold text-muted-foreground";
+
 const DefaultItem = ({ avatar, description, label }: MentionItem) => {
   const [failed, setFailed] = useState(false);
   return (
@@ -39,19 +42,23 @@ const DefaultItem = ({ avatar, description, label }: MentionItem) => {
       {avatar && !failed ? (
         <img
           alt=""
-          className="ext-mention-avatar"
+          className={AVATAR_CLASS}
           onError={() => setFailed(true)}
           src={avatar}
         />
       ) : (
-        <span aria-hidden className="ext-mention-avatar">
+        <span aria-hidden className={AVATAR_CLASS}>
           {label.charAt(0).toUpperCase()}
         </span>
       )}
-      <span className="ext-mention-text">
-        <span className="ext-mention-label">{label}</span>
+      <span className="ext-mention-text flex min-w-0 flex-col leading-tight">
+        <span className="ext-mention-label truncate text-[0.875rem] font-medium text-popover-foreground">
+          {label}
+        </span>
         {description && (
-          <span className="ext-mention-description">{description}</span>
+          <span className="ext-mention-description truncate text-[0.75rem] text-muted-foreground">
+            {description}
+          </span>
         )}
       </span>
     </>
@@ -125,14 +132,18 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>(
       <DropdownMenuContent
         activeItem={items.length > 0 ? activeItem : null}
         aria-busy={loading}
-        className="ext-mention-list"
+        className="ext-mention-list z-60 max-h-72 max-w-88 min-w-64 overflow-y-auto"
         id={listId}
         ref={listRef}
         role="listbox"
       >
-        {heading && <div className="ext-mention-heading">{heading}</div>}
+        {heading && (
+          <div className="ext-mention-heading px-2 pt-1.5 pb-1 text-[0.75rem] font-medium text-muted-foreground">
+            {heading}
+          </div>
+        )}
         {items.length === 0 ? (
-          <div className="ext-mention-empty">
+          <div className="ext-mention-empty px-2 py-1.5 text-[0.8125rem] text-muted-foreground">
             {loading ? "Searching…" : "No results"}
           </div>
         ) : (
@@ -154,6 +165,7 @@ const MentionList = forwardRef<MentionListHandle, MentionListProps>(
     );
   }
 );
+MentionList.displayName = "MentionList";
 
 export const renderMentionList = (
   options: MentionListOptions

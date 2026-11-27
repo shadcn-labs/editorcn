@@ -45,7 +45,11 @@ export const CalloutIcon = ({
   variant: CalloutVariant;
 }) => {
   if (emoji) {
-    return <span className="ext-callout-emoji">{emoji}</span>;
+    return (
+      <span className="ext-callout-emoji text-[1.125rem] leading-none">
+        {emoji}
+      </span>
+    );
   }
   const Icon = CALLOUT_ICONS[variant];
   return <Icon />;
@@ -140,13 +144,15 @@ export const CalloutMenu = ({
             key={variant}
             role="menuitemradio"
             aria-checked={variant === value}
-            className="ext-callout-menu-item"
+            className="ext-callout-menu-item [&>svg:first-child]:text-(--ext-callout-accent)"
             data-variant={variant}
             onClick={choose(() => onSelect(variant))}
           >
             <Icon />
             <span>{labels[label]}</span>
-            {variant === value && <Check className="ext-callout-check" />}
+            {variant === value && (
+              <Check className="ext-callout-check ml-auto" />
+            )}
           </DropdownMenuItem>
         );
       })}

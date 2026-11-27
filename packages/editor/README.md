@@ -1,6 +1,6 @@
 # @editorcn/editor
 
-A **toolbar-style** rich text editor built on [Tiptap](https://tiptap.dev/) with shadcn/ui design tokens. Part of the [editorcn](https://editorcn.vercel.app) editor suite.
+A **toolbar-style** rich text editor built on [Tiptap](https://tiptap.dev/) with shadcn/ui design tokens. Part of the [editorcn](https://www.rtecn.space) editor suite.
 
 ## Features
 
@@ -19,6 +19,15 @@ A **toolbar-style** rich text editor built on [Tiptap](https://tiptap.dev/) with
 npm install @editorcn/editor @tiptap/react @tiptap/pm @tiptap/starter-kit @tiptap/extension-link
 ```
 
+Then, in the CSS file that imports `tailwindcss`, import the theme and add the package to Tailwind's sources (the path is relative to that file):
+
+```css
+@import "@editorcn/editor/theme.css";
+@source "../node_modules/@editorcn/editor/dist";
+```
+
+The chrome is styled with Tailwind classes, which Tailwind doesn't scan in `node_modules` by default, and the theme holds the menu and toolbar animations.
+
 > **Tiptap v3 required.** `@editorcn/editor` is built against Tiptap **v3**. Make sure your `@tiptap/*` packages are on v3, and import `BubbleMenu`/`FloatingMenu` from `@tiptap/react/menus` (not the `@tiptap/react` root) if you use them directly.
 
 ### shadcn registry
@@ -32,7 +41,7 @@ Make sure your `components.json` includes the editorcn registry:
 ```json
 {
   "registries": {
-    "@editorcn": "https://editorcn.vercel.app/r/{name}.json"
+    "@editorcn": "https://www.rtecn.space/r/{name}.json"
   }
 }
 ```
@@ -44,13 +53,12 @@ Make sure your `components.json` includes the editorcn registry:
 
 import { useEditor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
-import { Underline } from "@tiptap/extension-underline";
 import { RichTextEditor, Link } from "@editorcn/editor";
 import "@editorcn/editor/style.css";
 
 export function MyEditor() {
   const editor = useEditor({
-    extensions: [StarterKit, Link, Underline],
+    extensions: [StarterKit.configure({ link: false }), Link],
     content: "<p>Start typing...</p>",
   });
 
@@ -80,7 +88,7 @@ export function MyEditor() {
 
 ## Documentation
 
-Full API reference at [editorcn.vercel.app/docs/editor](https://editorcn.vercel.app/docs/editor).
+Full API reference at [www.rtecn.space/docs/editor](https://www.rtecn.space/docs/editor).
 
 ## License
 

@@ -339,3 +339,19 @@
     opacity: 0;
   }
 }
+
+@keyframes marquee {
+  to {
+    transform: translateX(calc(-100% - var(--marquee-gap)));
+  }
+}
+
+.animate-marquee {
+  animation: marquee var(--marquee-duration, 40s) linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
+}

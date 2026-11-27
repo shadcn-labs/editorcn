@@ -17,10 +17,10 @@
 </p>
 
 <p align="center">
-  <a href="https://editorcn.vercel.app/docs">Get Started</a> ·
-  <a href="https://editorcn.vercel.app/docs/getting-started">Installation</a> ·
-  <a href="https://editorcn.vercel.app/docs/editor">Editor</a> ·
-  <a href="https://editorcn.vercel.app/docs/block-editor">Block Editor</a>
+  <a href="https://www.rtecn.space/docs">Get Started</a> ·
+  <a href="https://www.rtecn.space/docs/getting-started">Installation</a> ·
+  <a href="https://www.rtecn.space/docs/editor">Editor</a> ·
+  <a href="https://www.rtecn.space/docs/block-editor">Block Editor</a>
 </p>
 
 ## Features

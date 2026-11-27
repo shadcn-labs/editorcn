@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { cn } from "@/lib/utils";
 
@@ -11,7 +11,6 @@ import { collectAuthors, createId, mapThread, toggleReaction } from "./utils";
 
 import "@editorcn/editor/style.css";
 import "@editorcn/extensions/mention/style.css";
-import "@editorcn/extensions/ui/style.css";
 import "@editorcn/static-renderer/style.css";
 
 export const CommentBox = ({
@@ -35,16 +34,33 @@ export const CommentBox = ({
     (user) => user.id !== currentUser.id
   );
 
+  const saves = useRef(new Map<string, Promise<string>>());
+
+  const savedIdFor = (id: string) => saves.current.get(id) ?? id;
+
+  const afterSave = async (id: string, run: (savedId: string) => void) => {
+    let savedId: string;
+    try {
+      savedId = await savedIdFor(id);
+    } catch {
+      return;
+    }
+    run(savedId);
+  };
+
+  const removeLocal = (id: string) =>
+    setComments((prev) => mapThread(prev, (c) => (c.id === id ? null : c)));
+
   const actions: ThreadActions = {
     currentUser,
     mentionable,
-    post: (content, parentId) => {
-      onPost?.(content, parentId);
+    post: async (content, parentId) => {
+      const id = createId();
       const comment: CommentItem = {
         author: currentUser,
         content,
         createdAt: new Date().toISOString(),
-        id: createId(),
+        id,
       };
       setComments((prev) =>
         parentId
@@ -55,9 +71,21 @@ export const CommentBox = ({
             )
           : [...prev, comment]
       );
+      const save = (async () => {
+        const savedParentId = parentId ? await savedIdFor(parentId) : undefined;
+        const result = await onPost?.(content, savedParentId);
+        return typeof result === "string" ? result : id;
+      })();
+      saves.current.set(id, save);
+      try {
+        await save;
+      } catch (error) {
+        removeLocal(id);
+        throw error;
+      }
     },
     react: (id, emoji) => {
-      onReact?.(id, emoji);
+      afterSave(id, (savedId) => onReact?.(savedId, emoji));
       setComments((prev) =>
         mapThread(prev, (c) =>
           c.id === id
@@ -67,8 +95,8 @@ export const CommentBox = ({
       );
     },
     remove: (id) => {
-      onDelete?.(id);
-      setComments((prev) => mapThread(prev, (c) => (c.id === id ? null : c)));
+      afterSave(id, (savedId) => onDelete?.(savedId));
+      removeLocal(id);
     },
   };
 

@@ -9,9 +9,9 @@ import {
   SmilePlus,
   Trash2,
 } from "lucide-react";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,19 +34,26 @@ import type {
 } from "./types";
 import { EMOJIS, EXTENSIONS, ITEM, mention, timeAgo } from "./utils";
 
+// timeAgo reads Date.now(), which Next.js `cacheComponents` rejects during
+// prerender. Only this text waits for the client; the rest of the thread
+// still prerenders.
+const RelativeTime = ({ iso }: { iso: string }) => <>{timeAgo(iso)}</>;
+
 const EmojiPicker = ({ onPick }: { onPick: (emoji: string) => void }) => {
   const [open, setOpen] = useState(false);
   return (
     <Popover onOpenChange={setOpen} open={open}>
-      <PopoverTrigger asChild>
-        <Button
-          aria-label="Add reaction"
-          className="text-muted-foreground size-7 rounded-full border"
-          size="icon-sm"
-          variant="ghost"
-        >
-          <SmilePlus className="size-3.5" />
-        </Button>
+      <PopoverTrigger
+        aria-label="Add reaction"
+        className={cn(
+          buttonVariants({
+            className: "text-muted-foreground size-7 rounded-full border",
+            size: "icon-sm",
+            variant: "ghost",
+          })
+        )}
+      >
+        <SmilePlus className="size-3.5" />
       </PopoverTrigger>
       <PopoverContent
         align="start"
@@ -81,15 +88,18 @@ const CommentMenu = ({
   onDelete: () => void;
 }) => (
   <DropdownMenu>
-    <DropdownMenuTrigger asChild>
-      <Button
-        aria-label="Comment options"
-        className="text-muted-foreground size-7 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 data-[state=open]:opacity-100 [@media(hover:none)]:opacity-100"
-        size="icon-sm"
-        variant="ghost"
-      >
-        <MoreHorizontal className="size-4" />
-      </Button>
+    <DropdownMenuTrigger
+      aria-label="Comment options"
+      className={cn(
+        buttonVariants({
+          className:
+            "text-muted-foreground size-7 opacity-0 transition-opacity group-hover:opacity-100 focus-visible:opacity-100 aria-expanded:opacity-100 [@media(hover:none)]:opacity-100",
+          size: "icon-sm",
+          variant: "ghost",
+        })
+      )}
+    >
+      <MoreHorizontal className="size-4" />
     </DropdownMenuTrigger>
     <DropdownMenuContent align="end" className="min-w-36 p-1">
       <DropdownMenuItem className={ITEM} onClick={onCopy}>
@@ -170,7 +180,9 @@ const CommentBody = ({
           suppressHydrationWarning
           title={new Date(comment.createdAt).toLocaleString()}
         >
-          {timeAgo(comment.createdAt)}
+          <Suspense fallback={null}>
+            <RelativeTime iso={comment.createdAt} />
+          </Suspense>
         </time>
         <div className="ml-auto">
           <CommentMenu
@@ -250,10 +262,10 @@ export const CommentThread = ({
         initialContent={to.id === comment.id ? undefined : mention(to.author)}
         mentionable={actions.mentionable}
         onCancel={() => setTarget(null)}
-        onPost={(content) => {
-          actions.post(content, comment.id);
-          setTarget(null);
+        onPost={async (content) => {
           setOpen(true);
+          await actions.post(content, comment.id);
+          setTarget(null);
         }}
         placeholder={`Reply to ${to.author.name}…`}
         submitLabel="Reply"
