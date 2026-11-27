@@ -2,17 +2,21 @@
 
 import { Workflow } from "lucide-react";
 
-import { useToolbar, useToolbarEditor } from "../core/context";
+import { useToolbarEditor } from "../core/context";
 import { extensionPresent } from "../core/detection";
 import { useEditable, useEditorState } from "../core/editor-state";
 import type { ToolbarComponentProps } from "../core/types";
 import { Button } from "../ui/button";
 
+export interface MermaidToolbarProps extends ToolbarComponentProps {
+  label?: string;
+}
+
 export const MermaidToolbar = ({
   className,
   editor: editorProp,
-}: ToolbarComponentProps) => {
-  const { labels } = useToolbar();
+  label = "Diagram",
+}: MermaidToolbarProps) => {
   const editor = useToolbarEditor(editorProp);
   const editable = useEditable(editor);
 
@@ -28,11 +32,11 @@ export const MermaidToolbar = ({
 
   return (
     <Button
-      aria-label={labels.mermaid}
+      aria-label={label}
       className={className}
       size="icon-sm"
       disabled={disabled}
-      tooltip={labels.mermaid}
+      tooltip={label}
       onClick={() => {
         if (editor && !editor.isDestroyed && !disabled) {
           editor.chain().focus().setMermaid().run();

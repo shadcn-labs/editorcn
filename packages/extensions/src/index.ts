@@ -33,6 +33,7 @@ export {
   mermaidSlashCommandItem,
 } from "./mermaid";
 export { MermaidToolbar } from "./mermaid/toolbar";
+export type { MermaidToolbarProps } from "./mermaid/toolbar";
 export type {
   MermaidAttributes,
   MermaidDiagramsProps,
