@@ -88,7 +88,7 @@ const MermaidCard = ({
     <div
       className={cn(
         "ext-mermaid-box group/mermaid relative rounded-xl border border-border/60 bg-card select-none [transition:box-shadow_150ms_ease-out]",
-        selected && "ring-2 ring-ring/50"
+        selected && "border-ring ring-[3px] ring-ring/30 ring-inset"
       )}
       contentEditable={false}
       onDoubleClick={editable ? onEdit : undefined}
@@ -261,7 +261,7 @@ export const MermaidView = ({
               aria-label="Mermaid source"
               autoFocus
               className={cn(
-                "ext-mermaid-source block min-h-64 w-full resize-none border-0 bg-transparent p-4 font-mono text-[0.8125rem] leading-relaxed text-foreground outline-none select-text placeholder:text-muted-foreground/50",
+                "ext-mermaid-source block min-h-64 w-full resize-none border-0 bg-transparent p-4 font-mono text-[0.8125rem] leading-relaxed text-foreground outline-none select-text placeholder:text-muted-foreground/50 [.ProseMirror-hideselection_&]:selection:text-foreground",
                 showPreview &&
                   "border-b border-border/60 @xl/mermaid:border-r @xl/mermaid:border-b-0"
               )}

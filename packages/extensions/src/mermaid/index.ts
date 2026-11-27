@@ -58,7 +58,11 @@ export const Mermaid = Node.create<MermaidOptions>({
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(MermaidView);
+    return ReactNodeViewRenderer(MermaidView, {
+      stopEvent: ({ event }) =>
+        event.target instanceof Element &&
+        event.target.closest(".ext-mermaid-frame") !== null,
+    });
   },
 
   addOptions() {
