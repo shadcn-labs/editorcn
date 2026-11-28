@@ -15,8 +15,56 @@ export interface UseFloatingOptions {
   sideOffset?: number;
 }
 
-const clamp = (value: number, max: number): number =>
-  Math.max(8, Math.min(value, Math.max(8, max)));
+const VIEWPORT_MARGIN = 8;
+
+const SLIDE: Record<FloatingSide, [string, string]> = {
+  bottom: ["0", "-0.5rem"],
+  left: ["0.5rem", "0"],
+  right: ["-0.5rem", "0"],
+  top: ["0", "0.5rem"],
+};
+
+const fit = (value: number, size: number, limit: number): number =>
+  Math.max(VIEWPORT_MARGIN, Math.min(value, limit - size - VIEWPORT_MARGIN));
+
+const alignOn = (
+  align: FloatingAlign,
+  start: number,
+  length: number,
+  size: number
+): number => {
+  if (align === "start") {
+    return start;
+  }
+  if (align === "end") {
+    return start + length - size;
+  }
+  return start + length / 2 - size / 2;
+};
+
+const resolveSide = (
+  side: FloatingSide,
+  rect: DOMRect,
+  width: number,
+  height: number,
+  offset: number
+): FloatingSide => {
+  const room = {
+    bottom: window.innerHeight - rect.bottom - offset - VIEWPORT_MARGIN,
+    left: rect.left - offset - VIEWPORT_MARGIN,
+    right: window.innerWidth - rect.right - offset - VIEWPORT_MARGIN,
+    top: rect.top - offset - VIEWPORT_MARGIN,
+  };
+  const opposite: Record<FloatingSide, FloatingSide> = {
+    bottom: "top",
+    left: "right",
+    right: "left",
+    top: "bottom",
+  };
+  const need = side === "bottom" || side === "top" ? height : width;
+  const flipped = opposite[side];
+  return room[side] < need && room[flipped] > room[side] ? flipped : side;
+};
 
 export const useFloating = ({
   align = "center",
@@ -38,72 +86,44 @@ export const useFloating = ({
     if (!(trigger instanceof HTMLElement) || !content) {
       return;
     }
+    if (!trigger.isConnected) {
+      close();
+      return;
+    }
     const rect = trigger.getBoundingClientRect();
     const width = content.offsetWidth;
     const height = content.offsetHeight;
+    const resolved = resolveSide(side, rect, width, height, sideOffset);
 
-    let left: number | undefined;
-    let top: number | undefined;
-    let right: number | undefined;
-    let bottom: number | undefined;
-    const translate: string[] = [];
-
-    if (side === "bottom" || side === "top") {
-      if (side === "bottom") {
-        top = clamp(rect.bottom + sideOffset, window.innerHeight - height);
-      } else {
-        bottom = window.innerHeight - rect.top + sideOffset;
-      }
-      if (align === "center") {
-        left = clamp(rect.left + rect.width / 2, window.innerWidth - width);
-        translate.push("translateX(-50%)");
-      } else if (align === "end") {
-        right = clamp(
-          window.innerWidth - rect.right,
-          window.innerWidth - width
-        );
-      } else {
-        left = clamp(rect.left, window.innerWidth - width);
-      }
+    let left: number;
+    let top: number;
+    if (resolved === "bottom" || resolved === "top") {
+      top =
+        resolved === "bottom"
+          ? rect.bottom + sideOffset
+          : rect.top - sideOffset - height;
+      left = alignOn(align, rect.left, rect.width, width);
     } else {
-      if (side === "right") {
-        left = clamp(rect.right + sideOffset, window.innerWidth - width);
-      } else {
-        right = window.innerWidth - rect.left + sideOffset;
-      }
-      if (align === "center") {
-        top = clamp(rect.top + rect.height / 2, window.innerHeight - height);
-        translate.push("translateY(-50%)");
-      } else if (align === "end") {
-        bottom = window.innerHeight - rect.bottom;
-      } else {
-        top = clamp(rect.top, window.innerHeight - height);
-      }
+      left =
+        resolved === "right"
+          ? rect.right + sideOffset
+          : rect.left - sideOffset - width;
+      top = alignOn(align, rect.top, rect.height, height);
     }
 
-    content.style.left = left === undefined ? "" : `${left}px`;
-    content.style.top = top === undefined ? "" : `${top}px`;
-    content.style.right = right === undefined ? "" : `${right}px`;
-    content.style.bottom = bottom === undefined ? "" : `${bottom}px`;
-    content.style.transform = translate.join(" ");
-  }, [align, side, sideOffset]);
+    const [slideX, slideY] = SLIDE[resolved];
+    content.style.left = `${fit(left, width, window.innerWidth)}px`;
+    content.style.top = `${fit(top, height, window.innerHeight)}px`;
+    content.style.setProperty("--ext-slide-x", slideX);
+    content.style.setProperty("--ext-slide-y", slideY);
+    content.dataset.side = resolved;
+  }, [align, close, side, sideOffset]);
 
   useLayoutEffect(() => {
     if (!open) {
       return;
     }
     applyPosition();
-    const handleScroll = () => {
-      applyPosition();
-    };
-    const handleResize = () => {
-      applyPosition();
-    };
-    window.addEventListener("scroll", handleScroll, true);
-    window.addEventListener("resize", handleResize);
-    // The trigger can also move without a scroll or resize — a table grip
-    // shifts when its row or column is added or deleted. Follow it per frame
-    // so the open menu never detaches from its trigger.
     let frame: number;
     const follow = () => {
       applyPosition();
@@ -112,8 +132,6 @@ export const useFloating = ({
     frame = requestAnimationFrame(follow);
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", handleScroll, true);
-      window.removeEventListener("resize", handleResize);
     };
   }, [applyPosition, open]);
 

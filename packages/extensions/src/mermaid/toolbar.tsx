@@ -2,7 +2,7 @@
 
 import { Workflow } from "lucide-react";
 
-import { useToolbarEditor } from "../core/context";
+import { useToolbar, useToolbarEditor } from "../core/context";
 import { extensionPresent } from "../core/detection";
 import { useEditable, useEditorState } from "../core/editor-state";
 import type { ToolbarComponentProps } from "../core/types";
@@ -15,8 +15,10 @@ export interface MermaidToolbarProps extends ToolbarComponentProps {
 export const MermaidToolbar = ({
   className,
   editor: editorProp,
-  label = "Diagram",
+  label: labelProp,
 }: MermaidToolbarProps) => {
+  const { labels } = useToolbar();
+  const label = labelProp ?? labels.diagram;
   const editor = useToolbarEditor(editorProp);
   const editable = useEditable(editor);
 
@@ -32,7 +34,6 @@ export const MermaidToolbar = ({
 
   return (
     <Button
-      aria-label={label}
       className={className}
       size="icon-sm"
       disabled={disabled}

@@ -72,7 +72,7 @@ export const CalloutView = ({
               <Button
                 className="ext-callout-trigger size-7 text-(--ext-callout-accent) hover:bg-[color-mix(in_oklab,var(--ext-callout-accent)_15%,transparent)] hover:text-(--ext-callout-accent) [&>svg]:size-4.5"
                 size="icon-sm"
-                aria-label={labels.calloutType}
+                tooltip={labels.calloutType}
               >
                 {icon}
               </Button>

@@ -15,7 +15,9 @@ import {
 import { useEffect, useState } from "react";
 import type { KeyboardEvent, ReactNode } from "react";
 
+import { useToolbar } from "../core/context";
 import { useEditable } from "../core/editor-state";
+import type { ExtensionLabelKey } from "../core/labels";
 import { Button } from "../ui/button";
 import { cn } from "../ui/utils";
 import { MermaidPreview } from "./preview";
@@ -28,11 +30,12 @@ const PLACEHOLDER = `graph TD
   B -->|No| D[Debug]
   D --> B`;
 
-const LAYOUTS: { icon: ReactNode; label: string; value: Layout }[] = [
-  { icon: <Code />, label: "Code", value: "code" },
-  { icon: <Columns2 />, label: "Split", value: "split" },
-  { icon: <Eye />, label: "Preview", value: "preview" },
-];
+const LAYOUTS: { icon: ReactNode; label: ExtensionLabelKey; value: Layout }[] =
+  [
+    { icon: <Code />, label: "layoutCode", value: "code" },
+    { icon: <Columns2 />, label: "layoutSplit", value: "split" },
+    { icon: <Eye />, label: "layoutPreview", value: "preview" },
+  ];
 
 const IS_MAC =
   typeof navigator !== "undefined" &&
@@ -83,6 +86,7 @@ const MermaidCard = ({
   value,
 }: MermaidCardProps) => {
   const { copied, copy } = useCopy(value);
+  const { labels } = useToolbar();
 
   return (
     <div
@@ -97,8 +101,8 @@ const MermaidCard = ({
         <Button
           size="icon-sm"
           className={ICON_BUTTON_CLASS}
-          aria-label="Copy source"
-          tooltip={copied ? "Copied" : "Copy source"}
+          aria-label={labels.copySource}
+          tooltip={copied ? labels.copied : labels.copySource}
           disabled={!value}
           onClick={copy}
         >
@@ -109,8 +113,7 @@ const MermaidCard = ({
             <Button
               size="icon-sm"
               className={ICON_BUTTON_CLASS}
-              aria-label="Edit diagram"
-              tooltip="Edit"
+              tooltip={labels.editDiagram}
               onClick={onEdit}
             >
               <Pencil />
@@ -122,8 +125,7 @@ const MermaidCard = ({
                 ICON_BUTTON_CLASS,
                 "hover:bg-destructive/10 hover:text-destructive"
               )}
-              aria-label="Delete diagram"
-              tooltip="Delete"
+              tooltip={labels.deleteDiagram}
               onClick={onDelete}
             >
               <Trash2 />
@@ -152,6 +154,7 @@ export const MermaidView = ({
   const [draft, setDraft] = useState(value);
   const [layout, setLayout] = useState<Layout>("split");
   const { copied, copy } = useCopy(draft);
+  const { labels } = useToolbar();
 
   const isEditing = editing && editable;
   const lines = draft ? draft.split("\n").length : 0;
@@ -213,16 +216,16 @@ export const MermaidView = ({
           <div className="flex min-w-0 items-center gap-2">
             <Workflow className="size-3.5 shrink-0 text-muted-foreground" />
             <span className="hidden text-sm font-medium text-foreground @xs/mermaid:inline">
-              Diagram
+              {labels.diagram}
             </span>
             <span className="hidden text-xs text-muted-foreground tabular-nums @sm/mermaid:inline">
-              {lines} {lines === 1 ? "line" : "lines"}
+              {lines} {lines === 1 ? labels.diagramLine : labels.diagramLines}
             </span>
           </div>
           <div className="flex items-center gap-1">
             <fieldset
               className="ext-mermaid-layout m-0 flex h-8 min-w-0 items-center gap-0.5 rounded-lg border border-border/60 bg-background p-0.5 [@media(hover:none)_and_(pointer:coarse)]:h-10"
-              aria-label="Layout"
+              aria-label={labels.diagramLayout}
             >
               {LAYOUTS.map((option) => (
                 <Button
@@ -233,12 +236,12 @@ export const MermaidView = ({
                       "bg-muted text-foreground hover:bg-muted"
                   )}
                   active={layout === option.value}
-                  aria-label={option.label}
+                  tooltip={labels[option.label]}
                   onClick={() => setLayout(option.value)}
                 >
                   {option.icon}
                   <span className="hidden @lg/mermaid:inline">
-                    {option.label}
+                    {labels[option.label]}
                   </span>
                 </Button>
               ))}
@@ -249,8 +252,8 @@ export const MermaidView = ({
                 ICON_BUTTON_CLASS,
                 "size-8 [@media(hover:none)_and_(pointer:coarse)]:size-10"
               )}
-              aria-label="Copy source"
-              tooltip={copied ? "Copied" : "Copy source"}
+              aria-label={labels.copySource}
+              tooltip={copied ? labels.copied : labels.copySource}
               disabled={!draft}
               onClick={copy}
             >
@@ -266,7 +269,7 @@ export const MermaidView = ({
         >
           {showCode && (
             <textarea
-              aria-label="Mermaid source"
+              aria-label={labels.diagramSource}
               autoFocus
               className={cn(
                 "ext-mermaid-source block max-h-112 min-h-40 w-full resize-none overflow-x-auto [field-sizing:content] border-0 bg-transparent p-4 font-mono text-[0.8125rem] whitespace-pre @xl/mermaid:min-h-64 [@media(hover:none)_and_(pointer:coarse)]:text-base leading-relaxed text-foreground outline-none select-text placeholder:text-muted-foreground/50 [.ProseMirror-hideselection_&]:selection:text-foreground",
@@ -295,11 +298,11 @@ export const MermaidView = ({
             <span className="flex items-center gap-1">
               <kbd className={KBD_CLASS}>{IS_MAC ? "⌘" : "Ctrl"}</kbd>
               <kbd className={KBD_CLASS}>Enter</kbd>
-              <span>to apply</span>
+              <span>{labels.toApply}</span>
             </span>
             <span className="flex items-center gap-1">
               <kbd className={KBD_CLASS}>Esc</kbd>
-              <span>to cancel</span>
+              <span>{labels.toCancel}</span>
             </span>
           </div>
           <div className="ml-auto flex items-center gap-1.5">
@@ -307,14 +310,14 @@ export const MermaidView = ({
               className="h-7 rounded-lg border border-border bg-background px-2.5 text-xs font-medium hover:bg-muted [@media(hover:none)_and_(pointer:coarse)]:h-9 [@media(hover:none)_and_(pointer:coarse)]:px-3.5 [@media(hover:none)_and_(pointer:coarse)]:text-sm"
               onClick={cancel}
             >
-              Cancel
+              {labels.cancel}
             </Button>
             <Button
               className="h-7 rounded-lg border-transparent bg-primary px-2.5 text-xs font-medium text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground disabled:opacity-50 [@media(hover:none)_and_(pointer:coarse)]:h-9 [@media(hover:none)_and_(pointer:coarse)]:px-3.5 [@media(hover:none)_and_(pointer:coarse)]:text-sm"
               disabled={!dirty && Boolean(value)}
               onClick={apply}
             >
-              Apply
+              {labels.apply}
             </Button>
           </div>
         </div>

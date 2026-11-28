@@ -24,6 +24,8 @@ import {
 } from "react";
 import type { InputHTMLAttributes, KeyboardEvent, ReactNode } from "react";
 
+import { useToolbar } from "../core/context";
+import { useEditorState } from "../core/editor-state";
 import { Button } from "../ui/button";
 import { DropdownMenuContent } from "../ui/dropdown-content";
 import { DropdownMenuItem } from "../ui/dropdown-item";
@@ -108,7 +110,7 @@ const SearchInput = forwardRef<
   HTMLInputElement,
   InputHTMLAttributes<HTMLInputElement>
 >((props, ref) => (
-  <div className="ext-code-block-search sticky top-0 z-2 -mx-1 flex items-center bg-popover p-1 [&>svg]:pointer-events-none [&>svg]:absolute [&>svg]:left-3 [&>svg]:size-3.5 [&>svg]:text-muted-foreground">
+  <div className="ext-code-block-search sticky top-0 z-2 -mx-1 flex items-center rounded-t-lg bg-popover p-1 [&>svg]:pointer-events-none [&>svg]:absolute [&>svg]:left-3 [&>svg]:size-3.5 [&>svg]:text-muted-foreground">
     <Search />
     <Input ref={ref} className="h-8 pl-7" {...props} />
   </div>
@@ -143,6 +145,7 @@ const LanguageMenu = ({
       CODE_BLOCK_LANGUAGES.findIndex((lang) => lang.value === value)
     )
   );
+  const { labels } = useToolbar();
   const inputRef = useRef<HTMLInputElement>(null);
   const listId = useId();
 
@@ -169,11 +172,11 @@ const LanguageMenu = ({
   };
 
   return (
-    <div className="ext-code-block-languages w-60 animate-ext-pop-in rounded-lg border border-border bg-popover px-1 pt-0 pb-1 text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.15)]">
+    <div className="ext-code-block-languages w-60 animate-ext-pop-in overflow-hidden rounded-lg bg-popover px-1 pt-0 pb-1 text-popover-foreground shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)] ring-1 ring-border/60">
       <SearchInput
         ref={inputRef}
-        placeholder="Search for a language..."
-        aria-label="Search for a language"
+        placeholder={`${labels.searchLanguages}...`}
+        aria-label={labels.searchLanguages}
         role="combobox"
         aria-controls={listId}
         aria-expanded
@@ -184,16 +187,16 @@ const LanguageMenu = ({
         onChange={(event) => setSearch(event.target.value)}
         onKeyDown={onKeyDown}
       />
-      <div className={MENU_LABEL_CLASS}>Languages</div>
+      <div className={MENU_LABEL_CLASS}>{labels.languages}</div>
       <DropdownMenuContent
         ref={listRef}
         id={listId}
         role="listbox"
-        className="ext-code-block-language-list max-h-60 min-w-0 animate-none overflow-y-auto rounded-none border-none bg-transparent p-0 shadow-none supports-[not_selector(::-webkit-scrollbar)]:[scrollbar-color:var(--border)_transparent] supports-[not_selector(::-webkit-scrollbar)]:[scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-button]:hidden [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground [&::-webkit-scrollbar-track]:hidden"
+        className="ext-code-block-language-list max-h-60 min-w-0 animate-none overflow-y-auto rounded-none bg-transparent p-0 shadow-none ring-0 supports-[not_selector(::-webkit-scrollbar)]:[scrollbar-color:var(--border)_transparent] supports-[not_selector(::-webkit-scrollbar)]:[scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-button]:hidden [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border [&::-webkit-scrollbar-thumb:hover]:bg-muted-foreground [&::-webkit-scrollbar-track]:hidden"
         activeItem={activeItem}
       >
         {items.length === 0 && (
-          <div className={MENU_LABEL_CLASS}>No results</div>
+          <div className={MENU_LABEL_CLASS}>{labels.noResults}</div>
         )}
         {items.map((lang, index) => (
           <DropdownMenuItem
@@ -232,6 +235,7 @@ const ActionsMenu = ({
     setSearch,
     setSelected,
   } = useSearchList(actions, (action) => action.label);
+  const { labels } = useToolbar();
   const [submenu, setSubmenu] = useState<"focus" | "hover" | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -270,8 +274,8 @@ const ActionsMenu = ({
     >
       <SearchInput
         ref={inputRef}
-        placeholder="Search actions..."
-        aria-label="Search actions"
+        placeholder={`${labels.searchActions}...`}
+        aria-label={labels.searchActions}
         value={query}
         onChange={(event) => {
           setSubmenu(null);
@@ -279,8 +283,10 @@ const ActionsMenu = ({
         }}
         onKeyDown={onKeyDown}
       />
-      <div className={MENU_LABEL_CLASS}>Code</div>
-      {items.length === 0 && <div className={MENU_LABEL_CLASS}>No results</div>}
+      <div className={MENU_LABEL_CLASS}>{labels.code}</div>
+      {items.length === 0 && (
+        <div className={MENU_LABEL_CLASS}>{labels.noResults}</div>
+      )}
       {items.map((action, index) => (
         <DropdownMenuItem
           key={action.id}
@@ -319,6 +325,7 @@ const ActionsMenu = ({
 };
 
 const MermaidPreview = ({ code }: { code: string }) => {
+  const { labels } = useToolbar();
   const id = `ext-mermaid-${useId().replaceAll(/[^a-zA-Z0-9]/g, "")}`;
   const [svg, setSvg] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -347,9 +354,7 @@ const MermaidPreview = ({ code }: { code: string }) => {
       } catch (error_) {
         if (!cancelled) {
           setError(
-            error_ instanceof Error
-              ? error_.message
-              : "Failed to render diagram"
+            error_ instanceof Error ? error_.message : labels.diagramError
           );
         }
       }
@@ -358,7 +363,7 @@ const MermaidPreview = ({ code }: { code: string }) => {
       cancelled = true;
       clearTimeout(timer);
     };
-  }, [code, id]);
+  }, [code, id, labels.diagramError]);
 
   if (!code.trim()) {
     return null;
@@ -375,7 +380,7 @@ const MermaidPreview = ({ code }: { code: string }) => {
       )}
       {!error && !svg && (
         <div className="ext-code-block-mermaid-status">
-          Rendering diagram...
+          {labels.renderingDiagram}
         </div>
       )}
     </div>
@@ -391,6 +396,15 @@ export const CodeBlockView = ({
   const language = (node.attrs.language as string | null) || "plaintext";
   const caption = node.attrs.caption as string | null;
   const code = node.textContent;
+  const { labels } = useToolbar();
+  const active = useEditorState(editor, (current) => {
+    const pos = getPos();
+    if (typeof pos !== "number") {
+      return false;
+    }
+    const { from, to } = current.state.selection;
+    return from > pos && to < pos + node.nodeSize;
+  });
   const [editable, setEditable] = useState(editor.isEditable);
   const [menu, setMenu] = useState<Menu>(null);
   const [copied, setCopied] = useState(false);
@@ -497,16 +511,16 @@ export const CodeBlockView = ({
           {
             icon: <Captions />,
             id: "caption",
-            label: "Caption",
+            label: labels.caption,
             onSelect: addCaption,
           },
         ]
       : []),
-    { icon: <Copy />, id: "copy", label: "Copy code", onSelect: copy },
+    { icon: <Copy />, id: "copy", label: labels.copyCode, onSelect: copy },
     {
       icon: <WrapText />,
       id: "wrap",
-      label: "Wrap code",
+      label: labels.wrapCode,
       onSelect: toggleWrap,
       trailing: (
         <span
@@ -520,7 +534,7 @@ export const CodeBlockView = ({
           {
             icon: <Braces />,
             id: "language",
-            label: "Language",
+            label: labels.language,
             onSelect: () => setMenu("language"),
             submenu: true,
             trailing: <ChevronRight className={TRAILING_CLASS} />,
@@ -532,7 +546,7 @@ export const CodeBlockView = ({
           {
             icon: <Sparkles />,
             id: "format",
-            label: "Format code",
+            label: labels.formatCode,
             onSelect: format,
           },
         ]
@@ -543,8 +557,9 @@ export const CodeBlockView = ({
     <NodeViewWrapper className="ext-code-block" data-language={language}>
       <div className="ext-code-block-box group/code-block">
         <div
-          className="ext-code-block-header pointer-events-none absolute inset-[0.375rem_0.375rem_auto_0.5rem] z-10 flex items-start justify-between opacity-0 [transition:opacity_150ms_ease-out] group-hover/code-block:opacity-100 focus-within:opacity-100 data-open:opacity-100 *:pointer-events-auto"
+          className="ext-code-block-header pointer-events-none absolute inset-[0.25rem_0.25rem_auto_0.5rem] z-10 flex items-start justify-between opacity-0 [transition:opacity_150ms_ease-out] *:pointer-events-none group-hover/code-block:opacity-100 group-hover/code-block:*:pointer-events-auto focus-within:opacity-100 focus-within:*:pointer-events-auto data-active:opacity-100 data-active:*:pointer-events-auto data-open:opacity-100 data-open:*:pointer-events-auto"
           contentEditable={false}
+          data-active={active ? "" : undefined}
           data-open={menu ? "" : undefined}
         >
           {editable ? (
@@ -552,7 +567,7 @@ export const CodeBlockView = ({
               open={menu === "language"}
               onOpenChange={openMenu("language")}
               trigger={
-                <Button className="ext-code-block-lang h-5 gap-0.5 px-1.5 text-[0.75rem] font-normal text-muted-foreground [&>svg]:size-3">
+                <Button className="ext-code-block-lang h-6 gap-1 rounded-sm px-2 text-[0.8125rem] font-normal text-muted-foreground [&>svg]:size-3.5">
                   {getLanguageLabel(language)}
                   <ChevronDown />
                 </Button>
@@ -561,7 +576,7 @@ export const CodeBlockView = ({
               <LanguageMenu value={language} onSelect={setLanguage} />
             </DropdownMenu>
           ) : (
-            <span className="ext-code-block-lang inline-flex h-5 items-center gap-0.5 px-1.5 text-[0.75rem] font-normal text-muted-foreground">
+            <span className="ext-code-block-lang inline-flex h-6 items-center gap-1 px-2 text-[0.8125rem] font-normal text-muted-foreground">
               {getLanguageLabel(language)}
             </span>
           )}
@@ -569,8 +584,7 @@ export const CodeBlockView = ({
             <Button
               size="icon-sm"
               className={TOOLBAR_BUTTON_CLASS}
-              aria-label="Copy"
-              tooltip="Copy"
+              tooltip={copied ? labels.copied : labels.copy}
               onClick={copy}
             >
               {copied ? <Check /> : <Copy />}
@@ -579,8 +593,7 @@ export const CodeBlockView = ({
               <Button
                 size="icon-sm"
                 className={TOOLBAR_BUTTON_CLASS}
-                aria-label="Caption"
-                tooltip="Caption"
+                tooltip={labels.caption}
                 onClick={addCaption}
               >
                 <Captions />
@@ -594,7 +607,7 @@ export const CodeBlockView = ({
                 <Button
                   size="icon-sm"
                   className={TOOLBAR_BUTTON_CLASS}
-                  aria-label="More"
+                  tooltip={labels.codeActions}
                 >
                   <Ellipsis />
                 </Button>
@@ -621,8 +634,8 @@ export const CodeBlockView = ({
           {editable ? (
             <input
               ref={captionRef}
-              aria-label="Caption"
-              placeholder="Write a caption..."
+              aria-label={labels.caption}
+              placeholder={labels.captionPlaceholder}
               value={caption}
               onChange={(event) =>
                 updateAttributes({ caption: event.target.value })

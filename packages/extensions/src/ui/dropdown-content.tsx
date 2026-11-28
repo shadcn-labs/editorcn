@@ -18,7 +18,7 @@ const DropdownMenuContent = React.forwardRef<
       ref={ref}
       role="menu"
       className={cn(
-        "ext-dropdown-content relative min-w-40 animate-ext-pop-in rounded-lg border border-border bg-popover p-1 text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.15)]",
+        "ext-dropdown-content relative min-w-40 animate-ext-pop-in p-1 rounded-lg bg-popover text-popover-foreground shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)] ring-1 ring-border/60 outline-hidden",
         className
       )}
       {...handlers}

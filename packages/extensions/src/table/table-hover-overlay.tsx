@@ -1,26 +1,19 @@
 "use client";
 
-import type { ChainedCommands } from "@tiptap/core";
-import {
-  MoreHorizontal,
-  MoreVertical,
-  Plus,
-  Trash2,
-  ArrowRight,
-  ArrowLeft,
-  ArrowUp,
-  ArrowDown,
-} from "lucide-react";
+import type { Editor } from "@tiptap/core";
+import { MoreHorizontal, MoreVertical, Plus } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useToolbar, useToolbarEditor } from "../core/context";
 import { extensionPresent } from "../core/detection";
 import type { ExtensionLabels } from "../core/labels";
 import type { ToolbarComponentProps } from "../core/types";
+import { Button } from "../ui/button";
 import { DropdownMenuContent } from "../ui/dropdown-content";
-import { DropdownMenuItem } from "../ui/dropdown-item";
 import { DropdownMenu } from "../ui/dropdown-menu";
-import { DropdownMenuSeparator } from "../ui/dropdown-separator";
+import { cn } from "../ui/utils";
+import { COLUMN_ACTIONS, ROW_ACTIONS, TableActionItems } from "./actions";
+import type { TableAction, TableCommand } from "./actions";
 
 interface Box {
   bottom: number;
@@ -31,59 +24,51 @@ interface Box {
   width: number;
 }
 
-interface TableColumnLayout {
-  left: number;
-  width: number;
+interface Span {
+  size: number;
+  start: number;
 }
 
-interface TableRowLayout {
-  height: number;
-  top: number;
-}
-
-/**
- * Everything the overlay draws for one frame.
- *
- * `visible` is the editor's visible box — the intersection of every scroll/clip
- * container above the editable area. The controls live inside a clip box of
- * exactly that size, so a handle can never paint over the surrounding UI, and
- * the box is what `columns`, `rows` and `table` are measured against.
- */
 interface OverlayLayout {
-  /** The table's trailing edge is under the scroll box, so it has no handle. */
   clippedBottom: boolean;
   clippedRight: boolean;
-  columns: TableColumnLayout[];
-  /** Offset of the visible box from the overlay's origin. */
+  columns: Span[];
   offset: { left: number; top: number };
-  rows: TableRowLayout[];
-  /** The part of the table that is on screen. */
+  rows: Span[];
   table: Box;
-  /** Size of the editor's visible box. */
   visible: { height: number; width: number };
 }
 
-/** Half of a 1.1rem grip, so grips stay fully inside the visible box. */
-const GRIP_INSET = 9;
-/** Footprint of the add handles. */
+type OverlayMode = "pointer" | "selection";
+
+interface GripGeometry {
+  addAt: number | null;
+  cross: number;
+  span: Span;
+}
+
+const GRIP_THICKNESS = 12;
+const GRIP_GAP = 4;
+const GRIP_INSET = 2;
+const MIN_SLICE = 16;
+const DOT_SIZE = 20;
 const ADD_SIZE = 20;
-/** Gap between the table edge and an add handle. */
 const ADD_GAP = 6;
 
-const CONTROL_CLASS =
-  "ext-table-control pointer-events-auto absolute z-2 animate-ext-table-pop-in";
-
 const GRIP_CLASS =
-  "ext-table-grip group/grip relative flex size-[1.1rem] cursor-pointer touch-none items-center justify-center rounded-sm border border-transparent bg-transparent p-0 text-muted-foreground shadow-none [transition:background-color_150ms_ease-out,border-color_150ms_ease-out,box-shadow_150ms_ease-out,color_150ms_ease-out] before:absolute before:-inset-[0.35rem] before:rounded-md before:content-[''] hover:border-border hover:bg-popover hover:text-foreground hover:shadow-[0_1px_2px_rgba(0,0,0,0.08)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring focus-visible:outline-solid active:scale-92 data-[state=open]:border-border data-[state=open]:bg-popover data-[state=open]:text-foreground data-[state=open]:shadow-[0_1px_2px_rgba(0,0,0,0.08)]";
+  "ext-table-grip group/grip absolute z-2 h-auto min-w-0 animate-ext-table-pop-in rounded-sm border-border bg-popover p-0 text-muted-foreground shadow-[0_1px_2px_rgba(0,0,0,0.08)] before:absolute before:content-[''] hover:bg-accent hover:text-foreground active:scale-100 data-[state=open]:border-primary data-[state=open]:bg-primary data-[state=open]:text-primary-foreground [&>svg]:size-3";
 
-const GRIP_ICON_CLASS =
-  "absolute inset-0 m-auto size-3 shrink-0 scale-60 opacity-0 [transition:opacity_150ms_ease-out,scale_150ms_cubic-bezier(0.34,1.56,0.64,1)] group-hover/grip:scale-100 group-hover/grip:opacity-100 group-focus-visible/grip:scale-100 group-focus-visible/grip:opacity-100 group-data-[state=open]/grip:scale-100 group-data-[state=open]/grip:opacity-100";
+const COLUMN_GRIP_CLASS =
+  "ext-table-grip--column before:inset-x-0 before:-top-1 before:-bottom-1 [@media(pointer:coarse)]:before:-top-7";
 
-const GRIP_STROKE_CLASS =
-  "ext-table-grip-stroke pointer-events-none absolute inset-0 m-auto rounded-[1px] bg-muted-foreground opacity-60 [transition:opacity_150ms_ease-out] group-hover/grip:opacity-0 group-data-[state=open]/grip:opacity-0";
+const ROW_GRIP_CLASS =
+  "ext-table-grip--row before:inset-y-0 before:-right-1 before:-left-1 [@media(pointer:coarse)]:before:-left-7";
+
+const DOT_CLASS =
+  "ext-table-add-dot absolute z-3 size-5 min-w-0 animate-ext-table-pop-in rounded-full border-border bg-popover p-0 text-muted-foreground shadow-[0_1px_2px_rgba(0,0,0,0.08)] before:absolute before:-inset-1 before:rounded-full before:content-[''] hover:bg-accent hover:text-foreground [@media(pointer:coarse)]:before:-inset-3 [&>svg]:size-3";
 
 const ADD_CLASS =
-  "ext-table-add pointer-events-auto absolute flex animate-ext-table-pop-in items-center justify-center rounded-sm border border-border bg-popover p-0 text-popover-foreground [transition:background-color_100ms_ease-out,color_100ms_ease-out,scale_100ms_ease-out] hover:bg-accent hover:text-accent-foreground active:scale-95 [&>svg]:size-3.5 [&>svg]:shrink-0";
+  "ext-table-add absolute h-auto min-w-0 animate-ext-table-pop-in rounded-sm border-border bg-popover p-0 text-muted-foreground hover:bg-accent hover:text-accent-foreground active:scale-100 [&>svg]:size-3.5";
 
 const toBox = (
   left: number,
@@ -109,7 +94,6 @@ const intersect = (a: Box, b: Box): Box =>
 
 const isCollapsed = (box: Box): boolean => box.width <= 0 || box.height <= 0;
 
-/** Visible area of a scroll/clip container, without its borders or scrollbars. */
 const clientBox = (node: HTMLElement): Box => {
   const r = node.getBoundingClientRect();
   const left = r.left + node.clientLeft;
@@ -117,14 +101,6 @@ const clientBox = (node: HTMLElement): Box => {
   return toBox(left, top, left + node.clientWidth, top + node.clientHeight);
 };
 
-/**
- * Visible box of the editor in viewport coordinates: the intersection of every
- * scroll or clip container between the editable area and the document.
- *
- * The table node view's `.tableWrapper` is not part of this chain — it hugs the
- * table, so intersecting with it would cut the row handle under its bottom
- * padding. Its visible width is applied separately while measuring the table.
- */
 const visibleBounds = (dom: HTMLElement): Box | null => {
   let bounds: Box | null = null;
   for (let node: HTMLElement | null = dom; node; node = node.parentElement) {
@@ -141,37 +117,8 @@ const visibleBounds = (dom: HTMLElement): Box | null => {
   if (bounds) {
     return bounds;
   }
-  // Nothing clips the editor, so its own box is the visible area.
   const r = dom.getBoundingClientRect();
   return toBox(r.left, r.top, r.right, r.bottom);
-};
-
-/**
- * Center of the visible slice of `start`/`size` inside `from`/`to`, or `null`
- * when it is scrolled out entirely. The center is nudged so the grip stays
- * fully inside the visible box.
- */
-const fitCenter = (
-  start: number,
-  size: number,
-  from: number,
-  to: number
-): number | null => {
-  const visibleFrom = Math.max(start, from);
-  const visibleTo = Math.min(start + size, to);
-  if (visibleTo - visibleFrom <= 0) {
-    return null;
-  }
-  const min = from + GRIP_INSET;
-  const max = Math.max(min, to - GRIP_INSET);
-  return Math.min(Math.max((visibleFrom + visibleTo) / 2, min), max);
-};
-
-/** Keep a grip that straddles a table edge fully inside the visible box. */
-const fitEdge = (value: number, from: number, to: number): number => {
-  const min = from + GRIP_INSET;
-  const max = Math.max(min, to - GRIP_INSET);
-  return Math.min(Math.max(value, min), max);
 };
 
 const cellChildren = (row: Element): HTMLElement[] =>
@@ -179,10 +126,6 @@ const cellChildren = (row: Element): HTMLElement[] =>
     (cell) => cell.tagName === "TD" || cell.tagName === "TH"
   ) as HTMLElement[];
 
-/**
- * Measure the hovered table for one frame, or `null` when it has no visible
- * part to draw controls for.
- */
 const measureLayout = (
   anchor: HTMLElement,
   dom: HTMLElement,
@@ -197,15 +140,6 @@ const measureLayout = (
   const tableBox = toBox(tRect.left, tRect.top, tRect.right, tRect.bottom);
   let tableBounds = intersect(tableBox, visible);
 
-  // The node view scrolls wide tables sideways. Its scrollport is a fixed box in
-  // viewport coordinates — the table's own rect already accounts for how far it
-  // is scrolled — so narrowing the table to that width gives the part of the
-  // table that is actually on screen. Folding `scrollLeft` in here would shift
-  // the box and collapse it once the table is scrolled past its own width.
-  //
-  // Only the width is narrowed: the scroller's client height excludes the
-  // horizontal scrollbar, so intersecting vertically would clip the table's
-  // last row.
   const scroller = table.closest<HTMLElement>(".tableWrapper");
   if (scroller) {
     const sBox = clientBox(scroller);
@@ -229,8 +163,6 @@ const measureLayout = (
     }
   }
 
-  // Controls are placed inside the clip box, so they are measured relative to
-  // the visible box's top-left corner.
   const originX = visible.left;
   const originY = visible.top;
 
@@ -239,7 +171,7 @@ const measureLayout = (
     clippedRight: tableBox.right > tableBounds.right + 1,
     columns: widestCells.map((cell) => {
       const r = cell.getBoundingClientRect();
-      return { left: r.left - originX, width: r.width };
+      return { size: r.width, start: r.left - originX };
     }),
     offset: {
       left: visible.left - anchorRect.left,
@@ -247,7 +179,7 @@ const measureLayout = (
     },
     rows: rowElements.map((rowEl) => {
       const r = rowEl.getBoundingClientRect();
-      return { height: r.height, top: r.top - originY };
+      return { size: r.height, start: r.top - originY };
     }),
     table: toBox(
       tableBounds.left - originX,
@@ -259,297 +191,245 @@ const measureLayout = (
   };
 };
 
-interface ColumnControlProps {
-  colCenter: number;
-  labels: ExtensionLabels;
-  menuOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  runColumnOp: (op: (c: ChainedCommands) => ChainedCommands) => void;
-  top: number;
-}
+const visibleSlice = (span: Span, from: number, to: number): Span | null => {
+  const start = Math.max(span.start, from);
+  const end = Math.min(span.start + span.size, to);
+  return end - start < MIN_SLICE ? null : { size: end - start, start };
+};
 
-const ColumnControl = ({
-  colCenter,
-  labels,
-  menuOpen,
-  onOpenChange,
-  runColumnOp,
-  top,
-}: ColumnControlProps) => (
-  <div
-    className={`${CONTROL_CLASS} ext-table-control--column origin-top`}
-    style={{
-      left: colCenter,
-      top,
-      transform: "translate(-50%, -50%)",
-    }}
-  >
-    <DropdownMenu
-      open={menuOpen}
-      onOpenChange={onOpenChange}
-      side="bottom"
-      trigger={
-        <button
-          type="button"
-          aria-label={labels.columnActions}
-          className={GRIP_CLASS}
-          data-state={menuOpen ? "open" : "closed"}
-        >
-          <span
-            className={`${GRIP_STROKE_CLASS} ext-table-grip-stroke--column h-[3px] w-[14px]`}
-            aria-hidden
-          />
-          <MoreHorizontal className={GRIP_ICON_CLASS} />
-        </button>
-      }
-    >
-      <DropdownMenuContent>
-        <DropdownMenuItem
-          onClick={() => runColumnOp((c) => c.addColumnBefore())}
-        >
-          <ArrowLeft />
-          {labels.addColumnLeft}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => runColumnOp((c) => c.addColumnAfter())}
-        >
-          <ArrowRight />
-          {labels.addColumnRight}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          danger
-          onClick={() => runColumnOp((c) => c.deleteColumn())}
-        >
-          <Trash2 />
-          {labels.deleteColumn}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  </div>
-);
+const borderWithin = (span: Span, from: number, to: number): number | null => {
+  const border = span.start + span.size;
+  return border >= from - 0.5 && border <= to + 0.5 ? border : null;
+};
 
-interface RowControlProps {
-  labels: ExtensionLabels;
-  left: number;
-  menuOpen: boolean;
-  onOpenChange: (open: boolean) => void;
-  rowCenter: number;
-  runRowOp: (op: (c: ChainedCommands) => ChainedCommands) => void;
-}
-
-const RowControl = ({
-  labels,
-  left,
-  menuOpen,
-  onOpenChange,
-  rowCenter,
-  runRowOp,
-}: RowControlProps) => (
-  <div
-    className={`${CONTROL_CLASS} ext-table-control--row origin-left`}
-    style={{
-      left,
-      top: rowCenter,
-      transform: "translate(-50%, -50%)",
-    }}
-  >
-    <DropdownMenu
-      open={menuOpen}
-      onOpenChange={onOpenChange}
-      side="right"
-      trigger={
-        <button
-          type="button"
-          aria-label={labels.rowActions}
-          className={`${GRIP_CLASS} ext-table-grip--row`}
-          data-state={menuOpen ? "open" : "closed"}
-        >
-          <span
-            className={`${GRIP_STROKE_CLASS} ext-table-grip-stroke--row h-[14px] w-[3px]`}
-            aria-hidden
-          />
-          <MoreVertical className={`${GRIP_ICON_CLASS} rotate-90`} />
-        </button>
-      }
-    >
-      <DropdownMenuContent>
-        <DropdownMenuItem onClick={() => runRowOp((c) => c.addRowBefore())}>
-          <ArrowUp />
-          {labels.addRowAbove}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => runRowOp((c) => c.addRowAfter())}>
-          <ArrowDown />
-          {labels.addRowBelow}
-        </DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem danger onClick={() => runRowOp((c) => c.deleteRow())}>
-          <Trash2 />
-          {labels.deleteRow}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  </div>
-);
-
-interface AddHandlesProps {
-  labels: ExtensionLabels;
-  runColumnOp: (op: (c: ChainedCommands) => ChainedCommands) => void;
-  runRowOp: (op: (c: ChainedCommands) => ChainedCommands) => void;
-  showColumn: boolean;
-  showRow: boolean;
-  tableRect: Box;
-}
-
-const AddHandles = ({
-  labels,
-  runColumnOp,
-  runRowOp,
-  showColumn,
-  showRow,
-  tableRect,
-}: AddHandlesProps) => (
-  <>
-    {showColumn ? (
-      <button
-        type="button"
-        aria-label={labels.addColumnRight}
-        className={ADD_CLASS}
-        style={{
-          cursor: "col-resize",
-          height: tableRect.height,
-          left: tableRect.right + ADD_GAP,
-          top: tableRect.top,
-          width: ADD_SIZE,
-        }}
-        title={labels.addColumnRight}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            runColumnOp((c) => c.addColumnAfter());
-          }
-        }}
-        onClick={() => runColumnOp((c) => c.addColumnAfter())}
-      >
-        <Plus />
-      </button>
-    ) : null}
-    {showRow ? (
-      <button
-        type="button"
-        aria-label={labels.addRowBelow}
-        className={ADD_CLASS}
-        style={{
-          cursor: "row-resize",
-          height: ADD_SIZE,
-          left: tableRect.left,
-          top: tableRect.bottom + ADD_GAP,
-          width: tableRect.width,
-        }}
-        title={labels.addRowBelow}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            runRowOp((c) => c.addRowAfter());
-          }
-        }}
-        onClick={() => runRowOp((c) => c.addRowAfter())}
-      >
-        <Plus />
-      </button>
-    ) : null}
-  </>
-);
-
-interface OverlayControlsProps {
-  colMenuOpen: boolean;
-  hoveredCol: number | null;
-  hoveredRow: number | null;
-  labels: ExtensionLabels;
-  layout: OverlayLayout | null;
-  onColMenuOpenChange: (open: boolean) => void;
-  onRowMenuOpenChange: (open: boolean) => void;
-  rowMenuOpen: boolean;
-  runColumnOp: (op: (c: ChainedCommands) => ChainedCommands) => void;
-  runRowOp: (op: (c: ChainedCommands) => ChainedCommands) => void;
-}
-
-const OverlayControls = ({
-  colMenuOpen,
-  hoveredCol,
-  hoveredRow,
-  labels,
-  layout,
-  onColMenuOpenChange,
-  onRowMenuOpenChange,
-  rowMenuOpen,
-  runColumnOp,
-  runRowOp,
-}: OverlayControlsProps) => {
-  if (!layout) {
+const columnGeometry = (
+  layout: OverlayLayout,
+  index: number | null,
+  withAdd: boolean
+): GripGeometry | null => {
+  const column = index === null ? undefined : layout.columns[index];
+  if (!column) {
     return null;
   }
+  const { table } = layout;
+  const span = visibleSlice(column, table.left, table.right);
+  if (!span) {
+    return null;
+  }
+  return {
+    addAt: withAdd ? borderWithin(column, table.left, table.right) : null,
+    cross: Math.max(0, table.top - GRIP_GAP - GRIP_THICKNESS),
+    span,
+  };
+};
 
-  const { clippedBottom, clippedRight, columns, rows, table, visible } = layout;
-  const column = hoveredCol === null ? undefined : columns[hoveredCol];
-  const row = hoveredRow === null ? undefined : rows[hoveredRow];
+const rowGeometry = (
+  layout: OverlayLayout,
+  index: number | null,
+  withAdd: boolean
+): GripGeometry | null => {
+  const row = index === null ? undefined : layout.rows[index];
+  if (!row) {
+    return null;
+  }
+  const { table } = layout;
+  const span = visibleSlice(row, table.top, table.bottom);
+  if (!span) {
+    return null;
+  }
+  return {
+    addAt: withAdd ? borderWithin(row, table.top, table.bottom) : null,
+    cross: Math.max(0, table.left - GRIP_GAP - GRIP_THICKNESS),
+    span,
+  };
+};
 
-  // Derived from the measured layout every frame, so the grips follow the table
-  // while it scrolls or resizes instead of freezing on the cell that was hovered
-  // when they appeared.
-  const colCenter = column
-    ? fitCenter(column.left, column.width, 0, visible.width)
-    : null;
-  const rowCenter = row
-    ? fitCenter(row.top, row.height, 0, visible.height)
-    : null;
+const gripLength = (geometry: GripGeometry): number =>
+  geometry.span.size -
+  GRIP_INSET * 2 -
+  (geometry.addAt === null ? 0 : DOT_SIZE / 2);
 
-  // The trailing handles sit outside the table, so they are only shown when the
-  // table's trailing edge is on screen and their whole footprint still fits
-  // inside the visible box — otherwise the clip would cut them in half.
-  const showColumn =
-    colCenter !== null &&
-    hoveredCol === columns.length - 1 &&
-    !clippedRight &&
-    table.right + ADD_GAP + ADD_SIZE <= visible.width;
-  const showRow =
-    rowCenter !== null &&
-    hoveredRow === rows.length - 1 &&
-    !clippedBottom &&
-    table.bottom + ADD_GAP + ADD_SIZE <= visible.height;
+interface GripProps {
+  axis: "column" | "row";
+  geometry: GripGeometry;
+  labels: ExtensionLabels;
+  menuOpen: boolean;
+  onAdd: () => void;
+  onOpenChange: (open: boolean) => void;
+  onSelect: (action: TableAction) => void;
+}
+
+const Grip = ({
+  axis,
+  geometry,
+  labels,
+  menuOpen,
+  onAdd,
+  onOpenChange,
+  onSelect,
+}: GripProps) => {
+  const isColumn = axis === "column";
+  const { addAt, cross, span } = geometry;
+  const length = gripLength(geometry);
+  const crossCenter = cross + GRIP_THICKNESS / 2;
 
   return (
     <>
-      {colCenter !== null && (
-        <ColumnControl
-          colCenter={colCenter}
-          labels={labels}
-          menuOpen={colMenuOpen}
-          onOpenChange={onColMenuOpenChange}
-          runColumnOp={runColumnOp}
-          top={fitEdge(table.top, 0, visible.height)}
-        />
+      <DropdownMenu
+        open={menuOpen}
+        onOpenChange={onOpenChange}
+        side={isColumn ? "bottom" : "right"}
+        trigger={
+          <Button
+            className={cn(
+              GRIP_CLASS,
+              isColumn ? COLUMN_GRIP_CLASS : ROW_GRIP_CLASS
+            )}
+            data-state={menuOpen ? "open" : "closed"}
+            style={
+              isColumn
+                ? {
+                    height: GRIP_THICKNESS,
+                    left: span.start + GRIP_INSET,
+                    top: cross,
+                    width: length,
+                  }
+                : {
+                    height: length,
+                    left: cross,
+                    top: span.start + GRIP_INSET,
+                    width: GRIP_THICKNESS,
+                  }
+            }
+            tooltip={isColumn ? labels.columnActions : labels.rowActions}
+            tooltipSide="top"
+          >
+            {isColumn ? <MoreHorizontal /> : <MoreVertical />}
+          </Button>
+        }
+      >
+        <DropdownMenuContent>
+          <TableActionItems
+            groups={isColumn ? COLUMN_ACTIONS : ROW_ACTIONS}
+            labels={labels}
+            onSelect={onSelect}
+          />
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {addAt === null ? null : (
+        <Button
+          className={DOT_CLASS}
+          style={
+            isColumn
+              ? {
+                  left: addAt - DOT_SIZE / 2,
+                  top: crossCenter - DOT_SIZE / 2,
+                }
+              : {
+                  left: crossCenter - DOT_SIZE / 2,
+                  top: addAt - DOT_SIZE / 2,
+                }
+          }
+          tooltip={isColumn ? labels.addColumnRight : labels.addRowBelow}
+          tooltipSide="top"
+          onClick={onAdd}
+        >
+          <Plus />
+        </Button>
       )}
-      {rowCenter !== null && (
-        <RowControl
-          labels={labels}
-          left={fitEdge(table.left, 0, visible.width)}
-          menuOpen={rowMenuOpen}
-          onOpenChange={onRowMenuOpenChange}
-          rowCenter={rowCenter}
-          runRowOp={runRowOp}
-        />
-      )}
-      <AddHandles
-        labels={labels}
-        runColumnOp={runColumnOp}
-        runRowOp={runRowOp}
-        showColumn={showColumn}
-        showRow={showRow}
-        tableRect={table}
-      />
     </>
   );
+};
+
+interface EdgeAddProps {
+  labels: ExtensionLabels;
+  layout: OverlayLayout;
+  onAddColumn: () => void;
+  onAddRow: () => void;
+  showColumn: boolean;
+  showRow: boolean;
+}
+
+const EdgeAdd = ({
+  labels,
+  layout,
+  onAddColumn,
+  onAddRow,
+  showColumn,
+  showRow,
+}: EdgeAddProps) => {
+  const { table } = layout;
+  return (
+    <>
+      {showColumn ? (
+        <Button
+          className={cn(ADD_CLASS, "ext-table-add--column")}
+          style={{
+            height: table.height,
+            left: table.right + ADD_GAP,
+            top: table.top,
+            width: ADD_SIZE,
+          }}
+          tooltip={labels.addColumn}
+          onClick={onAddColumn}
+        >
+          <Plus />
+        </Button>
+      ) : null}
+      {showRow ? (
+        <Button
+          className={cn(ADD_CLASS, "ext-table-add--row")}
+          style={{
+            height: ADD_SIZE,
+            left: table.left,
+            top: table.bottom + ADD_GAP,
+            width: table.width,
+          }}
+          tooltip={labels.addRow}
+          onClick={onAddRow}
+        >
+          <Plus />
+        </Button>
+      ) : null}
+    </>
+  );
+};
+
+const edgeVisibility = (
+  layout: OverlayLayout | null,
+  withAdd: boolean,
+  column: GripGeometry | null,
+  row: GripGeometry | null,
+  hoveredCol: number | null,
+  hoveredRow: number | null
+): { column: boolean; row: boolean } => {
+  if (!layout || withAdd) {
+    return { column: false, row: false };
+  }
+  const { clippedBottom, clippedRight, columns, rows, table, visible } = layout;
+  return {
+    column:
+      column !== null &&
+      hoveredCol === columns.length - 1 &&
+      !clippedRight &&
+      table.right + ADD_GAP + ADD_SIZE <= visible.width,
+    row:
+      row !== null &&
+      hoveredRow === rows.length - 1 &&
+      !clippedBottom &&
+      table.bottom + ADD_GAP + ADD_SIZE <= visible.height,
+  };
+};
+
+const selectedCell = (editor: Editor): HTMLElement | null => {
+  try {
+    const { node } = editor.view.domAtPos(editor.state.selection.from);
+    const element = node instanceof HTMLElement ? node : node.parentElement;
+    const cell = element?.closest<HTMLElement>("td, th") ?? null;
+    return cell && editor.view.dom.contains(cell) ? cell : null;
+  } catch {
+    return null;
+  }
 };
 
 export const TableHoverOverlay = ({
@@ -561,18 +441,18 @@ export const TableHoverOverlay = ({
   const anchorRef = useRef<HTMLDivElement>(null);
   const activeTableRef = useRef<HTMLElement | null>(null);
   const hideTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastPointerRef = useRef("mouse");
+  const modeRef = useRef<OverlayMode>("pointer");
 
   const [layout, setLayout] = useState<OverlayLayout | null>(null);
   const [hoveredCol, setHoveredCol] = useState<number | null>(null);
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
+  const [mode, setMode] = useState<OverlayMode>("pointer");
   const [colMenuOpen, setColMenuOpen] = useState(false);
   const [rowMenuOpen, setRowMenuOpen] = useState(false);
 
   const isEditable = editor?.isEditable ?? false;
   const hasTable = editor ? extensionPresent(editor, "table") : false;
-  // The measure loop runs while a table is hovered, not while it is laid out.
-  // A table scrolled out of view has no layout to show, and stopping the loop
-  // there would leave it blank when it scrolls back in.
   const isActive = hoveredCol !== null || hoveredRow !== null;
 
   const cancelHide = useCallback(() => {
@@ -595,6 +475,11 @@ export const TableHoverOverlay = ({
     hideTimer.current = setTimeout(resetHover, 200);
   }, [cancelHide, resetHover]);
 
+  const switchMode = useCallback((next: OverlayMode) => {
+    modeRef.current = next;
+    setMode(next);
+  }, []);
+
   const recompute = useCallback(() => {
     const table = activeTableRef.current;
     const anchor = anchorRef.current;
@@ -604,6 +489,43 @@ export const TableHoverOverlay = ({
     );
   }, [editor]);
 
+  const trackCell = useCallback(
+    (cell: HTMLElement) => {
+      const table = cell.closest<HTMLElement>("table");
+      const rowEl = cell.parentElement;
+      if (!table || !rowEl) {
+        return;
+      }
+      if (activeTableRef.current !== table) {
+        setColMenuOpen(false);
+        setRowMenuOpen(false);
+      }
+      activeTableRef.current = table;
+      const colIdx = [...rowEl.children].indexOf(cell);
+      const rowIdx = [...table.querySelectorAll("tr")].indexOf(
+        rowEl as HTMLTableRowElement
+      );
+      if (colIdx !== -1) {
+        setHoveredCol(colIdx);
+      }
+      if (rowIdx !== -1) {
+        setHoveredRow(rowIdx);
+      }
+      recompute();
+    },
+    [recompute]
+  );
+
+  useEffect(() => {
+    const handlePointerDown = (e: PointerEvent) => {
+      lastPointerRef.current = e.pointerType;
+    };
+    document.addEventListener("pointerdown", handlePointerDown, true);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown, true);
+    };
+  }, []);
+
   useEffect(() => {
     if (!editor || editor.isDestroyed) {
       return;
@@ -611,6 +533,9 @@ export const TableHoverOverlay = ({
     const dom = editor.view.dom as HTMLElement;
 
     const handleOver = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse") {
+        return;
+      }
       const target = e.target as HTMLElement;
       if (!dom.contains(target)) {
         return;
@@ -627,11 +552,7 @@ export const TableHoverOverlay = ({
       cancelHide();
 
       const cell = target.closest?.("td, th") as HTMLElement | undefined;
-      const table = cell?.closest?.("table") as HTMLElement | undefined;
-      if (!cell || !table) {
-        // The pointer is in the wrapper's scroll gutter, not on a cell. The
-        // handles stay where they are — that is intentional — unless this is a
-        // different table than the active one.
+      if (!cell?.closest("table")) {
         if (
           activeTableRef.current &&
           !tableWrapper.contains(activeTableRef.current)
@@ -641,21 +562,8 @@ export const TableHoverOverlay = ({
         return;
       }
 
-      activeTableRef.current = table;
-
-      const rowEl = cell.parentElement;
-      const allRows = [...table.querySelectorAll("tr")];
-      const colIdx = rowEl ? [...rowEl.children].indexOf(cell) : -1;
-      const rowIdx = rowEl ? allRows.indexOf(rowEl as HTMLTableRowElement) : -1;
-
-      if (colIdx >= 0) {
-        setHoveredCol(colIdx);
-      }
-      if (rowIdx >= 0) {
-        setHoveredRow(rowIdx);
-      }
-
-      recompute();
+      switchMode("pointer");
+      trackCell(cell);
     };
 
     const handleLeave = (e: PointerEvent) => {
@@ -675,22 +583,38 @@ export const TableHoverOverlay = ({
       scheduleHide();
     };
 
+    const handleSelection = () => {
+      if (lastPointerRef.current === "mouse" || editor.isDestroyed) {
+        return;
+      }
+      const cell = selectedCell(editor);
+      if (cell) {
+        cancelHide();
+        switchMode("selection");
+        trackCell(cell);
+      } else if (modeRef.current === "selection") {
+        resetHover();
+      }
+    };
+
     const handleOverlayOver = () => {
       cancelHide();
     };
 
     dom.addEventListener("pointerover", handleOver);
     dom.addEventListener("pointerleave", handleLeave);
+    editor.on("selectionUpdate", handleSelection);
     const anchor = anchorRef.current;
     anchor?.addEventListener("pointerover", handleOverlayOver);
     return () => {
       dom.removeEventListener("pointerover", handleOver);
       dom.removeEventListener("pointerleave", handleLeave);
+      editor.off("selectionUpdate", handleSelection);
       anchor?.removeEventListener("pointerover", handleOverlayOver);
       cancelHide();
       resetHover();
     };
-  }, [editor, recompute, cancelHide, scheduleHide, resetHover]);
+  }, [editor, cancelHide, scheduleHide, resetHover, switchMode, trackCell]);
 
   useEffect(() => {
     if (!isActive) {
@@ -707,6 +631,16 @@ export const TableHoverOverlay = ({
     };
   }, [isActive, recompute]);
 
+  const withAdd = mode === "selection";
+  const column = layout ? columnGeometry(layout, hoveredCol, withAdd) : null;
+  const row = layout ? rowGeometry(layout, hoveredRow, withAdd) : null;
+  if (column === null && colMenuOpen) {
+    setColMenuOpen(false);
+  }
+  if (row === null && rowMenuOpen) {
+    setRowMenuOpen(false);
+  }
+
   const cellAt = (rowIdx: number, colIdx: number): HTMLElement | undefined => {
     const table = activeTableRef.current;
     if (!table) {
@@ -717,51 +651,37 @@ export const TableHoverOverlay = ({
     return cell?.tagName === "TD" || cell?.tagName === "TH" ? cell : undefined;
   };
 
-  const cellPos = (cell: HTMLElement): number | null => {
-    if (!editor || editor.isDestroyed) {
-      return null;
-    }
-    const pos = editor.view.posAtDOM(cell, 0, 0);
-    return pos ?? null;
-  };
-
-  const runCellOp = (
-    cell: HTMLElement | undefined,
-    op: (c: ChainedCommands) => ChainedCommands
-  ) => {
+  const runCellOp = (cell: HTMLElement | undefined, op: TableCommand) => {
     if (!editor || editor.isDestroyed || cell === undefined) {
       return;
     }
-    const pos = cellPos(cell);
-    if (pos === null) {
+    const pos = editor.view.posAtDOM(cell, 0, 0);
+    if (pos === null || pos === undefined) {
       return;
     }
     op(editor.chain().focus().setTextSelection(pos)).run();
   };
 
-  const runColumnOp = (op: (c: ChainedCommands) => ChainedCommands) => {
-    const col = hoveredCol ?? 0;
-    const cell = cellAt(0, col);
-    runCellOp(cell, op);
+  const runColumnOp = (op: TableCommand) => {
+    runCellOp(cellAt(0, hoveredCol ?? 0), op);
   };
 
-  const runRowOp = (op: (c: ChainedCommands) => ChainedCommands) => {
-    const row = hoveredRow ?? 0;
-    const cell = cellAt(row, 0);
-    runCellOp(cell, op);
-  };
-
-  const handleColMenuOpen = (open: boolean) => {
-    setColMenuOpen(open);
-  };
-
-  const handleRowMenuOpen = (open: boolean) => {
-    setRowMenuOpen(open);
+  const runRowOp = (op: TableCommand) => {
+    runCellOp(cellAt(hoveredRow ?? 0, 0), op);
   };
 
   if (!hasTable || !isEditable) {
     return null;
   }
+
+  const edge = edgeVisibility(
+    layout,
+    withAdd,
+    column,
+    row,
+    hoveredCol,
+    hoveredRow
+  );
 
   return (
     <div
@@ -770,7 +690,7 @@ export const TableHoverOverlay = ({
     >
       {layout ? (
         <div
-          className="ext-table-clip pointer-events-none absolute overflow-hidden"
+          className="ext-table-clip pointer-events-none absolute overflow-hidden *:pointer-events-auto"
           style={{
             height: layout.visible.height,
             left: layout.offset.left,
@@ -778,17 +698,41 @@ export const TableHoverOverlay = ({
             width: layout.visible.width,
           }}
         >
-          <OverlayControls
-            colMenuOpen={colMenuOpen}
-            hoveredCol={hoveredCol}
-            hoveredRow={hoveredRow}
+          {column ? (
+            <Grip
+              axis="column"
+              geometry={column}
+              labels={labels}
+              menuOpen={colMenuOpen}
+              onAdd={() => runColumnOp((c) => c.addColumnAfter())}
+              onOpenChange={setColMenuOpen}
+              onSelect={(action) => {
+                runColumnOp(action.command);
+                setColMenuOpen(false);
+              }}
+            />
+          ) : null}
+          {row ? (
+            <Grip
+              axis="row"
+              geometry={row}
+              labels={labels}
+              menuOpen={rowMenuOpen}
+              onAdd={() => runRowOp((c) => c.addRowAfter())}
+              onOpenChange={setRowMenuOpen}
+              onSelect={(action) => {
+                runRowOp(action.command);
+                setRowMenuOpen(false);
+              }}
+            />
+          ) : null}
+          <EdgeAdd
             labels={labels}
             layout={layout}
-            onColMenuOpenChange={handleColMenuOpen}
-            onRowMenuOpenChange={handleRowMenuOpen}
-            rowMenuOpen={rowMenuOpen}
-            runColumnOp={runColumnOp}
-            runRowOp={runRowOp}
+            onAddColumn={() => runColumnOp((c) => c.addColumnAfter())}
+            onAddRow={() => runRowOp((c) => c.addRowAfter())}
+            showColumn={edge.column}
+            showRow={edge.row}
           />
         </div>
       ) : null}

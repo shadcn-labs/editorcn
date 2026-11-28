@@ -1,17 +1,29 @@
 @theme {
-  --animate-ext-pop-in: ext-pop-in 0.18s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  --animate-ext-tooltip-in: ext-pop-in 0.12s ease-out forwards;
+  --animate-ext-pop-in: ext-pop-in 0.1s ease-out both;
+  --animate-ext-tooltip-in: ext-pop-in 0.15s ease-out both;
+  --animate-ext-tooltip-out: ext-pop-out 0.15s ease-in both;
 
   @keyframes ext-pop-in {
     from {
       opacity: 0;
-      translate: 0 0.25rem;
+      translate: var(--ext-slide-x, 0) var(--ext-slide-y, -0.5rem);
       scale: 0.95;
     }
     to {
       opacity: 1;
       translate: 0 0;
       scale: 1;
+    }
+  }
+
+  @keyframes ext-pop-out {
+    from {
+      opacity: 1;
+      scale: 1;
+    }
+    to {
+      opacity: 0;
+      scale: 0.95;
     }
   }
 }

@@ -1,6 +1,6 @@
 "use client";
 import type { ChainedCommands, Editor } from "@tiptap/core";
-import { CheckIcon, Grid3x3 as GridIcon } from "lucide-react";
+import { Grid3x3 as GridIcon } from "lucide-react";
 import { useRef, useState } from "react";
 
 import { useToolbar, useToolbarEditor } from "../core/context";
@@ -8,15 +8,19 @@ import { extensionPresent } from "../core/detection";
 import { shallowEqual, useEditorState } from "../core/editor-state";
 import type { ToolbarComponentProps } from "../core/types";
 import { Button } from "../ui/button";
-import { DropdownMenuItem } from "../ui/dropdown-item";
 import { Popover } from "../ui/popover";
 import { PopoverContent } from "../ui/popover-content";
 import { Separator } from "../ui/separator";
 import { cn } from "../ui/utils";
+import { COLUMN_ACTIONS, ROW_ACTIONS, TableActionItems } from "./actions";
+import type { TableAction } from "./actions";
 
 const GRID_INIT_SIZE = 6;
 const GRID_MAX_SIZE = 10;
 const GRID_DEFAULT = { cols: 1, rows: 1 };
+
+const SECTION_LABEL_CLASS =
+  "ext-table-toolbar-label px-2 pt-1 pb-1.5 text-[0.75rem] font-medium text-muted-foreground";
 
 const createRange = (length: number) =>
   Array.from({ length }, (_, index) => index + 1);
@@ -222,6 +226,13 @@ export const TableToolbar = ({
     activePointerId.current = null;
   };
 
+  const select = (action: TableAction) => {
+    run(editor, action.command, state.disabled);
+    if (action.id !== "headerRow") {
+      setOpen(false);
+    }
+  };
+
   const onOpenChange = (next: boolean) => {
     setOpen(next);
     if (next) {
@@ -238,7 +249,6 @@ export const TableToolbar = ({
       sideOffset={6}
       trigger={
         <Button
-          aria-label={labels.insertTable}
           active={state.inTable}
           className={className}
           size="icon-sm"
@@ -249,93 +259,46 @@ export const TableToolbar = ({
         </Button>
       }
     >
-      <PopoverContent className="ext-table-toolbar-popover flex flex-col gap-1.5 p-2">
+      <PopoverContent
+        className={cn(
+          "ext-table-toolbar-popover flex flex-col gap-1.5",
+          state.inTable ? "p-1" : "p-2"
+        )}
+      >
         {state.inTable ? (
           <div
-            className="ext-table-grid flex min-w-44 flex-col gap-1"
+            className="ext-table-grid flex min-w-52 flex-col gap-1"
             role="menu"
           >
-            <p className="ext-table-toolbar-label px-2 pt-1 pb-1.5 text-[0.75rem] font-medium text-muted-foreground">
-              {labels.rows}
-            </p>
-            <DropdownMenuItem
-              onClick={() =>
-                run(editor, (c) => c.addRowBefore(), state.disabled)
-              }
-            >
-              {labels.addRowAbove}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                run(editor, (c) => c.addRowAfter(), state.disabled)
-              }
-            >
-              {labels.addRowBelow}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled={!state.canDeleteRow}
-              onClick={() => run(editor, (c) => c.deleteRow(), state.disabled)}
-            >
-              {labels.deleteRow}
-            </DropdownMenuItem>
+            <p className={SECTION_LABEL_CLASS}>{labels.rows}</p>
+            <TableActionItems
+              disabled={{ deleteRow: !state.canDeleteRow }}
+              groups={[ROW_ACTIONS.flat()]}
+              labels={labels}
+              onSelect={select}
+            />
             <Separator />
-            <p className="ext-table-toolbar-label px-2 pt-1 pb-1.5 text-[0.75rem] font-medium text-muted-foreground">
-              {labels.columns}
-            </p>
-            <DropdownMenuItem
-              onClick={() =>
-                run(editor, (c) => c.addColumnBefore(), state.disabled)
-              }
-            >
-              {labels.addColumnLeft}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() =>
-                run(editor, (c) => c.addColumnAfter(), state.disabled)
-              }
-            >
-              {labels.addColumnRight}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled={!state.canDeleteColumn}
-              onClick={() =>
-                run(editor, (c) => c.deleteColumn(), state.disabled)
-              }
-            >
-              {labels.deleteColumn}
-            </DropdownMenuItem>
+            <p className={SECTION_LABEL_CLASS}>{labels.columns}</p>
+            <TableActionItems
+              disabled={{ deleteColumn: !state.canDeleteColumn }}
+              groups={[COLUMN_ACTIONS.flat()]}
+              labels={labels}
+              onSelect={select}
+            />
             <Separator />
-            <DropdownMenuItem
-              onClick={() =>
-                run(editor, (c) => c.toggleHeaderRow(), state.disabled)
-              }
-            >
-              <span className="ext-table-toolbar-item-spacer flex-1">
-                {labels.headerRow}
-              </span>
-              {state.headerOn ? <CheckIcon /> : null}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled={!state.canMerge}
-              onClick={() => run(editor, (c) => c.mergeCells(), state.disabled)}
-            >
-              {labels.mergeCells}
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              disabled={!state.canSplit}
-              onClick={() => run(editor, (c) => c.splitCell(), state.disabled)}
-            >
-              {labels.splitCell}
-            </DropdownMenuItem>
-            <Separator />
-            <DropdownMenuItem
-              danger
-              onClick={() =>
-                run(editor, (c) => c.deleteTable(), state.disabled)
-              }
-            >
-              {labels.deleteTable}
-            </DropdownMenuItem>
+            <TableActionItems
+              checked={{ headerRow: state.headerOn }}
+              disabled={{
+                mergeCells: !state.canMerge,
+                splitCell: !state.canSplit,
+              }}
+              groups={[
+                ["headerRow", "mergeCells", "splitCell"],
+                ["deleteTable"],
+              ]}
+              labels={labels}
+              onSelect={select}
+            />
           </div>
         ) : (
           <div className="ext-table-grid-popover flex flex-col gap-1.5">

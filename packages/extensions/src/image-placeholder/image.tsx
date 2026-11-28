@@ -19,6 +19,7 @@ import {
 import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 
+import { useToolbar } from "../core/context";
 import { Button } from "../ui/button";
 import { DropdownMenuContent } from "../ui/dropdown-content";
 import { DropdownMenuItem } from "../ui/dropdown-item";
@@ -40,6 +41,7 @@ const ResizableImageNode = ({
   updateAttributes,
   getPos,
 }: NodeViewProps) => {
+  const { labels } = useToolbar();
   const imageRef = useRef<HTMLImageElement | null>(null);
   const nodeRef = useRef<HTMLDivElement | null>(null);
   const [resizing, setResizing] = useState(false);
@@ -234,7 +236,7 @@ const ResizableImageNode = ({
         !resizing &&
         createPortal(
           <div
-            className="ext-image-actions ext-image-actions--floating fixed z-60 mt-0 flex items-center gap-1 rounded-lg border border-border bg-popover p-1 text-popover-foreground opacity-100 shadow-[0_4px_16px_rgba(0,0,0,0.08)]"
+            className="ext-image-actions ext-image-actions--floating fixed z-60 mt-0 flex items-center gap-1 rounded-lg bg-popover p-1 text-popover-foreground opacity-100 shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)] ring-1 ring-border/60"
             style={{
               right: window.innerWidth - actionBarRect.right,
               top: actionBarRect.top,
@@ -242,7 +244,7 @@ const ResizableImageNode = ({
           >
             <Button
               active={node.attrs.align === "left"}
-              aria-label="Align left"
+              tooltip={labels.alignLeft}
               className="ext-image-action-btn"
               size="icon-sm"
               onClick={() => updateAttributes({ align: "left" })}
@@ -251,7 +253,7 @@ const ResizableImageNode = ({
             </Button>
             <Button
               active={node.attrs.align === "center"}
-              aria-label="Align center"
+              tooltip={labels.alignCenter}
               className="ext-image-action-btn"
               size="icon-sm"
               onClick={() => updateAttributes({ align: "center" })}
@@ -260,7 +262,7 @@ const ResizableImageNode = ({
             </Button>
             <Button
               active={node.attrs.align === "right"}
-              aria-label="Align right"
+              tooltip={labels.alignRight}
               className="ext-image-action-btn"
               size="icon-sm"
               onClick={() => updateAttributes({ align: "right" })}
@@ -273,7 +275,7 @@ const ResizableImageNode = ({
               onOpenChange={setOpenedMore}
               trigger={
                 <Button
-                  aria-label="Image options"
+                  tooltip={labels.imageOptions}
                   className="ext-image-action-btn"
                   size="icon-sm"
                 >
@@ -284,13 +286,13 @@ const ResizableImageNode = ({
               <DropdownMenuContent className="ext-image-more-content">
                 <DropdownMenuItem onClick={duplicate}>
                   <Copy />
-                  Duplicate
+                  {labels.duplicate}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => updateAttributes({ width: "fit-content" })}
                 >
                   <Maximize2 />
-                  Full width
+                  {labels.fullWidth}
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
@@ -301,7 +303,7 @@ const ResizableImageNode = ({
                   }}
                 >
                   <Trash2 />
-                  Delete image
+                  {labels.deleteImage}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
