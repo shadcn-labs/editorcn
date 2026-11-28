@@ -9,7 +9,7 @@ import {
   DeleteEmbedIcon,
   EditUrlIcon,
   OpenInYouTubeIcon,
-} from "../icons";
+} from "../icons/icons";
 import { cn } from "../ui/utils";
 
 const SELECTOR_BUTTON =

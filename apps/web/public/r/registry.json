@@ -45,32 +45,8 @@
           "type": "registry:component"
         },
         {
-          "path": "block-editor/context.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/icon-types.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/icons.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/labels.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/language-icons.tsx",
-          "type": "registry:component"
-        },
-        {
           "path": "block-editor/style.css",
           "type": "registry:style"
-        },
-        {
-          "path": "block-editor/types.ts",
-          "type": "registry:component"
         },
         {
           "path": "block-editor/bubble-menu/index.tsx",
@@ -101,6 +77,22 @@
           "type": "registry:component"
         },
         {
+          "path": "block-editor/core/commands.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/core/context.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/core/types.ts",
+          "type": "registry:component"
+        },
+        {
           "path": "block-editor/extensions/index.ts",
           "type": "registry:component"
         },
@@ -121,43 +113,27 @@
           "type": "registry:component"
         },
         {
-          "path": "block-editor/lib/commands.ts",
-          "type": "registry:lib"
+          "path": "block-editor/icons/icon-types.ts",
+          "type": "registry:component"
         },
         {
-          "path": "block-editor/lib/utils.ts",
-          "type": "registry:lib"
+          "path": "block-editor/icons/icons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/icons/language-icons.tsx",
+          "type": "registry:component"
         },
         {
           "path": "block-editor/ui/index.ts",
           "type": "registry:component"
         },
         {
-          "path": "block-editor/ui/bubble-button-group.tsx",
+          "path": "block-editor/ui/button-group.tsx",
           "type": "registry:component"
         },
         {
-          "path": "block-editor/ui/bubble-button.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-dropdown-divider.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-dropdown-icon.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-dropdown-item.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-dropdown.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "block-editor/ui/bubble-separator.tsx",
+          "path": "block-editor/ui/button.tsx",
           "type": "registry:component"
         },
         {
@@ -165,7 +141,27 @@
           "type": "registry:component"
         },
         {
-          "path": "block-editor/ui/dropdown-overlay.tsx",
+          "path": "block-editor/ui/dropdown-icon.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/ui/dropdown-item.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/ui/dropdown-separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/ui/dropdown.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/ui/overlay.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/ui/separator.tsx",
           "type": "registry:component"
         },
         {
@@ -186,6 +182,10 @@
         },
         {
           "path": "block-editor/ui/slash-menu.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "block-editor/ui/utils.ts",
           "type": "registry:component"
         }
       ],
@@ -471,52 +471,20 @@
           "type": "registry:component"
         },
         {
-          "path": "editor/icon-types.ts",
+          "path": "editor/content.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/icons.tsx",
+          "path": "editor/footer.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/labels.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/language-icons.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-content.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-context.ts",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-controls-group.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-footer.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-text-editor.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/rte-toolbar.tsx",
+          "path": "editor/rich-text-editor.tsx",
           "type": "registry:component"
         },
         {
           "path": "editor/style.css",
           "type": "registry:style"
-        },
-        {
-          "path": "editor/types.ts",
-          "type": "registry:component"
         },
         {
           "path": "editor/bubble-menu/index.tsx",
@@ -535,23 +503,35 @@
           "type": "registry:component"
         },
         {
-          "path": "editor/controls/rte-control.tsx",
+          "path": "editor/controls/control.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/controls/rte-controls.tsx",
+          "path": "editor/controls/controls.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/controls/rte-link-control.tsx",
+          "path": "editor/controls/link-control.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/controls/rte-twitter-control.tsx",
+          "path": "editor/controls/twitter-control.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/controls/rte-youtube-control.tsx",
+          "path": "editor/controls/youtube-control.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/core/context.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/core/labels.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/core/types.ts",
           "type": "registry:component"
         },
         {
@@ -567,7 +547,55 @@
           "type": "registry:component"
         },
         {
+          "path": "editor/icons/icon-types.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/icons/icons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/icons/language-icons.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/primitives/button.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/primitives/dialog.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/primitives/input.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/primitives/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/primitives/toggle.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/primitives/tooltip.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/toolbar/controls-group.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/toolbar/toolbar.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "editor/ui/index.ts",
+          "type": "registry:component"
+        },
+        {
+          "path": "editor/ui/button-group.tsx",
           "type": "registry:component"
         },
         {
@@ -575,63 +603,35 @@
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/dialog.tsx",
+          "path": "editor/ui/color-swatch.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/input.tsx",
+          "path": "editor/ui/dropdown-icon.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/popover.tsx",
+          "path": "editor/ui/dropdown-item.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/rte-button-group.tsx",
+          "path": "editor/ui/dropdown-separator.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/rte-button.tsx",
+          "path": "editor/ui/dropdown.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/rte-color-swatch.tsx",
+          "path": "editor/ui/icon.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/rte-dropdown-divider.tsx",
+          "path": "editor/ui/overlay.tsx",
           "type": "registry:component"
         },
         {
-          "path": "editor/ui/rte-dropdown-icon.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-dropdown-item.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-dropdown.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-icon.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-overlay.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/rte-separator.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/toggle.tsx",
-          "type": "registry:component"
-        },
-        {
-          "path": "editor/ui/tooltip.tsx",
+          "path": "editor/ui/separator.tsx",
           "type": "registry:component"
         },
         {

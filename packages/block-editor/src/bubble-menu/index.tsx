@@ -3,7 +3,7 @@ import type { Editor } from "@tiptap/react";
 import { BubbleMenu as TiptapBubbleMenu } from "@tiptap/react/menus";
 import { Fragment, useCallback } from "react";
 
-import { BubbleSeparator } from "../ui";
+import { Separator } from "../ui";
 import { TextAlignSelector } from "./align-selector";
 import { ColorSelector } from "./color-selector";
 import { LinkSelector } from "./link-selector";
@@ -75,7 +75,7 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
       <div className="block-editor-bubble-menu flex h-9 animate-block-editor-bubble-pop-in items-center rounded-lg border border-border bg-popover px-1 shadow-[0_4px_16px_rgba(0,0,0,0.12)] [@media(hover:none)_and_(pointer:coarse)]:hidden">
         {sections.map((section, index) => (
           <Fragment key={section.id}>
-            {index > 0 && <BubbleSeparator />}
+            {index > 0 && <Separator />}
             {section.node}
           </Fragment>
         ))}

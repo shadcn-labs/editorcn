@@ -1,0 +1,45 @@
+---
+title: "November 28, 2026 - Editor file layout"
+description: "The rich text editor and the block editor now use the same folder layout as the extensions, with plain component names. Registry file paths change; the npm packages don't."
+date: "2026-11-28"
+---
+
+The rich text editor and the block editor now follow the same layout as the extensions, so each part is easier to find as the editors grow. Nothing changes in how they look or behave.
+
+## What changed
+
+- **Folders**: logic without UI moved to `core/`, icons to `icons/`, toolbar parts to `toolbar/`, and each editor's own building blocks stay in `ui/`.
+- **Plain names**: `RteButton`, `BubbleButton` and the other `Rte*` and `Bubble*` components are now `Button`, `Dropdown`, `DropdownItem`, `Separator`, `Overlay` and so on. `RteDropdownDivider` and `BubbleDropdownDivider` are now `DropdownSeparator`.
+- **Primitives**: the rich text editor's Base UI or Radix UI button, dialog, input, popover, toggle and tooltip moved from `editor/ui/` to `editor/primitives/`.
+- **Files**: `rte-text-editor.tsx` is now `rich-text-editor.tsx`, and the other `rte-*.tsx` files lost their prefix.
+
+The CSS class hooks (`rte-*`, `block-editor-*`) and the public exports (`RichTextEditor`, `BlockEditor`, `BubbleMenu`, `BottomBar`, labels and icons) are unchanged.
+
+## Upgrading
+
+### shadcn registry
+
+Re-add the editors to get the new layout:
+
+```bash
+npx shadcn@latest add @editorcn/editor @editorcn/block-editor
+```
+
+The CLI writes the new files but doesn't delete the old ones. Delete them after re-adding: some old files import `./button`, which now holds different code, so leaving them can break your type check. If you edited any of them, copy your changes into the new files first.
+
+In `components/editor/`:
+
+- `rte-text-editor.tsx`, `rte-context.ts`, `rte-content.tsx`, `rte-footer.tsx`, `rte-toolbar.tsx`, `rte-controls-group.tsx`, `labels.ts`, `types.ts`, `icons.tsx`, `icon-types.ts`, `language-icons.tsx`
+- `controls/rte-*.tsx`
+- `ui/rte-*.tsx`, `ui/dialog.tsx`, `ui/input.tsx`, `ui/popover.tsx`, `ui/toggle.tsx`, `ui/tooltip.tsx`, and on Radix UI styles `ui/render.tsx`
+
+In `components/block-editor/`:
+
+- `context.tsx`, `labels.ts`, `types.ts`, `icons.tsx`, `icon-types.ts`, `language-icons.tsx`, `lib/`
+- `ui/bubble-*.tsx`, `ui/dropdown-overlay.tsx`
+
+`components/editor/ui/button.tsx` now holds the bubble menu button. If your own code imported the Base UI or Radix button from there, import it from `components/editor/primitives/button` instead.
+
+### npm
+
+Nothing to do. `@editorcn/editor@0.6.0` and `@editorcn/block-editor@0.6.0` have the same exports and styles.

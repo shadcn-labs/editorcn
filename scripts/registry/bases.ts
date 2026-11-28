@@ -24,40 +24,53 @@ const twinFiles = (dir: string) =>
     )
     .map(({ name }) => name);
 
+const publishDir = dirname(baseDir);
+
+const published = (path: string) =>
+  dirname(path) === baseDir ? join(publishDir, basename(path)) : path;
+
 export const forBase = (item: Item, base: Base): Item => {
-  const dir = variantDir(base);
   const primitives = item.files.filter(
     (file) => dirname(file.source) === baseDir
   );
-  if (!dir || primitives.length === 0) {
+  if (primitives.length === 0) {
     return item;
   }
-  const twins = twinFiles(dir);
-  const home = posix.dirname(primitives[0]?.path ?? "");
-  const swapped = item.files.map((file): SourceFile => {
+  const dir = variantDir(base);
+  const twins = dir ? twinFiles(dir) : [];
+  const home = posix.dirname(posix.dirname(primitives[0]?.path ?? ""));
+  const files = item.files.map((file): SourceFile => {
+    if (dirname(file.source) !== baseDir) {
+      return file;
+    }
     const name = basename(file.source);
-    return dirname(file.source) === baseDir && twins.includes(name)
-      ? { ...file, location: file.source, source: join(dir, name) }
-      : file;
+    return {
+      ...file,
+      location: file.source,
+      path: `${home}/${name}`,
+      source: dir && twins.includes(name) ? join(dir, name) : file.source,
+    };
   });
-  const added = twins
-    .filter((name) => !existsSync(join(baseDir, name)))
-    .map(
-      (name): SourceFile => ({
-        location: join(baseDir, name),
-        path: `${home}/${name}`,
-        source: join(dir, name),
-        type: item.meta.type,
-      })
-    );
-  return { ...item, files: [...swapped, ...added] };
+  const added = dir
+    ? twins
+        .filter((name) => !existsSync(join(baseDir, name)))
+        .map(
+          (name): SourceFile => ({
+            location: join(baseDir, name),
+            path: `${home}/${name}`,
+            source: join(dir, name),
+            type: item.meta.type,
+          })
+        )
+    : [];
+  return { ...item, files: [...files, ...added] };
 };
 
 export const relocate = (content: string, file: SourceFile) => {
-  const { location } = file;
-  if (!(location && isScript(file.source))) {
+  if (!isScript(file.source)) {
     return content;
   }
+  const { location } = file;
   const dir = dirname(file.source);
   let output = content;
   const imports = scanImports(content, toPosix(relative(root, file.source)))
@@ -66,8 +79,14 @@ export const relocate = (content: string, file: SourceFile) => {
   for (const { end, specifier, start } of imports) {
     const target = resolveRelative(file.source, specifier);
     const moved =
-      dirname(target) === dir ? join(baseDir, basename(target)) : target;
-    const path = toPosix(relative(dirname(location), moved)).replace(
+      location && dirname(target) === dir
+        ? join(baseDir, basename(target))
+        : target;
+    if (!location && dirname(moved) !== baseDir) {
+      continue;
+    }
+    const from = dirname(published(location ?? file.source));
+    const path = toPosix(relative(from, published(moved))).replace(
       /\.tsx?$/,
       ""
     );

@@ -1,5 +1,14 @@
 # @editorcn/editor
 
+## 0.6.0
+
+### Changes
+
+- The source follows the extensions layout: `core/`, `icons/`, `ui/` and a folder per feature. Components in `ui/` have plain names (`Button`, `Dropdown`, `DropdownItem`, `DropdownSeparator`, `Separator`, `Overlay`) instead of `Rte*` / `Bubble*`.
+- The Base UI primitives moved from `ui/` to `primitives/base/` and their Radix twins to `primitives/radix/`. Registry installs get them at `editor/primitives/<name>.tsx`.
+- `rte-text-editor.tsx` is now `rich-text-editor.tsx`, and the other `rte-*.tsx` files lost their prefix.
+- No change to exports, styles or behavior for npm users. Registry users get new file paths; see the [changelog entry](https://www.rtecn.space/docs/changelog/2026-11-28-ui-structure).
+
 ## 0.5.3
 
 ### Fixes

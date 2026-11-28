@@ -14,38 +14,53 @@ your-project/
 ├── components/
 │   ├── editor/
 │   │   ├── index.ts
-│   │   ├── rte-text-editor.tsx
-│   │   ├── rte-context.ts
-│   │   ├── rte-toolbar.tsx
-│   │   ├── rte-content.tsx
-│   │   ├── rte-controls-group.tsx
-│   │   ├── labels.ts
-│   │   ├── icons.tsx
-│   │   ├── types.ts
+│   │   ├── rich-text-editor.tsx
+│   │   ├── content.tsx
+│   │   ├── footer.tsx
 │   │   ├── style.css
+│   │   ├── core/
+│   │   │   ├── context.ts
+│   │   │   ├── labels.ts
+│   │   │   └── types.ts
+│   │   ├── icons/
+│   │   │   ├── icons.tsx
+│   │   │   ├── icon-types.ts
+│   │   │   └── language-icons.tsx
+│   │   ├── toolbar/
+│   │   │   ├── toolbar.tsx
+│   │   │   └── controls-group.tsx
 │   │   ├── controls/
-│   │   │   ├── rte-control.tsx
-│   │   │   ├── rte-controls.tsx
-│   │   │   ├── rte-link-control.tsx
-│   │   │   ├── rte-twitter-control.tsx
-│   │   │   └── rte-youtube-control.tsx
+│   │   │   ├── control.tsx
+│   │   │   ├── controls.tsx
+│   │   │   ├── link-control.tsx
+│   │   │   ├── twitter-control.tsx
+│   │   │   └── youtube-control.tsx
+│   │   ├── bubble-menu/
+│   │   │   └── ...
 │   │   ├── extensions/
 │   │   │   ├── index.ts
 │   │   │   ├── link.ts
 │   │   │   └── resizable-node-view.tsx
+│   │   ├── primitives/
+│   │   │   ├── button.tsx
+│   │   │   ├── dialog.tsx
+│   │   │   ├── input.tsx
+│   │   │   ├── popover.tsx
+│   │   │   ├── toggle.tsx
+│   │   │   └── tooltip.tsx
 │   │   └── ui/
 │   │       ├── utils.ts
 │   │       ├── button.tsx
-│   │       ├── toggle.tsx
-│   │       ├── popover.tsx
-│   │       └── input.tsx
+│   │       ├── dropdown.tsx
+│   │       ├── separator.tsx
+│   │       └── ...
 │   └── block-editor/
-│       └── ... (same pattern, ~19 files)
+│       └── ... (same pattern: core/, icons/, ui/, bubble-menu/)
 ```
 
 **What this means for you:**
 
-- **Full customization**: Every control, extension, UI component, and style is yours to edit. Want to change the toolbar layout? Edit `rte-text-editor.tsx`. Want different resize behavior? Edit `resizable-node-view.tsx`.
+- **Full customization**: Every control, extension, UI component, and style is yours to edit. Want to change the toolbar layout? Edit `rich-text-editor.tsx`. Want different resize behavior? Edit `resizable-node-view.tsx`.
 - **No dependency lock-in**: Your editor doesn't break when editorcn publishes a new version. You control when and if you update.
 - **Direct imports**: Import from your project's components directory, not from a `node_modules` package:
 

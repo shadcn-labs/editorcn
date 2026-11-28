@@ -1,5 +1,5 @@
 export { BlockEditor } from "./block-editor";
-export { useBlockEditorContext } from "./context";
+export { useBlockEditorContext } from "./core/context";
 export { BubbleMenu } from "./bubble-menu/index";
 export { BottomBar } from "./bottom-bar";
 export type { BottomBarProps } from "./bottom-bar";
@@ -13,8 +13,8 @@ export type {
   BlockEditorLabels,
   BlockEditorPreset,
   BlockEditorProps,
-} from "./types";
-export { DEFAULT_BLOCK_EDITOR_LABELS } from "./labels";
-export type { BlockEditorIcons } from "./icon-types";
-export { DEFAULT_ICONS } from "./icons";
-export { DEFAULT_LANGUAGE_ICONS } from "./language-icons";
+} from "./core/types";
+export { DEFAULT_BLOCK_EDITOR_LABELS } from "./core/labels";
+export type { BlockEditorIcons } from "./icons/icon-types";
+export { DEFAULT_ICONS } from "./icons/icons";
+export { DEFAULT_LANGUAGE_ICONS } from "./icons/language-icons";

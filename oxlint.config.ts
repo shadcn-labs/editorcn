@@ -33,7 +33,7 @@ export default defineConfig({
             patterns: [
               {
                 message:
-                  "Import primitives from the package's ui/ folder so the registry can ship Base UI and Radix variants.",
+                  "Import primitives from the editor's primitives/ folder so the registry can ship Base UI and Radix variants.",
                 regex: "^(@base-ui/|@radix-ui/|radix-ui$)",
               },
             ],
@@ -43,7 +43,7 @@ export default defineConfig({
     },
     {
       files: [
-        "packages/editor/src/ui/**",
+        "packages/editor/src/primitives/**",
         "packages/block-editor/src/ui/**",
         "packages/extensions/src/ui/**",
       ],

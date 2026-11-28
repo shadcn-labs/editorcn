@@ -1,13 +1,13 @@
 import type { Editor } from "@tiptap/react";
 import { useState, useCallback } from "react";
 
-import { chainFocus } from "../lib/commands";
+import { chainFocus } from "../core/commands";
 import {
-  BubbleButton,
-  BubbleDropdown,
-  BubbleDropdownDivider,
+  Button,
+  Dropdown,
+  DropdownSeparator,
   ColorSwatch,
-  DropdownOverlay,
+  Overlay,
 } from "../ui";
 import { useEditorState, shallowEqual } from "./utils";
 
@@ -155,7 +155,7 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <BubbleButton
+      <Button
         active={Boolean(textColor || highlightColor)}
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => setOpen(!open)}
@@ -176,15 +176,15 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
             <path d="M8 12h8" />
           </svg>
         </span>
-      </BubbleButton>
+      </Button>
 
       {open && (
         <>
-          <DropdownOverlay
+          <Overlay
             onClick={() => setOpen(false)}
             onKeyDown={(e) => e.key === "Escape" && setOpen(false)}
           />
-          <BubbleDropdown className="block-editor-bubble-dropdown--color min-w-auto p-2 [&_.block-editor-bubble-dropdown-divider]:mx-0 [&_.block-editor-bubble-dropdown-divider]:mt-2 [&_.block-editor-bubble-dropdown-divider]:mb-1.5">
+          <Dropdown className="block-editor-bubble-dropdown--color min-w-auto p-2 [&_.block-editor-bubble-dropdown-divider]:mx-0 [&_.block-editor-bubble-dropdown-divider]:mt-2 [&_.block-editor-bubble-dropdown-divider]:mb-1.5">
             {recent.length > 0 && (
               <ColorGroup
                 title="Recently Used"
@@ -211,7 +211,7 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
 
             {hasColor && (
               <>
-                {recent.length > 0 && <BubbleDropdownDivider />}
+                {recent.length > 0 && <DropdownSeparator />}
                 <ColorGroup
                   title="Text Color"
                   className="block-editor-color-grid grid grid-cols-[repeat(5,1.5rem)] justify-center gap-1.5"
@@ -234,7 +234,7 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
 
             {hasHighlight && (
               <>
-                {(recent.length > 0 || hasColor) && <BubbleDropdownDivider />}
+                {(recent.length > 0 || hasColor) && <DropdownSeparator />}
                 <ColorGroup
                   title="Highlight Color"
                   className="block-editor-color-grid grid grid-cols-[repeat(5,1.5rem)] justify-center gap-1.5"
@@ -254,7 +254,7 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
                 </ColorGroup>
               </>
             )}
-          </BubbleDropdown>
+          </Dropdown>
         </>
       )}
     </div>

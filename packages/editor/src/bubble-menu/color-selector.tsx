@@ -2,12 +2,12 @@ import type { Editor } from "@tiptap/react";
 import { useState } from "react";
 
 import {
-  RteButton,
-  RteColorSwatch,
-  RteDropdown,
-  RteDropdownDivider,
-  RteIcon,
-  RteOverlay,
+  Button,
+  ColorSwatch,
+  Dropdown,
+  DropdownSeparator,
+  Icon,
+  Overlay,
 } from "../ui";
 import { useEditorState, shallowEqual } from "./utils";
 
@@ -141,13 +141,13 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <RteButton
+      <Button
         active={Boolean(textColor || highlightColor)}
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => setOpen(!open)}
         title="Text color"
       >
-        <RteIcon>
+        <Icon>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -162,11 +162,11 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
             <path d="m6 16 6-12 6 12" />
             <path d="M8 12h8" />
           </svg>
-        </RteIcon>
-      </RteButton>
+        </Icon>
+      </Button>
       {open && (
         <>
-          <RteOverlay
+          <Overlay
             onClick={() => setOpen(false)}
             onKeyDown={(e) => {
               if (e.key === "Escape") {
@@ -174,7 +174,7 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
               }
             }}
           />
-          <RteDropdown variant="color">
+          <Dropdown variant="color">
             {recent.length > 0 ? (
               <div className="rte-bubble-color-section flex flex-col gap-2">
                 <span className="rte-bubble-color-label px-0.5 text-[0.75rem] leading-none font-medium text-muted-foreground">
@@ -182,7 +182,7 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
                 </span>
                 <div className="rte-bubble-color-recent flex flex-wrap justify-center gap-1.5">
                   {recent.map((item) => (
-                    <RteColorSwatch
+                    <ColorSwatch
                       key={`${item.type}-${item.color}`}
                       variant={item.type}
                       color={item.color}
@@ -204,14 +204,14 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
             ) : null}
             {hasColor ? (
               <>
-                {recent.length > 0 && <RteDropdownDivider />}
+                {recent.length > 0 && <DropdownSeparator />}
                 <div className="rte-bubble-color-section flex flex-col gap-2">
                   <span className="rte-bubble-color-label px-0.5 text-[0.75rem] leading-none font-medium text-muted-foreground">
                     Text Color
                   </span>
                   <div className="rte-bubble-color-grid grid grid-cols-[repeat(5,1.5rem)] justify-center gap-1.5">
                     {TEXT_COLORS.map((item) => (
-                      <RteColorSwatch
+                      <ColorSwatch
                         key={item.color}
                         variant="text"
                         color={item.color}
@@ -226,14 +226,14 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
             ) : null}
             {hasHighlight ? (
               <>
-                {(recent.length > 0 || hasColor) && <RteDropdownDivider />}
+                {(recent.length > 0 || hasColor) && <DropdownSeparator />}
                 <div className="rte-bubble-color-section flex flex-col gap-2">
                   <span className="rte-bubble-color-label px-0.5 text-[0.75rem] leading-none font-medium text-muted-foreground">
                     Highlight Color
                   </span>
                   <div className="rte-bubble-color-grid grid grid-cols-[repeat(5,1.5rem)] justify-center gap-1.5">
                     {HIGHLIGHT_COLORS.map((item) => (
-                      <RteColorSwatch
+                      <ColorSwatch
                         key={item.color}
                         variant="highlight"
                         color={item.color}
@@ -246,7 +246,7 @@ export const ColorSelector = ({ editor }: { editor: Editor }) => {
                 </div>
               </>
             ) : null}
-          </RteDropdown>
+          </Dropdown>
         </>
       )}
     </div>

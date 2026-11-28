@@ -5,8 +5,8 @@ import { ReactRenderer } from "@tiptap/react";
 import type { SuggestionOptions } from "@tiptap/suggestion";
 import { createElement } from "react";
 
-import { HeadingIcon } from "../../icons";
-import { chainFocus } from "../../lib/commands";
+import { chainFocus } from "../../core/commands";
+import { HeadingIcon } from "../../icons/icons";
 import type { SlashCommandSuggestionItem } from "./slash-command";
 import SuggestionList from "./suggestion-list";
 import type {

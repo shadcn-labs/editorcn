@@ -1,7 +1,7 @@
 import type { Editor } from "@tiptap/react";
 
-import { DEFAULT_ICONS } from "../icons";
-import { BubbleButton, BubbleButtonGroup } from "../ui";
+import { DEFAULT_ICONS } from "../icons/icons";
+import { Button, ButtonGroup } from "../ui";
 import { useEditorState, shallowEqual } from "./utils";
 
 interface TextSelectorResult {
@@ -76,17 +76,17 @@ export const TextButtons = ({ editor }: { editor: Editor }) => {
   );
 
   return (
-    <BubbleButtonGroup>
+    <ButtonGroup>
       {getTextItems(editor).map((item) => (
-        <BubbleButton
+        <Button
           key={item.mark}
           active={item.isActive(editorState)}
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => item.command(editor)}
         >
           {item.icon}
-        </BubbleButton>
+        </Button>
       ))}
-    </BubbleButtonGroup>
+    </ButtonGroup>
   );
 };
