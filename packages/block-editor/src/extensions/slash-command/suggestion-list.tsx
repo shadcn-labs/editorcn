@@ -10,9 +10,9 @@ import {
   useRef,
 } from "react";
 
-import { useOptionalBlockEditorContext } from "../../context";
-import type { BlockEditorIcons } from "../../icon-types";
-import { DEFAULT_ICONS } from "../../icons";
+import { useOptionalBlockEditorContext } from "../../core/context";
+import type { BlockEditorIcons } from "../../icons/icon-types";
+import { DEFAULT_ICONS } from "../../icons/icons";
 import {
   SlashMenu,
   SlashMenuList,

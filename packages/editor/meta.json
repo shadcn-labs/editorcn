@@ -19,7 +19,11 @@
     "@tiptap/react@>=3.0.1 <4",
     "@tiptap/starter-kit@>=2.11.5 <4"
   ],
-  "exclude": ["icon-placeholder.tsx", "icon-library.ts", "ui/radix"],
+  "exclude": [
+    "icons/icon-placeholder.tsx",
+    "icons/icon-library.ts",
+    "primitives/radix"
+  ],
   "fileTypes": {
     "ui/utils.ts": "registry:lib"
   }

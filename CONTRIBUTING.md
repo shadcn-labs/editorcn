@@ -48,6 +48,24 @@ All of these run in CI, so running them locally before pushing saves a round tri
 
 A pre-commit hook via [lefthook](https://github.com/evilmartians/lefthook) automatically runs `pnpm fix` on staged files.
 
+## Project structure
+
+`packages/editor`, `packages/block-editor` and `packages/extensions` share one layout:
+
+- `core/`: logic without UI, such as context, commands, labels and types.
+- `ui/`: the package's own building blocks (`Button`, `Dropdown`, `DropdownItem`, `Separator`, ...). They carry the package's look and animations, so each package keeps its own `ui/`.
+- A folder per feature (`bubble-menu/`, `controls/`, `toolbar/`, `slash-command/`, `table/`, ...) that imports from `core/` and `ui/`.
+- `packages/editor` and `packages/block-editor` also keep their icons in `icons/`.
+
+Naming:
+
+- Components have plain names. The folder says which package owns them, so there's no `Rte` or `Bubble` prefix.
+- A file is named after its main export in kebab-case: `DropdownItem` lives in `dropdown-item.tsx`.
+- Use shadcn's words for parts: `Separator`, `Item`, `Content`, `Trigger`.
+- Keep the CSS class hooks (`rte-*`, `block-editor-*`, `ext-*`) when you rename a component. Users target them in their own CSS.
+
+Base UI and Radix UI primitives live only in `packages/editor/src/primitives/base/` and `primitives/radix/`, with the same file names and exports in both. The registry publishes the matching set at `primitives/<name>` for each style. Everywhere else, importing `@base-ui/*` or `radix-ui` fails lint.
+
 ## Before opening a pull request
 
 Every pull request must be tied to an issue. Before opening a PR, search the existing issues, discussions, and pull requests so you do not duplicate active work. If there is no existing issue, open one with the relevant template and describe the problem, use case, or bug reproduction.

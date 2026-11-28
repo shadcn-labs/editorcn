@@ -1,14 +1,8 @@
 import type { Editor } from "@tiptap/react";
 import { useState } from "react";
 
-import { DEFAULT_ICONS } from "../icons";
-import {
-  BubbleButton,
-  BubbleDropdown,
-  BubbleDropdownIcon,
-  BubbleDropdownItem,
-  DropdownOverlay,
-} from "../ui";
+import { DEFAULT_ICONS } from "../icons/icons";
+import { Button, Dropdown, DropdownIcon, DropdownItem, Overlay } from "../ui";
 import { useEditorState, shallowEqual } from "./utils";
 
 interface AlignSelectorResult {
@@ -70,18 +64,18 @@ export const TextAlignSelector = ({ editor }: { editor: Editor }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <BubbleButton
+      <Button
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => setOpen(!open)}
       >
-        <BubbleDropdownIcon>
+        <DropdownIcon>
           {activeItem ? activeItem.icon : DEFAULT_ICONS.alignLeftIcon}
-        </BubbleDropdownIcon>
+        </DropdownIcon>
         {DEFAULT_ICONS.dropdownArrowIcon}
-      </BubbleButton>
+      </Button>
       {open && (
         <>
-          <DropdownOverlay
+          <Overlay
             onClick={() => setOpen(false)}
             onKeyDown={(e) => {
               if (e.key === "Escape") {
@@ -89,9 +83,9 @@ export const TextAlignSelector = ({ editor }: { editor: Editor }) => {
               }
             }}
           />
-          <BubbleDropdown align="align" style={{ left: "auto", right: 0 }}>
+          <Dropdown align="align" style={{ left: "auto", right: 0 }}>
             {alignItems.map((item, i) => (
-              <BubbleDropdownItem
+              <DropdownItem
                 key={i}
                 active={item.isActive(editorState)}
                 onMouseDown={(e) => e.preventDefault()}
@@ -100,11 +94,11 @@ export const TextAlignSelector = ({ editor }: { editor: Editor }) => {
                   setOpen(false);
                 }}
               >
-                <BubbleDropdownIcon>{item.icon}</BubbleDropdownIcon>
+                <DropdownIcon>{item.icon}</DropdownIcon>
                 <span>{item.label}</span>
-              </BubbleDropdownItem>
+              </DropdownItem>
             ))}
-          </BubbleDropdown>
+          </Dropdown>
         </>
       )}
     </div>

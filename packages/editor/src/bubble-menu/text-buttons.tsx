@@ -1,6 +1,6 @@
 import type { Editor } from "@tiptap/react";
 
-import { RteButton, RteButtonGroup, RteIcon } from "../ui";
+import { Button, ButtonGroup, Icon } from "../ui";
 import { useEditorState, shallowEqual } from "./utils";
 
 const Svg = ({
@@ -22,10 +22,6 @@ const Svg = ({
   >
     {children}
   </svg>
-);
-
-const Icon = ({ children }: { children: React.ReactNode }) => (
-  <RteIcon>{children}</RteIcon>
 );
 
 interface TextSelectorResult {
@@ -137,17 +133,17 @@ export const TextButtons = ({ editor }: { editor: Editor }) => {
   );
 
   return (
-    <RteButtonGroup>
+    <ButtonGroup>
       {getTextItems(editor).map((item) => (
-        <RteButton
+        <Button
           key={item.mark}
           active={item.isActive(editorState)}
           onMouseDown={(e) => e.preventDefault()}
           onClick={() => item.command(editor)}
         >
           {item.icon}
-        </RteButton>
+        </Button>
       ))}
-    </RteButtonGroup>
+    </ButtonGroup>
   );
 };

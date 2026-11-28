@@ -92,9 +92,9 @@ export const ranges: Record<string, string> = {
 };
 
 export const primitivePairs = {
-  base: "packages/editor/src/ui",
+  base: "packages/editor/src/primitives/base",
   baseImport: /^@base-ui\//,
-  variants: { radix: "packages/editor/src/ui/radix" },
+  variants: { radix: "packages/editor/src/primitives/radix" },
 };
 
 export const stateSelectors: [RegExp, string][] = [

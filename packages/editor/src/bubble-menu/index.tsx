@@ -3,7 +3,7 @@ import type { Editor } from "@tiptap/react";
 import { BubbleMenu as TiptapBubbleMenu } from "@tiptap/react/menus";
 import { useCallback } from "react";
 
-import { RteSeparator } from "../ui";
+import { Separator } from "../ui";
 import { ColorSelector } from "./color-selector";
 import { TextButtons, getTextItems } from "./text-buttons";
 
@@ -57,7 +57,7 @@ export const BubbleMenu = ({ editor }: BubbleMenuProps) => {
     >
       <div className="rte-bubble-menu flex h-10 animate-rte-bubble-pop-in items-center rounded-lg border border-[color-mix(in_srgb,var(--border)_60%,transparent)] bg-popover px-1 text-popover-foreground shadow-[0_8px_30px_-12px_rgb(0_0_0/0.15)]">
         {hasText && <TextButtons editor={editor} />}
-        {hasText && hasColor && <RteSeparator />}
+        {hasText && hasColor && <Separator />}
         {hasColor && <ColorSelector editor={editor} />}
       </div>
     </TiptapBubbleMenu>

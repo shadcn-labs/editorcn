@@ -1,5 +1,12 @@
 # @editorcn/block-editor
 
+## 0.6.0
+
+### Changes
+
+- The source follows the extensions layout: `core/`, `icons/`, `ui/` and a folder per feature. Components in `ui/` have plain names (`Button`, `Dropdown`, `DropdownItem`, `DropdownSeparator`, `Separator`, `Overlay`) instead of `Rte*` / `Bubble*`.
+- No change to exports, styles or behavior for npm users. Registry users get new file paths; see the [changelog entry](https://www.rtecn.space/docs/changelog/2026-11-28-ui-structure).
+
 ## 0.5.3
 
 ### Fixes

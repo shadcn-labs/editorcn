@@ -1,14 +1,8 @@
 import type { Editor } from "@tiptap/react";
 import { useState, useRef, useCallback, useEffect } from "react";
 
-import { DEFAULT_ICONS } from "../icons";
-import {
-  BubbleButton,
-  BubbleDropdown,
-  BubbleDropdownIcon,
-  BubbleDropdownItem,
-  DropdownOverlay,
-} from "../ui";
+import { DEFAULT_ICONS } from "../icons/icons";
+import { Button, Dropdown, DropdownIcon, DropdownItem, Overlay } from "../ui";
 
 interface LinkableChain {
   extendMarkRange(type: string): LinkableChain;
@@ -66,17 +60,17 @@ export const LinkSelector = ({ editor }: { editor: Editor }) => {
 
   return (
     <div style={{ position: "relative" }}>
-      <BubbleButton
+      <Button
         active={isLink}
         onMouseDown={(e) => e.preventDefault()}
         onClick={() => setOpen(!open)}
         title="Link"
       >
         {DEFAULT_ICONS.linkIcon}
-      </BubbleButton>
+      </Button>
       {open && (
         <>
-          <DropdownOverlay
+          <Overlay
             onClick={() => setOpen(false)}
             onKeyDown={(e) => {
               if (e.key === "Escape") {
@@ -84,7 +78,7 @@ export const LinkSelector = ({ editor }: { editor: Editor }) => {
               }
             }}
           />
-          <BubbleDropdown style={{ left: "auto", minWidth: "220px", right: 0 }}>
+          <Dropdown style={{ left: "auto", minWidth: "220px", right: 0 }}>
             <form
               className="block-editor-link-form flex flex-col gap-2 p-1"
               onSubmit={handleSubmit}
@@ -99,31 +93,27 @@ export const LinkSelector = ({ editor }: { editor: Editor }) => {
               />
               <div className="block-editor-link-actions flex gap-1">
                 {isLink && (
-                  <BubbleDropdownItem
+                  <DropdownItem
                     danger
                     onMouseDown={(e) => e.preventDefault()}
                     onClick={handleUnlink}
                     style={{ justifyContent: "center" }}
                   >
-                    <BubbleDropdownIcon>
-                      {DEFAULT_ICONS.unlinkIcon}
-                    </BubbleDropdownIcon>
+                    <DropdownIcon>{DEFAULT_ICONS.unlinkIcon}</DropdownIcon>
                     <span>Remove</span>
-                  </BubbleDropdownItem>
+                  </DropdownItem>
                 )}
-                <BubbleDropdownItem
+                <DropdownItem
                   onMouseDown={(e) => e.preventDefault()}
                   type="submit"
                   style={{ justifyContent: "center" }}
                 >
-                  <BubbleDropdownIcon>
-                    {DEFAULT_ICONS.checkIcon}
-                  </BubbleDropdownIcon>
+                  <DropdownIcon>{DEFAULT_ICONS.checkIcon}</DropdownIcon>
                   <span>{isLink ? "Update" : "Add"}</span>
-                </BubbleDropdownItem>
+                </DropdownItem>
               </div>
             </form>
-          </BubbleDropdown>
+          </Dropdown>
         </>
       )}
     </div>

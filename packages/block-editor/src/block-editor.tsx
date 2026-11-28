@@ -5,10 +5,10 @@ import { useCallback, useRef } from "react";
 
 import { BottomBar } from "./bottom-bar";
 import { BubbleMenu } from "./bubble-menu";
-import { BlockEditorProvider, useBlockEditorContext } from "./context";
-import { IconPlaceholder } from "./icon-placeholder";
-import { cn } from "./lib/utils";
-import type { BlockEditorProps } from "./types";
+import { BlockEditorProvider, useBlockEditorContext } from "./core/context";
+import type { BlockEditorProps } from "./core/types";
+import { IconPlaceholder } from "./icons/icon-placeholder";
+import { cn } from "./ui/utils";
 
 const computePositionConfig = {
   placement: "left-start",
