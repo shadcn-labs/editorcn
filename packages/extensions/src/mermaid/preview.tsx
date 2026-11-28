@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { useToolbar } from "../core/context";
 import { cn } from "../ui/utils";
 import { cache, renderCached, useMermaidTheme } from "./render";
 
@@ -21,6 +22,7 @@ export interface MermaidPreviewProps {
 export const MermaidPreview = ({ className, value }: MermaidPreviewProps) => {
   const source = value?.trim() ?? "";
   const theme = useMermaidTheme();
+  const { labels } = useToolbar();
   const key = `${theme}\n${source}`;
   const [state, setState] = useState<RenderState>(() => ({
     key,
@@ -48,10 +50,7 @@ export const MermaidPreview = ({ className, value }: MermaidPreviewProps) => {
         } catch (error) {
           if (!cancelled) {
             setState((current) => ({
-              error:
-                error instanceof Error
-                  ? error.message
-                  : "Failed to render diagram",
+              error: error instanceof Error ? error.message : "",
               key,
               svg: current.svg,
             }));
@@ -74,12 +73,13 @@ export const MermaidPreview = ({ className, value }: MermaidPreviewProps) => {
           className
         )}
       >
-        Empty diagram
+        {labels.emptyDiagram}
       </div>
     );
   }
 
-  const error = state.key === key ? state.error : undefined;
+  const failure = state.key === key ? state.error : undefined;
+  const error = failure === "" ? labels.diagramError : failure;
   const svg = cache.get(key) ?? state.svg;
 
   if (!svg) {
@@ -91,7 +91,7 @@ export const MermaidPreview = ({ className, value }: MermaidPreviewProps) => {
             error ? "text-destructive" : "text-muted-foreground"
           )}
         >
-          {error ?? "Rendering diagram..."}
+          {error ?? labels.renderingDiagram}
         </output>
         <pre className="m-0 overflow-x-auto bg-transparent p-4 font-mono text-xs">
           <code>{source}</code>

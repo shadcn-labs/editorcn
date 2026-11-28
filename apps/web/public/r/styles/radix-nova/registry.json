@@ -289,6 +289,10 @@
           "type": "registry:component"
         },
         {
+          "path": "extensions/ui/tooltip.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "extensions/ui/use-floating.tsx",
           "type": "registry:component"
         },
@@ -390,6 +394,10 @@
         },
         {
           "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/tooltip.tsx",
           "type": "registry:component"
         },
         {
@@ -851,6 +859,10 @@
           "type": "registry:component"
         },
         {
+          "path": "extensions/ui/tooltip.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "extensions/ui/use-floating.tsx",
           "type": "registry:component"
         },
@@ -937,6 +949,10 @@
         },
         {
           "path": "extensions/ui/popover.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/tooltip.tsx",
           "type": "registry:component"
         },
         {
@@ -1098,7 +1114,7 @@
           "type": "registry:component"
         },
         {
-          "path": "extensions/ui/use-floating.tsx",
+          "path": "extensions/ui/tooltip.tsx",
           "type": "registry:component"
         },
         {
@@ -1298,6 +1314,10 @@
           "type": "registry:component"
         },
         {
+          "path": "extensions/table/actions.tsx",
+          "type": "registry:component"
+        },
+        {
           "path": "extensions/table/slash-command-item.ts",
           "type": "registry:component"
         },
@@ -1347,6 +1367,10 @@
         },
         {
           "path": "extensions/ui/separator.tsx",
+          "type": "registry:component"
+        },
+        {
+          "path": "extensions/ui/tooltip.tsx",
           "type": "registry:component"
         },
         {

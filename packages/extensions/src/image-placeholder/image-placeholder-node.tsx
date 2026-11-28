@@ -174,11 +174,11 @@ export const ImagePlaceholderNode = ({
             <TabsList>
               <TabsTrigger value="upload">
                 <Upload />
-                Upload
+                {labels.upload}
               </TabsTrigger>
               <TabsTrigger value="url">
                 <Link />
-                Embed link
+                {labels.embedLink}
               </TabsTrigger>
             </TabsList>
             <TabsContent value="upload">
@@ -204,7 +204,7 @@ export const ImagePlaceholderNode = ({
                   className="ext-image-upload-label flex h-28 w-full cursor-pointer flex-col items-center justify-center text-center select-none [&>svg]:mx-auto [&>svg]:mb-2 [&>svg]:size-6 [&>svg]:shrink-0"
                 >
                   <Upload />
-                  Drag & drop or click to upload
+                  {labels.uploadImageHint}
                 </label>
               </div>
             </TabsContent>
@@ -221,21 +221,21 @@ export const ImagePlaceholderNode = ({
                       setUrlError(false);
                     }
                   }}
-                  placeholder="Paste the image link..."
+                  placeholder={labels.imageUrlPlaceholder}
                 />
                 {urlError ? (
                   <p className="ext-image-error m-0 text-[0.75rem] text-destructive">
-                    Please enter a valid URL
+                    {labels.invalidImageUrl}
                   </p>
                 ) : null}
                 <Button
                   type="submit"
                   className="ext-image-embed-submit w-full border-transparent bg-primary text-primary-foreground hover:bg-[color-mix(in_srgb,var(--primary)_85%,black)] hover:text-primary-foreground"
                 >
-                  Embed Image
+                  {labels.embedImage}
                 </Button>
                 <p className="ext-image-hint m-0 text-center text-[0.75rem] text-muted-foreground">
-                  Works with any image from the web
+                  {labels.embedImageHint}
                 </p>
               </form>
             </TabsContent>
