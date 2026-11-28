@@ -5,8 +5,8 @@ import { StarterKit } from "@tiptap/starter-kit";
 import { describe, expect, it } from "vitest";
 
 import { looksLikeMarkdown, normalizeMarks } from ".";
-import { TwitterEmbed } from "../../../editor/src/controls/rte-twitter-control";
-import { YouTubeEmbed } from "../../../editor/src/controls/rte-youtube-control";
+import { TwitterEmbed } from "../../../editor/src/controls/twitter-control";
+import { YouTubeEmbed } from "../../../editor/src/controls/youtube-control";
 import { ResizableImage } from "../image-placeholder";
 import { Mention } from "../mention";
 import { Table } from "../table";
